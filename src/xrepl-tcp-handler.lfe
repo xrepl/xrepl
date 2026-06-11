@@ -75,11 +75,7 @@
        (error_logger:info_msg "Socket error: ~p" (list reason))
        'ok)
 
-      ;; Timeout for keepalive
-      (after 30000
-        (send-keepalive state)
-        (call transport 'setopts socket (list (tuple 'active 'once)))
-        (message-loop state)))))
+)))
 
 (defun handle-data (data state)
   "Process incoming message data."
@@ -162,10 +158,4 @@
                                             reason
                                             (list_to_binary
                                               (io_lib:format "~p" (list reason))))))
-                state))
-
-(defun send-keepalive (state)
-  "Send keepalive ping."
-  (send-response (map 'id (binary "keepalive"))
-                (map 'status 'ping)
                 state))
