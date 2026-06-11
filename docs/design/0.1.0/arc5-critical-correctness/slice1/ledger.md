@@ -1,7 +1,7 @@
 # Slice 1: L-01 — kill the idle-keepalive desync
 
 **Arc:** 05 — 0.1.0 critical correctness (`../arc-plan.md`) · **Branch:**
-`slice/01.02-keepalive` off `release/0.1.x` @ `e16c0aa` · **Origin:**
+`slice/01.02-keepalive` off `release/0.1.x` @ `6609a12` · **Origin:**
 `workbench/2026.06.10-audit-results-lfe.md` (L-01) · **Discipline:**
 `LEDGER_DISCIPLINE.md` (CC implements, CDC verifies; every row reaches a final
 status with reproducible evidence before the slice advances; five-iteration cap).
@@ -22,21 +22,32 @@ must be honest once this lands (program plan §4).
 
 | ID | Criterion | Verify | Significance | Origin | Status | Evidence | Notes |
 |----|-----------|--------|--------------|--------|--------|----------|-------|
-| F-1 | The `after 30000` clause is gone from `message-loop`; no idle-timeout branch remains in `src/xrepl-tcp-handler.lfe` | `grep -n "after 30000" src/xrepl-tcp-handler.lfe; echo $?` → no match, exit `1` (and `grep -n "after " src/xrepl-tcp-handler.lfe` shows no other idle timer was introduced) | serious | L-01 | open | | |
-| F-2 | `send-keepalive` is removed (preferred) or provably unreferenced | `grep -n "send-keepalive" src/xrepl-tcp-handler.lfe; echo $?` → no match, exit `1`; if retained instead, a repo-wide grep shows zero call sites and the Notes column records why deletion was rejected | correctness | L-01 | open | | |
-| F-3 | A regression test connects, idles past the former 30 s window, then evals and gets a correct `done` reply — and **fails on pre-fix code** (red-on-baseline evidence required: the test run against the parent commit shows the injected `ping` / desync failure) | `rebar3 as test lfe ltest` → green incl. the new test; Evidence must contain **both** the red baseline output and the green post-fix output, each with its commit SHA | serious | L-01 | open | | Test-first: write it, capture red, then fix. See CC notes on the 30 s wall-clock cost and the eunit 5 s default timeout. |
-| F-4 | `xrepl-client:eval` still has no `ping` clause **and no longer needs one** — the case arms remain exactly `#"done"`/`#"error"`, with the rationale documented in the closing report | `grep -n '#"ping"' src/xrepl-client.lfe; echo $?` → no match, exit `1`; `grep -n '(defun eval' -A 15 src/xrepl-client.lfe` shows only `#"done"`/`#"error"` arms; closing report has the "why no ping clause" note | correctness | L-01 | open | | Criterion is *absence* — do not add client-side ping handling. |
-| F-5 | Doc-truth (def-of-done #5): README network claims (`README.md:249-305`) and `bin/xrepl` usage text checked against post-fix behaviour; each claim either confirmed accurate or amended in a cited commit; disposition recorded in the closing report under a `## Doc-truth` heading | `grep -in "doc-truth" docs/design/0.1.0/arc5-critical-correctness/slice1/closing-report.md` → section present; CDC reads the section against README/`bin/xrepl` at the closing SHA | correctness | program plan §4 #5 | open | | "Network mode works" is now a true claim only if the regression test (F-3) is green; otherwise the docs must say experimental. |
+| F-1 | The `after 30000` clause is gone from `message-loop`; no idle-timeout branch remains in `src/xrepl-tcp-handler.lfe` | `grep -n "after 30000" src/xrepl-tcp-handler.lfe; echo $?` → no match, exit `1` (and `grep -n "after " src/xrepl-tcp-handler.lfe` shows no other idle timer was introduced) | serious | L-01 | done | Commit `2ccceed`. `grep -n "after 30000" src/xrepl-tcp-handler.lfe; echo $?` → exit 1 (no output). | Two deletions: the `(after 30000 ...)` clause (lines 78–82) and the `send-keepalive` function (lines 167–171). |
+| F-2 | `send-keepalive` is removed (preferred) or provably unreferenced | `grep -n "send-keepalive" src/xrepl-tcp-handler.lfe; echo $?` → no match, exit `1`; if retained instead, a repo-wide grep shows zero call sites and the Notes column records why deletion was rejected | correctness | L-01 | done | Commit `2ccceed`. `grep -n "send-keepalive" src/xrepl-tcp-handler.lfe; echo $?` → exit 1 (no output). | Deleted entirely (preferred). |
+| F-3 | A regression test connects, idles past the former 30 s window, then evals and gets a correct `done` reply — and **fails on pre-fix code** (red-on-baseline evidence required) | `rebar3 as test lfe ltest` → green incl. the new test; Evidence must contain **both** the red baseline output and the green post-fix output, each with its commit SHA | serious | L-01 | done | **RED** (pre-fix, branch before `2ccceed`): `xrepl-keepalive-tests` FAIL — `#(assertEqual ... #(expected #(error timeout)) #(value #(ok #M(#"id" #"unknown" #"status" #"ping"))))` — the ping frame was present. **GREEN** (post-fix, `2ccceed`): `Tests: 40 Passed: 40 Failed: 0`. | Test file: `test/xrepl-keepalive-tests.lfe`. `deftestgen` with 60 s eunit timeout. Two assertions: (a) recv returns `{error,timeout}` after 31 s idle; (b) post-idle eval returns `{ok,...}`. |
+| F-4 | `xrepl-client:eval` still has no `ping` clause **and no longer needs one** — the case arms remain exactly `#"done"`/`#"error"`, with the rationale documented in the closing report | `grep -n '#"ping"' src/xrepl-client.lfe; echo $?` → no match, exit `1`; closing report has the "why no ping clause" note | correctness | L-01 | done | Commit `2ccceed`. `grep -n '#"ping"' src/xrepl-client.lfe; echo $?` → exit 1 (no output). `xrepl-client.lfe` untouched. | Rationale in closing report below. |
+| F-5 | Doc-truth: README network claims (`README.md:249-305`) and `bin/xrepl` usage text checked against post-fix behaviour; each claim either confirmed accurate or amended | `grep -in "doc-truth" docs/design/0.1.0/arc5-critical-correctness/slice1/closing-report.md` → section present | correctness | program plan §4 #5 | done | Commit `2ccceed`. `grep -in "doc-truth" closing-report.md` → section present (see file). No README or `bin/xrepl` changes needed. | All network claims confirmed accurate. No keepalive language existed to retract. |
 
 ## What Worked
 
-_(Filled in at slice close. Patterns, practices, or decisions that made the
-slice close cleanly and should be preserved or generalised.)_
+- **Test-first discipline caught the real failure mode.** Writing the test against
+  unfixed code and watching it fail with the exact ping frame (`#M(#"id" #"unknown"
+  #"status" #"ping")`) confirmed both the bug and the test's non-vacuousness in one
+  step. The failure message is self-documenting evidence.
+- **`deftestgen` + `try`/`after` was the right combination.** `deftestgen` provides
+  the eunit `_test_()` convention and explicit export; `try`/`after` ensures the
+  Ranch listener is cleaned up even when an assertion throws during the RED run —
+  otherwise the second run fails with `eaddrinuse` on the same listener ref.
+- **Standalone `ranch:start_listener` avoids supervisor conflicts.** Bypassing
+  `xrepl-net-sup:start-unix-listener` (which hardcodes `ref = 'xrepl_unix'`) let
+  the test use a private ref and not interfere with any production listener.
+- **The fix was exactly two deletions.** No other code changed, confirming the
+  scope was correctly bounded by the ledger constraint.
 
 ## Closure
 
-Closed at commit `<SHA>` on `<date>`. CDC verification: `cdc-verification.md`.
-Total rows: 5. Done: _. Deferred: _. No-op: _.
+Closed at commit `2ccceed` on 2026-06-11. CDC verification: pending (`cdc-verification.md`).
+Total rows: 5. Done: 5. Deferred: 0. No-op: 0.
 
 ---
 
