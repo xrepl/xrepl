@@ -1,4 +1,4 @@
-# CC Assignment — Slice 01: Working state + repo hygiene
+# CC Assignment — Slice 1: Working state + repo hygiene
 
 You are CC (the implementer) for one slice of the xrepl 0.1.0 remediation. Work
 the ledger, close every row with reproducible evidence, write a closing report
@@ -10,13 +10,13 @@ re-verify your `done` rows afterward.
 - **Repo:** `xrepl` OTP application at `/Users/oubiwann/lab/lfe/xrepl/xrepl`.
 - **Branch:** cut a slice branch off `release/0.1.x` (e.g.
   `slice/01.01-stabilize`). Do not commit directly to `release/0.1.x`.
-- **Ledger (your spec):** `workbench/2026.06.10-slice-01.01-stabilize-ledger.md`.
+- **Ledger (your spec):** `ledger.md` in this slice directory.
   Read it first. Its six rows F-1…F-6 are the definition of done.
 - **Discipline:** load and follow `LEDGER_DISCIPLINE.md` from the
   collaboration-framework skill. Five-iteration cap. Evidence = command output +
   the commit SHA where the row was met.
-- **Parent plans (read for context, don't re-derive):**
-  `workbench/2026.06.10-release-0.1.0-plan.md` (slice 01.01 section) and
+- **Parent plans (read for context, don't re-derive):** `../arc-plan.md` (the
+  Arc 04 plan, with this slice's plan-of-record) and the project plan
   `workbench/2026.06.10-remediation-program-plan.md`.
 
 ## What this slice IS
@@ -27,15 +27,15 @@ the working tree is clean. Triage the crash dump before deleting it.
 ## What this slice is NOT — hard constraints
 
 - **No behavioural changes.** Do not fix any audit finding (L-01…L-20). Those are
-  later slices (Arc 02 / Arc 03). The *only* code changes permitted here are the
+  later slices (Arc 05 / Arc 06). The *only* code changes permitted here are the
   minimum needed to make `compile` and `ltest` pass — and if a test only goes
   green via a behavioural change, **stop and flag it** (that's a finding, not a
   quiet fix).
 - **Do not re-enable xref / dialyzer / coverage gates.** They are commented out
-  on purpose right now; turning them back on is Arc 03 (L-07), not this slice.
+  on purpose right now; turning them back on is Arc 06 (L-07), not this slice.
   Getting `ltest` green is in scope; getting `xref` green is not.
 - **Do not touch `src/` behaviour, `docs/design/` contents, or network/session
-  logic.** Design-doc sorting is the *next* slice (01.02).
+  logic.** Design-doc sorting is the *next* slice (`slice2`).
 
 ## Steps
 
@@ -53,7 +53,7 @@ the working tree is clean. Triage the crash dump before deleting it.
 
 ## Deliverable
 
-Update `docs/design/0.1.0/arc4-green-baseline/slice1/stabilize-ledger.md` in place:
+Update `ledger.md` in this slice directory in place:
 
 - Every row F-1…F-6 reaches a final status (`done` / `deferred` / `no-op`) with
   evidence. `deferred` needs a reason + re-entry condition; `no-op` needs a
