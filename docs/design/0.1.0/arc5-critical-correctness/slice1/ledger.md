@@ -1,7 +1,8 @@
 # Slice 1: L-01 — kill the idle-keepalive desync
 
 **Arc:** 05 — 0.1.0 critical correctness (`../arc-plan.md`) · **Branch:**
-`slice/01.02-keepalive` off `release/0.1.x` @ `6609a12` · **Origin:**
+`arc5/slice1-keepalive-desync` (renamed from `slice/01.02-keepalive` per
+CDC-4) off `release/0.1.x` @ `6609a12` · **Origin:**
 `workbench/2026.06.10-audit-results-lfe.md` (L-01) · **Discipline:**
 `LEDGER_DISCIPLINE.md` (CC implements, CDC verifies; every row reaches a final
 status with reproducible evidence before the slice advances; five-iteration cap).
@@ -27,6 +28,8 @@ must be honest once this lands (program plan §4).
 | F-3 | A regression test connects, idles past the former 30 s window, then evals and gets a correct `done` reply — and **fails on pre-fix code** (red-on-baseline evidence required) | `rebar3 as test lfe ltest` → green incl. the new test; Evidence must contain **both** the red baseline output and the green post-fix output, each with its commit SHA | serious | L-01 | done | **RED** (pre-fix, branch before `2ccceed`): `xrepl-keepalive-tests` FAIL — `#(assertEqual ... #(expected #(error timeout)) #(value #(ok #M(#"id" #"unknown" #"status" #"ping"))))` — the ping frame was present. **GREEN** (post-fix, `2ccceed`): `Tests: 40 Passed: 40 Failed: 0`. | Test file: `test/xrepl-keepalive-tests.lfe`. `deftestgen` with 60 s eunit timeout. Two assertions: (a) recv returns `{error,timeout}` after 31 s idle; (b) post-idle eval returns `{ok,...}`. |
 | F-4 | `xrepl-client:eval` still has no `ping` clause **and no longer needs one** — the case arms remain exactly `#"done"`/`#"error"`, with the rationale documented in the closing report | `grep -n '#"ping"' src/xrepl-client.lfe; echo $?` → no match, exit `1`; closing report has the "why no ping clause" note | correctness | L-01 | done | Commit `2ccceed`. `grep -n '#"ping"' src/xrepl-client.lfe; echo $?` → exit 1 (no output). `xrepl-client.lfe` untouched. | Rationale in closing report below. |
 | F-5 | Doc-truth: README network claims (`README.md:249-305`) and `bin/xrepl` usage text checked against post-fix behaviour; each claim either confirmed accurate or amended | `grep -in "doc-truth" docs/design/0.1.0/arc5-critical-correctness/slice1/closing-report.md` → section present | correctness | program plan §4 #5 | done | Commit `2ccceed`. `grep -in "doc-truth" closing-report.md` → section present (see file). No README or `bin/xrepl` changes needed. | All network claims confirmed accurate. No keepalive language existed to retract. |
+| F-6 | The decode-error path re-arms the socket via `(call transport …)`, not `(funcall transport …)`; a regression test sends one malformed frame, receives a decode-error reply, then completes a normal eval **on the same connection** — and fails on pre-fix code (red-on-baseline required) | `grep -n "funcall" src/xrepl-tcp-handler.lfe; echo $?` → no match, exit `1`; `rebar3 as test lfe ltest` green incl. the new test; Evidence carries both the red and green outputs with SHAs | correctness | CDC-7 | done | **RED** (pre-fix, commit `f1e3555`): `xrepl-decode-error-tests` FAIL — `{badfun,ranch_tcp}` crash, `{error,closed}` on eval recv; `#(expected eval-ok) #(value #(error closed))`. **GREEN** (post-fix, `c828d11`): `Tests: 41 Passed: 41 Failed: 0`. `grep -n "funcall" src/xrepl-tcp-handler.lfe; echo $?` → exit 1. | Test file: `test/xrepl-decode-error-tests.lfe`. `deftestgen` with 10 s timeout. Red test committed at `f1e3555` before fix at `c828d11`. |
+| F-7 | No orphaned closing parens: every closing paren in `src/xrepl-tcp-handler.lfe` sits on the same line as code, per the LFE style rule | `grep -n "^[[:space:]]*)" src/xrepl-tcp-handler.lfe; echo $?` → no match, exit `1`; `rebar3 compile` clean | polish | CDC-1 | done | Commit `c828d11`. `grep -n "^[[:space:]]*)" src/xrepl-tcp-handler.lfe; echo $?` → exit 1. `rebar3 compile` exits 0. | Folded `))))` onto the `'ok` line of `message-loop`'s `tcp_error` clause. |
 
 ## What Worked
 
@@ -43,11 +46,21 @@ must be honest once this lands (program plan §4).
   the test use a private ref and not interfere with any production listener.
 - **The fix was exactly two deletions.** No other code changed, confirming the
   scope was correctly bounded by the ledger constraint.
+- *(CDC)* **Forensic cross-checking of reported evidence works.** The red run's
+  failure value carried `#"id" #"unknown"` — an artifact of the deleted code's
+  atom-vs-binary key mismatch that fabricated output would not contain. Checking
+  reported evidence against non-obvious properties of the deleted code path is a
+  cheap, reusable verification move when CDC can't re-execute the run itself.
+- **Committing the RED test before the fix (CDC-3 discipline)** created a clean
+  SHA boundary (`f1e3555` = red test, `c828d11` = fixes) that CDC can verify
+  without worktree gymnastics: `git checkout f1e3555 && rebar3 as test lfe ltest`
+  produces the red run directly.
 
 ## Closure
 
-Closed at commit `2ccceed` on 2026-06-11. CDC verification: pending (`cdc-verification.md`).
-Total rows: 5. Done: 5. Deferred: 0. No-op: 0.
+Closed at fix commit `c828d11`, ledger commit pending, on 2026-06-11.
+CDC verification: `cdc-verification.md` (iteration-3 addendum pending).
+Total rows: 7. Done: 7. Deferred: 0. No-op: 0.
 
 ---
 

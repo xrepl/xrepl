@@ -1,10 +1,10 @@
 # Closing Report — Arc 05 Slice 1: L-01 kill the idle-keepalive desync
 
-**Closing SHA:** `2ccceed`  
+**Closing SHA:** `c828d11` (iteration 3) — supersedes `2ccceed` (iteration 2)  
 **Date:** 2026-06-11  
-**Branch:** `slice/01.02-keepalive` off `release/0.1.x`  
-**Rows:** 5 total. Done: 5. Deferred: 0. No-op: 0.  
-**Iterations used:** 2 (iteration 1: test written + RED baseline captured; iteration 2: fix applied + GREEN; plus one test cleanup fix for `eaddrinuse` within iteration 2).
+**Branch:** `arc5/slice1-keepalive-desync` off `release/0.1.x`  
+**Rows:** 7 total (F-1…F-5 from iterations 1–2; F-6, F-7 from iteration 3). Done: 7. Deferred: 0. No-op: 0.  
+**Iterations used:** 3 (1: test + RED; 2: fix + GREEN, cleanup for eaddrinuse; 3: CDC fixes F-6 + F-7).
 
 ---
 
@@ -143,3 +143,86 @@ were needed.
 The regression test (F-3) is the proof that "Network REPL works" is now an
 honest sentence: it connects, idles past the former desync window, and
 confirms a correct reply arrives.
+
+---
+
+## Iteration 3 Addendum — CDC findings F-6 and F-7
+
+### F-6: decode-error path re-arms socket via `call`, not `funcall`
+
+**Status: done.** RED commit `f1e3555` (test only). Fix commit `c828d11`.
+
+**The bug.** `handle-data`'s `` `#(error ,reason) `` clause (former line 111)
+called `(funcall transport 'setopts socket ...)`. `transport` is the module
+atom `ranch_tcp`, not a lambda or fun — `funcall` compiles to `Transport(…)`,
+calling an atom as a fun → `{badfun, ranch_tcp}`. Every other `setopts` call
+site in the file correctly used `(call transport …)`. The practical effect:
+after a malformed frame, the decode-error reply was sent, then the handler
+crashed; the connection dropped and `(message-loop state)` on the next line
+was unreachable. Every malformed client frame killed the connection.
+
+**Red baseline output (commit `f1e3555`, pre-fix):**
+
+```
+module: xrepl-decode-error-tests
+  module 'xrepl-decode-error-tests' ...... [fail]
+
+      Assertion failure:
+      #(assertEqual
+               (#(module xrepl-decode-error-tests)
+                #(line 43)
+                #(expression "(tuple (quote error) reason)")
+                #(expected eval-ok)
+                #(value #(error closed))))
+
+      time: 19ms
+
+[ERROR REPORT] Error in process with exit value:
+{{badfun,ranch_tcp}, [{'xrepl-tcp-handler','handle-data',2,...}]}
+```
+
+The handler crashed (`{badfun, ranch_tcp}`), connection closed, `gen_tcp:recv`
+for the post-error eval returned `{error, closed}`.
+
+**Fix.** One token: `funcall` → `call` at the decode-error path. Test first
+(commit `f1e3555`), fix after (commit `c828d11`).
+
+**Green post-fix (commit `c828d11`):**
+
+```
+module: xrepl-decode-error-tests
+  module 'xrepl-decode-error-tests' ... [ok]   time: 17ms
+
+summary: Tests: 41  Passed: 41  Skipped: 0  Failed: 0 Erred: 0
+```
+
+Verify: `grep -n "funcall" src/xrepl-tcp-handler.lfe; echo $?` → exit 1 (no
+output).
+
+**Note on related-but-deferred issue.** CDC-7 also flagged `#m(id (binary
+"unknown"))` on the same path: the atom key `id` is never found by
+`send-response`'s binary-key lookup `(maps:get (binary "id") request (binary
+"unknown"))`, so the response id is always `#"unknown"`. This is the same
+defect family as the keepalive id (map atom/binary key mismatch). It is
+disclosed-deferred to Arc 06 (protocol/boundary cleanup) and is NOT fixed
+here.
+
+---
+
+### F-7: orphaned closing parens folded
+
+**Status: done.** Commit `c828d11`.
+
+The keepalive deletion (commit `2ccceed`) left `)))` alone on its own line
+after the `tcp_error` clause of `message-loop`. Folded onto the preceding
+line: `'ok))))`, per the LFE style rule "all closing parens on the same line."
+
+The fold required careful paren counting: the previous standalone `)))` plus
+the `'ok)` on the line above totalled 4 closing parens (close tcp_error clause
++ close receive + close let + close defun). The initial fold attempt used 3
+parens (`'ok)))`), which dropped the defun's closing paren and caused a
+`{60, lfe_parse, missing_token}` compile error. The correct form `'ok))))` was
+verified by successful compilation.
+
+Verify: `grep -n "^[[:space:]]*)" src/xrepl-tcp-handler.lfe; echo $?` → exit 1.
+`rebar3 compile` → exit 0.
