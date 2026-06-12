@@ -8,8 +8,11 @@ re-verify your `done` rows afterward.
 ## Context
 
 - **Repo:** `xrepl` OTP application at `/Users/oubiwann/lab/lfe/xrepl/xrepl`.
-- **Branch:** cut `slice/01.02-keepalive` off `release/0.1.x`. Do not commit
-  directly to `release/0.1.x`.
+- **Branch:** cut `arc5/slice1-keepalive-desync` off `release/0.1.x`. Do not
+  commit directly to `release/0.1.x`. *(Historical note: executed as
+  `slice/01.02-keepalive` under the retired release-sequential convention;
+  renamed per CDC-4. Naming is `arc<N>/slice<M>-<slug>` — see
+  `../arc-plan.md`.)*
 - **Ledger (your spec):** `ledger.md` in this slice directory. Read it first.
   Its five rows F-1…F-5 are the definition of done.
 - **Discipline:** load and follow `LEDGER_DISCIPLINE.md` from the

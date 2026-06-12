@@ -152,6 +152,16 @@ Duncan re-tags `0.1.0`. Then rebase `main` off `release/0.1.x` and cut
 ## Notes for the executor (CC) and reviewer (CDC)
 
 - **One slice = one branch off `release/0.1.x` = one ledger.** Don't bundle.
+- **Branch naming: `arc<N>/slice<M>-<slug>`** (e.g. `arc5/slice1-keepalive-desync`)
+  — each scale is self-labeled and grouped, never two scales packed into one
+  dotted token; numbering is book-style (slice numbers restart per arc; only
+  arcs increment across the work). Mirrors the docs layout
+  `arc<N>-<arc-slug>/slice<M>/`. This arc's branches are `arc5/slice1-…`
+  through `arc5/slice5-…`. Convention set 2026-06-11 (CDC-4, slice1),
+  retiring both the release-sequential style (`slice/01.02-…`) and the
+  short-lived dotted style (`slice/05.01-…`). Existing commit messages keep
+  their historical numbers — never rebase to fix numbering; evidence SHAs in
+  closed ledgers must stay valid.
 - **Tests are the Verify column where behaviour changes.** A grep proves code
   *shape*; a test proves *behaviour*. L-01/L-04/L-05/L-09/L-02 each need a test
   that would fail if the bug were still present.

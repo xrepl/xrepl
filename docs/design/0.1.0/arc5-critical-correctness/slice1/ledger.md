@@ -58,9 +58,13 @@ must be honest once this lands (program plan §4).
 
 ## Closure
 
-Closed at fix commit `c828d11`, ledger commit pending, on 2026-06-11.
-CDC verification: `cdc-verification.md` (iteration-3 addendum pending).
-Total rows: 7. Done: 7. Deferred: 0. No-op: 0.
+Closed at fix commit `c828d11` (ledger commit `5a46cc5`), on 2026-06-11.
+CDC verification: `cdc-verification.md` — **fully verified, 7/7**: all five
+original rows reproduced (F-3 via guarded host harness); F-6 red/green and
+F-7 compile reproduced via operator-executed `cdc-iter3-red-green.sh`
+(red: `{badfun,ranch_tcp}` crash + `#(error closed)`, 40/41 at `f1e3555`;
+green: 41/41 at `5a46cc5`). Merge-ready to `release/0.1.x`.
+Total rows: 7. Done: 7. Deferred: 0. No-op: 0. Iterations: 3 of 5.
 
 ---
 
