@@ -73,9 +73,7 @@
       ;; Socket error
       (`#(tcp_error ,socket ,reason)
        (error_logger:info_msg "Socket error: ~p" (list reason))
-       'ok)
-
-)))
+       'ok))))
 
 (defun handle-data (data state)
   "Process incoming message data."
@@ -108,7 +106,7 @@
       (`#(error ,reason)
        (error_logger:info_msg "Message decode failed: ~p" (list reason))
        (send-error #m(id (binary "unknown")) 'decode-error reason state)
-       (funcall transport 'setopts socket (list (tuple 'active 'once)))
+       (call transport 'setopts socket (list (tuple 'active 'once)))
        (message-loop state)))))
 
 (defun authenticate-message (message state)
