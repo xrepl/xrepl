@@ -1,0 +1,20 @@
+[package]
+name = "xrepl"
+description = "Proof-of-concept binary for the inverted xrepl terminal client: wires the IF mock backend into the event-driven core."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[[bin]]
+name = "xrepl"
+path = "src/main.rs"
+
+[dependencies]
+xrepl-core = { workspace = true }
+xrepl-adventure = { workspace = true }
+tokio = { workspace = true }
+
+[lints]
+workspace = true

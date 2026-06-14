@@ -1,0 +1,14 @@
+[package]
+name = "xrepl-adventure"
+description = "A tiny interactive-fiction engine used as the zero-BEAM mock backend for the xrepl core PoC — and the seed of the in-REPL text adventure."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+xrepl-core = { workspace = true }
+
+[lints]
+workspace = true

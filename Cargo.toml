@@ -1,0 +1,48 @@
+# xrepl — Rust terminal-client workspace.
+#
+# This is the seed of the M1 "inverted" xrepl core: a Rust front-end that owns
+# the terminal and the human, with the BEAM (the existing xrepl OTP app, also
+# in this repo) owning the language over the msgpack protocol. See
+# `workbench/2026.06.13-rust-core-poc-notes.md` for the scope of this first
+# proof-of-concept (infra only — no reading/printing/evaluating of LFE).
+#
+# This workspace lives at the repo root alongside the rebar3 project; cargo and
+# rebar3 ignore each other's manifests. Virtual workspace (PS-26): one
+# Cargo.lock, one target/, shared metadata.
+
+[workspace]
+resolver = "2"
+members = [
+    "crates/xrepl-core",
+    "crates/xrepl-adventure",
+    "crates/xrepl",
+]
+
+[workspace.package]
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.85"
+license = "Apache-2.0"
+authors = ["Duncan <oubiwann@gmail.com>"]
+
+[workspace.dependencies]
+xrepl-core = { path = "crates/xrepl-core" }
+xrepl-adventure = { path = "crates/xrepl-adventure" }
+# NOTE: reedline moves quickly pre-1.0. This pin was chosen without crates.io
+# access; if it fails to resolve, `cargo update -p reedline` or bump the minor
+# here. The surface this PoC uses (Reedline::create, read_line, Signal) has been
+# stable across many releases.
+reedline = "0.38"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync"] }
+thiserror = "2"
+
+# Quality floor expressed as lints, inherited by every member via
+# `[lints] workspace = true`. Kept at `warn` (not `deny`) deliberately: this
+# tree has not been compiled in-session, so a hard deny on an unanticipated
+# lint would be a footgun. `make lint-rust` runs clippy with `-D warnings`.
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+
+[workspace.lints.clippy]
+all = "warn"

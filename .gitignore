@@ -33,3 +33,7 @@ tramp
 priv/images/drafts
 .claude
 /workbench
+
+# Rust workspace build output. Cargo.lock is intentionally NOT ignored:
+# this workspace produces a binary, and apps/workspaces commit their lockfile.
+/target
