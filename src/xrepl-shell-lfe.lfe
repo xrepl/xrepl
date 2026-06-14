@@ -231,9 +231,14 @@
 (defun suggestion-table ()
   "Atoms whose unbound calls return an xs:run suggestion instead of an error.
 
-  Never include xs:run itself. Extend by adding atoms here; the hook
-  substitutes the actual symbol name into the hint text automatically."
-  '(pwd passwd password))
+  All entries are verified unbound in the default LFE shell env
+  (lfe_env:is_fbound/3 = false for each). Never include xs:run itself.
+  Extend by adding atoms here; the hook substitutes the symbol name
+  into the hint text automatically.
+
+  pwd was removed: it is a real xrepl built-in (bound via xrepl-env)
+  so the no-hijack guard would always suppress it."
+  '(password passwd unlock open knock sesame secret login))
 
 (defun check-suggestion (form env)
   "Check whether form is an unbound call to a table symbol.

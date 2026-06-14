@@ -245,27 +245,47 @@
 ;;; Did-you-mean hook tests (slice5)
 ;;; ----------------
 
-(deftest dym-pwd-returns-hint
-  "(pwd) with a bare env — pwd is unbound, returns a formatted xs:run hint.
-  Note: the default LFE shell env has pwd/0 as a built-in, so we use a
-  bare lfe_env:new() to test the hint mechanism for 'pwd itself."
+(deftest dym-open-returns-hint
+  "(open) — unbound in default env, in table — returns xs:run hint.
+  Verified: lfe_env:is_fbound(open, 0, default-env) = false."
   (setup)
-  ;; Use a bare env (no shell built-ins) so pwd is unbound
-  (let ((bare-env (lfe_env:new)))
-    (case (xrepl-shell-lfe:init (map 'env bare-env))
-      (`#(ok ,state0)
-       (case (xrepl-shell-lfe:eval "(pwd)" state0 (map))
-         (`#(ok #(formatted ,text) ,state1)
-          ;; Text contains the xs:run suggestion with the typed name
-          (let ((s (if (is_binary text) (binary_to_list text) text)))
-            (is (=/= 'nomatch (string:find s "(xs:run 'pwd)"))))
-          ;; Shell state is unchanged (env not updated)
-          (is-equal state0 state1))
-         (other (is-equal (tuple 'expected-hint 'got) other))))
-      (_ (is 'false)))))
+  (case (xrepl-shell-lfe:init (map))
+    (`#(ok ,state0)
+     (case (xrepl-shell-lfe:eval "(open)" state0 (map))
+       (`#(ok #(formatted ,text) ,state1)
+        (let ((s (if (is_binary text) (binary_to_list text) text)))
+          (is (=/= 'nomatch (string:find s "(xs:run 'open)"))))
+        ;; Shell state is unchanged (env not updated)
+        (is-equal state0 state1))
+       (other (is-equal (tuple 'expected-hint 'got) other))))
+    (_ (is 'false))))
+
+(deftest dym-sesame-returns-hint
+  "(sesame) — unbound in default env — hint substitutes 'sesame."
+  (setup)
+  (case (xrepl-shell-lfe:init (map))
+    (`#(ok ,state0)
+     (case (xrepl-shell-lfe:eval "(sesame)" state0 (map))
+       (`#(ok #(formatted ,text) ,_)
+        (let ((s (if (is_binary text) (binary_to_list text) text)))
+          (is (=/= 'nomatch (string:find s "(xs:run 'sesame)")))))
+       (other (is-equal (tuple 'expected-hint 'got) other))))
+    (_ (is 'false))))
+
+(deftest dym-unlock-with-args
+  "(unlock 1) — args ignored; name 'unlock substituted in hint."
+  (setup)
+  (case (xrepl-shell-lfe:init (map))
+    (`#(ok ,state0)
+     (case (xrepl-shell-lfe:eval "(unlock 1)" state0 (map))
+       (`#(ok #(formatted ,text) ,_)
+        (let ((s (if (is_binary text) (binary_to_list text) text)))
+          (is (=/= 'nomatch (string:find s "(xs:run 'unlock)")))))
+       (other (is-equal (tuple 'expected-hint 'got) other))))
+    (_ (is 'false))))
 
 (deftest dym-passwd-returns-hint
-  "(passwd) — unbound, in table — hint substitutes the name 'passwd."
+  "(passwd) — unbound in default env, in table — returns xs:run hint."
   (setup)
   (case (xrepl-shell-lfe:init (map))
     (`#(ok ,state0)
@@ -273,18 +293,6 @@
        (`#(ok #(formatted ,text) ,_)
         (let ((s (if (is_binary text) (binary_to_list text) text)))
           (is (=/= 'nomatch (string:find s "(xs:run 'passwd)")))))
-       (other (is-equal (tuple 'expected-hint 'got) other))))
-    (_ (is 'false))))
-
-(deftest dym-password-with-args
-  "(password 1 2) — args are ignored; name 'password is substituted."
-  (setup)
-  (case (xrepl-shell-lfe:init (map))
-    (`#(ok ,state0)
-     (case (xrepl-shell-lfe:eval "(password 1 2)" state0 (map))
-       (`#(ok #(formatted ,text) ,_)
-        (let ((s (if (is_binary text) (binary_to_list text) text)))
-          (is (=/= 'nomatch (string:find s "(xs:run 'password)")))))
        (other (is-equal (tuple 'expected-hint 'got) other))))
     (_ (is 'false))))
 

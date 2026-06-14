@@ -202,3 +202,25 @@ is complete: pluggable + per-session-switchable + advertised shells, with proven
 save/resume. Forward: Arc7 (`xs` engine — slice1 `xs-bundle` cc-prompt already
 written, fully parallel) and Arc8 (`xs-shell`, which makes `xs:run` real and
 completes the breadcrumb).
+
+## slice5 — DONE (accepted 2026-06-14) — Arc6 COMPLETE
+
+did-you-mean hook landed in `xrepl-shell-lfe`. 81/81 green. Uses
+`lfe_env:is_fbound/3` (verified) to fire only on UNBOUND trigger symbols;
+no-hijack proven; returns `#(ok #(formatted "Did you mean (xs:run '<name>)?") …)`.
+
+**Bait-word finding (open design tweak — Duncan's call).** `pwd` is a real
+xrepl built-in (`xrepl-env` binds `pwd/0` → `lfe_xrepl:pwd`), so the hint never
+fires for `(pwd)` in the live shell — the favored "shell reflex" bait is taken.
+Collision is ONLY `pwd`. Taken built-ins: `cd clear ep epp exit flush h help hist
+i memory p pid pp pwd q quit regs sesh-* uptime`. FREE thematic words (all fire):
+`passwd password login unlock secret key knock sesame open door enter auth
+authenticate`. Recommendation: drop `pwd`, seed door-themed free words
+(`password passwd unlock open knock sesame secret login`) — a one-line seed-list
+edit. **DECIDED (Duncan 2026-06-14):** that exact 8-word set; tweak cc-prompt
+written (`slice5-did-you-mean/bait-words-tweak.md`).
+
+Arc6 multishell seam is otherwise COMPLETE: pluggable + per-session-switchable +
+advertised shells, proven save/resume, discovery hook. Two latent xrepl bugs
+fixed en route (broken persistence; metadata-timing). Forward: Arc7 (`xs` engine)
++ Arc8 (`xs-shell`, completes the breadcrumb).
