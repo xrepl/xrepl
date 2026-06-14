@@ -26,5 +26,11 @@
 
      ;; (describe ShellState) -> map()
      ;;   Capability map for this shell, merged into the `describe` op.
-     #(describe 1)))
+     #(describe 1)
+
+     ;; (snapshot ShellState) -> map()
+     ;;   Return a serialisable snapshot of the shell's state, stored
+     ;;   under the key 'env-snapshot in xrepl-store. Must round-trip
+     ;;   through init/1 (via the 'snapshot key in Opts).
+     #(snapshot 1)))
   ((_) 'undefined))

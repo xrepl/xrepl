@@ -1,4 +1,4 @@
-# CC PROMPT — arc0 / slice2: the `xrepl-shell` behaviour + `xrepl-shell-lfe`
+# CC PROMPT — arc6 / slice2: the `xrepl-shell` behaviour + `xrepl-shell-lfe`
 
 **You are** Claude Code (Sonnet 4.6), implementing to a spec from the design
 lead (a sibling CDC/Opus instance), reviewed by Duncan (lead + QA).
@@ -8,7 +8,7 @@ lead (a sibling CDC/Opus instance), reviewed by Duncan (lead + QA).
 `xrepl-shell-lfe` that reproduces the current LFE eval semantics — **as new
 modules only**, fully unit-tested, with **zero changes to the live eval path**.
 
-**Decision-of-record:** `workbench/support/arc0-foundation/shell-seam-decision.md`
+**Decision-of-record:** `docs/design/0.1.0/arc6-multishell/shell-seam-decision.md`
 (read it). This slice builds the abstraction; a later slice rewires the session
 onto it. Do **not** rewire anything in this slice.
 

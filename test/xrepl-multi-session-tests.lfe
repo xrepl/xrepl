@@ -130,6 +130,26 @@
       (_ (is 'false))))
   (teardown))
 
+;;; Save → close → reopen → restore round-trip test
+;;;
+;;; Proves the fix for the silently-broken serialize-env path (which called
+;;; a non-existent function and silently returned empty bindings). The old
+;;; session-persistence-basic / session-recovery tests only checked that the
+;;; 'env-snapshot key exists in ETS — they passed under both broken and fixed
+;;; code. This test confirms the value is actually there after reopen.
+
+(deftest session-restore-roundtrip
+  (setup)
+  (let ((`#(ok ,id) (xrepl-session-manager:create (map 'name "roundtrip"))))
+    (xrepl-session:eval id '(set keep-me 12345))
+    (xrepl-session:save-state id)
+    (xrepl-session-manager:close id)   ;; stops process, keeps ETS + snapshot
+    (xrepl-session-manager:reopen id)  ;; restarts; init restores from snapshot
+    (case (xrepl-session:eval id 'keep-me)
+      (`#(ok ,12345) (is 'true))
+      (other (is-equal #(ok 12345) other))))  ;; loud failure shows actual value
+  (teardown))
+
 ;;; Performance test
 
 (deftest multiple-sessions-performance

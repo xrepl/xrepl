@@ -1,4 +1,4 @@
-# CC PROMPT — arc0 / slice1: xrepl capability-discovery audit ("shells over the protocol")
+# CC PROMPT — arc6 / slice1: xrepl capability-discovery audit ("shells over the protocol")
 
 **You are** Claude Code (Sonnet 4.6), implementing to a spec written by the
 design lead (a sibling CDC / Opus instance) and reviewed by Duncan (project lead
@@ -169,7 +169,7 @@ and quote the observed shapes:
 ## Deliverables
 
 1. **REPORT** at
-   `xrepl/workbench/support/arc0-foundation/slice1-capability-audit/REPORT.md`
+   `xrepl/docs/design/0.1.0/arc6-multishell/slice1-capability-audit/REPORT.md`
    with sections: Summary (top-line answer to "can xrepl host & switch shells
    today?") · Q1 · Q2 · Q3 · Q4 · Q5 gap table + recommendation · Corrections to
    the seed map · Observations (out-of-scope things noticed) · What I could NOT

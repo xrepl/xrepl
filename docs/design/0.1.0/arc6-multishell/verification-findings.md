@@ -1,11 +1,11 @@
 # support (GROUND IF) — doc-12 §7 verification findings
 
-> Workbench note, gitignored. Resolves the `[verify]` items in
+> Design note. Resolves the `[verify]` items in
 > `12-LFE-ENGINE-HOWTO.md §7` against the actual xrepl/LFE/OTP source, and
 > records three corrections to docs 11/12 where the code diverges from the spec.
 > Naming: generic engine = `xs-*` (visible); story-specific = `support`
-> (`priv/support.xsf`, this workbench). "ground"/"GROUND" never appears in
-> tracked xrepl source.
+> (`priv/support.xsf`). The narrative lives only inside that opaque bundle;
+> these design docs are public (Duncan's call — deep-divers earn the reward).
 
 Date: 2026-06-14. LFE dep pinned at **2.2.0** (`xrepl/xrepl/rebar.lock`).
 
@@ -38,9 +38,9 @@ needed for one-form-per-entry.
   ...)                              ; then zip:zip_get/2 per entry, zip:zip_close/1
 ```
 
-**Workbench is already gitignored** — `xrepl/xrepl/.gitignore:35` → `/workbench`.
-So `workbench/support/**` (this whole planning tree) is untracked automatically.
-No git action required.
+**These planning docs now live in tracked `docs/design/0.1.0/arc6-multishell/`**
+(public, per Duncan). Only the runtime bundle's contents stay hidden — the story
+text lives inside `priv/support.xsf` (opaque), not in any tracked source file.
 
 ## Corrections to docs 11/12 (code diverges from spec)
 
@@ -119,7 +119,7 @@ payload is a seeded special-case → maximal cover. `(pwd)` is shell-reflex bait
 OPEN: does xrepl support a per-session kernel today, or must we build it? →
 **CC capability-discovery audit** (read + exploratory eunit, zero production
 changes), seeded with this note, producing a severity-graded report here in
-`workbench/support/`. Then Duncan + CDC decide the kernel-seam shape (likely:
+`docs/design/0.1.0/arc6-multishell/`. Then Duncan + CDC decide the kernel-seam shape (likely:
 add kernel/plugin support). The pure spine (`xs-bundle`/`xs-world`/`xs-engine`)
 is unaffected and design-able now.
 

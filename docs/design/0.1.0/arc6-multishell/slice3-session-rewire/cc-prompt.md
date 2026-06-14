@@ -1,4 +1,4 @@
-# CC PROMPT — arc0 / slice3: rewire `xrepl-session` onto the shell
+# CC PROMPT — arc6 / slice3: rewire `xrepl-session` onto the shell
 
 **You are** Claude Code (Sonnet 4.6), implementing to a spec from the design
 lead (sibling CDC/Opus), reviewed by Duncan (lead + QA).
@@ -10,7 +10,7 @@ LFE eval path. Move the env lifecycle (build/restore/serialize) into the shell.
 now-dead session code, including a latent parse-error bug (Duncan approved
 delete-not-patch).
 
-**Read first:** `workbench/support/arc0-foundation/shell-seam-decision.md`
+**Read first:** `docs/design/0.1.0/arc6-multishell/shell-seam-decision.md`
 (the locked `eval/3` contract from slice2, and the bug write-up). The slice2
 modules `src/xrepl-shell.lfe`, `src/xrepl-shell-lfe.lfe`,
 `test/xrepl-shell-lfe-tests.lfe` are in place and green.

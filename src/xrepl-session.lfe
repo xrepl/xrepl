@@ -1,8 +1,10 @@
 (defmodule xrepl-session
   "Session management for xrepl.
 
-  Each session is a gen_server that manages its own environment
-  and evaluator process. Supports state persistence to xrepl-store."
+  Each session is a gen_server that delegates evaluation to a per-session
+  active shell (default xrepl-shell-lfe). The shell owns parse, eval, and
+  env serialisation; the session owns process isolation, persistence, and
+  OTP lifecycle."
   (behaviour gen_server)
   ;; API
   (export
@@ -26,12 +28,13 @@
 ;;; ----------------
 
 (defrecord session-state
-  id              ;; Session UUID
-  env             ;; LFE environment
-  evaluator       ;; PID of evaluator process
-  eval-pending    ;; Reply-to for pending evaluation
-  last-save       ;; Timestamp of last state save
-  save-interval)  ;; How often to save (ms)
+  id            ;; Session UUID
+  shell         ;; Shell module atom (default 'xrepl-shell-lfe)
+  shell-state   ;; Opaque shell state (threaded through evaluator-loop)
+  evaluator     ;; PID of evaluator process
+  eval-pending  ;; Reply-to for pending evaluation
+  last-save     ;; Timestamp of last state save
+  save-interval) ;; How often to save (ms)
 
 ;;; ----------------
 ;;; API functions
@@ -60,26 +63,33 @@
     ok"
   (gen_server:call (process-name session-id) 'stop))
 
-(defun eval (session-id form)
-  "Evaluate a form in the session.
+(defun eval (session-id input)
+  "Send raw input to the session for evaluation.
+
+  Input may be a char-list string (e.g. \"(+ 1 2)\") or an already-parsed
+  LFE form (e.g. '(set x 42) or the atom 'x). Parsing is delegated to
+  the active shell's eval/3, which calls prepare-form internally.
 
   Args:
     session-id: Session identifier
-    form: LFE form to evaluate
+    input: char-list string or LFE form
 
   Returns:
     #(ok value) on success
     #(error reason) on failure"
-  (gen_server:call (process-name session-id) (tuple 'eval form) 5000))
+  (gen_server:call (process-name session-id) (tuple 'eval input) 5000))
 
 (defun get-env (session-id)
-  "Get the current environment.
+  "Get the current LFE environment from the session's active shell.
+
+  NOTE: LFE-shell-specific. Returns the lfe_env from xrepl-shell-lfe's
+  shell state. Not meaningful for shells that do not use lfe_env.
 
   Args:
     session-id: Session identifier
 
   Returns:
-    The current LFE environment"
+    The current LFE environment (lfe_env opaque term)"
   (gen_server:call (process-name session-id) 'get-env))
 
 (defun save-state (session-id)
@@ -109,49 +119,53 @@
 ;;; ----------------
 
 (defun init (session-id)
-  "Initialize a session, restoring state if available."
+  "Initialise a session, delegating env lifecycle to xrepl-shell-lfe."
   (process_flag 'trap_exit 'true)
 
-  ;; Initialize session-specific history
-  (let ((history-opts (map 'history_enabled (application:get_env 'xrepl 'history_enabled 'true)
-                           'history_file (application:get_env 'xrepl 'history_file
-                                                              (xrepl-history:default-file)))))
+  ;; Initialise session-specific history
+  (let ((history-opts (map 'history_enabled
+                               (application:get_env 'xrepl 'history_enabled 'true)
+                           'history_file
+                               (application:get_env 'xrepl 'history_file
+                                                    (xrepl-history:default-file)))))
     (xrepl-history:init session-id history-opts))
 
-  ;; Determine if this is a remote session from metadata
+  ;; Detect transport and build shell init opts
   (let* ((transport-type (get-transport-type session-id))
          (remote? (is-remote-transport? transport-type))
-         (base-env (xrepl-env:new "" '() remote?))
-         (restored-env (restore-env session-id base-env))
-         ;; Inject session-id into environment for commands to access
-         (env-with-id (lfe_env:add_vbinding '$session-id session-id restored-env))
-         (evaluator (start-evaluator session-id env-with-id))
-         (now (erlang:monotonic_time 'millisecond)))
-    (tuple 'ok (make-session-state id session-id
-                                   env env-with-id
-                                   evaluator evaluator
-                                   eval-pending 'undefined
-                                   last-save now
-                                   save-interval 60000))))  ;; Save every 60 seconds
+         ;; Read stored snapshot (may be 'undefined if no prior save)
+         (snapshot (case (xrepl-store:get-session session-id)
+                     (`#(ok ,session-data)
+                      (maps:get 'env-snapshot session-data 'undefined))
+                     (`#(error ,_) 'undefined)))
+         (shell 'xrepl-shell-lfe))
+    (case (call shell 'init (map 'remote? remote?
+                                 'session-id session-id
+                                 'snapshot snapshot))
+      (`#(ok ,ss)
+       (let* ((evaluator (start-evaluator session-id shell ss))
+              (now (erlang:monotonic_time 'millisecond)))
+         (tuple 'ok (make-session-state id session-id
+                                        shell shell
+                                        shell-state ss
+                                        evaluator evaluator
+                                        eval-pending 'undefined
+                                        last-save now
+                                        save-interval 60000))))
+      (`#(error ,reason)
+       (tuple 'stop (tuple 'shell-init-failed reason))))))
 
 (defun handle_call
   "Handle synchronous calls."
-  ;; Evaluate a form (can be either a parsed form or a string to parse)
-  ((`#(eval ,form-or-string) from state)
-   ;; Parse if it's a string, otherwise use as-is
-   (case (prepare-form form-or-string)
-     (`#(ok ,form)
-      ;; Send to evaluator and wait for response
-      (! (session-state-evaluator state) (tuple 'eval form (self)))
-      ;; Store the reply-to and don't reply yet
-      (tuple 'noreply (set-session-state-eval-pending state from)))
-     (`#(error ,reason)
-      ;; Parse error, reply immediately
-      (tuple 'reply (tuple 'error reason) state))))
+  ;; Evaluate raw input (string or form) — parsing delegated to the shell
+  ((`#(eval ,input) from state)
+   (! (session-state-evaluator state) (tuple 'eval input (self)))
+   (tuple 'noreply (set-session-state-eval-pending state from)))
 
-  ;; Get environment
+  ;; Get environment — LFE-shell-specific accessor
   (('get-env _from state)
-   (tuple 'reply (session-state-env state) state))
+   (let ((env (xrepl-shell-lfe:env-of (session-state-shell-state state))))
+     (tuple 'reply env state)))
 
   ;; Save state manually
   (('save-state _from state)
@@ -165,7 +179,6 @@
 
   ;; Stop session
   (('stop _from state)
-   ;; Stop evaluator
    (let ((eval-pid (session-state-evaluator state)))
      (if (is_process_alive eval-pid)
        (exit eval-pid 'shutdown)))
@@ -181,55 +194,45 @@
 
 (defun handle_info
   "Handle info messages."
-  ;; Result from evaluator
-  ((`#(eval-result ,value ,new-env) state)
+  ;; Successful eval result — thread new shell-state back into session
+  ((`#(eval-result ,value ,ss2) state)
    (case (session-state-eval-pending state)
      ('undefined
-      ;; No pending evaluation, ignore
       (tuple 'noreply state))
      (from
-      ;; Reply to caller
       (gen_server:reply from (tuple 'ok value))
-      ;; Update environment and maybe save state
-      (let* ((updated-state (set-session-state-env
+      (let* ((updated-state (set-session-state-shell-state
                               (set-session-state-eval-pending state 'undefined)
-                              new-env))
+                              ss2))
              (saved-state (maybe-save-state updated-state)))
-        ;; Touch the session in store
         (xrepl-store:touch-session (session-state-id saved-state))
         (tuple 'noreply saved-state)))))
 
-  ;; Error from evaluator
-  ((`#(eval-error ,class ,reason ,stack) state)
+  ;; Error from shell eval — map to a message string and reply
+  ((`#(eval-error ,error-info) state)
    (case (session-state-eval-pending state)
      ('undefined
-      ;; No pending evaluation, ignore
       (tuple 'noreply state))
      (from
-      ;; Format error and reply
-      (let ((error-msg (xrepl-io:format-error class reason stack)))
+      (let ((error-msg (eval-error-to-msg error-info)))
         (gen_server:reply from (tuple 'error error-msg))
         (tuple 'noreply (set-session-state-eval-pending state 'undefined))))))
 
   ;; Evaluator exited normally
   ((`#(EXIT ,eval-pid normal) state)
    (case (== eval-pid (session-state-evaluator state))
-     ('true
-      ;; Evaluator finished normally (shouldn't happen during normal operation)
-      (tuple 'noreply state))
-     ('false
-      ;; Some other process exited
-      (tuple 'noreply state))))
+     ('true (tuple 'noreply state))
+     ('false (tuple 'noreply state))))
 
-  ;; Evaluator crashed
+  ;; Evaluator crashed — restart with current shell + shell-state
   ((`#(EXIT ,eval-pid ,reason) state)
    (case (== eval-pid (session-state-evaluator state))
      ('true
-      ;; Restart evaluator
       (io:format "Evaluator crashed (~p), restarting...~n" (list reason))
       (let* ((session-id (session-state-id state))
-             (new-evaluator (start-evaluator session-id (session-state-env state))))
-        ;; If there was a pending evaluation, report error
+             (shell (session-state-shell state))
+             (ss (session-state-shell-state state))
+             (new-evaluator (start-evaluator session-id shell ss)))
         (case (session-state-eval-pending state)
           ('undefined 'ok)
           (from (gen_server:reply from (tuple 'error 'evaluator-crashed))))
@@ -237,7 +240,6 @@
                          (set-session-state-eval-pending state 'undefined)
                          new-evaluator))))
      ('false
-      ;; Some other process exited
       (tuple 'noreply state))))
 
   ;; Other messages
@@ -255,87 +257,65 @@
   "Handle code changes."
   (tuple 'ok state))
 
-;;; ----------------
-;;; Form preparation
-;;; ----------------
-
-(defun prepare-form (form-or-string)
-  "Prepare a form for evaluation.
-
-  If input is a string, parse it into an LFE form.
-  If input is already a form, return it as-is.
-
-  Args:
-    form-or-string: Either a string to parse or an already-parsed form
-
-  Returns:
-    #(ok form) or #(error reason)"
-  (if (is_list form-or-string)
-    ;; Check if it's a string (list of integers) or a form (list structure)
-    (case form-or-string
-      ('()
-       ;; Empty list is a valid form
-       (tuple 'ok '()))
-      ((cons first _)
-       (if (is_integer first)
-         ;; It's a string (list of character codes), parse it
-         (case (lfe_io:read_string form-or-string)
-           (`#(ok ,forms)
-            (case forms
-              ((cons form _) (tuple 'ok form))
-              ('() (tuple 'error "Empty input"))))
-           (`#(error ,_ ,_)
-            (tuple 'error "Parse error"))
-           ('eof
-            (tuple 'error "Unexpected EOF")))
-         ;; It's a form (list structure), use as-is
-         (tuple 'ok form-or-string))))
-    ;; Not a list, must be an atom or other term - use as-is
-    (tuple 'ok form-or-string)))
 
 ;;; ----------------
 ;;; Evaluator process
 ;;; ----------------
 
-(defun start-evaluator (session-id initial-env)
-  "Start an evaluator process.
+(defun start-evaluator (session-id shell shell-state)
+  "Start an evaluator process for the given shell.
 
   Args:
     session-id: Session identifier
-    initial-env: Initial LFE environment
+    shell: Shell module atom
+    shell-state: Initial shell state
 
   Returns:
     Evaluator PID"
-  (spawn_link (lambda () (evaluator-loop session-id initial-env))))
+  (spawn_link (lambda () (evaluator-loop session-id shell shell-state))))
 
-(defun evaluator-loop (session-id env)
-  "Main evaluator loop.
+(defun evaluator-loop (session-id shell shell-state)
+  "Main evaluator loop — delegates to the active shell's eval/3.
 
-  Receives eval requests and sends back results."
+  Receives:
+    #(eval Input ReplyTo)
+
+  Sends back:
+    #(eval-result Value ShellState2)   - on success
+    #(eval-error ErrorInfo)            - on shell error or exception"
   (receive
-    (`#(eval ,form ,reply-to)
-     ;; Add command to session-specific history before evaluation
-     (xrepl-history:add session-id (format-form form))
-     (try
-       (case (xrepl-eval:eval-form form env)
-         (`#(ok ,value ,new-env)
-          ;; Update shell variables
-          (let ((final-env (xrepl-env:update-shell-vars form value new-env)))
-            (! reply-to (tuple 'eval-result value final-env))
-            (evaluator-loop session-id final-env)))
-         (`#(error ,reason)
-          ;; Evaluation error
-          (! reply-to (tuple 'eval-error 'error reason '()))
-          (evaluator-loop session-id env)))
-       (catch
-         ((tuple class reason stack)
-          ;; Exception during evaluation
-          (! reply-to (tuple 'eval-error class reason stack))
-          (evaluator-loop session-id env)))))))
+    (`#(eval ,input ,reply-to)
+     ;; Record the input in session history
+     (xrepl-history:add session-id (format-input input))
+     ;; Delegate evaluation to the shell
+     (let ((ctx (map 'session-id session-id)))
+       (try
+         (case (call shell 'eval input shell-state ctx)
+           (`#(ok ,value ,ss2)
+            (! reply-to (tuple 'eval-result value ss2))
+            (evaluator-loop session-id shell ss2))
+           (`#(error ,error-info)
+            (! reply-to (tuple 'eval-error error-info))
+            (evaluator-loop session-id shell shell-state)))
+         (catch
+           ((tuple class reason stack)
+            (! reply-to
+               (tuple 'eval-error
+                      (tuple 'exception class reason stack)))
+            (evaluator-loop session-id shell shell-state))))))))
 
 ;;; ----------------
 ;;; Helper functions
 ;;; ----------------
+
+(defun format-input (input)
+  "Render input as a history string.
+  Char-list strings (list of char codes) are used as-is; forms are printed.
+  Uses andalso for short-circuit: (car input) is only called when is_list."
+  (cond
+    ((== input '()) "")
+    ((andalso (is_list input) (is_integer (car input))) input)
+    ('true (format-form input))))
 
 (defun format-form (form)
   "Convert form to string for history.
@@ -347,58 +327,34 @@
     String representation"
   (lfe_io:print1 form))
 
+(defun eval-error-to-msg (error-info)
+  "Map an xrepl-shell error-info term to a flat error message string."
+  (case error-info
+    ;; Shell's eval-form returned {error, Str} — already formatted
+    (`#(eval ,str) str)
+    ;; Shell's prepare-form returned {error, Reason}
+    (`#(parse ,r)
+     (lists:flatten (io_lib:format "parse error: ~p" (list r))))
+    ;; Exception escaped shell eval/3 (safety net)
+    (`#(exception ,class ,reason ,stack)
+     (xrepl-io:format-error class reason stack))
+    ;; Unknown error shape
+    (_
+     (lists:flatten (io_lib:format "error: ~p" (list error-info))))))
+
 ;;; ----------------
 ;;; State persistence helpers
 ;;; ----------------
 
-(defun serialize-env (env)
-  "Serialize environment for storage.
-
-  Note: We can't serialize function closures.
-  Store only the variable bindings that are serializable."
-  ;; For Phase 2, we'll do a simple serialization
-  ;; In future phases, we can enhance this
-  (try
-    (let ((bindings (xrepl-env:get-bindings env)))
-      (map 'bindings (filter-serializable-bindings bindings)))
-    (catch
-      ((tuple _ _ _)
-       ;; If serialization fails, return empty map
-       (map 'bindings '())))))
-
-(defun filter-serializable-bindings (bindings)
-  "Filter out non-serializable bindings."
-  (lists:filtermap
-    (lambda (binding)
-      (case binding
-        (`#(,name ,value)
-         (if (is-serializable? value)
-           (tuple 'true binding)
-           'false))))
-    bindings))
-
-(defun is-serializable? (value)
-  "Check if value can be serialized."
-  (cond
-    ;; Atoms, numbers, strings are ok
-    ((is_atom value) 'true)
-    ((is_number value) 'true)
-    ((is_binary value) 'true)
-    ;; Lists need checking
-    ((is_list value)
-     (lists:all (fun is-serializable? 1) value))
-    ;; Tuples need checking
-    ((is_tuple value)
-     (lists:all (fun is-serializable? 1) (tuple_to_list value)))
-    ;; Maps are ok
-    ((is_map value) 'true)
-    ;; Functions, PIDs, refs, ports cannot be serialized
-    ('true 'false)))
-
 (defun save-state-to-store (session-id state)
-  "Save session state to xrepl-store."
+  "Save session state to xrepl-store.
+
+  Calls the shell's snapshot/1 to serialise the env, stored under
+  the literal key 'env-snapshot (preserves existing storage contract)."
   (try
-    (let ((env-snapshot (serialize-env (session-state-env state))))
+    (let* ((shell (session-state-shell state))
+           (ss (session-state-shell-state state))
+           (env-snapshot (call shell 'snapshot ss)))
       (xrepl-store:update-session
         session-id
         (lambda (session-data)
@@ -420,29 +376,6 @@
         (set-session-state-last-save state now))
       state)))
 
-(defun restore-env (session-id base-env)
-  "Restore environment from stored snapshot."
-  (case (xrepl-store:get-session session-id)
-    (`#(ok ,session-data)
-     (case (maps:get 'env-snapshot session-data 'undefined)
-       ('undefined base-env)
-       (snapshot
-        (restore-env-from-snapshot snapshot base-env))))
-    (`#(error ,_)
-     base-env)))
-
-(defun restore-env-from-snapshot (snapshot base-env)
-  "Restore environment from snapshot."
-  (let ((bindings (maps:get 'bindings snapshot '())))
-    ;; Start with base environment and restore bindings
-    (lists:foldl
-      (lambda (binding env)
-        (case binding
-          (`#(,name ,value)
-           (xrepl-env:add-binding name value env))))
-      base-env
-      bindings)))
-
 ;;; ----------------
 ;;; Transport detection helpers
 ;;; ----------------
@@ -460,7 +393,6 @@
      (let ((metadata (maps:get 'metadata session-data (map))))
        (maps:get 'transport-type metadata 'stdio)))
     (`#(error ,_)
-     ;; Default to stdio if we can't get metadata
      'stdio)))
 
 (defun is-remote-transport? (transport-type)

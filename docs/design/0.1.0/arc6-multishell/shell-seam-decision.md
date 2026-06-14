@@ -1,8 +1,8 @@
 # Shell seam — design decision (post-audit)
 
-> Workbench, gitignored. Records the architecture decision taken after CC's
+> Design note. Records the architecture decision taken after CC's
 > slice1 capability audit (`slice1-capability-audit/REPORT.md`). This is the
-> design-of-record for the pluggable-shell seam; it seeds the Arc0 cc-prompts.
+> design-of-record for the pluggable-shell seam; it seeds the Arc6 cc-prompts.
 
 ## Audit outcome (CC, 2026-06-14)
 
@@ -32,7 +32,7 @@ extension field MINOR. Spike tests: `test/xrepl-shell-pluggability-spike-tests.l
 callbacks:
   (init Opts)                  -> {ok, ShellState} | {error, R}
   (eval Input ShellState Ctx)  -> {ok, Response, ShellState2}
-                                | {switch, TargetMod, InitOpts, Response}
+                                | {switch-shell, TargetMod, InitOpts, Response}
                                 | {error, R}
   (describe ShellState)        -> CapabilityMap     ; merged into `describe` op
   (prompt ShellState)          -> binary()          ; OPTIONAL
@@ -45,7 +45,8 @@ callbacks:
   of hardwiring `xrepl-eval:eval-form`; threads `ShellState2` back into the
   session.
 - **Switching needs NO new dispatcher op.** `eval` returns
-  `{switch, Mod, Opts, Response}`; the loop calls `(Mod:init Opts)`, swaps the
+  `{switch-shell, Mod, Opts, Response}` (distinct from the dispatcher's existing
+  `#(switch …)` *session*-switch); the loop calls `(Mod:init Opts)`, swaps the
   two session fields, and returns `Response` (which announces the now-active
   shell so the client updates its prompt). `(xs:run 'pwd)` in the LFE shell →
   switch to `xs-shell`; story `/quit` → switch back to `xrepl-shell-lfe`.
@@ -55,16 +56,16 @@ callbacks:
   `describe/1`; (f) the `image` field is just an extra key a shell adds to its
   response map (encoder not field-locked — CC proved by test).
 
-## LOAD-BEARING GUARDRAIL (into every Arc0 cc-prompt)
+## LOAD-BEARING GUARDRAIL (into every Arc6 cc-prompt)
 
 `xrepl-shell-lfe` MUST wrap the existing eval path so the default REPL is
-behaviorally unchanged and **every current xrepl test stays green**. Arc0 is a
+behaviorally unchanged and **every current xrepl test stays green**. Arc6 is a
 refactor-behind-an-interface, not a behavior change. Day-one observable
 difference for a normal LFE user = zero.
 
 ## Revised arc plan
 
-- **Arc0 — shell seam (xrepl core; generic, shippable, zero story content):**
+- **Arc6 — shell seam (xrepl core; generic, shippable, zero story content):**
   - slice1: capability audit ✅
   - slice2: define `xrepl-shell` behaviour + implement `xrepl-shell-lfe` as NEW
     modules reproducing current parse→eval→thread-env semantics; unit-tested;
@@ -95,18 +96,18 @@ Read of the live modules refined the plan:
   env-snapshot save/restore (slice3 routes serialization through the shell).
 - Reuse targets for `xrepl-shell-lfe`: `xrepl-eval:eval-form/2`,
   `xrepl-env:new/3`, `xrepl-env:update-shell-vars/3`, `lfe_io:read_string/1`.
-- **Arc1 — `xs` engine (content-agnostic, pure; also the future Lykn browser
+- **Arc7 — `xs` engine (content-agnostic, pure; also the future Lykn browser
   reader's shared core):** `xs-bundle` (load+validate from `.xsf`), `xs-world`,
   `xs-engine` (pure `handle/3`).
-- **Arc2 — story shell + wiring:** `xs-shell` (`xrepl-shell` impl) bridging
+- **Arc8 — story shell + wiring:** `xs-shell` (`xrepl-shell` impl) bridging
   `xs-engine` to the protocol; loads `priv/support.xsf`; world-in-metadata
   save/resume; images via `xrepl-term-graphics:render-data/2`.
-- **Arc3 — content + polish:** `deep/` + `endings/` content, `egg-in-basket`
+- **Arc9 — content + polish:** `deep/` + `endings/` content, `egg-in-basket`
   client gating, cross-VM "save game" if wanted (`xrepl-store` export/import).
 
-Naming holds: `xrepl-shell*` / `xs-*` are generic + visible; `support.xsf` +
-this workbench are the only story-specific things; "ground" never in tracked
-source; committed `xs-*`/`xrepl-shell*` code is content-agnostic.
+Naming holds: `xrepl-shell*` / `xs-*` are generic + visible; `support.xsf` is
+the only story-specific artifact — the narrative lives only inside it (opaque).
+These docs are public (deep-divers earn the reward); committed `xs-*`/`xrepl-shell*` code is content-agnostic.
 
 ## slice2 — DONE (accepted 2026-06-14)
 
@@ -134,3 +135,34 @@ pre-assemble forms. Sole caller is `handle_call` (L142). slice3 moves parsing
 into the shell (corrected 2-tuple pattern) and DELETES this clause — fold the
 fix into the refactor, do not hotfix-then-delete. (Optional standalone 1-line
 fix if Duncan wants the running server hardened sooner.)
+
+## slice3 — DONE (accepted 2026-06-14)
+
+Session rewired onto the active shell. 63/63 green after Phase B and Phase C;
+multi-session isolation/persistence tests pass (they enforce `eval/2` contract +
+env-threading + both input types). Phase A expanded `xrepl-shell-lfe`
+(`init/1` now handles remote?/snapshot/session-id; added `snapshot/1`,
+`env-of/1`). Phase B: `session-state` `env` → `shell`+`shell-state`; loop calls
+`shell:eval/3`; error routed via `eval-error-to-msg`; save uses `shell:snapshot`
+under the same `'env-snapshot` key. Phase C: deleted `prepare-form` (+ the latent
+parse-bug clause), `serialize-env`, `filter-serializable-bindings`,
+`is-serializable?`, `restore-env`, `restore-env-from-snapshot`.
+
+**MAJOR finding — persistence was silently broken in shipping xrepl.** Old
+`serialize-env` called `lfe_env:get_vbindings` (does not exist in LFE 2.2); a
+`try/catch` swallowed it and stored an EMPTY snapshot → reopen restored nothing.
+CC's `snapshot/1` uses the real `lfe_env:get_vars/1` and now captures bindings
+correctly. So slice3 silently FIXED a latent bug (good, but not behavior-neutral
+as billed).
+
+**TEST GAP (action).** `session-persistence-basic` / `session-recovery` only
+assert `(maps:is_key 'env-snapshot …)` — they passed with BOTH the broken empty
+snapshot and the real one. No test closes→reopens→asserts a restored value, so
+working save/restore is UNPROVEN. Arc8 save/resume depends on this path → add a
+`session-restore-roundtrip` test (set → save → close → reopen → assert value)
+before building on it.
+
+**LFE gotcha (for future cc-prompts):** `(and …)`/`(or …)` are functions
+(evaluate all args); `(andalso …)`/`(orelse …)` short-circuit. CC's
+`(and (is_list x) (is_integer (car x)))` crashed on atom input until switched to
+`andalso`.

@@ -1,4 +1,4 @@
-# arc0 / slice1: xrepl Shell-Pluggability Capability Audit
+# arc6 / slice1: xrepl Shell-Pluggability Capability Audit
 
 **Date:** 2026-06-14  
 **Auditor:** Claude Code (Sonnet 4.6), implementing against the spec in `cc-prompt.md`  

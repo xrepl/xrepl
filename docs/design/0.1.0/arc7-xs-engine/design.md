@@ -1,11 +1,11 @@
-# Arc1 — the `xs` engine (design)
+# Arc7 — the `xs` engine (design)
 
-> Workbench, gitignored. Design-of-record for the content-agnostic interactive-
+> Design-of-record for the content-agnostic interactive-
 > fiction engine. Three modules — `xs-bundle`, `xs-world`, `xs-engine` — that
 > load a story bundle and run it. **Pure and portable:** no socket, no terminal,
 > no zip in the core transition logic; the same `.xsf` IR and the same
 > `xs-engine:handle/3` are what a future Lykn→JS browser reader re-ports. The
-> protocol/terminal wiring is Arc2 (`xs-shell`), kept strictly out of here.
+> protocol/terminal wiring is Arc8 (`xs-shell`), kept strictly out of here.
 >
 > Source of truth for schema + semantics: GROUND doc 12 (`12-LFE-ENGINE-HOWTO.md`).
 > Verified runtime APIs: `zip:zip_open/2 [memory]` + `zip:zip_get/2`,
@@ -25,7 +25,7 @@ Node keys (per doc 12 §1.3): `(id <atom>)`, `(type scene|prompt|ending|suspend)
 `(reveal (when <cond>) <element> …)`, `(stub true)`. Prompt-only: `(prompt "…")`,
 `(password "…")`, `(on-success <id>)`, `(fail-text "…")`, `(items (item …) …)`.
 Body elements: `"string"` (paragraph), `(stream "…")` (slow reveal — DEFERRED,
-Arc3+), `(if <cond> <then> [<else>])`. Choice:
+Arc9+), `(if <cond> <then> [<else>])`. Choice:
 `(choice (cmd "go" "down" …) (to <id>) (set <flag> <val>) (if <cond>))` or
 `(choice (cmd …) (action help|look|inventory))`. Condition grammar (§1.6):
 `(flag? f) | (not c) | (and c …) | (or c …) | (>= visits N) | (= visits N) |
@@ -51,7 +51,7 @@ Dir)`. Load path:
    `lfe_io:read_string(binary_to_list(Bin))` → `{ok, [Form]}` → take the one
    `(node …)` form. Same for `manifest.lfe` → the one `(story …)` form.
 3. `zip:zip_close/1`. Image entries (`assets/images/**`) are **not** parsed
-   here — their bytes are fetched lazily by Arc2 when a node is shown.
+   here — their bytes are fetched lazily by Arc8 when a node is shown.
 4. Parse each `(node …)`/`(story …)` s-expr into an internal map (a small
    recursive reader over the keyword-list form). Build `#{Id => Node}` + manifest.
 
@@ -69,7 +69,7 @@ function" check — reused, per doc 12.)
 
 ## Module 2 — `xs-world` (state + conditions)
 
-The per-play-through world. Pure data so it serializes for free (Arc2 stores it
+The per-play-through world. Pure data so it serializes for free (Arc8 stores it
 in session metadata; the values are atoms/numbers/maps only).
 
 ```
@@ -97,7 +97,7 @@ protocol** — just data in, data out.
 ```
 (handle Node Input World) -> {World2, [Output]}
   Output = #(text Binary)      ; a paragraph
-         | #(stream Binary)    ; slow-reveal (Arc3+ in xs-shell; engine just tags it)
+         | #(stream Binary)    ; slow-reveal (Arc9+ in xs-shell; engine just tags it)
          | #(image AssetId)    ; render hint; bytes fetched by xs-shell
          | #(goto NodeId)      ; transition; caller loads + re-enters
          | suspend             ; soft-exit, resumable
@@ -126,7 +126,7 @@ The caller (xs-shell) owns the **enter→await→handle** loop: on `#(goto Id)` 
 loads the node, runs its entry (on-enter/body/reveal), and awaits the next line.
 `handle/3` itself stays a single pure step so it's table-testable and portable.
 
-## Arc2 seam (not built here — just the contract `xs-shell` will honour)
+## Arc8 seam (not built here — just the contract `xs-shell` will honour)
 
 `xs-shell` is an `xrepl-shell` behaviour impl whose `eval/3` feeds the player's
 line to `xs-engine:handle/3`, threads `World` inside its shell-state (mirrored to
@@ -151,10 +151,10 @@ session `metadata` for free in-VM save/resume), and renders `[Output]`:
 Test fixtures use a tiny **neutral** in-test bundle (a couple of nodes), NOT the
 real story — `xs-*` is content-agnostic and its tests must stay story-free.
 
-## Slice order (Arc1)
+## Slice order (Arc7)
 - slice1: `xs-bundle` (load + validate from a bundle binary).
 - slice2: `xs-world` (state + total condition evaluator).
 - slice3: `xs-engine` (`handle/3`, all four node kinds + items + meta verbs).
 
 Each is pure and unit-testable with no xrepl/session/terminal dependency — they
-can be built and reviewed independently of, and in parallel with, Arc0.
+can be built and reviewed independently of, and in parallel with, Arc6.
