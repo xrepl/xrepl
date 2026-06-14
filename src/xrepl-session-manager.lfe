@@ -36,45 +36,43 @@
   "Create a new session.
 
   Options:
-    name: Human-readable name for session
-    timeout: Session timeout in ms
-    metadata: User metadata
-    config: Session configuration
+    name:           Human-readable name for session
+    shell:          Shell module atom (default 'xrepl-shell-lfe)
+    transport-type: 'tcp | 'unix | 'stdio
+    timeout:        Session timeout in ms
+    metadata:       User metadata
+    config:         Session configuration
+
+  The shell, name, and transport-type are written into the initial ETS
+  metadata BEFORE the session process starts, so xrepl-session:init can
+  read the chosen shell immediately.
 
   Returns:
     #(ok session-id) | #(error reason)"
-  (case (xrepl-store:create-session opts)
-    (`#(ok ,session-id)
-     ;; Start the session process
-     (case (xrepl-session-sup:start-session session-id)
-       (`#(ok ,_pid)
-        (logger:info "Started session ~s" (list session-id))
-        ;; Add name and transport-type to metadata if provided
-        (let* ((name (maps:get 'name opts 'undefined))
-               (transport-type (maps:get 'transport-type opts 'undefined))
-               (metadata-map (cond
-                               ;; Both name and transport-type provided
-                               ((andalso (=/= name 'undefined)
-                                         (=/= transport-type 'undefined))
-                                (map 'name name 'transport-type transport-type))
-                               ;; Only name provided
-                               ((=/= name 'undefined)
-                                (map 'name name))
-                               ;; Only transport-type provided
-                               ((=/= transport-type 'undefined)
-                                (map 'transport-type transport-type))
-                               ;; Neither provided
-                               ('true 'undefined))))
-          (case metadata-map
-            ('undefined 'ok)
-            (_ (xrepl-store:set-metadata session-id metadata-map))))
-        (tuple 'ok session-id))
-       (`#(error ,reason)
-        ;; Clean up store entry
-        (xrepl-store:delete-session session-id)
-        (tuple 'error reason))))
-    (`#(error ,reason)
-     (tuple 'error reason))))
+  (let* ((name (maps:get 'name opts 'undefined))
+         (transport-type (maps:get 'transport-type opts 'undefined))
+         (shell (maps:get 'shell opts 'xrepl-shell-lfe))
+         ;; Build initial metadata; always include shell so init can read it
+         (meta0 (map 'shell shell))
+         (meta1 (if (=/= name 'undefined)
+                  (maps:put 'name name meta0)
+                  meta0))
+         (initial-meta (if (=/= transport-type 'undefined)
+                         (maps:put 'transport-type transport-type meta1)
+                         meta1))
+         ;; Embed metadata in opts so xrepl-store:create-session stores it
+         (create-opts (maps:put 'metadata initial-meta opts)))
+    (case (xrepl-store:create-session create-opts)
+      (`#(ok ,session-id)
+       (case (xrepl-session-sup:start-session session-id)
+         (`#(ok ,_pid)
+          (logger:info "Started session ~s" (list session-id))
+          (tuple 'ok session-id))
+         (`#(error ,reason)
+          (xrepl-store:delete-session session-id)
+          (tuple 'error reason))))
+      (`#(error ,reason)
+       (tuple 'error reason)))))
 
 (defun close (session-id)
   "Close a session (stop process but keep metadata for reopening).

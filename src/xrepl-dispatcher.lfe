@@ -167,15 +167,28 @@
            context)))
 
 (defun handle-describe (message context)
-  "Handle describe request (server capabilities)."
-  (tuple (map 'status 'done
-              'versions (map 'xrepl (list_to_binary (xrepl-vsn:get))
-                             'lfe (list_to_binary (xrepl-vsn:get 'lfe))
-                             'erlang (list_to_binary
-                                       (erlang:system_info 'otp_release)))
-              'ops (list 'eval 'clone 'close 'ls_sessions 'describe 'ping 'load_file 'upload_history)
-              'transports (list 'tcp 'unix 'stdio))
-         context))
+  "Handle describe request (server capabilities).
+
+  Includes the active shell's describe/1 map under the 'shell key when
+  a session is associated with this context. Shell describe maps use
+  atom keys with binary values (e.g. 'name -> #\"lfe\")."
+  (let* ((session-id (handler-context-session-id context))
+         (base-response (map 'status 'done
+                             'versions (map 'xrepl (list_to_binary (xrepl-vsn:get))
+                                            'lfe (list_to_binary (xrepl-vsn:get 'lfe))
+                                            'erlang (list_to_binary
+                                                      (erlang:system_info 'otp_release)))
+                             'ops (list 'eval 'clone 'close 'ls_sessions 'describe
+                                        'ping 'load_file 'upload_history)
+                             'transports (list 'tcp 'unix 'stdio)))
+         (response (if (== session-id 'undefined)
+                     base-response
+                     (let ((shell-desc
+                             (try
+                               (xrepl-session:describe session-id)
+                               (catch (_ (map))))))
+                       (maps:put 'shell shell-desc base-response)))))
+    (tuple response context)))
 
 (defun handle-ping (message context)
   "Handle ping request."

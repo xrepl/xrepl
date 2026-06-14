@@ -13,6 +13,7 @@
    (eval 2)
    (get-env 1)
    (save-state 1)
+   (describe 1)
    (process-name 1))
   ;; Callbacks
   (export
@@ -102,6 +103,16 @@
     ok | #(error reason)"
   (gen_server:call (process-name session-id) 'save-state))
 
+(defun describe (session-id)
+  "Return the active shell's describe/1 capability map.
+
+  Args:
+    session-id: Session identifier
+
+  Returns:
+    map() from the active shell's describe/1"
+  (gen_server:call (process-name session-id) 'describe))
+
 (defun process-name (session-id)
   "Generate process name for session.
 
@@ -119,7 +130,9 @@
 ;;; ----------------
 
 (defun init (session-id)
-  "Initialise a session, delegating env lifecycle to xrepl-shell-lfe."
+  "Initialise a session. Reads active shell from stored metadata (set by
+  xrepl-session-manager:create before the process starts). Defaults to
+  'xrepl-shell-lfe. Delegates env lifecycle to the chosen shell."
   (process_flag 'trap_exit 'true)
 
   ;; Initialise session-specific history
@@ -130,15 +143,16 @@
                                                     (xrepl-history:default-file)))))
     (xrepl-history:init session-id history-opts))
 
-  ;; Detect transport and build shell init opts
+  ;; Read full session data once: transport, snapshot, and active shell
   (let* ((transport-type (get-transport-type session-id))
          (remote? (is-remote-transport? transport-type))
-         ;; Read stored snapshot (may be 'undefined if no prior save)
-         (snapshot (case (xrepl-store:get-session session-id)
-                     (`#(ok ,session-data)
-                      (maps:get 'env-snapshot session-data 'undefined))
-                     (`#(error ,_) 'undefined)))
-         (shell 'xrepl-shell-lfe))
+         (session-data (case (xrepl-store:get-session session-id)
+                         (`#(ok ,sd) sd)
+                         (`#(error ,_) (map))))
+         (snapshot (maps:get 'env-snapshot session-data 'undefined))
+         (metadata (maps:get 'metadata session-data (map)))
+         ;; Shell chosen by create/1 opts; default is xrepl-shell-lfe
+         (shell (maps:get 'shell metadata 'xrepl-shell-lfe)))
     (case (call shell 'init (map 'remote? remote?
                                  'session-id session-id
                                  'snapshot snapshot))
@@ -162,10 +176,20 @@
    (! (session-state-evaluator state) (tuple 'eval input (self)))
    (tuple 'noreply (set-session-state-eval-pending state from)))
 
-  ;; Get environment — LFE-shell-specific accessor
+  ;; Get environment — LFE-shell-specific; returns 'undefined for other shells
   (('get-env _from state)
-   (let ((env (xrepl-shell-lfe:env-of (session-state-shell-state state))))
+   (let* ((shell (session-state-shell state))
+          (env (if (== shell 'xrepl-shell-lfe)
+                 (xrepl-shell-lfe:env-of (session-state-shell-state state))
+                 'undefined)))
      (tuple 'reply env state)))
+
+  ;; Return the active shell's capability map
+  (('describe _from state)
+   (let* ((shell (session-state-shell state))
+          (ss (session-state-shell-state state))
+          (desc (call shell 'describe ss)))
+     (tuple 'reply desc state)))
 
   ;; Save state manually
   (('save-state _from state)
@@ -204,6 +228,23 @@
       (let* ((updated-state (set-session-state-shell-state
                               (set-session-state-eval-pending state 'undefined)
                               ss2))
+             (saved-state (maybe-save-state updated-state)))
+        (xrepl-store:touch-session (session-state-id saved-state))
+        (tuple 'noreply saved-state)))))
+
+  ;; Shell switched mid-turn — reply with Response, update active shell
+  ((`#(eval-result-switch ,response ,mod ,new-ss) state)
+   (case (session-state-eval-pending state)
+     ('undefined
+      (tuple 'noreply state))
+     (from
+      (gen_server:reply from (tuple 'ok response))
+      (let* ((updated-state
+               (set-session-state-shell-state
+                 (set-session-state-shell
+                   (set-session-state-eval-pending state 'undefined)
+                   mod)
+                 new-ss))
              (saved-state (maybe-save-state updated-state)))
         (xrepl-store:touch-session (session-state-id saved-state))
         (tuple 'noreply saved-state)))))
@@ -296,7 +337,15 @@
             (evaluator-loop session-id shell ss2))
            (`#(error ,error-info)
             (! reply-to (tuple 'eval-error error-info))
-            (evaluator-loop session-id shell shell-state)))
+            (evaluator-loop session-id shell shell-state))
+           (`#(switch-shell ,mod ,opts ,response)
+            (case (call mod 'init opts)
+              (`#(ok ,new-ss)
+               (! reply-to (tuple 'eval-result-switch response mod new-ss))
+               (evaluator-loop session-id mod new-ss))
+              (`#(error ,r)
+               (! reply-to (tuple 'eval-error (tuple 'switch-init-failed r)))
+               (evaluator-loop session-id shell shell-state)))))
          (catch
            ((tuple class reason stack)
             (! reply-to
@@ -338,6 +387,9 @@
     ;; Exception escaped shell eval/3 (safety net)
     (`#(exception ,class ,reason ,stack)
      (xrepl-io:format-error class reason stack))
+    ;; Shell switch init failed
+    (`#(switch-init-failed ,r)
+     (lists:flatten (io_lib:format "shell switch failed: ~p" (list r))))
     ;; Unknown error shape
     (_
      (lists:flatten (io_lib:format "error: ~p" (list error-info))))))

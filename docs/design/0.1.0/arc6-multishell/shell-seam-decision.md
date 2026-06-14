@@ -160,9 +160,45 @@ assert `(maps:is_key 'env-snapshot …)` — they passed with BOTH the broken em
 snapshot and the real one. No test closes→reopens→asserts a restored value, so
 working save/restore is UNPROVEN. Arc8 save/resume depends on this path → add a
 `session-restore-roundtrip` test (set → save → close → reopen → assert value)
-before building on it.
+before building on it. **RESOLVED 2026-06-14:** `session-restore-roundtrip`
+added (strict `#(ok 12345)` assertion + loud-failure branch); 64/64 green; the
+fix is PROVEN — in-VM binding save/resume round-trips end-to-end. Arc8 save/resume
+foundation is solid.
 
 **LFE gotcha (for future cc-prompts):** `(and …)`/`(or …)` are functions
 (evaluate all args); `(andalso …)`/`(orelse …)` short-circuit. CC's
 `(and (is_list x) (is_integer (car x)))` crashed on atom input until switched to
 `andalso`.
+
+## slice4 — DONE (accepted 2026-06-14)
+
+Switching + echo shell + describe-merge. 75/75 green (+11 new). The seam is
+proven end-to-end: `xrepl-shell-switching-tests.lfe` starts a session in
+`xrepl-shell-echo`, echoes, switches on `"quit"`, and asserts the session then
+evaluates `(+ 1 2)` → `#(ok 3)` (genuinely back in LFE), and `describe`'s
+advertised shell flips `#"echo"`→`#"lfe"` across the switch. Switch threading:
+shell `eval/3` → `#(switch-shell Mod Opts Response)` → evaluator-loop inits Mod →
+`#(eval-result-switch Response Mod NewSS)` → session sets `shell`+`shell-state`.
+`shell` opt on `create` selects the starting shell (default `xrepl-shell-lfe`);
+`get-env` guarded to the LFE shell; `describe` omits `'shell` cleanly when no
+session.
+
+**Incidental fix:** `xrepl-session-manager:create` set metadata AFTER
+`start-session`, so `init` couldn't read it; fixed by pre-building metadata
+(incl. `shell`) before the spawn. Also makes transport-type correct at init.
+(Second incidental correctness fix this arc, after the persistence one.)
+
+## slice5 — WRITTEN (the did-you-mean breadcrumb)
+
+Hook in `xrepl-shell-lfe:eval/3`: an UNBOUND call to a seeded trigger
+(`pwd`/`passwd`/`password`) returns `#(formatted "Did you mean (xs:run '<name>)?")`
+instead of a raw error; never hijacks a bound function; non-trigger unbound calls
+and normal eval untouched. `xs:run` is a FORWARD REFERENCE — wired in Arc8; slice5
+only emits the suggestion text (don't seed/stub `xs:run`).
+
+## Arc6 status
+slices 1–4 DONE; slice5 written/queued. After slice5 lands, the multishell seam
+is complete: pluggable + per-session-switchable + advertised shells, with proven
+save/resume. Forward: Arc7 (`xs` engine — slice1 `xs-bundle` cc-prompt already
+written, fully parallel) and Arc8 (`xs-shell`, which makes `xs:run` real and
+completes the breadcrumb).
