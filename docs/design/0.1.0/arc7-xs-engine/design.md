@@ -189,3 +189,28 @@ list when many** — e.g. `(body "one")` → `body => "one"`; `(body "a" "b")` �
 `as-list` helper (bare non-list → one-element list) at each multi-valued field
 access, or it will mishandle single-element nodes. (`flags` is exempt —
 `parse-flags` already returns a list.) Bake `as-list` into `xs-engine`.
+
+## slice3 `xs-engine` — DONE (accepted 2026-06-14) — ARC7 COMPLETE
+
+`src/xs-engine.lfe` + tests; 131/131 green; content-agnostic; file read-verified
+intact (a sed corruption hit another file mid-task and was recovered).
+`as-list/1` (Phase A) implemented to the heuristic and tested standalone.
+`enter/2` order: on-enter → bump-visit → body → reveal (vs bumped world) → image
+→ kind-tail (`ending`→`done`, `suspend`→`suspend`). `handle/3` precedence:
+choice → meta-verb (look/take/inventory/help) → (prompt) password → "You can't
+do that." Items: takeable via `eval-cond`, on-take sets+text, `add-item`.
+Password mismatch → `fail-text` (normal text, world unchanged). PURE; avoids
+`try` entirely (leans on `eval-cond` totality + defensive `case`s). New gotcha:
+`node` is unusable as a param name (lfe_lint BIF collision) — used `nd`.
+
+**Arc7 is complete.** `xs-bundle` + `xs-world` + `xs-engine` — the whole pure,
+portable engine exists and is proven. Output contract for Arc8:
+`enter/2` & `handle/3` → `#(World2 [Output])`, Output ∈
+`#(text Bin) | #(stream Bin) | #(image AssetId) | #(goto NodeId) | done | suspend`.
+
+Forward: **Arc8 `xs-shell`** — drive `enter`/`handle` over a bundle, hold World
+in session metadata (save/resume), render Outputs to protocol responses
+(`#(text)`→`#(formatted)`, `#(goto)`→load+enter next node, `#(image)`→`zip_get`
+bytes + `xrepl-term-graphics:render-data/2`, `done`/`suspend`→switch back to
+`xrepl-shell-lfe`), and wire `xs:run` (the LFE-shell entry that switches in,
+completing the breadcrumb).
