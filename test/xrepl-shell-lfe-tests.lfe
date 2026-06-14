@@ -240,3 +240,93 @@
           (is-not (lists:member 'fn-var names))))
        (_ (is 'false))))
     (_ (is 'false))))
+
+;;; ----------------
+;;; Did-you-mean hook tests (slice5)
+;;; ----------------
+
+(deftest dym-pwd-returns-hint
+  "(pwd) with a bare env — pwd is unbound, returns a formatted xs:run hint.
+  Note: the default LFE shell env has pwd/0 as a built-in, so we use a
+  bare lfe_env:new() to test the hint mechanism for 'pwd itself."
+  (setup)
+  ;; Use a bare env (no shell built-ins) so pwd is unbound
+  (let ((bare-env (lfe_env:new)))
+    (case (xrepl-shell-lfe:init (map 'env bare-env))
+      (`#(ok ,state0)
+       (case (xrepl-shell-lfe:eval "(pwd)" state0 (map))
+         (`#(ok #(formatted ,text) ,state1)
+          ;; Text contains the xs:run suggestion with the typed name
+          (let ((s (if (is_binary text) (binary_to_list text) text)))
+            (is (=/= 'nomatch (string:find s "(xs:run 'pwd)"))))
+          ;; Shell state is unchanged (env not updated)
+          (is-equal state0 state1))
+         (other (is-equal (tuple 'expected-hint 'got) other))))
+      (_ (is 'false)))))
+
+(deftest dym-passwd-returns-hint
+  "(passwd) — unbound, in table — hint substitutes the name 'passwd."
+  (setup)
+  (case (xrepl-shell-lfe:init (map))
+    (`#(ok ,state0)
+     (case (xrepl-shell-lfe:eval "(passwd)" state0 (map))
+       (`#(ok #(formatted ,text) ,_)
+        (let ((s (if (is_binary text) (binary_to_list text) text)))
+          (is (=/= 'nomatch (string:find s "(xs:run 'passwd)")))))
+       (other (is-equal (tuple 'expected-hint 'got) other))))
+    (_ (is 'false))))
+
+(deftest dym-password-with-args
+  "(password 1 2) — args are ignored; name 'password is substituted."
+  (setup)
+  (case (xrepl-shell-lfe:init (map))
+    (`#(ok ,state0)
+     (case (xrepl-shell-lfe:eval "(password 1 2)" state0 (map))
+       (`#(ok #(formatted ,text) ,_)
+        (let ((s (if (is_binary text) (binary_to_list text) text)))
+          (is (=/= 'nomatch (string:find s "(xs:run 'password)")))))
+       (other (is-equal (tuple 'expected-hint 'got) other))))
+    (_ (is 'false))))
+
+(deftest dym-zzznope-not-a-trigger
+  "(zzznope 1) — unbound but NOT in table — normal error, no hint."
+  (setup)
+  (case (xrepl-shell-lfe:init (map))
+    (`#(ok ,state0)
+     (case (xrepl-shell-lfe:eval "(zzznope 1)" state0 (map))
+       (`#(error ,_) (is 'true))       ;; normal error path
+       (`#(ok #(formatted ,_) ,_)      ;; must NOT be a hint
+        (is 'false))
+       (_ (is 'true))))                ;; other error shapes also ok
+    (_ (is 'false))))
+
+(deftest dym-no-hijack-bound-function
+  "If the user binds a table symbol as a function, it is called normally.
+  Uses 'passwd (unbound in default env) to test the no-hijack guard cleanly
+  (pwd/0 is a shell built-in — testing passwd is cleaner and equivalent)."
+  (setup)
+  (case (xrepl-shell-lfe:init (map))
+    (`#(ok ,state0)
+     ;; Verify passwd hint fires BEFORE the user defines it
+     (case (xrepl-shell-lfe:eval "(passwd)" state0 (map))
+       (`#(ok #(formatted ,_) ,_) 'ok)   ;; hint fires when unbound
+       (_ (is 'false)))
+     ;; Now define a user function named passwd
+     (case (xrepl-shell-lfe:eval "(defun passwd () 'real)" state0 (map))
+       (`#(ok ,_ ,state1)
+        ;; (passwd) must call the user's function, NOT produce a hint
+        (case (xrepl-shell-lfe:eval "(passwd)" state1 (map))
+          (`#(ok real ,_) (is 'true))   ;; atom 'real — bare in quasi-quote
+          (other (is-equal (tuple 'expected-real 'got) other))))
+       (_ (is 'false))))
+    (_ (is 'false))))
+
+(deftest dym-normal-eval-unaffected
+  "(+ 1 2) = 3 with the hook present — normal eval unchanged."
+  (setup)
+  (case (xrepl-shell-lfe:init (map))
+    (`#(ok ,state0)
+     (case (xrepl-shell-lfe:eval "(+ 1 2)" state0 (map))
+       (`#(ok ,3 ,_) (is 'true))
+       (other (is-equal (tuple 'expected-3 'got) other))))
+    (_ (is 'false))))

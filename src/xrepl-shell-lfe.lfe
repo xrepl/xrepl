@@ -56,6 +56,10 @@
   (parse), xrepl-eval:eval-form/2 (eval), and xrepl-env:update-shell-vars/3
   (thread history vars).
 
+  Includes a did-you-mean hook: if the parsed form is a call to an unbound
+  symbol in the suggestion table (e.g. pwd, passwd, password), a hint is
+  returned without evaluating and without changing shell state.
+
   Args:
     input:       raw input — char list string OR already-parsed LFE form
     shell-state: lfe-shell-state record
@@ -63,24 +67,32 @@
 
   Returns:
     #(ok Value ShellState2)             - normal turn
+    #(ok #(formatted Text) ShellState)  - did-you-mean hint (state unchanged)
     #(error #(parse Reason))            - input could not be parsed
     #(error #(eval Reason))             - xrepl-eval returned an error
     #(error #(exception Class Rsn Stk)) - unexpected exception escaped"
   (let ((env (lfe-shell-state-env shell-state)))
     (case (prepare-form input)
       (`#(ok ,form)
-       (try
-         (case (xrepl-eval:eval-form form env)
-           (`#(ok ,value ,new-env)
-            (let ((final-env (xrepl-env:update-shell-vars
-                               form value new-env)))
-              (tuple 'ok value
-                     (set-lfe-shell-state-env shell-state final-env))))
-           (`#(error ,reason)
-            (tuple 'error (tuple 'eval reason))))
-         (catch
-           ((tuple class reason stack)
-            (tuple 'error (tuple 'exception class reason stack))))))
+       ;; Did-you-mean hook: intercept before calling eval-form
+       (case (check-suggestion form env)
+         (`#(suggest ,text)
+          ;; Return hint; env and shell state are unchanged
+          (tuple 'ok (tuple 'formatted text) shell-state))
+         ('no-match
+          ;; Normal eval path
+          (try
+            (case (xrepl-eval:eval-form form env)
+              (`#(ok ,value ,new-env)
+               (let ((final-env (xrepl-env:update-shell-vars
+                                  form value new-env)))
+                 (tuple 'ok value
+                        (set-lfe-shell-state-env shell-state final-env))))
+              (`#(error ,reason)
+               (tuple 'error (tuple 'eval reason))))
+            (catch
+              ((tuple class reason stack)
+               (tuple 'error (tuple 'exception class reason stack))))))))
       (`#(error ,reason)
        (tuple 'error (tuple 'parse reason))))))
 
@@ -211,3 +223,38 @@
      (lists:all (fun serializable? 1) (tuple_to_list value)))
     ((is_map value) 'true)
     ('true 'false)))
+
+;;; ----------------
+;;; Did-you-mean hook
+;;; ----------------
+
+(defun suggestion-table ()
+  "Atoms whose unbound calls return an xs:run suggestion instead of an error.
+
+  Never include xs:run itself. Extend by adding atoms here; the hook
+  substitutes the actual symbol name into the hint text automatically."
+  '(pwd passwd password))
+
+(defun check-suggestion (form env)
+  "Check whether form is an unbound call to a table symbol.
+
+  Returns #(suggest Text) if a hint should be shown, 'no-match otherwise.
+  Guards against hijacking user-defined functions: the hint only fires when
+  lfe_env:is_fbound/3 (verified exported from lfe_env.erl) returns false.
+
+  Conditions that must ALL hold:
+    1. form is a list whose head is an atom (a function-call shape)
+    2. that atom is in suggestion-table/0
+    3. the atom is NOT bound in env at the called arity"
+  (case form
+    ((cons sym args)
+     (when (is_atom sym))
+     (if (andalso (lists:member sym (suggestion-table))
+                  (not (lfe_env:is_fbound sym (length args) env)))
+       (tuple 'suggest (suggest-text sym))
+       'no-match))
+    (_ 'no-match)))
+
+(defun suggest-text (sym)
+  "Build the did-you-mean hint string for the given symbol."
+  (++ "Did you mean (xs:run '" (atom_to_list sym) ")?"))
