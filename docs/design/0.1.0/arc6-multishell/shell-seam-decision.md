@@ -218,7 +218,12 @@ i memory p pid pp pwd q quit regs sesh-* uptime`. FREE thematic words (all fire)
 authenticate`. Recommendation: drop `pwd`, seed door-themed free words
 (`password passwd unlock open knock sesame secret login`) — a one-line seed-list
 edit. **DECIDED (Duncan 2026-06-14):** that exact 8-word set; tweak cc-prompt
-written (`slice5-did-you-mean/bait-words-tweak.md`).
+written (`slice5-did-you-mean/bait-words-tweak.md`). **LANDED + verified in
+source:** seed = the 8 words, `pwd` removed; guard uses `andalso` + `is_fbound`;
+all 8 confirmed `is_fbound=false` at runtime (default env); tests assert hints in
+the default shell env. (CC's pasted report was truncated — full-suite `N/N green`
+line not visible; Duncan to confirm the run.) Nit: module docstring still lists
+`pwd` as an example — clean up on the next touch (Arc8). **Arc6 COMPLETE.**
 
 Arc6 multishell seam is otherwise COMPLETE: pluggable + per-session-switchable +
 advertised shells, proven save/resume, discovery hook. Two latent xrepl bugs

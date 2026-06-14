@@ -158,3 +158,25 @@ real story — `xs-*` is content-agnostic and its tests must stay story-free.
 
 Each is pure and unit-testable with no xrepl/session/terminal dependency — they
 can be built and reviewed independently of, and in parallel with, Arc6.
+
+## slice1 `xs-bundle` — DONE (accepted 2026-06-14)
+
+`src/xs-bundle.lfe` + tests; 89/89 green; content-agnostic (neutral `room-a`/
+`room-b` fixtures). Load path = `zip:zip_open [memory]` → `zip_get` →
+`lfe_io:read_string/1` per entry. **Locked `{error,…}` shapes:**
+`{dangling, NodeId|entry, TargetId}` (covers `to`, `on-success`, and manifest
+`entry`), `{dup-node, Id}`, `no-entry`, `no-manifest`; missing image →
+`logger:warning` + `{ok, Bundle}`. Flag-reference validation DEFERRED to
+`xs-world` (owns the condition/set grammar). `Bundle` =
+`#m(manifest M nodes #{Id=>NodeMap} flags FlagList images-dir Dir
+image-assets #{AssetId=>true})`.
+
+### IR-consumption note (LOAD-BEARING for slice2/slice3 + the Lykn reader)
+`parse-keyword-list` stores a multi-valued node field **bare when single, as a
+list when many** — e.g. `(body "one")` → `body => "one"`; `(body "a" "b")` →
+`body => ("a" "b")`. Same for `choices`, `items`, `on-enter`, `reveal`.
+`xs-bundle` handled this for `choices` (`collect-to-targets` checks the
+`(cons 'choice …)` bare case). **Every consumer must normalize** with an
+`as-list` helper (bare non-list → one-element list) at each multi-valued field
+access, or it will mishandle single-element nodes. (`flags` is exempt —
+`parse-flags` already returns a list.) Bake `as-list` into `xs-engine`.
