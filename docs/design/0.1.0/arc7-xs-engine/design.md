@@ -171,6 +171,15 @@ can be built and reviewed independently of, and in parallel with, Arc6.
 `#m(manifest M nodes #{Id=>NodeMap} flags FlagList images-dir Dir
 image-assets #{AssetId=>true})`.
 
+## slice2 `xs-world` — DONE (accepted 2026-06-14)
+
+`src/xs-world.lfe` + tests; 111/111 green; content-agnostic. World =
+`#m(node Id flags #{f=>bool} visits #{Id=>N} items #{id=>true})` (pure data).
+`eval-cond/2` covers every grammar form and is **total** (catch-all →
+`logger:warning` + `false`, proven by tests). `and`/`or` use named helper
+foldls (the `lfe_codelift` workaround — see proto-skill gotcha #4). Flag shape
+from `xs-bundle` consumed directly (always a list).
+
 ### IR-consumption note (LOAD-BEARING for slice2/slice3 + the Lykn reader)
 `parse-keyword-list` stores a multi-valued node field **bare when single, as a
 list when many** — e.g. `(body "one")` → `body => "one"`; `(body "a" "b")` →
