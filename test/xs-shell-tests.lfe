@@ -249,3 +249,97 @@
        (is (=/= 'nomatch (binary:match opening #"First line.\nSecond line."))))
       (other
        (is-equal (tuple 'expected-multi-text-opening 'got) other)))))
+
+;;; ----------------
+;;; Phase A — save/1 and resume/2 (pure, neutral bundle)
+;;; ----------------
+
+(deftest save-returns-world-map
+  "save/1 returns the World map (same value as snapshot/1)."
+  (setup)
+  (let ((bin (test-bundle-bin)))
+    (case (xs-shell:start bin)
+      (`#(ok ,state ,_)
+       (let ((saved (xs-shell:save state)))
+         (is (is_map saved))
+         (is (maps:is_key 'node saved))
+         (is-equal saved (xs-shell:snapshot state))))
+      (_ (is 'false)))))
+
+(deftest resume-renders-current-room
+  "resume/2 rebuilds state at the saved node and renders its body text."
+  (setup)
+  (let* ((bin (test-bundle-bin))
+         (`#(ok ,bundle) (xs-bundle:load bin))
+         ;; Build a played world: current node = gate, start visited
+         (world0 (xs-world:new (xs-bundle:manifest bundle)))
+         (world1 (xs-world:set-node world0 'gate))
+         (world2 (xs-world:bump-visit world1 'start)))
+    (case (xs-shell:resume world2 bundle)
+      (`#(ok ,state ,room)
+       ;; Room text contains gate body
+       (is (is_binary room))
+       (is (=/= 'nomatch (binary:match room #"gate")))
+       ;; State's save world equals the saved world
+       (is-equal world2 (xs-shell:save state)))
+      (other
+       (is-equal (tuple 'expected-ok-resume 'got) other)))))
+
+(deftest resume-stale-save
+  "resume/2 returns {error, stale-save} when saved node is not in bundle."
+  (setup)
+  (let* ((bin (test-bundle-bin))
+         (`#(ok ,bundle) (xs-bundle:load bin))
+         (world0 (xs-world:new (xs-bundle:manifest bundle)))
+         (stale  (xs-world:set-node world0 'lost-in-space)))
+    (is-equal (tuple 'error 'stale-save)
+              (xs-shell:resume stale bundle))))
+
+;;; ----------------
+;;; Phase B — save points in eval/3
+;;; ----------------
+
+(deftest eval-quit-saves-world-to-metadata
+  "eval 'quit' writes the world to session metadata under 'xs-save."
+  (setup)
+  (let* ((`#(ok ,sid) (xrepl-session-manager:create (map 'name "xs-quit-test")))
+         (bin (test-bundle-bin))
+         (`#(ok ,state0 ,_) (xs-shell:start bin))
+         (ctx (map 'session-id sid)))
+    (case (xs-shell:eval "quit" state0 ctx)
+      (`#(switch-shell xrepl-shell-lfe ,_ ,_)
+       (case (xrepl-store:get-metadata sid)
+         (`#(ok ,meta)
+          ;; xs-save must be present
+          (is (maps:is_key 'xs-save meta))
+          (let ((saved (maps:get 'xs-save meta)))
+            (is (is_map saved))
+            ;; Current node was 'start' when quit was issued
+            (is-equal 'start (xs-world:current-node saved))))
+         (_ (is 'false))))
+      (other (is-equal (tuple 'expected-switch-shell 'got) other)))
+    (xrepl-session-manager:destroy sid)))
+
+(deftest eval-done-clears-save-from-metadata
+  "Reaching a 'done' ending removes (sets to 'none) the 'xs-save entry."
+  (setup)
+  (let* ((`#(ok ,sid) (xrepl-session-manager:create (map 'name "xs-done-test")))
+         (bin (test-bundle-bin))
+         (`#(ok ,state0 ,_) (xs-shell:start bin))
+         (ctx (map 'session-id sid))
+         ;; Pre-seed a save so we can confirm it gets cleared
+         (_ (xrepl-store:set-metadata sid (map 'xs-save (xs-shell:save state0))))
+         ;; Navigate: start → north → gate → xyzzy → vault (ending → done)
+         (`#(ok ,_ ,state1) (xs-shell:eval "north" state0 ctx))
+         (done-result       (xs-shell:eval "xyzzy" state1 ctx)))
+    ;; The done result must be a switch-shell
+    (case done-result
+      (`#(switch-shell xrepl-shell-lfe ,_ ,_)
+       (case (xrepl-store:get-metadata sid)
+         (`#(ok ,meta)
+          ;; xs-save must be absent or 'none (cleared on done)
+          (let ((saved (maps:get 'xs-save meta 'not-present)))
+            (is (orelse (== saved 'not-present) (== saved 'none)))))
+         (_ (is 'false))))
+      (other (is-equal (tuple 'expected-switch-shell-done 'got) other)))
+    (xrepl-session-manager:destroy sid)))

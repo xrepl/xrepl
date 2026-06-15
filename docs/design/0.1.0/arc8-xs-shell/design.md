@@ -24,6 +24,14 @@
   renders that room) or starts fresh. No session-level active-shell-persistence
   needed — metadata carries it. Deferred: per-turn autosave; auto room-render on
   a bare session reopen (resume via `(xs:run)` renders it).
+  **DONE (accepted 2026-06-14, 147 green, + 1 addendum):** save via `Ctx`
+  session-id works; `resume/2` + save-points (quit/suspend save, done clears)
+  correct. GAP CC honestly flagged: `get-current` reads the *calling process's*
+  dict; the evaluator process never sets it → `xs:run`'s resume lookup finds
+  nothing in real use (tests pass only via explicit `set-current`).
+  **addendum-evaluator-current-session.md:** evaluator-loop calls
+  `set-current session-id` on start → eval'd code (xs:run + any session-aware
+  command) can find its session. Generic infra fix.
 - **slice3 — images.** `#(image Id)` → `zip_get` bytes from the `.xsf` +
   `xrepl-term-graphics:render-data/2`.
 

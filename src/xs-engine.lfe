@@ -17,6 +17,7 @@
   (export
    (handle 3)
    (enter 2)
+   (render-room 2)
    (as-list 1)
    (string? 1)))
 
@@ -141,12 +142,31 @@
 ;;; Phase B — enter/2
 ;;; ----------------
 
-(defun enter (nd world)
-  "Apply on-enter + bump-visit + emit body/reveal/image + kind tail.
+(defun render-room (nd world)
+  "Render a node's body + reveal + image against World.
 
-  Order: on-enter sets → bump-visit → body → reveal → image → kind-tail.
-  Visit is bumped BEFORE reveal so (>= visits 2) conditions trigger on
-  the 2nd entry.
+  Does NOT apply on-enter sets or bump the visit count. Used by enter/2
+  (after on-enter + bump) and by xs-shell:resume (returning to a saved
+  room without re-entering).
+
+  Args:
+    nd:    NodeMap from xs-bundle
+    world: World from xs-world
+
+  Returns:
+    list of Outputs (text/stream/image)"
+  (let* ((body     (as-list (maps:get 'body nd '())))
+         (body-out (lists:flatmap (lambda (e) (render-element e world)) body))
+         (rev-out  (emit-reveal nd world))
+         (img-out  (emit-image nd)))
+    (++ body-out rev-out img-out)))
+
+(defun enter (nd world)
+  "Apply on-enter + bump-visit + render room + kind tail.
+
+  Order: on-enter sets → bump-visit → body/reveal/image → kind-tail.
+  Visit is bumped BEFORE render-room so (>= visits 2) conditions trigger
+  on the 2nd entry.
 
   Args:
     nd:    NodeMap from xs-bundle
@@ -160,20 +180,15 @@
          ;; 2. Bump this node's visit
          (nd-id    (maps:get 'id nd 'undefined))
          (w2       (xs-world:bump-visit w1 nd-id))
-         ;; 3. Emit body
-         (body     (as-list (maps:get 'body nd '())))
-         (body-out (lists:flatmap (lambda (e) (render-element e w2)) body))
-         ;; 4. Reveal (condition evaluated against w2 so visit bump counts)
-         (rev-out  (emit-reveal nd w2))
-         ;; 5. Image
-         (img-out  (emit-image nd))
+         ;; 3-5. Render body + reveal + image (against w2 so bump counts)
+         (room-out (render-room nd w2))
          ;; 6. Kind tail
          (kind     (maps:get 'type nd 'scene))
          (tail     (case kind
                      ('ending  (list 'done))
                      ('suspend (list 'suspend))
                      (_ '())))
-         (outputs  (++ body-out rev-out img-out tail)))
+         (outputs  (++ room-out tail)))
     (tuple w2 outputs)))
 
 ;;; ----------------

@@ -17,6 +17,8 @@
    (eval 3)
    (describe 1)
    (snapshot 1)
+   (save 1)
+   (resume 2)
    (prompt 1)))
 
 ;;; ----------------
@@ -97,26 +99,39 @@
   Returns:
     #(ok #(formatted Bin) ShellState2)                  - normal turn
     #(switch-shell xrepl-shell-lfe #m() #(formatted B)) - story ended/suspended"
-  (let* ((bundle  (xs-shell-state-bundle shell-state))
-         (world   (xs-shell-state-world  shell-state))
-         (nd-id   (xs-world:current-node world))
-         (input-bin (normalize-input input)))
-    (case (xs-bundle:node bundle nd-id)
-      (`#(ok ,nd)
-       (let* ((`#(,w1 ,outs) (xs-engine:handle nd input-bin world))
-              (`#(,w2 ,texts ,terminal)
-               (process-outputs outs bundle w1 '() 'none))
-              (output-bin (join-texts texts))
-              (state2     (make-xs-shell-state bundle bundle world w2)))
-         (if (=/= terminal 'none)
-           (tuple 'switch-shell 'xrepl-shell-lfe (map)
-                  (tuple 'formatted output-bin))
-           (tuple 'ok (tuple 'formatted output-bin) state2))))
-      ('error
-       ;; Current node missing from bundle — degenerate state
-       (tuple 'ok
-              (tuple 'formatted #"(The story state is lost.)")
-              shell-state)))))
+  (let* ((bundle     (xs-shell-state-bundle shell-state))
+         (world      (xs-shell-state-world  shell-state))
+         (nd-id      (xs-world:current-node world))
+         (input-bin  (normalize-input input))
+         (session-id (maps:get 'session-id ctx 'undefined)))
+    ;; Intercept quit/exit BEFORE engine — save world and leave story
+    (if (orelse (== input-bin #"quit") (== input-bin #"exit"))
+      (progn
+        (save-to-session session-id world)
+        (tuple 'switch-shell 'xrepl-shell-lfe (map)
+               (tuple 'formatted #"Progress saved. Until next time.")))
+      ;; Normal engine path
+      (case (xs-bundle:node bundle nd-id)
+        (`#(ok ,nd)
+         (let* ((`#(,w1 ,outs) (xs-engine:handle nd input-bin world))
+                (`#(,w2 ,texts ,terminal)
+                 (process-outputs outs bundle w1 '() 'none))
+                (output-bin (join-texts texts))
+                (state2     (make-xs-shell-state bundle bundle world w2)))
+           (if (=/= terminal 'none)
+             (progn
+               ;; done → clear the save; suspend → save current world
+               (if (== terminal 'done)
+                 (clear-session-save session-id)
+                 (save-to-session session-id w2))
+               (tuple 'switch-shell 'xrepl-shell-lfe (map)
+                      (tuple 'formatted output-bin)))
+             (tuple 'ok (tuple 'formatted output-bin) state2))))
+        ('error
+         ;; Current node missing from bundle — degenerate state
+         (tuple 'ok
+                (tuple 'formatted #"(The story state is lost.)")
+                shell-state))))))
 
 (defun describe (_shell-state)
   "Return the xs-shell capability map.
@@ -125,15 +140,48 @@
     map with atom keys: name, kind, prompt"
   (map 'name #"xs" 'kind #"story" 'prompt #"> "))
 
-(defun snapshot (shell-state)
-  "Return the world map for session persistence.
+(defun save (shell-state)
+  "Return the world map — the save blob (pure data, serializable).
 
-  The bundle is NOT included (it is reloadable from the .xsf file).
-  Full save/resume wiring (world into session metadata) is slice2.
+  The bundle is excluded (it is reloadable from the .xsf file).
+
+  Args:
+    shell-state: xs-shell-state record
 
   Returns:
     World map"
   (xs-shell-state-world shell-state))
+
+(defun snapshot (shell-state)
+  "Return the world map for xrepl session persistence (delegates to save/1).
+
+  Returns:
+    World map"
+  (save shell-state))
+
+(defun resume (saved-world bundle)
+  "Rebuild shell state from a saved world + a freshly loaded bundle.
+
+  Renders the current room WITHOUT applying on-enter or bumping the visit
+  (the player is resuming mid-play, not re-entering). If the saved current
+  node is absent from the bundle (stale save), returns {error, stale-save}.
+
+  Args:
+    saved-world: World map from a prior save/1 call
+    bundle:      freshly loaded xs-bundle Bundle map
+
+  Returns:
+    #(ok ShellState RenderedRoom) | #(error stale-save)"
+  (let ((nd-id (xs-world:current-node saved-world)))
+    (case (xs-bundle:node bundle nd-id)
+      ('error
+       (tuple 'error 'stale-save))
+      (`#(ok ,nd)
+       (let* ((room-outs (xs-engine:render-room nd saved-world))
+              (room-bin  (join-texts (flatten-texts room-outs)))
+              (state     (make-xs-shell-state bundle bundle
+                                              world  saved-world)))
+         (tuple 'ok state room-bin))))))
 
 (defun prompt (_shell-state)
   "Return the xs-shell prompt binary.
@@ -214,3 +262,27 @@
   lists:join/2 is OTP-19+; iolist_to_binary/1 is ancient. Replaces
   binary:join/2 which is OTP-28+ only. Handles empty/single/multi uniformly."
   (iolist_to_binary (lists:join #"\n" texts)))
+
+;;; ----------------
+;;; Session save helpers (Phase B)
+;;; ----------------
+
+(defun save-to-session (session-id world)
+  "Write World to session metadata under 'xs-save.
+  No-op when session-id is 'undefined (no session context).
+
+  Uses xrepl-store:set-metadata/2 which merges, so this adds/updates
+  the 'xs-save key without touching other metadata."
+  (if (=/= session-id 'undefined)
+    (xrepl-store:set-metadata session-id (map 'xs-save world))
+    'ok))
+
+(defun clear-session-save (session-id)
+  "Mark the save slot as empty (story ended cleanly — done output).
+  Sets 'xs-save to 'none rather than removing the key (set-metadata
+  merges; remove would require update-session). xs:run treats 'none
+  the same as absent.
+  No-op when session-id is 'undefined."
+  (if (=/= session-id 'undefined)
+    (xrepl-store:set-metadata session-id (map 'xs-save 'none))
+    'ok))
