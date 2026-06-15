@@ -198,3 +198,43 @@
          (is (maps:is_key "tile.png" img-assets))))
       (other
        (is-equal (tuple 'expected-ok-with-image 'got) other)))))
+
+;;; ----------------
+;;; image-bytes/2 tests (slice3)
+;;; ----------------
+
+(defun img-bundle-bin ()
+  "A bundle with an image asset for testing image-bytes/2."
+  (make-xsf-with-images
+    (mfst)
+    (list (tuple "room-a.lfe" (node-a))
+          (tuple "room-b.lfe" (node-b)))
+    (list (tuple "assets/images/pic-a.png" #"PNGBYTES"))))
+
+(deftest image-bytes-stem-match
+  "image-bytes with stem 'pic-a' resolves 'assets/images/pic-a.png'."
+  (setup)
+  (case (xs-bundle:load (img-bundle-bin))
+    (`#(ok ,bundle)
+     ;; Stem match: asset-id without extension
+     (is-equal (tuple 'ok #"PNGBYTES")
+               (xs-bundle:image-bytes bundle "pic-a")))
+    (_ (is 'false))))
+
+(deftest image-bytes-exact-match
+  "image-bytes with full filename 'pic-a.png' resolves the same entry."
+  (setup)
+  (case (xs-bundle:load (img-bundle-bin))
+    (`#(ok ,bundle)
+     ;; Exact match: full filename including extension
+     (is-equal (tuple 'ok #"PNGBYTES")
+               (xs-bundle:image-bytes bundle "pic-a.png")))
+    (_ (is 'false))))
+
+(deftest image-bytes-missing-returns-error
+  "image-bytes for an absent asset id returns 'error."
+  (setup)
+  (case (xs-bundle:load (img-bundle-bin))
+    (`#(ok ,bundle)
+     (is-equal 'error (xs-bundle:image-bytes bundle "nope")))
+    (_ (is 'false))))

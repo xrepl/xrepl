@@ -41,6 +41,24 @@
   remote-transport image delivery (in-process render only). OPEN: asset-id ↔
   filename convention (node `(image "X")` = stem or full filename?) — settle when
   paintings are packed; supports both via stem-or-exact match for now.
+  **DONE (accepted 2026-06-14, 153 green, read-verified):** `image-bytes/2`
+  (exact-or-stem, lazy re-open of stored `source`), `process-outputs` collects
+  image ids (pure 4-tuple), `render-images` best-effort `try`/`catch` wired into
+  start/eval/resume. **Asset-id convention DECIDED: STEM** (`(image "door")`),
+  per CC's recommendation — apply when packing paintings.
+
+## ARC8 COMPLETE — and the whole engine with it
+
+xs-shell drives the engine over a bundle; `xs:run` enters (breadcrumb complete),
+switching mid-stream; save/resume rides session metadata; images render from the
+`.xsf`. All content-agnostic, all green (153 tests). Remaining is NOT engine work:
+- Pack `priv/support.xsf` (co-author's GROUND content → reproducible mtime-pinned
+  zip per the original packing design). Use STEM asset ids.
+- Trivial nit: two `xs-shell-tests` docstrings still say "binary:join" — clean up
+  on a future touch.
+- Intentional deferrals (post-engine, only if wanted): remote-transport image
+  delivery; streaming pacing; per-turn autosave; REPL-env preservation across a
+  story visit; auto room-render on a bare session reopen.
 
 ## slice1 — DONE (accepted 2026-06-14, with one follow-up)
 

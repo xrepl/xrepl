@@ -27,6 +27,23 @@
       (`#(ok #(,_ ,bin)) bin)
       (err (error (tuple 'fixture-failed err))))))
 
+(defun make-xsf-with-images (manifest-src node-pairs image-pairs)
+  "Like make-xsf but also includes raw image entries.
+  image-pairs: [{zip-path-string, binary-content}]"
+  (let* ((m-entry    (tuple "manifest.lfe" (list_to_binary manifest-src)))
+         (n-entries  (lists:map
+                       (lambda (p)
+                         (tuple (++ "nodes/" (element 1 p))
+                                (list_to_binary (element 2 p))))
+                       node-pairs))
+         (img-entries (lists:map
+                        (lambda (p) (tuple (element 1 p) (element 2 p)))
+                        image-pairs))
+         (entries    (++ (cons m-entry n-entries) img-entries)))
+    (case (zip:create "bundle.xsf" entries '(memory))
+      (`#(ok #(,_ ,bin)) bin)
+      (err (error (tuple 'fixture-failed err))))))
+
 ;;; ---- Neutral source strings ----
 
 (defun mfst-src ()
@@ -249,6 +266,51 @@
        (is (=/= 'nomatch (binary:match opening #"First line.\nSecond line."))))
       (other
        (is-equal (tuple 'expected-multi-text-opening 'got) other)))))
+
+;;; ----------------
+;;; Phase B image tests (slice3)
+;;; ----------------
+
+(deftest node-with-image-still-renders-text
+  "A room with (image ...) renders its body text correctly (image is additive)."
+  (setup)
+  (let* ((node-img
+           "(node (id start) (type scene) (title \"Start\")
+                  (body \"Room A text.\")
+                  (image \"pic-a.png\")
+                  (choices (choice (cmd \"go\") (to vault))))")
+         ;; Bundle includes the actual image bytes
+         (bin (make-xsf-with-images
+                (mfst-src)
+                (list (tuple "start.lfe" node-img)
+                      (tuple "vault.lfe" (vault-src)))
+                (list (tuple "assets/images/pic-a.png" #"FAKE_PNG_BYTES")))))
+    (case (xs-shell:start bin)
+      (`#(ok ,_state ,opening)
+       ;; Text is present — image is a best-effort side channel
+       (is (is_binary opening))
+       (is (=/= 'nomatch (binary:match opening #"Room A text."))))
+      (other
+       (is-equal (tuple 'expected-ok-with-image 'got) other)))))
+
+(deftest missing-image-does-not-break-text-turn
+  "A room whose (image ...) asset is absent still returns its text correctly."
+  (setup)
+  (let* ((node-with-img
+           "(node (id start) (type scene) (title \"Start\")
+                  (body \"Room text.\")
+                  (image \"no-such.png\")
+                  (choices (choice (cmd \"go\") (to vault))))")
+         (bin (make-xsf (mfst-src)
+                        (list (tuple "start.lfe" node-with-img)
+                              (tuple "vault.lfe" (vault-src))))))
+    (case (xs-shell:start bin)
+      (`#(ok ,_state ,opening)
+       ;; Text renders correctly despite missing image
+       (is (is_binary opening))
+       (is (=/= 'nomatch (binary:match opening #"Room text."))))
+      (other
+       (is-equal (tuple 'expected-ok 'got) other)))))
 
 ;;; ----------------
 ;;; Phase A — save/1 and resume/2 (pure, neutral bundle)

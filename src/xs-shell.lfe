@@ -55,6 +55,8 @@
            (`#(ok ,nd)
             (let* ((`#(,w1 ,outs) (xs-engine:enter nd w0))
                    (opening       (join-texts (flatten-texts outs))))
+              ;; Render opening room images best-effort (slice3)
+              (render-images bundle (flatten-image-ids outs))
               (tuple 'ok
                      (make-xs-shell-state bundle bundle world w1)
                      opening)))
@@ -114,10 +116,12 @@
       (case (xs-bundle:node bundle nd-id)
         (`#(ok ,nd)
          (let* ((`#(,w1 ,outs) (xs-engine:handle nd input-bin world))
-                (`#(,w2 ,texts ,terminal)
-                 (process-outputs outs bundle w1 '() 'none))
+                (`#(,w2 ,texts ,image-ids ,terminal)
+                 (process-outputs outs bundle w1 '() '() 'none))
                 (output-bin (join-texts texts))
                 (state2     (make-xs-shell-state bundle bundle world w2)))
+           ;; Render images best-effort before returning text response
+           (render-images bundle image-ids)
            (if (=/= terminal 'none)
              (progn
                ;; done → clear the save; suspend → save current world
@@ -181,6 +185,8 @@
               (room-bin  (join-texts (flatten-texts room-outs)))
               (state     (make-xs-shell-state bundle bundle
                                               world  saved-world)))
+         ;; Render resumed room images best-effort (slice3)
+         (render-images bundle (flatten-image-ids room-outs))
          (tuple 'ok state room-bin))))))
 
 (defun prompt (_shell-state)
@@ -194,28 +200,28 @@
 ;;; Output processing
 ;;; ----------------
 
-(defun process-outputs (outs bundle world acc-texts terminal)
-  "Fold a list of xs-engine Outputs into {World2, Texts, Terminal}.
+(defun process-outputs (outs bundle world acc-texts acc-images terminal)
+  "Fold a list of xs-engine Outputs into {World2, Texts, ImageIds, Terminal}.
 
   goto: load + enter the target node; fold its outputs first (prepend).
   done/suspend: mark terminal (story over, return to LFE shell).
-  image: skipped in slice1 (no byte loading here).
+  image: collect the asset id for lazy rendering in eval/3.
   text/stream: accumulated (in order; reversed by caller).
 
   Returns:
-    #(World2 TextsInOrder Terminal)"
+    #(World2 TextsInOrder ImageIdsInOrder Terminal)"
   (case outs
     ('()
-     (tuple world (lists:reverse acc-texts) terminal))
+     (tuple world (lists:reverse acc-texts) (lists:reverse acc-images) terminal))
     ((cons out rest)
      (case out
        (`#(text ,bin)
-        (process-outputs rest bundle world (cons bin acc-texts) terminal))
+        (process-outputs rest bundle world (cons bin acc-texts) acc-images terminal))
        (`#(stream ,bin)
-        (process-outputs rest bundle world (cons bin acc-texts) terminal))
-       (`#(image ,_id)
-        ;; Slice1: skip — image bytes fetched in a later slice
-        (process-outputs rest bundle world acc-texts terminal))
+        (process-outputs rest bundle world (cons bin acc-texts) acc-images terminal))
+       (`#(image ,img-id)
+        ;; Collect image id; bytes are rendered best-effort in eval/3
+        (process-outputs rest bundle world acc-texts (cons img-id acc-images) terminal))
        (`#(goto ,nd-id)
         (let ((w1 (xs-world:set-node world nd-id)))
           (case (xs-bundle:node bundle nd-id)
@@ -223,16 +229,16 @@
              (let* ((`#(,w2 ,enter-outs) (xs-engine:enter nd w1)))
                ;; Prepend enter-outs so they appear before remaining rest
                (process-outputs (++ enter-outs rest) bundle w2
-                                acc-texts terminal)))
+                                acc-texts acc-images terminal)))
             ('error
              ;; Unknown node id — skip goto
-             (process-outputs rest bundle world acc-texts terminal)))))
+             (process-outputs rest bundle world acc-texts acc-images terminal)))))
        ('done
-        (process-outputs rest bundle world acc-texts 'done))
+        (process-outputs rest bundle world acc-texts acc-images 'done))
        ('suspend
-        (process-outputs rest bundle world acc-texts 'suspend))
+        (process-outputs rest bundle world acc-texts acc-images 'suspend))
        (_
-        (process-outputs rest bundle world acc-texts terminal))))))
+        (process-outputs rest bundle world acc-texts acc-images terminal))))))
 
 ;;; ----------------
 ;;; Helpers
@@ -255,6 +261,34 @@
         (`#(stream ,bin) (tuple 'true bin))
         (_ 'false)))
     outs))
+
+(defun flatten-image-ids (outs)
+  "Extract image asset ids from an Output list (in order)."
+  (lists:filtermap
+    (lambda (o)
+      (case o
+        (`#(image ,id) (tuple 'true id))
+        (_ 'false)))
+    outs))
+
+(defun render-images (bundle image-ids)
+  "Render each image id best-effort via xrepl-term-graphics:render-data/2.
+
+  Missing images and non-graphics terminals are silently skipped so a
+  failing render never breaks the text response (text always wins).
+  In-process/local transport only — remote delivery is deferred."
+  (lists:foreach
+    (lambda (id)
+      (case (xs-bundle:image-bytes bundle id)
+        (`#(ok ,bin)
+         (try
+           (xrepl-term-graphics:render-data bin
+                                             (map 'name (list_to_binary id)))
+           (catch
+             ;; Non-graphics terminal or other render error: skip silently
+             ((tuple _ _ _) 'ok))))
+        ('error 'ok)))  ;; missing image: skip
+    image-ids))
 
 (defun join-texts (texts)
   "Join text binaries with newlines into one binary (portable to OTP 25+).

@@ -26,7 +26,8 @@
    (load-file 1)
    (node 2)
    (entry-node 1)
-   (manifest 1)))
+   (manifest 1)
+   (image-bytes 2)))
 
 ;;; ----------------
 ;;; Public API
@@ -49,7 +50,10 @@
                  ((tuple _ r _)
                   (tuple 'error (tuple 'load-exception r)))))))
        (zip:zip_close handle)
-       result))
+       ;; Thread source binary into Bundle for lazy image access
+       (case result
+         (`#(ok ,bundle) (tuple 'ok (maps:put 'source binary bundle)))
+         (_ result))))
     (`#(error ,r)
      (tuple 'error (tuple 'zip-open r)))))
 
@@ -97,6 +101,67 @@
   Returns:
     map"
   (maps:get 'manifest bundle (map)))
+
+(defun image-bytes (bundle asset-id)
+  "Fetch image bytes from the bundle's zip by asset id.
+
+  Supports two lookup conventions:
+    exact — asset-id matches the full filename in images-dir (e.g. 'pic-a.png')
+    stem  — asset-id matches the basename without extension (e.g. 'pic-a')
+
+  The convention to use when packing real images is deliberately left open
+  until the paintings are ready; both are tried here so either works.
+
+  Args:
+    bundle:   a loaded Bundle map (must have 'source key)
+    asset-id: string asset identifier
+
+  Returns:
+    #(ok Binary) | error"
+  (let* ((source    (maps:get 'source bundle #""))
+         (img-dir   (bundle-images-dir bundle))
+         (img-assets (maps:get 'image-assets bundle (map)))
+         (entry-name (resolve-image-entry asset-id img-dir img-assets)))
+    (if (== entry-name 'none)
+      'error
+      (case (zip:zip_open source '(memory))
+        (`#(ok ,handle)
+         (let ((result
+                 (case (zip:zip_get entry-name handle)
+                   (`#(ok #(,_ ,bin)) (tuple 'ok bin))
+                   (_ 'error))))
+           (zip:zip_close handle)
+           result))
+        (_ 'error)))))
+
+(defun bundle-images-dir (bundle)
+  "Extract images-dir string from the bundle manifest."
+  (maps:get 'images-dir
+            (maps:get 'assets (manifest bundle) (map))
+            "assets/images"))
+
+(defun resolve-image-entry (asset-id img-dir img-assets)
+  "Find the full zip entry path for an asset-id (exact or stem match).
+  Returns the entry path string, or 'none if not found."
+  (let ((pfx (++ img-dir "/")))
+    (cond
+      ;; Exact: asset-id is the full filename (e.g. 'pic-a.png')
+      ((maps:is_key asset-id img-assets)
+       (++ pfx asset-id))
+      ;; Stem: asset-id is basename without extension (e.g. 'pic-a')
+      ('true
+       (case (find-by-stem asset-id (maps:keys img-assets))
+         ('none 'none)
+         (k (++ pfx k)))))))
+
+(defun find-by-stem (stem keys)
+  "Find the first key whose filename rootname equals stem."
+  (case keys
+    ('() 'none)
+    ((cons k rest)
+     (if (== stem (filename:rootname k))
+       k
+       (find-by-stem stem rest)))))
 
 ;;; ----------------
 ;;; Load implementation
