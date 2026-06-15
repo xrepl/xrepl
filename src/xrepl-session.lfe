@@ -306,6 +306,10 @@
 (defun start-evaluator (session-id shell shell-state)
   "Start an evaluator process for the given shell.
 
+  The evaluator process registers its session via set-current/1 so that
+  any eval'd code (e.g. xs:run) can call get-current and find its session.
+  This is per-process dict — it does not affect the dispatcher/client.
+
   Args:
     session-id: Session identifier
     shell: Shell module atom
@@ -313,7 +317,11 @@
 
   Returns:
     Evaluator PID"
-  (spawn_link (lambda () (evaluator-loop session-id shell shell-state))))
+  (spawn_link (lambda ()
+                ;; Register this session in the evaluator process's dict
+                ;; so eval'd code can call xrepl-session-manager:get-current
+                (xrepl-session-manager:set-current session-id)
+                (evaluator-loop session-id shell shell-state))))
 
 (defun evaluator-loop (session-id shell shell-state)
   "Main evaluator loop — delegates to the active shell's eval/3.

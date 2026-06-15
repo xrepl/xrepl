@@ -32,8 +32,15 @@
   **addendum-evaluator-current-session.md:** evaluator-loop calls
   `set-current session-id` on start → eval'd code (xs:run + any session-aware
   command) can find its session. Generic infra fix.
-- **slice3 — images.** `#(image Id)` → `zip_get` bytes from the `.xsf` +
-  `xrepl-term-graphics:render-data/2`.
+- **slice3 — images (WRITTEN, last Arc8 slice).** `xs-bundle` keeps the `.xsf`
+  `source` binary + adds `image-bytes/2` (lazy re-open zip, resolve asset id by
+  stem-or-exact, `zip_get`). `process-outputs` collects image ids (pure);
+  `eval`/`start`/`resume` render each best-effort via
+  `xrepl-term-graphics:render-data/2` (raw bytes + `name` opt) — missing image or
+  non-graphics terminal → graceful skip, text unaffected. Deferred:
+  remote-transport image delivery (in-process render only). OPEN: asset-id ↔
+  filename convention (node `(image "X")` = stem or full filename?) — settle when
+  paintings are packed; supports both via stem-or-exact match for now.
 
 ## slice1 — DONE (accepted 2026-06-14, with one follow-up)
 

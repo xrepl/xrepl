@@ -165,3 +165,25 @@
     (xrepl-session-manager:destroy id)
     (is-not (xrepl-session-manager:is-active? id)))
   (teardown))
+
+;;; Evaluator process self-registers its session (addendum test)
+;;;
+;;; Proves that the evaluator-loop calls set-current on start, so any
+;;; expression eval'd inside the session can call get-current and find
+;;; its own session-id — no manual set-current needed.
+
+(deftest evaluator-registers-session-for-evald-code
+  "xrepl-session:eval of (get-current) returns the session's own id."
+  (setup)
+  (let ((`#(ok ,id) (xrepl-session-manager:create)))
+    ;; Evaluate (xrepl-session-manager:get-current) inside the session.
+    ;; The evaluator process must self-register via set-current on start,
+    ;; so this returns the session-id — NOT 'no-session — with NO manual
+    ;; set-current in this test.
+    (case (xrepl-session:eval id '(xrepl-session-manager:get-current))
+      (`#(ok ,result)
+       (is-equal id result))
+      (other
+       (is-equal (tuple 'expected-session-id id) other)))
+    (xrepl-session-manager:destroy id))
+  (teardown))
