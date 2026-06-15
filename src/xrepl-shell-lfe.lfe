@@ -84,10 +84,17 @@
           (try
             (case (xrepl-eval:eval-form form env)
               (`#(ok ,value ,new-env)
-               (let ((final-env (xrepl-env:update-shell-vars
-                                  form value new-env)))
-                 (tuple 'ok value
-                        (set-lfe-shell-state-env shell-state final-env))))
+               ;; Generic switch-shell sentinel: any LFE function may
+               ;; return #(xrepl-switch-shell Mod Opts Response) to
+               ;; request a shell switch (e.g. xs:run).
+               (case value
+                 (`#(xrepl-switch-shell ,mod ,opts ,response)
+                  (tuple 'switch-shell mod opts response))
+                 (_
+                  (let ((final-env (xrepl-env:update-shell-vars
+                                     form value new-env)))
+                    (tuple 'ok value
+                           (set-lfe-shell-state-env shell-state final-env))))))
               (`#(error ,reason)
                (tuple 'error (tuple 'eval reason))))
             (catch

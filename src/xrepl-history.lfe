@@ -118,7 +118,7 @@
     (try
       (progn
         (let* ((lines (lists:map #'list_to_binary/1 commands))
-               (content (binary:join lines #"\n")))
+               (content (iolist_to_binary (lists:join #"\n" lines))))
           ;; Ensure directory exists
           (filelib:ensure_dir file-str)
           ;; Write atomically (write to temp, then rename)
