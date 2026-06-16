@@ -163,6 +163,11 @@
        k
        (find-by-stem stem rest)))))
 
+(defun image-in-assets? (img-id img-assets)
+  "True if img-id matches any img-assets key by exact filename or stem."
+  (orelse (maps:is_key img-id img-assets)
+          (=/= 'none (find-by-stem img-id (maps:keys img-assets)))))
+
 ;;; ----------------
 ;;; Load implementation
 ;;; ----------------
@@ -384,7 +389,7 @@
       (case (maps:get 'image nmap 'none)
         ('none 'ok)
         (img-id
-         (if (maps:is_key img-id img-assets)
+         (if (image-in-assets? img-id img-assets)
            'ok
            (logger:warning
              "xs-bundle: node ~p references image ~p not in bundle"

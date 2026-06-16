@@ -238,3 +238,49 @@
     (`#(ok ,bundle)
      (is-equal 'error (xs-bundle:image-bytes bundle "nope")))
     (_ (is 'false))))
+
+;;; ----------------
+;;; Stem-aware validation tests (Part 1 fix)
+;;; ----------------
+
+(deftest stem-ref-with-matching-asset-no-warning
+  "Node (image \"pic-a\") + assets/images/pic-a.png in zip: loads ok;
+   image-bytes resolves stem (no spurious missing-image warning)."
+  (setup)
+  (let* ((node-with-stem-img
+           "(node (id room-a) (type scene) (title \"A\") (body \".\")
+                  (image \"pic-a\")
+                  (choices (choice (cmd \"go\") (to room-b))))")
+         (bin (make-xsf-with-images
+                (mfst)
+                (list (tuple "room-a.lfe" node-with-stem-img)
+                      (tuple "room-b.lfe" (node-b)))
+                (list (tuple "assets/images/pic-a.png" #"PNGBYTES")))))
+    (case (xs-bundle:load bin)
+      (`#(ok ,bundle)
+       (is-equal 'room-a (xs-bundle:entry-node bundle))
+       (is-equal (tuple 'ok #"PNGBYTES")
+                 (xs-bundle:image-bytes bundle "pic-a")))
+      (other
+       (is-equal (tuple 'expected-ok-for-stem-ref 'got) other)))))
+
+(deftest stem-ref-genuinely-missing-still-warns
+  "Node (image \"no-pic\") with no matching zip entry loads; image-bytes returns error."
+  (setup)
+  (let* ((node-with-missing-stem
+           "(node (id room-a) (type scene) (title \"A\") (body \".\")
+                  (image \"no-pic\")
+                  (choices (choice (cmd \"go\") (to room-b))))")
+         (bin (make-xsf-with-images
+                (mfst)
+                (list (tuple "room-a.lfe" node-with-missing-stem)
+                      (tuple "room-b.lfe" (node-b)))
+                (list (tuple "assets/images/other.png" #"PNGBYTES")))))
+    (case (xs-bundle:load bin)
+      (`#(ok ,bundle)
+       ;; Loads (warning only, not error)
+       (is-equal 'room-a (xs-bundle:entry-node bundle))
+       ;; image-bytes can't resolve the absent stem
+       (is-equal 'error (xs-bundle:image-bytes bundle "no-pic")))
+      (other
+       (is-equal (tuple 'expected-ok-despite-missing-stem 'got) other)))))
