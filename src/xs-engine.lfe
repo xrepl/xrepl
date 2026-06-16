@@ -385,15 +385,20 @@
 ;;; ---- Prompt password ----
 
 (defun try-password (nd input world)
-  "For prompt nodes: match Input against password; emit goto or fail-text."
+  "For prompt nodes: match Input against password; emit goto or fail-text.
+
+  Comparison is case-insensitive: both sides are lowercased before matching
+  so that bundles with uppercase passwords (e.g. 'FRENCHTOWN1957') work for
+  players whose input is normalized to lowercase by xs-shell."
   (let ((pw       (maps:get 'password nd 'none))
         (on-succ  (maps:get 'on-success nd 'none))
         (fail-txt (maps:get 'fail-text nd "Nothing happens.")))
     (if (== pw 'none)
       (tuple world (list (tuple 'text #"You can't do that.")))
-      (if (== input (to-bin pw))
-        (let ((outs (if (== on-succ 'none) '()
-                      (list (tuple 'goto on-succ)))))
-          (tuple world outs))
-        (tuple world
-               (list (tuple 'text (to-bin fail-txt))))))))
+      (let ((pw-norm (list_to_binary (string:to_lower (binary_to_list (to-bin pw))))))
+        (if (== input pw-norm)
+          (let ((outs (if (== on-succ 'none) '()
+                        (list (tuple 'goto on-succ)))))
+            (tuple world outs))
+          (tuple world
+                 (list (tuple 'text (to-bin fail-txt)))))))))
