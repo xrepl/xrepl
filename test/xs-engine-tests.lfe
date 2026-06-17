@@ -356,7 +356,7 @@
 ;;; ----------------
 
 (deftest help-lists-exits
-  "F-4: help output contains 'Exits' and each (to …) choice's first synonym."
+  "F-4/slice4: help output contains 'Moves' and each (to …) choice's first synonym."
   (setup)
   (let* ((w0 (nav-world))
          (`#(,_w1 ,outs) (xs-engine:handle (nav-node) #"help" w0))
@@ -364,7 +364,7 @@
                  (lists:filtermap
                    (lambda (o) (case o (`#(text ,b) (tuple 'true b)) (_ 'false)))
                    outs))))
-    (is (=/= 'nomatch (binary:match text #"Exits")))
+    (is (=/= 'nomatch (binary:match text #"Moves")))
     (is (=/= 'nomatch (binary:match text #"back")))
     (is (=/= 'nomatch (binary:match text #"woods")))
     (is (=/= 'nomatch (binary:match text #"left")))))
@@ -407,3 +407,136 @@
                          exits-outs))))
     (is (=/= 'nomatch (binary:match help-text  #"none obvious")))
     (is (=/= 'nomatch (binary:match exits-text #"none obvious")))))
+
+;;; ----------------
+;;; Phase F — Unicode render fix + help/moves polish (slice6 F-1…F-7)
+;;; ----------------
+
+;;; ---- Fixtures ----
+
+(defun em-bytes () (list 226 128 148))
+
+(defun make-xsf (manifest-src node-pairs)
+  "Build a .xsf bundle binary in memory from LFE source strings."
+  (let* ((m-entry   (tuple "manifest.lfe" (list_to_binary manifest-src)))
+         (n-entries (lists:map
+                      (lambda (p)
+                        (tuple (++ "nodes/" (element 1 p))
+                               (list_to_binary (element 2 p))))
+                      node-pairs))
+         (entries   (cons m-entry n-entries)))
+    (case (zip:create "bundle.xsf" entries '(memory))
+      (`#(ok #(,_ ,bin)) bin)
+      (err (error (tuple 'fixture-failed err))))))
+
+(defun uni-mfst ()
+  "(story (title \"Neutral\") (schema \"1.0\") (version \"1\") (entry room-a) (protocol \"xrepl\"))")
+
+(defun uni-room-a-src ()
+  "scene room-a: two body paras, one with em-dash bytes; choice to room-b."
+  (++ "(node (id room-a) (type scene) (title \"A\")"
+      " (body \"Plain text.\" \"Em"
+      (em-bytes)
+      "dash.\")"
+      " (choices (choice (cmd \"next\") (to room-b))))"))
+
+(defun uni-room-b-src ()
+  "scene room-b: two body paras, one with em-dash bytes; choice back."
+  (++ "(node (id room-b) (type scene) (title \"B\")"
+      " (body \"Room B.\" \"Also em"
+      (em-bytes)
+      "dash.\")"
+      " (choices (choice (cmd \"back\") (to room-a))))"))
+
+(defun uni-bundle-bin ()
+  (make-xsf (uni-mfst)
+             (list (tuple "room-a.lfe" (uni-room-a-src))
+                   (tuple "room-b.lfe" (uni-room-b-src)))))
+
+;;; ---- Tests ----
+
+(deftest unicode-paragraph-renders
+  "F-1: render-element of a byte list with em-dash bytes returns #(text …), not '()."
+  (setup)
+  (let* ((em-para (++ "Hello " (em-bytes) " world."))
+         (world   (xs-world:new (map 'entry 'u 'flags '())))
+         (result  (xs-engine:render-element em-para world)))
+    (is-equal (list (tuple 'text (list_to_binary em-para)))
+              result)))
+
+(deftest multi-paragraph-unicode-enter
+  "F-2: enter/2 with two body paragraphs (unicode + ASCII) renders both."
+  (setup)
+  (let* ((em-para   (++ "Em" (em-bytes) "dash."))
+         (nd        (map 'id 'u 'type 'scene
+                         'body (list "Plain text." em-para)))
+         (world     (xs-world:new (map 'entry 'u 'flags '())))
+         (`#(,_ ,outs) (xs-engine:enter nd world))
+         (combined  (iolist_to_binary
+                      (lists:filtermap
+                        (lambda (o) (case o (`#(text ,b) (tuple 'true b)) (_ 'false)))
+                        outs))))
+    (is (=/= 'nomatch (binary:match combined #"Plain text.")))
+    (is (=/= 'nomatch (binary:match combined (list_to_binary (em-bytes)))))))
+
+(deftest scene-change-prints-room
+  "F-3: navigating to a scene with Unicode body yields the full body text."
+  (setup)
+  (case (xs-shell:start (uni-bundle-bin))
+    (`#(ok ,state0 ,_opening)
+     (case (xs-shell:eval "next" state0 (map))
+       (`#(ok #(formatted ,text) ,_state1)
+        (is (=/= 'nomatch (binary:match text #"Room B.")))
+        (is (=/= 'nomatch (binary:match text (list_to_binary (em-bytes))))))
+       (other (is-equal (tuple 'expected-ok 'got) other))))
+    (other (is-equal (tuple 'expected-ok-start 'got) other))))
+
+(deftest look-prints-full-body
+  "F-4: 'look' returns the current node's full body including Unicode paragraphs."
+  (setup)
+  (case (xs-shell:start (uni-bundle-bin))
+    (`#(ok ,state0 ,_opening)
+     (case (xs-shell:eval "look" state0 (map))
+       (`#(ok #(formatted ,text) ,_state1)
+        (is (=/= 'nomatch (binary:match text #"Plain text.")))
+        (is (=/= 'nomatch (binary:match text (list_to_binary (em-bytes))))))
+       (other (is-equal (tuple 'expected-ok 'got) other))))
+    (other (is-equal (tuple 'expected-ok-start 'got) other))))
+
+(deftest help-mentions-movement
+  "F-5: help text includes a movement hint (go <exit>)."
+  (setup)
+  (let* ((w0 (nav-world))
+         (`#(,_w1 ,outs) (xs-engine:handle (nav-node) #"help" w0))
+         (text (iolist_to_binary
+                 (lists:filtermap
+                   (lambda (o) (case o (`#(text ,b) (tuple 'true b)) (_ 'false)))
+                   outs))))
+    (is (=/= 'nomatch (binary:match text #"go ")))))
+
+(deftest help-blank-line-before-moves
+  "F-6: help text has a blank line (\\n\\n) immediately before 'Moves'."
+  (setup)
+  (let* ((w0 (nav-world))
+         (`#(,_w1 ,outs) (xs-engine:handle (nav-node) #"help" w0))
+         (text (iolist_to_binary
+                 (lists:filtermap
+                   (lambda (o) (case o (`#(text ,b) (tuple 'true b)) (_ 'false)))
+                   outs))))
+    (is (=/= 'nomatch (binary:match text #"\n\nMoves")))))
+
+(deftest moves-label
+  "F-7: 'moves' and 'exits' both produce text with the 'Moves:' label."
+  (setup)
+  (let* ((w0 (nav-world))
+         (`#(,_  ,m-outs) (xs-engine:handle (nav-node) #"moves" w0))
+         (`#(,_  ,e-outs) (xs-engine:handle (nav-node) #"exits" w0))
+         (extract (lambda (outs)
+                    (iolist_to_binary
+                      (lists:filtermap
+                        (lambda (o) (case o (`#(text ,b) (tuple 'true b)) (_ 'false)))
+                        outs))))
+         (m-text (funcall extract m-outs))
+         (e-text (funcall extract e-outs)))
+    (is (=/= 'nomatch (binary:match m-text #"Moves:")))
+    (is (=/= 'nomatch (binary:match e-text #"Moves:")))))

@@ -20,6 +20,7 @@
    (render-room 2)
    (as-list 1)
    (string? 1)
+   (render-element 2)
    (node-exits 1)))
 
 ;;; ----------------
@@ -27,12 +28,12 @@
 ;;; ----------------
 
 (defun string? (v)
-  "Return true when V is a non-empty printable char list (an LFE string).
-
-  Used by as-list to distinguish a bare body string from a tagged form."
+  "True when V is a non-empty list of integers (a char/byte list). Unicode
+  codepoints and raw UTF-8 bytes (as read from the .xsf) all count as text;
+  printability is NOT required."
   (andalso (is_list v)
            (=/= v '())
-           (io_lib:printable_list v)))
+           (lists:all #'erlang:is_integer/1 v)))
 
 (defun as-list (v)
   "Normalise a possibly-bare xs-bundle field value to a proper list.
@@ -317,22 +318,22 @@
         (_ 'false)))
     (as-list (maps:get 'choices nd '()))))
 
-(defun exits-text (nd)
-  "Build the 'Exits: …' line binary for a node."
+(defun moves-text (nd)
+  "Build the 'Moves: …' line binary for a node."
   (let ((names (node-exits nd)))
     (if (== names '())
-      #"Exits: none obvious."
+      #"Moves: none obvious."
       (iolist_to_binary
-        (list #"Exits: "
+        (list #"Moves: "
               (iolist_to_binary (lists:join #", " names))
               #".")))))
 
 (defun help-text (nd)
-  "Build the full help text binary, appending this node's exits."
+  "Build the full help text binary, appending this node's moves."
   (iolist_to_binary
-    (list #"Commands: look, help, inventory (i), take <item>."
-          #"\n"
-          (exits-text nd))))
+    (list #"Commands: look, help, inventory (i), take <item>, go <exit>."
+          #"\n\n"
+          (moves-text nd))))
 
 (defun run-action (action nd world)
   "Execute a meta action from a choice (look / inventory / help)."
@@ -376,7 +377,12 @@
 
       ((== s "exits")
        (tuple 'matched
-              (list (tuple 'text (exits-text nd)))
+              (list (tuple 'text (moves-text nd)))
+              world))
+
+      ((== s "moves")
+       (tuple 'matched
+              (list (tuple 'text (moves-text nd)))
               world))
 
       ('true 'no-match))))
