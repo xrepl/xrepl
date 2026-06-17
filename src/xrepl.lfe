@@ -19,7 +19,11 @@
    (echo 1))
   ;; Utility
   (export
-   (version 0) (versions 0)))
+   (version 0) (versions 0))
+  ;; Prompt helpers (exported for tests)
+  (export
+   (shell-label 1)
+   (shell-name->label 1)))
 
 ;;; ----------------
 ;;; config functions
@@ -378,20 +382,34 @@
 
   Returns:
     Prompt string"
-  (let ((session-count (length (xrepl-session-manager:list))))
+  (let ((label         (shell-label session-id))
+        (session-count (length (xrepl-session-manager:list))))
     (if (> session-count 1)
       ;; Multiple sessions: show session name
       (case (get-session-name session-id)
         ('undefined
-         (++ (xrepl-term-colour:apply "xrepl" #m(fg blue))
+         (++ (xrepl-term-colour:apply label #m(fg blue))
              (xrepl-term-colour:apply "> " #m(fg bright-yellow bold true))))
         (name
-         (++ (xrepl-term-colour:apply "xrepl:" #m(fg blue))
+         (++ (xrepl-term-colour:apply (++ label ":") #m(fg blue))
              (xrepl-term-colour:apply name #m(fg green))
              (xrepl-term-colour:apply "> " #m(fg bright-yellow bold true)))))
       ;; Single session: simple prompt
-      (++ (xrepl-term-colour:apply "xrepl" #m(fg blue))
+      (++ (xrepl-term-colour:apply label #m(fg blue))
           (xrepl-term-colour:apply "> " #m(fg bright-yellow bold true))))))
+
+(defun shell-name->label (name)
+  "Map a shell describe name binary to a prompt label string.
+  Returns \"xs\" when name is #\"xs\", \"xrepl\" for everything else."
+  (if (== name #"xs") "xs" "xrepl"))
+
+(defun shell-label (session-id)
+  "Return the prompt label for the active shell of session-id.
+  Returns \"xs\" for xs-shell sessions, \"xrepl\" otherwise (and on error)."
+  (try
+    (shell-name->label (maps:get 'name (xrepl-session:describe session-id)))
+    (catch
+      ((tuple _ _ _) "xrepl"))))
 
 (defun get-session-name (session-id)
   "Get session name or return undefined.
