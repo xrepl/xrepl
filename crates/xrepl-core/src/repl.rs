@@ -55,7 +55,7 @@ struct Command {
 /// Currently infallible in practice (the loop handles its own peer failures by
 /// shutting down cleanly), but returns [`Result`] so that error propagation can
 /// be added — for transport or child-process failures — without an API change.
-pub async fn run<B: Backend>(mut backend: B) -> Result<()> {
+pub async fn run<B: Backend>(backend: B) -> Result<()> {
     let (event_tx, mut event_rx) = tokio_mpsc::channel::<Event>(EVENT_CAPACITY);
     let (command_tx, command_rx) = tokio_mpsc::channel::<Command>(COMMAND_CAPACITY);
     let (pulse_tx, pulse_rx) = std_mpsc::channel::<()>();
