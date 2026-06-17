@@ -19,7 +19,8 @@
    (enter 2)
    (render-room 2)
    (as-list 1)
-   (string? 1)))
+   (string? 1)
+   (node-exits 1)))
 
 ;;; ----------------
 ;;; Phase A — as-list normaliser
@@ -272,11 +273,66 @@
     ((list f v) (xs-world:set-flag world f v))
     (_ world)))
 
+(defun strip-move-prefix (input)
+  "Strip a leading movement verb from a trimmed binary input.
+  Prefixes tried: 'go ', 'walk ', 'move ', 'head ', 'run '.
+  Returns the suffix as a trimmed binary, or input unchanged."
+  (let ((s (binary_to_list input)))
+    (strip-move-pfx input s (list "go " "walk " "move " "head " "run "))))
+
+(defun strip-move-pfx (orig s prefixes)
+  "Try each prefix; return trimmed suffix of first match, or orig."
+  (case prefixes
+    ('() orig)
+    ((cons pfx rest)
+     (case (string:prefix s pfx)
+       ('nomatch (strip-move-pfx orig s rest))
+       (suffix   (list_to_binary (string:trim suffix)))))))
+
 (defun cmd-matches? (cmds input)
-  "True when any cmd string (char list) equals Input (binary)."
-  (lists:any
-    (lambda (cmd) (== (to-bin cmd) input))
-    cmds))
+  "True when any cmd string equals Input or its movement-verb-stripped form."
+  (let ((stripped (strip-move-prefix input)))
+    (lists:any
+      (lambda (cmd)
+        (let ((cmd-bin (to-bin cmd)))
+          (orelse (== cmd-bin input)
+                  (== cmd-bin stripped))))
+      cmds)))
+
+(defun node-exits (nd)
+  "Return the first cmd synonym of each (to …) choice in Nd.
+  (action …)-only choices are excluded. Returns a list of binaries."
+  (lists:filtermap
+    (lambda (choice)
+      (case choice
+        ((cons 'choice parts)
+         (let* ((cm    (parse-kv-pairs parts))
+                (to-id (maps:get 'to cm 'none))
+                (cmds  (as-list (maps:get 'cmd cm '()))))
+           (if (=/= to-id 'none)
+             (case cmds
+               ((cons first _) (tuple 'true (to-bin first)))
+               ('() 'false))
+             'false)))
+        (_ 'false)))
+    (as-list (maps:get 'choices nd '()))))
+
+(defun exits-text (nd)
+  "Build the 'Exits: …' line binary for a node."
+  (let ((names (node-exits nd)))
+    (if (== names '())
+      #"Exits: none obvious."
+      (iolist_to_binary
+        (list #"Exits: "
+              (iolist_to_binary (lists:join #", " names))
+              #".")))))
+
+(defun help-text (nd)
+  "Build the full help text binary, appending this node's exits."
+  (iolist_to_binary
+    (list #"Commands: look, help, inventory (i), take <item>."
+          #"\n"
+          (exits-text nd))))
 
 (defun run-action (action nd world)
   "Execute a meta action from a choice (look / inventory / help)."
@@ -290,7 +346,7 @@
     ('inventory
      (inventory-output world))
     ('help
-     (list (tuple 'text #"Commands: look, help, inventory (i), take <item>.")))
+     (list (tuple 'text (help-text nd))))
     (_ '())))
 
 ;;; ---- Meta verbs ----
@@ -315,8 +371,12 @@
 
       ((== s "help")
        (tuple 'matched
-              (list (tuple 'text
-                           #"Commands: look, help, inventory (i), take <item>."))
+              (list (tuple 'text (help-text nd)))
+              world))
+
+      ((== s "exits")
+       (tuple 'matched
+              (list (tuple 'text (exits-text nd)))
               world))
 
       ('true 'no-match))))
@@ -388,7 +448,7 @@
   "For prompt nodes: match Input against password; emit goto or fail-text.
 
   Comparison is case-insensitive: both sides are lowercased before matching
-  so that bundles with uppercase passwords (e.g. 'FRENCHTOWN1957') work for
+  so that bundles with uppercase passwords (e.g. 'SECRET99') work for
   players whose input is normalized to lowercase by xs-shell."
   (let ((pw       (maps:get 'password nd 'none))
         (on-succ  (maps:get 'on-success nd 'none))

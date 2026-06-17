@@ -57,6 +57,33 @@
                      'flags (list (map 'id 'visited  'type 'bool 'default 'false)
                                   (map 'id 'has-key  'type 'bool 'default 'false)))))
 
+(defun nav-node ()
+  "scene: 3 (to …) choices with multi-synonym cmds + 1 (action help) choice.
+  Used for movement-prefix stripping and exits tests (F-1…F-7)."
+  (map
+    'id      'nav
+    'type    'scene
+    'body    "A neutral junction."
+    'choices (list '(choice (cmd "back" "down" "away") (to open-area))
+                   '(choice (cmd "woods" "flats" "trail") (to forest))
+                   '(choice (cmd "left") (to left-path))
+                   '(choice (cmd "help") (action help)))))
+
+(defun exitless-node ()
+  "scene: one (action help) choice only; no (to …) choices.
+  Used for F-7: exits/help on a node with no destination choices."
+  (map
+    'id      'exitless
+    'type    'scene
+    'body    "A dead end."
+    'choices '(choice (cmd "help") (action help))))
+
+(defun nav-world ()
+  (xs-world:new (map 'entry 'nav 'flags '())))
+
+(defun exitless-world ()
+  (xs-world:new (map 'entry 'exitless 'flags '())))
+
 ;;; ----------------
 ;;; Phase A — as-list tests
 ;;; ----------------
@@ -282,3 +309,101 @@
               (`#(text ,b) (=/= 'nomatch (binary:match b #"can't")))
               (_ 'false)))
           outs))))
+
+;;; ----------------
+;;; Phase D — movement-prefix stripping (F-1, F-2, F-3)
+;;; ----------------
+
+(deftest go-prefix-matches-bare-cmd
+  "F-1: 'go back' strips 'go ' and matches the (to open-area) choice."
+  (setup)
+  (let* ((w0 (nav-world))
+         (`#(,_w1 ,outs) (xs-engine:handle (nav-node) #"go back" w0)))
+    (is (lists:member (tuple 'goto 'open-area) outs))))
+
+(deftest all-movement-prefixes-match
+  "F-2: walk/move/head/run prefixes and bare cmd all reach their choices."
+  (setup)
+  (let* ((w0 (nav-world))
+         (`#(,_  ,o1) (xs-engine:handle (nav-node) #"walk woods" w0))
+         (`#(,_  ,o2) (xs-engine:handle (nav-node) #"move left"  w0))
+         (`#(,_  ,o3) (xs-engine:handle (nav-node) #"head back"  w0))
+         (`#(,_  ,o4) (xs-engine:handle (nav-node) #"run back"   w0))
+         (`#(,_  ,o5) (xs-engine:handle (nav-node) #"back"       w0)))
+    (is (lists:member (tuple 'goto 'forest)    o1))
+    (is (lists:member (tuple 'goto 'left-path) o2))
+    (is (lists:member (tuple 'goto 'open-area) o3))
+    (is (lists:member (tuple 'goto 'open-area) o4))
+    (is (lists:member (tuple 'goto 'open-area) o5))))
+
+(deftest go-prefix-no-false-match
+  "F-3: 'go nowhere' strips to 'nowhere'; no choice matches; falls to can't-do-that."
+  (setup)
+  (let* ((w0 (nav-world))
+         (`#(,_w1 ,outs) (xs-engine:handle (nav-node) #"go nowhere" w0)))
+    (is-not (lists:any
+              (lambda (o) (case o (`#(goto ,_) 'true) (_ 'false)))
+              outs))
+    (is (lists:any
+          (lambda (o)
+            (case o
+              (`#(text ,b) (=/= 'nomatch (binary:match b #"can't")))
+              (_ 'false)))
+          outs))))
+
+;;; ----------------
+;;; Phase E — help lists exits + exits command (F-4…F-7)
+;;; ----------------
+
+(deftest help-lists-exits
+  "F-4: help output contains 'Exits' and each (to …) choice's first synonym."
+  (setup)
+  (let* ((w0 (nav-world))
+         (`#(,_w1 ,outs) (xs-engine:handle (nav-node) #"help" w0))
+         (text (iolist_to_binary
+                 (lists:filtermap
+                   (lambda (o) (case o (`#(text ,b) (tuple 'true b)) (_ 'false)))
+                   outs))))
+    (is (=/= 'nomatch (binary:match text #"Exits")))
+    (is (=/= 'nomatch (binary:match text #"back")))
+    (is (=/= 'nomatch (binary:match text #"woods")))
+    (is (=/= 'nomatch (binary:match text #"left")))))
+
+(deftest exits-command-lists-exits
+  "F-5: 'exits' meta-verb lists the node's (to …) choices."
+  (setup)
+  (let* ((w0 (nav-world))
+         (`#(,_w1 ,outs) (xs-engine:handle (nav-node) #"exits" w0))
+         (text (iolist_to_binary
+                 (lists:filtermap
+                   (lambda (o) (case o (`#(text ,b) (tuple 'true b)) (_ 'false)))
+                   outs))))
+    (is (=/= 'nomatch (binary:match text #"back")))
+    (is (=/= 'nomatch (binary:match text #"woods")))
+    (is (=/= 'nomatch (binary:match text #"left")))))
+
+(deftest exits-excludes-action-choices
+  "F-6: node-exits returns only (to …) choices; (action help) is excluded."
+  (setup)
+  (let ((exits (xs-engine:node-exits (nav-node))))
+    (is (lists:member #"back"  exits))
+    (is (lists:member #"woods" exits))
+    (is (lists:member #"left"  exits))
+    (is-equal 3 (length exits))))
+
+(deftest exitless-node-help-exits
+  "F-7: help and exits on a node with no (to …) choices say 'none obvious'; no crash."
+  (setup)
+  (let* ((w0 (exitless-world))
+         (`#(,_w1 ,help-outs)  (xs-engine:handle (exitless-node) #"help"  w0))
+         (`#(,_w2 ,exits-outs) (xs-engine:handle (exitless-node) #"exits" w0))
+         (help-text  (iolist_to_binary
+                       (lists:filtermap
+                         (lambda (o) (case o (`#(text ,b) (tuple 'true b)) (_ 'false)))
+                         help-outs)))
+         (exits-text (iolist_to_binary
+                       (lists:filtermap
+                         (lambda (o) (case o (`#(text ,b) (tuple 'true b)) (_ 'false)))
+                         exits-outs))))
+    (is (=/= 'nomatch (binary:match help-text  #"none obvious")))
+    (is (=/= 'nomatch (binary:match exits-text #"none obvious")))))

@@ -21,9 +21,16 @@ there — you'll get a quiet "nothing here yet" instead of a crash.)
 From the `xrepl/xrepl` directory:
 
 ```bash
-rebar3 compile      # or: make build
+rebar3 compile      # or: make build   (rebuild after a `make clean`)
 ./bin/xrepl
 ```
+
+> ⚠ **Use `./bin/xrepl` — NOT `rebar3 lfe repl` or `rebar3 shell`.**
+> Those start the *plain* LFE shell, which bypasses xrepl's session/shell
+> pipeline. The story trigger and `(xs:run)` only work through `./bin/xrepl`:
+> in a plain LFE shell `(open)` is just "undefined function" and `(xs:run)`
+> dumps a raw tuple instead of opening the door. Only xrepl's own shell routes
+> your input through the machinery the story lives in.
 
 You'll land at the LFE prompt:
 
