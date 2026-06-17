@@ -53,7 +53,7 @@ help: help-general help-lfe help-rust
 help-general:
 	@echo ""
 	@echo "$(CYAN)╔══════════════════════════════════════════════════════════╗$(RESET)"
-	@echo "$(CYAN)║$(RESET) $(BLUE)$(PROJECT_NAME) v$(APP_VERSION) — polyglot build system (LFE + Rust)$(RESET)   $(CYAN)║$(RESET)"
+	@echo "$(CYAN)║$(RESET) $(BLUE)$(PROJECT_NAME) v$(APP_VERSION) — polyglot build system (LFE + Rust)$(RESET)        $(CYAN)║$(RESET)"
 	@echo "$(CYAN)╚══════════════════════════════════════════════════════════╝$(RESET)"
 	@echo ""
 	@echo "$(GREEN)General (both languages):$(RESET)"
