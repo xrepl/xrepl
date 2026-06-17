@@ -240,6 +240,12 @@ for dep in "$XREPL_DEPS"/*/ebin; do
         CODE_PATHS="$CODE_PATHS -pa $dep"
     fi
 done
+# Checkouts (local deps under _checkouts/) are built into a separate tree
+for dep in "$PROJECT_ROOT/_build/default/checkouts"/*/ebin; do
+    if [ -d "$dep" ]; then
+        CODE_PATHS="$CODE_PATHS -pa $dep"
+    fi
+done
 
 # Build node flags
 if [ -n "$NODE_NAME" ]; then
