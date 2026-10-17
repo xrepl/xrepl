@@ -1,6 +1,6 @@
 # Arc01 — Preserve and relocate planning
 
-Status: planned. Prepared 2026-10-17. Parent: [Project08](../project-plan.md).
+Status: active. Prepared 2026-10-17. Parent: [Project08](../project-plan.md).
 Workflow: Operator-selected One-Contributor. Acceptance: [ledger.md](ledger.md).
 
 ## Capability
@@ -51,3 +51,11 @@ No close records have been pre-created.
 
 - v1.0 — 2026-10-17: one delivery arc, two usable increments, with branch
   coverage and timestamp restoration included in the import/cutover obligations.
+
+## Execution update v1.1 — 2026-10-17
+
+Slice01’s exact import094e72b and restoration/recovery checks are delivered
+(attested). Slice02 is now [planned in detail](slice02-cut-over-source-navigation/slice-plan.md)
+and authorized for source cutover. Pointer-only Cargo/test comments surfaced
+by Slice01 are explicitly included; no behavior changes. Earlier planned-only
+status is superseded. Final acceptance remains with the human Operator.

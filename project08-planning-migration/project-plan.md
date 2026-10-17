@@ -1,6 +1,6 @@
 ---
 project: project08-planning-migration
-status: planned
+status: active
 depends-on: []
 blocks: [canonical-planning-cutover]
 related: [project01-repl-foundations, project02-terminal-visualization, project03-emacs-integration, project04-repl-remediation, project05-rust-frontend, project06-pluggable-shells, project07-story-runtime]
@@ -217,3 +217,27 @@ Next action: Operator reviews the mapping and directs the migration when ready.
   the Operator's request; seven historical homes still suffice. Recorded the
   authorized main fast-forward, filesystem preservation limits, and the
   One-Contributor workflow. This is a new plan, not a historical acceptance.
+
+## Execution authorization — v1.1 (2026-10-17)
+
+The Operator approved the complete plan and all moves, permitted well-scoped
+subagents and optionally additional contributor workflows. Retain the existing
+One-Contributor workflow with read-only lookup assistants; the Operator remains
+the acceptance authority. Sofie owns implementation and self-review. Lookup
+returns are evidence inputs, not independent acceptance. No role substitution
+or simulated human approval is claimed. All migration/cleanup steps are now
+authorized; the earlier preparation-only hold is superseded. Publishing remains
+a separately directed operation.
+
+Before mutation, all 72 original file hashes, file modes and mtimes, all 31
+directory modes and mtimes, and ignored-file membership matched the initial
+manifest. Main and release still agree at 18ba5b7. Creation metadata will be
+augmented through Darwin's native timestamp API before copying.
+
+Reference lookup identified routing-only comments in Cargo.toml and
+test/xrepl-shell-pluggability-spike-tests.lfe. Include those two explicit files
+in source cutover solely to repair moved/pre-existing stale documentation
+pointers; no code, test assertion, dependency or build behavior changes.
+
+v1.1 records the Operator's execution/delegation permission, the unchanged
+baseline, and the bounded routing-comment allowance surfaced by Slice01.
