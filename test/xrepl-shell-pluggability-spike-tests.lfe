@@ -245,8 +245,8 @@
                                  'value (binary "42")
                                  'session (binary "abc")
                                  'image (binary "PNG_BYTES_HERE")))
-         (`#(ok ,encoded) (xrepl-protocol-msgpack:encode extended-response))
-         (`#(ok ,decoded) (xrepl-protocol-msgpack:decode encoded)))
+         (`#(ok ,encoded) (xrepl-ptcl-msgpack:encode extended-response))
+         (`#(ok ,decoded) (xrepl-ptcl-msgpack:decode encoded)))
     (is (is_binary encoded))
     ;; msgpack encodes atom keys as strings
     (is (maps:is_key (binary "image") decoded))

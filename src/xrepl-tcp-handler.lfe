@@ -80,7 +80,7 @@
   (let ((transport (protocol-state-transport state))
         (socket (protocol-state-socket state)))
     ;; Decode message (MessagePack)
-    (case (xrepl-protocol-msgpack:decode data)
+    (case (xrepl-ptcl-msgpack:decode data)
       (`#(ok ,message)
        ;; Authenticate if not yet authenticated
        (case (protocol-state-authenticated state)
@@ -139,7 +139,7 @@
          (full-response (maps:put 'id msg-id response))
          (transport (protocol-state-transport state))
          (socket (protocol-state-socket state)))
-    (case (xrepl-protocol-msgpack:encode full-response)
+    (case (xrepl-ptcl-msgpack:encode full-response)
       (`#(ok ,encoded)
        (call transport 'send socket encoded))
       (`#(error ,reason)

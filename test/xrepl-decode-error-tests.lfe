@@ -68,7 +68,7 @@
               ;;         attempting to re-arm the socket).
               (case (gen_tcp:recv sock 0 5000)
                 (`#(ok ,data)
-                 (case (xrepl-protocol-msgpack:decode data)
+                 (case (xrepl-ptcl-msgpack:decode data)
                    (`#(ok ,response)
                     (is-equal #"error" (maps:get #"status" response)))
                    (`#(error ,_)
@@ -78,13 +78,13 @@
               ;; Step 3: Send valid eval on the SAME connection.
               ;; Pre-fix: handler crashed; gen_tcp:recv returns {error, closed}.
               ;; Post-fix: handler looped back; eval is processed normally.
-              (case (xrepl-protocol-msgpack:encode
+              (case (xrepl-ptcl-msgpack:encode
                       (map 'op 'eval 'code #"(+ 1 2)" 'id #"de-test-1"))
                 (`#(ok ,encoded)
                  (gen_tcp:send sock encoded)
                  (case (gen_tcp:recv sock 0 5000)
                    (`#(ok ,eval-data)
-                    (case (xrepl-protocol-msgpack:decode eval-data)
+                    (case (xrepl-ptcl-msgpack:decode eval-data)
                       (`#(ok ,eval-response)
                        ;; Assert done reply — connection survived the decode error
                        (is-equal #"done" (maps:get #"status" eval-response)))

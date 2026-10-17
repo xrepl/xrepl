@@ -4,7 +4,7 @@
    (all 0)))
 
 (defun get ()
-  (get 'xrepl))
+  (xrepl-vsn:get 'xrepl))
 
 (defun get (app-name)
   (application:load app-name)
@@ -16,7 +16,7 @@
   `#(architecture ,(erlang:system_info 'system_architecture)))
 
 (defun version+name (app-name)
-  `#(,app-name ,(get app-name)))
+  `#(,app-name ,(xrepl-vsn:get app-name)))
 
 (defun versions-rebar ()
   `(,(version+name 'rebar)

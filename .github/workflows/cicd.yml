@@ -19,14 +19,20 @@ jobs:
 
     strategy:
       matrix:
-        otp_version: ['28', '27']
+        include:
+          - otp_version: '29'
+            rebar3_version: '3.27.3'
+          - otp_version: '28'
+            rebar3_version: '3.24'
+          - otp_version: '27'
+            rebar3_version: '3.24'
 
     steps:
     - uses: actions/checkout@v4
     - uses: erlef/setup-beam@v1
       with:
         otp-version: ${{ matrix.otp_version }}
-        rebar3-version: '3.24'
+        rebar3-version: ${{ matrix.rebar3_version }}
     - name: Check rebar3 Version
       run: rebar3 --version
     - name: Compile
@@ -38,7 +44,7 @@ jobs:
     - name: Compile Tests
       run: rebar3 as test compile
     - name: Run Unit Tests
-      run: rebar3 as test lfe ltest
+      run: rebar3 as test eunit
     #- name: Test Coverage
     #  run: rebar3 as test do proper -c, cover -v --min_coverage=0
 
@@ -67,6 +73,6 @@ jobs:
     - name: Compile Tests
       run: rebar3 as test compile
     - name: Run Unit Tests
-      run: rebar3 as test lfe ltest
+      run: rebar3 as test eunit
     #- name: Test Coverage
     #  run: rebar3 as test do proper -c, cover -v --min_coverage=0
