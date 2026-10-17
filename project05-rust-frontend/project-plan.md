@@ -16,7 +16,7 @@ name lineage and potential consumers, not independently accepted prerequisites.
 
 ## Scope, current status and boundaries
 
-D-01 is resolved in the addendum; D-02 remains open. G-01 streaming, G-02 interrupt and G-03 shutdown retain their original protocol/sibling dependencies. The PoC notes say written/static-reviewed, not compiled or run in that session; no new runtime proof is claimed. Public RUST-CORE-POC.md stays with implementation.
+D-01 is resolved in the addendum; D-02 remains open. G-01 streaming, G-02 interrupt and G-03 shutdown retain their original protocol/sibling dependencies. The PoC notes say written/static-reviewed, not compiled or run in that session; no new runtime proof is claimed. RUST-CORE-POC.md is now preserved with the infrastructure PoC slice artifacts, per the Operator’s follow-up classification.
 
 Migration delivers navigable records, not acceptance of the historical runtime
 or designs. The original prompts, plans, ledgers and review roles keep their
@@ -41,3 +41,5 @@ composition and any future definition of done require an explicit accepted plan.
 
 - v1.0 — 2026-10-17: retrospective scope/navigation created by Project08; original
   payloads and timestamp provenance retained without new implementation acceptance.
+
+- v1.1 — 2026-10-17: Operator moved the PoC overview into Project05’s infrastructure slice; prior retention in the implementation checkout is superseded. Historical payloads remain unchanged.

@@ -37,3 +37,19 @@ history; the two excluded DS_Store files are not recovered.
 Evidence: import-validation.json records a real fresh-checkout mismatch before
 apply, successful restore/verify and original-layout recovery, plus refusal of
 changed payload, escaping-path and symlink cases. These are self-checks (attested).
+
+## Follow-up PoC overview relocation
+
+After the original 69-file restore, also restore the relocated PoC overview:
+
+```sh
+python3 .worktrees/planning/project08-planning-migration/arc01-preserve-and-relocate/slice01-import-planning-corpus/artifacts/restore-timestamps.py --root .worktrees/planning --manifest .worktrees/planning/project08-planning-migration/arc01-preserve-and-relocate/slice01-import-planning-corpus/artifacts/rust-poc-relocation.json --apply --creation
+```
+
+Expected: 1 file, 0 directories, mismatches=[]. This supplemental manifest
+records the exact source-root snapshot moved by the Operator after the initial
+69-file migration; its hash/edit time differs from the earlier retained-public
+snapshot. The original native creation-time entry still matches exactly.
+Six additional empty legacy directory timestamps are captured in Slice02’s
+`artifacts/legacy-container-cleanup.json`; the original-layout helper’s 31-dir
+recovery count remains its initial file-derived scope. Finder metadata is discarded.

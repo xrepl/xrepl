@@ -13,7 +13,7 @@ Prepared 2026-10-17 from the checked-out corpus and all local branches, with liv
 | `project07-story-runtime` | 21 | Pure xs engine and xs-shell integration, including acceptance and diagnostic assignments. |
 | `project08-planning-migration` | new | Preserve and relocate this corpus, then switch source navigation. |
 
-69 working-tree planning files + 1 historical branch variant. `RUST-CORE-POC.md` stays in the implementation checkout as user documentation; its relationship is Project05. Two `.DS_Store` files remain local and are excluded from Git.
+Initial import: 69 planning files + 1 historical branch variant. Follow-up: the Operator moved `RUST-CORE-POC.md` into Project05’s infrastructure PoC artifacts, adding one preserved planning record. The two leftover `.DS_Store` files are disposable cleanup, not project records.
 
 ## Evidence and classification limits
 
@@ -42,7 +42,7 @@ Destinations are relative to the planning worktree except retained public docume
 
 | Original path | Disposition / destination |
 | --- | --- |
-| `RUST-CORE-POC.md` | `retain-user-documentation` |
+| `RUST-CORE-POC.md` | `project05-rust-frontend/arc02-event-core/slice01-infrastructure-poc/artifacts/RUST-CORE-POC.md` |
 | `docs/design/0.1.0/arc1-standalone-repl/cc-prompt.md` | `project01-repl-foundations/arc01-standalone-repl/cc-prompt.md` |
 | `docs/design/0.1.0/arc1-standalone-repl/cli-addendum.md` | `project01-repl-foundations/arc01-standalone-repl/cli-addendum.md` |
 | `docs/design/0.1.0/arc2-multi-session/cc-prompt.md` | `project01-repl-foundations/arc02-multi-session/cc-prompt.md` |
@@ -124,3 +124,5 @@ Destinations are relative to the planning worktree except retained public docume
 All old→new path mappings are provenance. Historical inline references remain byte-preserved and resolve through this map and pinned Git source history. New plans and current instructions must link to the canonical locations.
 
 Execution update2026-10-17: all 69 mapped planning payloads and1 older attributed branch variant are imported unchanged. See the Project08 implementation report for self-check receipts and pending human acceptance.
+
+Follow-up 2026-10-17: the PoC relocation supersedes its initial retained-public disposition. Exact current source bytes/dates are in `rust-poc-relocation.json`; initial migration snapshots remain unchanged.

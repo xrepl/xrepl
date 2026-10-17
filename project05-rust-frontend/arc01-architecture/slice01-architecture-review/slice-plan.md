@@ -21,7 +21,7 @@ handoff; do not infer execution order from timestamps or largest suffix.
 
 ## Acceptance and known limits
 
-D-01 is resolved in the addendum; D-02 remains open. G-01 streaming, G-02 interrupt and G-03 shutdown retain their original protocol/sibling dependencies. The PoC notes say written/static-reviewed, not compiled or run in that session; no new runtime proof is claimed. Public RUST-CORE-POC.md stays with implementation.
+D-01 is resolved in the addendum; D-02 remains open. G-01 streaming, G-02 interrupt and G-03 shutdown retain their original protocol/sibling dependencies. The PoC notes say written/static-reviewed, not compiled or run in that session; no new runtime proof is claimed. RUST-CORE-POC.md is now preserved with the infrastructure PoC slice artifacts, per the Operator’s follow-up classification.
 
 The sibling ledger is a new, explicitly retrospective resumption checklist;
 it is not presented as an original acceptance contract.
@@ -37,3 +37,5 @@ New supporting output defaults to this slice’s artifacts/ directory. Historica
 root-level support files remain as explicit imported layout exceptions.
 
 - v1.0 — 2026-10-17: present-day navigation added; original records preserved.
+
+- v1.1 — 2026-10-17: Operator moved the PoC overview into Project05’s infrastructure slice; prior retention in the implementation checkout is superseded. Historical payloads remain unchanged.

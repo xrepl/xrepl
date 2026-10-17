@@ -1,7 +1,7 @@
 # Slice02 — Cut over source navigation
 
-Status: implemented; human Operator acceptance pending.
-approved moves. Workflow: One-Contributor with read-only lookup assistance.
+Status: implemented; follow-up cleanup authorized 2026-10-17.
+Workflow: One-Contributor with read-only lookup assistance.
 Parent: [Arc01](../arc-plan.md). Contract: [ledger](ledger.md).
 
 ## Delivery and inputs
@@ -64,3 +64,14 @@ final human Operator acceptance is not simulated.
 All assigned execution and self-check work is delivered; see closing-report.md.
 Earlier preparation/active status is superseded. Ledger evidence is attested;
 human acceptance remains explicit and historical gates remain unchanged.
+
+## Follow-up allowance v1.1 — 2026-10-17
+
+Operator-authorized cleanup supersedes the original preservation of the two
+DS_Store files and retention of RUST-CORE-POC.md in source. Remove the recorded
+empty docs/design and workbench containers using guarded unlink/rmdir, keeping
+their captured metadata in artifacts/legacy-container-cleanup.json. The PoC
+overview becomes a timestamp-preserved Project05 artifact; commit the copy and
+its supplemental manifest before deleting the tracked source-root file. Add its
+route and supplemental restoration command to docs/planning.md. Commit and push
+main and planning after all work, as expressly requested.

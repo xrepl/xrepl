@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-10-17T16:21:38.831739-05:00",
+  "authorization": "Operator reclassified RUST-CORE-POC.md as a planning/project artifact and requested relocation plus commit/push. This supersedes its earlier retained-public disposition.",
+  "entries": [
+    {
+      "source": "RUST-CORE-POC.md",
+      "kind": "file",
+      "mode": "0o644",
+      "mtime_ns": 1792269563415867290,
+      "atime_ns": 1792269617262831613,
+      "ctime_ns_observed_only": 1792269563415867290,
+      "birthtime_ns": 1781367078095692954,
+      "sha256": "8e0917ea519bcda44f89732b878751545e870bfb9b7671b5e58ac5cc64ff74a9",
+      "size_bytes": 3279,
+      "tracked": true,
+      "source_commit": "9d7956bdb273ef900312565a5f9efb38e91265b6",
+      "source_blob_oid": "80572bb8cf5b07daba6decad9804e9c3a3c0a791",
+      "project": "project05-rust-frontend",
+      "destination": "project05-rust-frontend/arc02-event-core/slice01-infrastructure-poc/artifacts/RUST-CORE-POC.md",
+      "disposition": "migrate"
+    }
+  ],
+  "native_creation_metadata": "native-creation-times.json already records the same exact creation time for this source; equality verified at capture.",
+  "content_context": "Unchanged snapshot of the source-root version. docs/planning.md links inside this historical artifact refer to the implementation checkout; current setup link is in the owning slice-plan.md.",
+  "initial_inventory": "source-inventory.json remains an immutable snapshot of the initial migration, not the current disposition of this supplemental record."
+}

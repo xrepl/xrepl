@@ -1,0 +1,182 @@
+{
+  "captured_at": "2026-10-17T16:19:52.726151-05:00",
+  "authorization": "Operator requested removal of remaining local docs/design and other moved legacy copies; supersedes prior retention of the two Finder metadata files.",
+  "source_commit": "9d7956bdb273ef900312565a5f9efb38e91265b6",
+  "planning_payloads_verified_from_committed_blobs": 69,
+  "historical_variant_verified": 1,
+  "pre_cleanup_status": "snapshot before removal; outcome recorded in Slice02 report",
+  "entries": [
+    {
+      "source": "docs/design",
+      "kind": "directory",
+      "mode": "0o755",
+      "mtime_ns": 1781448892745764329,
+      "atime_ns": 1781448892763689522,
+      "ctime_ns_observed_only": 1781448892745764329,
+      "birthtime_ns": 1760401649649477231,
+      "captured_after_source_cutover": true,
+      "included_in_initial_file_derived_inventory": true,
+      "disposition": "remove empty legacy container after children; metadata retained here"
+    },
+    {
+      "source": "docs/design/0.1.0",
+      "kind": "directory",
+      "mode": "0o755",
+      "mtime_ns": 1792269579744401655,
+      "atime_ns": 1792269579748334430,
+      "ctime_ns_observed_only": 1792269579744401655,
+      "birthtime_ns": 1781139153830171360,
+      "captured_after_source_cutover": true,
+      "included_in_initial_file_derived_inventory": true,
+      "disposition": "remove empty legacy container after children; metadata retained here"
+    },
+    {
+      "source": "docs/design/0.1.0/arc5-critical-correctness",
+      "kind": "directory",
+      "mode": "0o755",
+      "mtime_ns": 1792269579733870798,
+      "atime_ns": 1792269579733870840,
+      "ctime_ns_observed_only": 1792269579733870798,
+      "birthtime_ns": 1781149117765719979,
+      "captured_after_source_cutover": true,
+      "included_in_initial_file_derived_inventory": true,
+      "disposition": "remove empty legacy container after children; metadata retained here"
+    },
+    {
+      "source": "docs/design/0.1.0/arc5-critical-correctness/.DS_Store",
+      "kind": "file",
+      "mode": "0o644",
+      "mtime_ns": 1781220896077593447,
+      "atime_ns": 1781220896092846749,
+      "ctime_ns_observed_only": 1781220896077593447,
+      "birthtime_ns": 1781220896077163287,
+      "captured_after_source_cutover": true,
+      "included_in_initial_file_derived_inventory": true,
+      "sha256": "bdb024caa937534c9815ba4f0eb795421921e2e047e9800098229a9ff681f570",
+      "disposition": "disposable Finder metadata; no migrated document content"
+    },
+    {
+      "source": "docs/design/0.1.0/arc5-critical-correctness/slice2",
+      "kind": "directory",
+      "mode": "0o755",
+      "mtime_ns": 1781149132429688084,
+      "atime_ns": 1781149132429688084,
+      "ctime_ns_observed_only": 1781149132429772293,
+      "birthtime_ns": 1781149132429688084,
+      "captured_after_source_cutover": true,
+      "included_in_initial_file_derived_inventory": false,
+      "disposition": "remove empty legacy container after children; metadata retained here"
+    },
+    {
+      "source": "docs/design/0.1.0/arc5-critical-correctness/slice3",
+      "kind": "directory",
+      "mode": "0o755",
+      "mtime_ns": 1781149142283161330,
+      "atime_ns": 1781149142283161330,
+      "ctime_ns_observed_only": 1781149142283202998,
+      "birthtime_ns": 1781149142283161330,
+      "captured_after_source_cutover": true,
+      "included_in_initial_file_derived_inventory": false,
+      "disposition": "remove empty legacy container after children; metadata retained here"
+    },
+    {
+      "source": "docs/design/0.1.0/arc5-critical-correctness/slice4",
+      "kind": "directory",
+      "mode": "0o755",
+      "mtime_ns": 1781149144176141006,
+      "atime_ns": 1781149144176141006,
+      "ctime_ns_observed_only": 1781149144176187882,
+      "birthtime_ns": 1781149144176141006,
+      "captured_after_source_cutover": true,
+      "included_in_initial_file_derived_inventory": false,
+      "disposition": "remove empty legacy container after children; metadata retained here"
+    },
+    {
+      "source": "docs/design/0.1.0/arc5-critical-correctness/slice5",
+      "kind": "directory",
+      "mode": "0o755",
+      "mtime_ns": 1781149146952713597,
+      "atime_ns": 1781149146952713597,
+      "ctime_ns_observed_only": 1781149146952799973,
+      "birthtime_ns": 1781149146952713597,
+      "captured_after_source_cutover": true,
+      "included_in_initial_file_derived_inventory": false,
+      "disposition": "remove empty legacy container after children; metadata retained here"
+    },
+    {
+      "source": "docs/design/0.1.0/arc8-xs-shell",
+      "kind": "directory",
+      "mode": "0o755",
+      "mtime_ns": 1792269579742241267,
+      "atime_ns": 1792269579748312721,
+      "ctime_ns_observed_only": 1792269579742241267,
+      "birthtime_ns": 1781479067859411799,
+      "captured_after_source_cutover": true,
+      "included_in_initial_file_derived_inventory": true,
+      "disposition": "remove empty legacy container after children; metadata retained here"
+    },
+    {
+      "source": "docs/design/0.1.0/arc8-xs-shell/.DS_Store",
+      "kind": "file",
+      "mode": "0o644",
+      "mtime_ns": 1781879938346100369,
+      "atime_ns": 1781879938353384224,
+      "ctime_ns_observed_only": 1781879938346100369,
+      "birthtime_ns": 1781589292783581888,
+      "captured_after_source_cutover": true,
+      "included_in_initial_file_derived_inventory": true,
+      "sha256": "9c449f8507e28e3eed017a72c511fd3a404ffb403878207163cbddff674ae352",
+      "disposition": "disposable Finder metadata; no migrated document content"
+    },
+    {
+      "source": "workbench",
+      "kind": "directory",
+      "mode": "0o755",
+      "mtime_ns": 1792269579747624050,
+      "atime_ns": 1792269580067259579,
+      "ctime_ns_observed_only": 1792269579747624050,
+      "birthtime_ns": 1781061819988727631,
+      "captured_after_source_cutover": true,
+      "included_in_initial_file_derived_inventory": true,
+      "disposition": "remove empty legacy container after children; metadata retained here"
+    },
+    {
+      "source": "workbench/support",
+      "kind": "directory",
+      "mode": "0o755",
+      "mtime_ns": 1781448682887084577,
+      "atime_ns": 1781449000975526622,
+      "ctime_ns_observed_only": 1781448682887084577,
+      "birthtime_ns": 1781416053335775973,
+      "captured_after_source_cutover": true,
+      "included_in_initial_file_derived_inventory": false,
+      "disposition": "remove empty legacy container after children; metadata retained here"
+    },
+    {
+      "source": "workbench/support/arc0-foundation",
+      "kind": "directory",
+      "mode": "0o755",
+      "mtime_ns": 1781448594684131847,
+      "atime_ns": 1781449000976279581,
+      "ctime_ns_observed_only": 1781448594684131847,
+      "birthtime_ns": 1781416053335894842,
+      "captured_after_source_cutover": true,
+      "included_in_initial_file_derived_inventory": false,
+      "disposition": "remove empty legacy container after children; metadata retained here"
+    }
+  ],
+  "additional_empty_directories": [
+    "docs/design/0.1.0/arc5-critical-correctness/slice2",
+    "docs/design/0.1.0/arc5-critical-correctness/slice3",
+    "docs/design/0.1.0/arc5-critical-correctness/slice4",
+    "docs/design/0.1.0/arc5-critical-correctness/slice5",
+    "workbench/support",
+    "workbench/support/arc0-foundation"
+  ],
+  "inventory_note": "The initial migration inventory followed file parents, so it did not include six empty historical subdirectories. Their exact observed timestamps are retained here before removal. The existing original-layout helper restores its initial31 directory records; this supplement preserves the six additional empty-container records without creating new active planning scopes.",
+  "retained_public_paths": [
+    "docs/planning.md"
+  ],
+  "unrelated_empty_directory_retained": "docs/research",
+  "follow_up_poc_reclassification": "RUST-CORE-POC.md moves to Project05 artifacts; not retained in source."
+}

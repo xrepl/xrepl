@@ -6,7 +6,7 @@ or independent acceptance. Original filenames and bodies are preserved.
 
 ## Capability and status
 
-D-01 is resolved in the addendum; D-02 remains open. G-01 streaming, G-02 interrupt and G-03 shutdown retain their original protocol/sibling dependencies. The PoC notes say written/static-reviewed, not compiled or run in that session; no new runtime proof is claimed. Public RUST-CORE-POC.md stays with implementation.
+D-01 is resolved in the addendum; D-02 remains open. G-01 streaming, G-02 interrupt and G-03 shutdown retain their original protocol/sibling dependencies. The PoC notes say written/static-reviewed, not compiled or run in that session; no new runtime proof is claimed. RUST-CORE-POC.md is now preserved with the infrastructure PoC slice artifacts, per the Operator’s follow-up classification.
 
 ## Imported original inputs
 
@@ -27,3 +27,5 @@ explicit import exceptions; new supporting output belongs under artifacts/.
 
 - v1.0 — 2026-10-17: added retrospective navigation in Project08. Existing
   canonical filenames remain historical payloads; current notes live alongside.
+
+- v1.1 — 2026-10-17: Operator moved the PoC overview into Project05’s infrastructure slice; prior retention in the implementation checkout is superseded. Historical payloads remain unchanged.

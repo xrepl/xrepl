@@ -251,3 +251,19 @@ Arc01 delivered both increments and the composed fresh-clone demonstration.
 Current status updated to implemented-awaiting-operator; all source/removal,
 metadata and reference obligations have attested evidence. The original plans,
 open historical gates and source/publication boundaries are preserved.
+
+## Follow-up cleanup authorization v1.3 — 2026-10-17
+
+The Operator requested removal of remaining local docs/design and moved legacy
+containers, reclassified RUST-CORE-POC.md as a Project05 artifact, and explicitly
+authorized commit and push when finished. This supersedes the prior retention
+of the public PoC overview and two Finder metadata files. Copy the overview
+unchanged into the infrastructure slice, preserve its exact current bytes and
+mtime/creation time in a supplemental manifest, commit it before source removal,
+and update current navigation. Capture metadata for the remaining empty legacy
+directories before removing them. Six empty subdirectories were absent from the
+initial file-parent inventory; their observed timestamps are preserved separately.
+No missing document payload was found; the initial 69+1 records remain unchanged.
+This follow-up adds one preserved record (70 planning payloads + 1 older variant).
+The requested publication covers main and planning. No release-branch update
+is implied, and historical acceptance gates remain as recorded.
