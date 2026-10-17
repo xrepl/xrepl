@@ -26,4 +26,6 @@ The exact preserved payload import is commit `094e72b`; source provenance is
 `18ba5b7`. Project08 uses One-Contributor with scoped read-only lookup assistants;
 all implementation checks are attested, not independently accepted.
 
-Source cutover:main9d7956b. [Migration implementation report](project08-planning-migration/closing-report.md) records all checks and remaining acceptance/publication state.
+Initial source cutover: `9d7956b`; follow-up cleanup/PoC relocation: `02fc239`. [Migration implementation report](project08-planning-migration/closing-report.md) records all checks and remaining acceptance/publication state.
+
+The [Rust PoC overview](project05-rust-frontend/arc02-event-core/slice01-infrastructure-poc/artifacts/RUST-CORE-POC.md) now lives with its Project05 implementation notes. Its dates are covered by the supplemental relocation manifest; source legacy containers are removed.

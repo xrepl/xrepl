@@ -67,3 +67,31 @@ Final metadata check: Slice02 artifacts/final-navigation-check.json records
 188 current planning links with zero missing targets and matching row walks
 (P7/A4/S8/C6). All70 legacy payloads and the restoration helper remain unchanged
 from the checked import/composition candidates; source worktree is clean.
+
+## Follow-up cleanup and PoC relocation — 2026-10-17
+
+Operator-authorized follow-up supersedes retention of the source-root PoC
+overview and two Finder metadata files. Planning commit `d71913e` preserves
+the unchanged overview under Project05’s infrastructure PoC slice with an exact
+mtime/creation-time supplemental manifest. Source commit `02fc239` removes its
+root copy and updates only docs/planning.md. Local docs/design and workbench
+containers are now absent: 11 empty directories and two DS_Store files removed,
+with their observed dates recorded in Slice02’s legacy-container-cleanup.json.
+The initial file-derived inventory did not include six empty subdirectories;
+their timestamps are now captured in that supplement before deletion. Initial
+69+1 payloads/manifests remain unchanged; this follow-up adds one preserved
+overview (70 planning files plus one historical branch variant).
+
+Both restoration manifests report zero modification/creation-time mismatches:
+original69 files/27 directories plus supplementary1 file/0 directories. The
+original-layout helper remains scoped to its initial31 directory records; the
+six additional empty-container records are retained separately, without
+creating new active slice scopes. Ctime remains OS-maintained. Current planning
+filesystem links all resolve, including the PoC overview’s source-context
+forwarder. Product tests were not run; no code, assertions or build data changed.
+
+Evidence: Slice02 artifacts/legacy-container-cleanup.json and Slice01
+artifacts/rust-poc-relocation.json. Checks are attested; historical independent
+acceptance requirements are unchanged. The Operator explicitly requested commit
+and push of main and planning after this work. Prior publication holds are
+superseded for these two branches; no release-branch change is included.

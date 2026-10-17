@@ -178,5 +178,30 @@
     "docs/planning.md"
   ],
   "unrelated_empty_directory_retained": "docs/research",
-  "follow_up_poc_reclassification": "RUST-CORE-POC.md moves to Project05 artifacts; not retained in source."
+  "follow_up_poc_reclassification": "RUST-CORE-POC.md moves to Project05 artifacts; not retained in source.",
+  "removal": {
+    "completed_at": "2026-10-17T16:22:41.096829-05:00",
+    "directories_removed": 11,
+    "finder_metadata_files_removed": 2,
+    "unexpected_files_removed": 0,
+    "docs_design_exists": false,
+    "workbench_exists": false,
+    "metadata_preservation_commit": "d71913e",
+    "poc_source_removed_after_committed_import": true,
+    "poc_destination": "project05-rust-frontend/arc02-event-core/slice01-infrastructure-poc/artifacts/RUST-CORE-POC.md"
+  },
+  "verification": {
+    "source_commit": "02fc2390bdc2217775f6e24126720917d366ccb7",
+    "initial_payload_hashes_match": 69,
+    "supplemental_poc_payload_hash_matches": true,
+    "source_delta_paths": [
+      "RUST-CORE-POC.md",
+      "docs/planning.md"
+    ],
+    "current_planning_links_resolve": 193,
+    "missing_planning_links": [],
+    "preserved_public_guide": "docs/planning.md",
+    "publication_authorized": true,
+    "operator_authorization": "when you have finished with all tasks, commit and push"
+  }
 }

@@ -205,13 +205,15 @@ accepts the completed migration after the self-check report.
 
 ## Current status and next action
 
-All approved moves, source cutover and self-checks are implemented. Source main
-is9d7956b; preserved import 094e72b; checked navigation/helper46fcca1. See
-[implementation report](closing-report.md), the per-slice reports and receipts.
-Earlier preparation-only holds are superseded by the recorded execution approval.
-Human Operator acceptance remains pending; self-checks are attested. No product
-behavior change or remote push is claimed. Next action: Operator review and
-separately directed publication when desired.
+The initial migration and follow-up cleanup/PoC relocation are implemented.
+Current source main is `02fc239`; initial import `094e72b`, navigation/helper
+`46fcca1`, and supplemental PoC preservation `d71913e` remain separately
+identifiable. See [implementation report](closing-report.md) and the follow-up
+receipts. No docs/design or workbench containers or root PoC copy remain in
+source. Original bytes/dates and pending historical acceptance stay preserved.
+The Operator explicitly authorized commit/push of main and planning; initial
+publication holds are superseded for this delivery. Evidence is attested;
+human acceptance is not simulated. No release-branch update is part of cleanup.
 
 ## Version history
 
