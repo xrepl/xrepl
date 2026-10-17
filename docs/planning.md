@@ -84,3 +84,28 @@ they derive its Git root and need its source/build context. Read their historica
 contracts first; relocation does not authorize rerunning them or prove runtime
 acceptance. Existing inline historical references remain unchanged and map back
 to their pinned original context.
+
+## Rust PoC overview
+
+The PoC overview is a project artifact on the planning branch, alongside its
+implementation notes:
+
+```text
+project05-rust-frontend/arc02-event-core/slice01-infrastructure-poc/artifacts/RUST-CORE-POC.md
+```
+
+Its unchanged source-root snapshot was imported in planning commit `d71913e`.
+The previous decision to keep it at the source root is superseded. Its source-
+relative guide links have a local forwarding page in the planning artifact
+folder. After the original 69-file timestamp restore, restore this additional
+file’s dates too:
+
+```sh
+python3 .worktrees/planning/project08-planning-migration/arc01-preserve-and-relocate/slice01-import-planning-corpus/artifacts/restore-timestamps.py --root .worktrees/planning --manifest .worktrees/planning/project08-planning-migration/arc01-preserve-and-relocate/slice01-import-planning-corpus/artifacts/rust-poc-relocation.json --apply --creation
+```
+
+Expected: 1 file, 0 directories, mismatches=[]. The initial manifest and import
+remain unchanged; this supplemental manifest records the later relocation.
+All source `docs/design/` and `workbench/` containers have been removed after
+metadata capture. Slice02’s legacy-container-cleanup.json also preserves six
+empty-directory records outside the original file-derived inventory.
