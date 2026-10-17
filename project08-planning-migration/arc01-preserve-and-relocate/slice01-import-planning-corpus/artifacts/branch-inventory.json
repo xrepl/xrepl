@@ -1,0 +1,90 @@
+{
+  "captured_at": "2026-10-17T14:46:47.390351-05:00",
+  "main_before_fast_forward": "001caacc14c8e4c8aec30c845713b8f78d6b96ce",
+  "main_after_fast_forward": "18ba5b787d5b77f17050127569e3804585b1f772",
+  "fast_forward_counts_before": [
+    0,
+    34
+  ],
+  "refs": [
+    {
+      "ref": "refs/heads/arc4/slice1-stabilize",
+      "commit": "e16c0aa30ef466457c27766598e5d03c05f3f992",
+      "main_only_commits": 44,
+      "ref_only_commits": 3
+    },
+    {
+      "ref": "refs/heads/arc5/slice1-keepalive-desync",
+      "commit": "001caacc14c8e4c8aec30c845713b8f78d6b96ce",
+      "main_only_commits": 34,
+      "ref_only_commits": 0
+    },
+    {
+      "ref": "refs/heads/main",
+      "commit": "18ba5b787d5b77f17050127569e3804585b1f772",
+      "main_only_commits": 0,
+      "ref_only_commits": 0
+    },
+    {
+      "ref": "refs/heads/release/0.1.x",
+      "commit": "18ba5b787d5b77f17050127569e3804585b1f772",
+      "main_only_commits": 0,
+      "ref_only_commits": 0
+    },
+    {
+      "ref": "refs/remotes/macpro/main",
+      "commit": "001caacc14c8e4c8aec30c845713b8f78d6b96ce",
+      "main_only_commits": 34,
+      "ref_only_commits": 0
+    },
+    {
+      "ref": "refs/remotes/origin/HEAD",
+      "commit": "001caacc14c8e4c8aec30c845713b8f78d6b96ce",
+      "main_only_commits": 34,
+      "ref_only_commits": 0
+    },
+    {
+      "ref": "refs/remotes/origin/main",
+      "commit": "001caacc14c8e4c8aec30c845713b8f78d6b96ce",
+      "main_only_commits": 34,
+      "ref_only_commits": 0
+    },
+    {
+      "ref": "refs/remotes/origin/release/0.1.x",
+      "commit": "5d4e334a3fd7bd5b63eeffbb42c417e9624229b7",
+      "main_only_commits": 9,
+      "ref_only_commits": 0
+    }
+  ],
+  "arc4_patch_equivalent_commits": [
+    "- f8afef7950bfb420de2332dbbcb67cc99dd10056 Slice 01.01: close ledger \u2014 baseline green, crash dump triaged",
+    "- 780f51fc57d953eca42c8bb3e8fcee320ee5db7f Updated docs.",
+    "- e16c0aa30ef466457c27766598e5d03c05f3f992 Doc is needed; now split across two arc docs."
+  ],
+  "unique_tip_variant": {
+    "ref": "refs/heads/arc4/slice1-stabilize",
+    "commit": "e16c0aa30ef466457c27766598e5d03c05f3f992",
+    "source": "docs/design/0.1.0/arc5-critical-correctness/arc-plan.md",
+    "blob_oid": "157fdad71c4ec0234e5213dd908c26b8b81320c1",
+    "sha256": "2360bc01c090db5084251ee1d743ff1b8930273da755f592ed1698535fdfe9e0",
+    "size_bytes": 8612,
+    "already_in_main_history": true,
+    "disposition": "import historical variant; do not replace the newer main plan",
+    "mtime_provenance": "no original filesystem timestamp exists in Git; record last path-changing commit time only",
+    "destination": "project04-repl-remediation/arc05-critical-correctness/slice01-keepalive-desync/artifacts/branch-variants/e16c0aa/arc-plan.md",
+    "last_path_change_commit": "780f51fc57d953eca42c8bb3e8fcee320ee5db7f",
+    "last_path_change_commit_time": "2026-06-11T01:13:10-05:00"
+  },
+  "live_remotes": {
+    "origin": {
+      "main": "001caacc14c8e4c8aec30c845713b8f78d6b96ce",
+      "release/0.1.x": "5d4e334a3fd7bd5b63eeffbb42c417e9624229b7"
+    },
+    "macpro": {
+      "main": "001caacc14c8e4c8aec30c845713b8f78d6b96ce"
+    }
+  },
+  "remote_scope": "Live SSH ls-remote --heads queries completed for both remotes; macpro tracking ref refreshed. No pushes.",
+  "off_main_documentation_blobs_not_in_main_history": 0,
+  "scope": "All local heads and cached remote tips; all off-main commits reachable from refs including tags examined for documentation blobs absent from main history."
+}
