@@ -1,0 +1,18 @@
+{
+  "evidence_strength": "attested",
+  "current_planning_links": 188,
+  "missing_links": [],
+  "row_walk_counts": {
+    "P": 7,
+    "A": 4,
+    "S": 8,
+    "C": 6
+  },
+  "legacy_payloads_unchanged_since_exact_import": 70,
+  "restoration_helper_unchanged_since_fresh_clone_composition": true,
+  "source_worktree_clean": true,
+  "source_commit": "9d7956bdb273ef900312565a5f9efb38e91265b6",
+  "final_human_acceptance": "pending; no simulation",
+  "pending_execution_work": [],
+  "publication": "not performed; separately directed"
+}

@@ -1,6 +1,6 @@
 ---
 project: project08-planning-migration
-status: active
+status: implemented-awaiting-operator
 depends-on: []
 blocks: [canonical-planning-cutover]
 related: [project01-repl-foundations, project02-terminal-visualization, project03-emacs-integration, project04-repl-remediation, project05-rust-frontend, project06-pluggable-shells, project07-story-runtime]
@@ -31,7 +31,7 @@ this migration neither reopens nor accepts implementation work.
 
 ## Baseline and coverage
 
-- Source checkout: `/Users/oubiwann/lab/lfe/xrepl/xrepl`, currently on
+- Source checkout: `/Users/oubiwann/lab/lfe/xrepl/xrepl`, at initial capture on
   `release/0.1.x` at `18ba5b787d5b77f17050127569e3804585b1f772`.
 - Local `main` fast-forwarded from `001caacc14c8e4c8aec30c845713b8f78d6b96ce`
   to that same tip after proving 0 main-only / 34 release-only commits.
@@ -205,10 +205,13 @@ accepts the completed migration after the self-check report.
 
 ## Current status and next action
 
-Planning substrate and proposed map prepared. No legacy file has moved or been
-edited. No migration helper has been written or run; no import, source cleanup,
-product tests or push has occurred. Local main fast-forward is complete.
-Next action: Operator reviews the mapping and directs the migration when ready.
+All approved moves, source cutover and self-checks are implemented. Source main
+is9d7956b; preserved import 094e72b; checked navigation/helper46fcca1. See
+[implementation report](closing-report.md), the per-slice reports and receipts.
+Earlier preparation-only holds are superseded by the recorded execution approval.
+Human Operator acceptance remains pending; self-checks are attested. No product
+behavior change or remote push is claimed. Next action: Operator review and
+separately directed publication when desired.
 
 ## Version history
 
@@ -241,3 +244,10 @@ pointers; no code, test assertion, dependency or build behavior changes.
 
 v1.1 records the Operator's execution/delegation permission, the unchanged
 baseline, and the bounded routing-comment allowance surfaced by Slice01.
+
+## Version update v1.2 — 2026-10-17
+
+Arc01 delivered both increments and the composed fresh-clone demonstration.
+Current status updated to implemented-awaiting-operator; all source/removal,
+metadata and reference obligations have attested evidence. The original plans,
+open historical gates and source/publication boundaries are preserved.

@@ -1,6 +1,6 @@
 # Slice01 — Import the planning corpus
 
-Status: active; execution authorized 2026-10-17. Prepared 2026-10-17.
+Status: implemented; human Operator acceptance pending.
 Parent: [Arc01](../arc-plan.md). Contract: [ledger.md](ledger.md).
 Workflow: One-Contributor, selected by the Operator. Sofie plans, implements and
 self-checks; no synthetic CC prompt or reviewer-verification file is created.
@@ -101,3 +101,9 @@ Current assignment: Operator approved all moves and completion of Project08.
 Source inspection and lookup assistants are bounded to the approved corpus and
 active documentation references. The original preparation-only assignment is
 superseded. No CC-role handoff is simulated.
+
+## Implementation status — 2026-10-17
+
+All assigned execution and self-check work is delivered; see closing-report.md.
+Earlier preparation/active status is superseded. Ledger evidence is attested;
+human acceptance remains explicit and historical gates remain unchanged.

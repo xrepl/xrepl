@@ -13,7 +13,7 @@ be merged into one another.
 | [project05-rust-frontend](project05-rust-frontend/project-plan.md) | rust frontend | imported-unreconciled |
 | [project06-pluggable-shells](project06-pluggable-shells/project-plan.md) | pluggable shells | imported-unreconciled |
 | [project07-story-runtime](project07-story-runtime/project-plan.md) | story runtime | imported-unreconciled |
-| [project08-planning-migration](project08-planning-migration/project-plan.md) | Preserve and relocate the planning corpus | migration in progress; attested checks |
+| [project08-planning-migration](project08-planning-migration/project-plan.md) | Preserve and relocate the planning corpus | implemented; human acceptance pending |
 
 Project01–07 plans are new retrospective navigation, not new implementation
 acceptance. Original prompts, ledgers, addenda, failed attempts and verification
@@ -25,3 +25,5 @@ and [timestamp restoration/recovery](project08-planning-migration/arc01-preserve
 The exact preserved payload import is commit `094e72b`; source provenance is
 `18ba5b7`. Project08 uses One-Contributor with scoped read-only lookup assistants;
 all implementation checks are attested, not independently accepted.
+
+Source cutover:main9d7956b. [Migration implementation report](project08-planning-migration/closing-report.md) records all checks and remaining acceptance/publication state.

@@ -1,6 +1,6 @@
 # Slice02 — Cut over source navigation
 
-Status: active. Authorized 2026-10-17 by the Operator’s direction to perform all
+Status: implemented; human Operator acceptance pending.
 approved moves. Workflow: One-Contributor with read-only lookup assistance.
 Parent: [Arc01](../arc-plan.md). Contract: [ledger](ledger.md).
 
@@ -48,7 +48,7 @@ Guarded negative cases from Slice01 remain applicable to the unchanged helper.
 This slice’s new evidence is artifacts/cutover-validation.json and reference
 inventory, then its per-row closing report and arc/project composition records.
 
-Recovery after cleanup uses import commit094e72b plus manifests; source commit
+Recovery after cleanup uses import commit 094e72b plus manifests; source commit
 18ba5b7 recovers the 60 tracked originals. Source Git cannot recover the 9 ignored
 workbench files, so their versioned planning import is the recovery authority.
 Publication/push remains a separately directed action. Self-checks are attested;
@@ -58,3 +58,9 @@ final human Operator acceptance is not simulated.
 
 - v1.0 — 2026-10-17: opened after exact import and successful restoration,
   recovery and negative checks; scoped pointer-only source comments explicitly.
+
+## Implementation status — 2026-10-17
+
+All assigned execution and self-check work is delivered; see closing-report.md.
+Earlier preparation/active status is superseded. Ledger evidence is attested;
+human acceptance remains explicit and historical gates remain unchanged.

@@ -1,6 +1,6 @@
 # Arc01 — Preserve and relocate planning
 
-Status: active. Prepared 2026-10-17. Parent: [Project08](../project-plan.md).
+Status: implemented; human Operator acceptance pending. Prepared 2026-10-17. Parent: [Project08](../project-plan.md).
 Workflow: Operator-selected One-Contributor. Acceptance: [ledger.md](ledger.md).
 
 ## Capability
@@ -42,10 +42,9 @@ reports alone do not establish this composition result.
 
 ## Current status
 
-Only Slice01 planning is open; no migration execution or CC assignment issued.
-Its inventory/mapping are planning evidence and may need a fresh snapshot before
-execution. Slice02 will be detailed after Slice01 has a usable import candidate.
-No close records have been pre-created.
+Both slices are implemented; see their per-row reports and the arc's
+[composition report](closing-report.md). All checks are attested. Human
+Operator acceptance remains pending; previous planned-only status is historical.
 
 ## Version history
 
@@ -54,8 +53,13 @@ No close records have been pre-created.
 
 ## Execution update v1.1 — 2026-10-17
 
-Slice01’s exact import094e72b and restoration/recovery checks are delivered
+Slice01’s exact import 094e72b and restoration/recovery checks are delivered
 (attested). Slice02 is now [planned in detail](slice02-cut-over-source-navigation/slice-plan.md)
 and authorized for source cutover. Pointer-only Cargo/test comments surfaced
 by Slice01 are explicitly included; no behavior changes. Earlier planned-only
 status is superseded. Final acceptance remains with the human Operator.
+
+## Version update v1.2 — 2026-10-17
+
+Slice02 delivered source 9d7956b and full source+planning recovery. The arc
+composition is implemented with attested evidence; no additional slice needed.

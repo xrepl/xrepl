@@ -1,0 +1,89 @@
+{
+  "evidence_strength": "attested",
+  "source_commit": "9d7956bdb273ef900312565a5f9efb38e91265b6",
+  "planning_candidate_commit": "46fcca13651a66e4c15da494180dad45bb957168",
+  "import_commit": "094e72b",
+  "checks": [
+    {
+      "name": "canonical-payloads-and-removed-source-copies",
+      "files": 69,
+      "hashes_and_modes": "match",
+      "original_source_paths_remaining": 0
+    },
+    {
+      "name": "attributed-branch-variant",
+      "files": 1,
+      "blob": "157fdad71c4ec0234e5213dd908c26b8b81320c1"
+    },
+    {
+      "name": "exact-source-change-allowlist",
+      "tracked_removals": 60,
+      "routing_paths": 7,
+      "total": 67
+    },
+    {
+      "name": "unrelated-source-and-runtime-preservation",
+      "unchanged_files": 81,
+      "result": "Git blobs and modes identical outside exact routing/removal allowlist"
+    },
+    {
+      "name": "planning-navigation-filesystem-links",
+      "links": 185,
+      "missing": []
+    },
+    {
+      "name": "restore-fresh-planning-worktree",
+      "exit_code": 0,
+      "result": {
+        "layout": "canonical",
+        "apply": true,
+        "files": 69,
+        "directories": 27,
+        "mismatches": [],
+        "creation_unsupported": [],
+        "creation_not_requested": false,
+        "ctime": "recorded only; OS-maintained",
+        "atime": "restored snapshot value on apply; subsequent reads may change it"
+      }
+    },
+    {
+      "name": "verify-fresh-planning-worktree",
+      "exit_code": 0,
+      "result": {
+        "layout": "canonical",
+        "apply": false,
+        "files": 69,
+        "directories": 27,
+        "mismatches": [],
+        "creation_unsupported": [],
+        "creation_not_requested": false,
+        "ctime": "recorded only; OS-maintained",
+        "atime": "restored snapshot value on apply; subsequent reads may change it"
+      }
+    },
+    {
+      "name": "recover-composed-original-layout",
+      "exit_code": 0,
+      "result": {
+        "layout": "original",
+        "apply": true,
+        "files": 69,
+        "directories": 31,
+        "mismatches": [],
+        "creation_unsupported": [],
+        "creation_not_requested": false,
+        "ctime": "recorded only; OS-maintained",
+        "atime": "restored snapshot value on apply; subsequent reads may change it"
+      },
+      "hashes_verified": 69
+    },
+    {
+      "name": "fresh-main-plus-planning-setup",
+      "source_commit": "9d7956bdb273ef900312565a5f9efb38e91265b6",
+      "planning_commit": "46fcca13651a66e4c15da494180dad45bb957168",
+      "source_guide_present": true,
+      "legacy_tracked_and_ignored_paths_absent": true
+    }
+  ],
+  "result": "all composition checks passed; attested; final human Operator acceptance pending"
+}

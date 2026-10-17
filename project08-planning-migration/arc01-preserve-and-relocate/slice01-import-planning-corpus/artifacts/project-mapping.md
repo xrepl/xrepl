@@ -1,6 +1,6 @@
-# Proposed legacy project mapping
+# Approved legacy project mapping
 
-Prepared 2026-10-17 from the checked-out corpus and all local branches, with live origin/macpro branch-tip checks. Project numbers identify records; they do not express dependencies. Only Project08 is created in this planning pass. The other seven names are reserved for the migration.
+Prepared 2026-10-17 from the checked-out corpus and all local branches, with live origin/macpro branch-tip checks. Project numbers identify records; they do not express dependencies. All eight project homes now exist. The seven historical names were reserved during planning and populated in the approved migration.
 
 | Project | Files to relocate | Scope |
 | --- | ---: | --- |
@@ -38,7 +38,7 @@ Prepared 2026-10-17 from the checked-out corpus and all local branches, with liv
 
 ## Complete working-tree file map
 
-Destinations are relative to the planning worktree except retained public documentation. These are proposed paths; imports have not happened. Exact file metadata, hashes, original directory metadata and dispositions are in `source-inventory.json`.
+Destinations are relative to the planning worktree except retained public documentation. The approved imports are committed at 094e72b; source cutover is9d7956b. The initial inventory retains its original proposal label as historical snapshot metadata. Exact file metadata, hashes, original directory metadata and dispositions are in `source-inventory.json`.
 
 | Original path | Disposition / destination |
 | --- | --- |
@@ -122,3 +122,5 @@ Destinations are relative to the planning worktree except retained public docume
 | `refs/heads/arc4/slice1-stabilize:docs/design/0.1.0/arc5-critical-correctness/arc-plan.md` | `project04-repl-remediation/arc05-critical-correctness/slice01-keepalive-desync/artifacts/branch-variants/e16c0aa/arc-plan.md` |
 
 All old→new path mappings are provenance. Historical inline references remain byte-preserved and resolve through this map and pinned Git source history. New plans and current instructions must link to the canonical locations.
+
+Execution update2026-10-17: all 69 mapped planning payloads and1 older attributed branch variant are imported unchanged. See the Project08 implementation report for self-check receipts and pending human acceptance.
