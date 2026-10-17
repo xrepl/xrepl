@@ -15,6 +15,7 @@
 * [Dev Process](#dev-process-)
 * [Tests](#tests-)
 * [Usage](#usage-)
+* [Planning and design records](#planning-and-design-records)
 * [License](#license-)
 
 ## About [&#x219F;](#table-of-contents)
@@ -575,6 +576,13 @@ Then in the REPL:
 ```lfe
 (xrepl:start)
 ```
+
+## Planning and design records
+
+Project plans, prompts, audits and historical implementation records live on the
+separate `planning` branch in `.worktrees/planning`. See the
+[planning workspace guide](docs/planning.md) for project routing, setup on another
+machine, and restoration of original file and directory dates.
 
 ## License [&#x219F;](#table-of-contents)
 

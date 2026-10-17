@@ -7,7 +7,7 @@
   Run:
     rebar3 as test eunit --module xrepl-shell-pluggability-spike-tests
 
-  See: workbench/support/arc0-foundation/slice1-capability-audit/REPORT.md"
+  See: docs/planning.md; Project06 arc06-multishell/slice01-capability-audit/REPORT.md"
   (behaviour ltest-unit))
 
 (include-lib "ltest/include/ltest-macros.lfe")

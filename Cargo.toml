@@ -3,7 +3,7 @@
 # This is the seed of the M1 "inverted" xrepl core: a Rust front-end that owns
 # the terminal and the human, with the BEAM (the existing xrepl OTP app, also
 # in this repo) owning the language over the msgpack protocol. See
-# `workbench/2026.06.13-rust-core-poc-notes.md` for the scope of this first
+# docs/planning.md, Project05 infrastructure PoC notes, for the scope of this first
 # proof-of-concept (infra only — no reading/printing/evaluating of LFE).
 #
 # This workspace lives at the repo root alongside the rebar3 project; cargo and

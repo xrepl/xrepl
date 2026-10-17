@@ -36,7 +36,8 @@ crates/
 
 This PoC was written without a Rust toolchain available in the authoring
 sandbox (no `cargo`, no crates.io), so **it has not been compiled or run in that
-environment** — see `workbench/2026.06.13-rust-core-poc-notes.md`. The commands
+environment** — see the Project05 infrastructure PoC notes on the planning
+branch ([workspace setup](docs/planning.md)). The commands
 below are the host-side verification path (or use the `*-rust` make targets):
 
 ```sh
@@ -64,5 +65,6 @@ The PoC depth was scoped to the event-core spine. These are wired *for* but not
 - **BEAM child lifecycle** — the three-rung shutdown ladder and the stdin-EOF
   watchdog; a `ChildDown` event variant slots into the same channel.
 
-See `workbench/2026.06.10-rust-core-architecture-review.md` and its 2026.06.11
-addendum for the full architecture these hooks anticipate.
+See Project05’s `arc01-architecture/slice01-architecture-review/artifacts/`
+on the planning branch for the 2026.06.10 architecture review and its 2026.06.11
+addendum ([workspace setup](docs/planning.md)).

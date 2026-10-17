@@ -37,3 +37,6 @@ priv/images/drafts
 # Rust workspace build output. Cargo.lock is intentionally NOT ignored:
 # this workspace produces a binary, and apps/workspaces commit their lockfile.
 /target
+
+# Dedicated source-independent planning checkout.
+/.worktrees/
