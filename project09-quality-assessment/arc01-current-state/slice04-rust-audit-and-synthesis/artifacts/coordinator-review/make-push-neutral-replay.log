@@ -1,0 +1,9 @@
+Isolation: git resolved only to neutral failing stub /private/tmp/xrepl-p09-fakegit-i3xp3dh3/git; no real git/network push executed.
+make_exit=0
+stdout:
+[1;34mPushing main to all remotes...[0m
+[1;36m• neutral:[0m
+[1;32m✓ Pushed[0m
+
+stderr:
+NEUTRAL_STUB_GIT_FAILURE exit42

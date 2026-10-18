@@ -1,0 +1,10 @@
+reader "go back\n" -> {ok,[go,back]}; public_read -> {ok,go}
+reader "take key\n" -> {ok,[take,key]}; public_read -> {ok,take}
+reader "(go back)\n" -> {ok,[[go,back]]}; public_read -> {ok,[go,back]}
+reader "((\n" -> {error,{1,lfe_parse,missing_token}}; public_read -> {caught,
+                                                                      error,
+                                                                      {case_clause,
+                                                                       {error,
+                                                                        {1,
+                                                                         lfe_parse,
+                                                                         missing_token}}}}

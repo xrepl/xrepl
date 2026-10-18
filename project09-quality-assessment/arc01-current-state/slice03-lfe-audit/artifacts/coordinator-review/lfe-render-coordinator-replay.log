@@ -1,0 +1,3 @@
+resolved_renderer={ok,displayed}
+public_render_wrapper={caught,error,{case_clause,{ok,displayed}}}
+remote_module_report_for_loaded_xrepl="Error: Module xrepl not found or not loaded\n\n"

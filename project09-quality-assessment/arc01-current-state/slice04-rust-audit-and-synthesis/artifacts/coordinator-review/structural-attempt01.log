@@ -1,0 +1,6 @@
+PASS: 157 corpus hashes unchanged; 23420 logical lines; original/wrapper inventory preserved
+PASS: 87 source hashes/dispositions; source and both resolved sibling pins clean/unchanged
+Traceback (most recent call last):
+  File "/Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning/project09-quality-assessment/arc01-current-state/slice04-rust-audit-and-synthesis/artifacts/coordinator-review/verify-assessment.py", line 63, in <module>
+    assert all((SOURCE / f).exists() for f in row['implementation_paths']), row['id']
+AssertionError: OBL-L17

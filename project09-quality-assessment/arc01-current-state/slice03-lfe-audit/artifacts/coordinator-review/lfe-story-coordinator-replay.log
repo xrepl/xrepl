@@ -1,0 +1,11 @@
+neutral_opening=<<"Start.">> undeclared_flag_accepted=true
+string_go_back={'switch-shell','xrepl-shell-lfe',#{},
+                               {formatted,<<"Finish.">>}}
+form_go_back={exit,badarg,{erlang,list_to_binary,1}}
+bare_atom_back={'switch-shell','xrepl-shell-lfe',#{},
+                               {formatted,<<"Finish.">>}}
+unicode_codepoint_render={exit,badarg,{erlang,list_to_binary,1}}
+malformed_and_condition={exit,{case_clause,bad_tail},{lists,foldl,3}}
+done_save_disposition={ok,#{shell => 'xrepl-shell-lfe','xs-save' => none}}
+public_get_bindings={exit,undef,{lfe_env,get_vbindings,1}}
+hex_name_switch={error,'not-found'} normal_id_attach=ok

@@ -1,0 +1,9 @@
+Isolation: cargo, cargo-binstall and cargo-outdated are neutral local stubs; no installer/download executed.
+make_exit=0
+stdout:
+[1;34mChecking for outdated dependencies...[0m
+
+
+[1;32m✓ All dependencies up to date[0m
+
+stderr:

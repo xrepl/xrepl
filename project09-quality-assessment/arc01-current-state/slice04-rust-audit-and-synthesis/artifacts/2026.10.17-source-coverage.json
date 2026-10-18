@@ -1,0 +1,442 @@
+{
+  "source_pin": "b865b3137e841269f9218d978817cc243e6b9278",
+  "population": 87,
+  "meaning": "Complete disposition of tracked population; inspection is not dynamic execution. Asset hash intake is separate from semantic content review.",
+  "files": [
+    {
+      "path": ".github/workflows/cicd.yml",
+      "sha256": "16211ea67c86cc7c214e8253e22a320800a705d4096df3d1b078327f9b704fce",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "4e9fc0ad1269cae97465445ef5d9c63ce61cc2c1a732640c583cad61ddd9c9b7",
+      "disposition": "Coordinator full read; build/private/planning ignore boundaries checked; duplicate beam pattern is minor, ungraded."
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "572eaa54d49bb0646906accdeb683e325f9fc3a5b759eefe0f15a54532f70cde",
+      "disposition": "Full instruction/documentation intake; context and public contracts, not a claim all README features are delivered."
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "9a73c18cb46c1c448f05bbcc1d0961e9f3159f8c3ec83c39cbcae09f94303b54",
+      "disposition": "Full Rust CC and coordinator source/manifest read; see Rust evidence."
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "e9a80e9da3753a1da17330d05f7d4d013614a4f6f2b44f73d47ef2cf0d7f4a07",
+      "disposition": "Full Rust CC and coordinator source/manifest read; see Rust evidence."
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "b5f9a68ab001b3717d935c2535e09043931d5e139682cc7eee83be047e1a22c6",
+      "disposition": "Tracked non-executable license metadata; licensing/legal review outside code audit."
+    },
+    {
+      "path": "Makefile",
+      "sha256": "cfeecf6df71e68a04ebd3336172f802f4a3df025ba644fb28a054a90c65d9a1f",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "README.md",
+      "sha256": "5ef8fb48d5dba6c6ff4cc455e93cada47af3ffcd4fbac74622635d5ade02e4b9",
+      "disposition": "Full instruction/documentation intake; context and public contracts, not a claim all README features are delivered."
+    },
+    {
+      "path": "bin/xrepl",
+      "sha256": "926799fad1652ac02771135fc7bb7cb0b8fe09d6f85da6e6f5c12f4a5c49d3f0",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "crates/xrepl-adventure/Cargo.toml",
+      "sha256": "6b3b56910dc98cda97b3b19cb8781400799ff1d341927bfec7187a909df25814",
+      "disposition": "Full Rust CC and coordinator source/manifest read; see Rust evidence."
+    },
+    {
+      "path": "crates/xrepl-adventure/src/lib.rs",
+      "sha256": "b7ad5462686dd6aa979a9e4b790891edc9a3cf8157d6ba2c0dba964330ca3346",
+      "disposition": "Full Rust CC and coordinator source/manifest read; see Rust evidence."
+    },
+    {
+      "path": "crates/xrepl-core/Cargo.toml",
+      "sha256": "1f888cd1d3e6e48cc88c7806e6ff7de4e81e53c6af4d8b46f9872c3cd3c126a6",
+      "disposition": "Full Rust CC and coordinator source/manifest read; see Rust evidence."
+    },
+    {
+      "path": "crates/xrepl-core/src/backend.rs",
+      "sha256": "1054abe162c76b41b7dd5a2c9e35c5145ce1914b101b1ac65540c53211b99f1e",
+      "disposition": "Full Rust CC and coordinator source/manifest read; see Rust evidence."
+    },
+    {
+      "path": "crates/xrepl-core/src/error.rs",
+      "sha256": "e950b9597f24b1cf912a7735572dbe7b40c50099390d968997963652fcd483d9",
+      "disposition": "Full Rust CC and coordinator source/manifest read; see Rust evidence."
+    },
+    {
+      "path": "crates/xrepl-core/src/event.rs",
+      "sha256": "75c84e84c54565c01ec27e4f6ccc5a66eb61724b9896da73bbe2f0549a8eef47",
+      "disposition": "Full Rust CC and coordinator source/manifest read; see Rust evidence."
+    },
+    {
+      "path": "crates/xrepl-core/src/input.rs",
+      "sha256": "d9c40e45bc249fe45b480130cdfb8afb07c7b015ee8dca09081e31f9fa3acbbe",
+      "disposition": "Full Rust CC and coordinator source/manifest read; see Rust evidence."
+    },
+    {
+      "path": "crates/xrepl-core/src/lib.rs",
+      "sha256": "51ff2204a96dcde6dba40ea8a8c7f38405b34a5311805114e01d5419b2a56473",
+      "disposition": "Full Rust CC and coordinator source/manifest read; see Rust evidence."
+    },
+    {
+      "path": "crates/xrepl-core/src/render.rs",
+      "sha256": "281a05ae5fa00cd48af46ce10d77958773e037b2a5145738c6b5deb21914cb41",
+      "disposition": "Full Rust CC and coordinator source/manifest read; see Rust evidence."
+    },
+    {
+      "path": "crates/xrepl-core/src/repl.rs",
+      "sha256": "90f5b9047f3f5ef7c127d207f6c7efe4b2bbe68f63c7f2ccf96f5be2a61c89ee",
+      "disposition": "Full Rust CC and coordinator source/manifest read; see Rust evidence."
+    },
+    {
+      "path": "crates/xrepl/Cargo.toml",
+      "sha256": "2be273d6ee102a6791d8f603dfcc3078666a3f290cf8798cfb3a0fc9dfc9899d",
+      "disposition": "Full Rust CC and coordinator source/manifest read; see Rust evidence."
+    },
+    {
+      "path": "crates/xrepl/src/main.rs",
+      "sha256": "57e9b4f7d4ced5d3354a84c0fb2ea01bc533ac19cd510dc1f6c2c716276ef6c8",
+      "disposition": "Full Rust CC and coordinator source/manifest read; see Rust evidence."
+    },
+    {
+      "path": "docs/planning.md",
+      "sha256": "fe8c81649ec15c5bee8ed05769fe4d5c6e4343208a117aa234fdd07875700a9c",
+      "disposition": "Full instruction/documentation intake; context and public contracts, not a claim all README features are delivered."
+    },
+    {
+      "path": "mk/lfe.mk",
+      "sha256": "2cab4e5213346f4aa7e8a89adb3eef27a159b4bd4fd2b25b563b869cd297a12a",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "mk/rust.mk",
+      "sha256": "40e1024a7c4d3ca34807a6856b0dd66501f855baccb1bb2f152e07cd8ce3d1c7",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "priv/banners/v1.txt",
+      "sha256": "830ba9c9e7d7734a1a2485d3c6790b31aafd36222264a534e693b9694b350fc3",
+      "disposition": "Tracked asset metadata/hash only; visual/story contents not semantically audited. Native archive fixture may be loaded by full suite; see implementation extent caveat."
+    },
+    {
+      "path": "priv/banners/v2.txt",
+      "sha256": "67a076a64937fd3b6abf3aa80ef6aa8ecd7024334ed69e7a16df48b106db5f1a",
+      "disposition": "Tracked asset metadata/hash only; visual/story contents not semantically audited. Native archive fixture may be loaded by full suite; see implementation extent caveat."
+    },
+    {
+      "path": "priv/images/logo-v1-x250.png",
+      "sha256": "01399d1aac4cfc37cc111125e679c0b9567c964fc4408c45c02059e1a327ba8c",
+      "disposition": "Tracked asset metadata/hash only; visual/story contents not semantically audited. Native archive fixture may be loaded by full suite; see implementation extent caveat."
+    },
+    {
+      "path": "priv/images/logo-v1-x4800.png",
+      "sha256": "c038282110d81115cbbbb615af3a079f8ed301b271f356b053c2f85c9768e058",
+      "disposition": "Tracked asset metadata/hash only; visual/story contents not semantically audited. Native archive fixture may be loaded by full suite; see implementation extent caveat."
+    },
+    {
+      "path": "priv/images/project-art-large.jpg",
+      "sha256": "e4fdd96d1723639e11633736e748ed3d5ab403109cfba4c9d036170b4683970d",
+      "disposition": "Tracked asset metadata/hash only; visual/story contents not semantically audited. Native archive fixture may be loaded by full suite; see implementation extent caveat."
+    },
+    {
+      "path": "priv/images/startup-screenshot.png",
+      "sha256": "55f1533c1f674710228f0d38691c5a1bbcd35a527fa7133d36c3f1fbd70729df",
+      "disposition": "Tracked asset metadata/hash only; visual/story contents not semantically audited. Native archive fixture may be loaded by full suite; see implementation extent caveat."
+    },
+    {
+      "path": "priv/support.xsf",
+      "sha256": "27284c9cd0a482f1ea2ce9c3734482a50e28a10d461d09661d738608b79c052e",
+      "disposition": "Tracked asset metadata/hash only; visual/story contents not semantically audited. Native archive fixture may be loaded by full suite; see implementation extent caveat."
+    },
+    {
+      "path": "rebar.config",
+      "sha256": "8dbe1406124cc923ee844f681eeb4c736c6e5e76cfad1e16c69de7c9e587fb7e",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "rebar.lock",
+      "sha256": "09c5799aba5f6794f471f063ae1b7c45f1960068e304a5bb346c18f6e69fba29",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/lfe_xrepl.erl",
+      "sha256": "3f9ebbcbbd26cf291a912b8acbdbd0489464ef3fb9250e27237321e97de43bb4",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/rebar.lock",
+      "sha256": "11147eb50b093a61fe80253dae762d703387f23054d00907217c4ab3dc2d6b8c",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-app.lfe",
+      "sha256": "1d68d78a64d4c94906f1e0903f71bd3c008a02939915b0b3ff998592b448b1d8",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-auth.lfe",
+      "sha256": "63a83aa2102165b4530c3b6d0a0cc3ac4c73e68ffad82417387f0f7b278a2651",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-client-shell-fns.lfe",
+      "sha256": "723431472eeea7ef80230be45611f1a9c00bcf5f062d34bb5c9db4bccee83288",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-client-shell.lfe",
+      "sha256": "58477f9db828380762fcfc0585665db74b505343bd082bd3a3829d9f9ddc611d",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-client-sup.lfe",
+      "sha256": "418aeac6485fbf9da7c5bae54dbfbbbb0fc8dc796a60a111c6a3c1c76fdab0e1",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-client.lfe",
+      "sha256": "e4257015e98aa7661c8417385bc95564710900c8f7aa167e6e95fe01d3c96709",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-commands.lfe",
+      "sha256": "71a69cefe0ddeb621130d950a9e8daa217330fc946c3fafda0ecf1c3d979f12b",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-config.lfe",
+      "sha256": "4f33f4d987c3c040d7062dcce88ca70c4afc10c35eb04a15d438ed0eda912b13",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-consts.lfe",
+      "sha256": "0e52e4e520159953f953d29d5c1e21ff80c8d5d39fb02bac46f74c7752801bfe",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-dispatcher.lfe",
+      "sha256": "be2ea935eabf928b4a1de87f2bda27ef0040df305b79b167cf0abef775b4b8d6",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-env.lfe",
+      "sha256": "cfe82bb99f05adcb8c8eee1d427e3f2b32f683d7258e69045b37503075ba20ab",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-eval.lfe",
+      "sha256": "8b766fbd36acc88b68b10c089191fb844cdbcc4501648ab5298c55541648b459",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-help-remote.lfe",
+      "sha256": "bb47d7efe57d2c7c02a69c128bb3b2bea047ecbb6bef681a4ca491da50f08b7c",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-history.lfe",
+      "sha256": "06b1ff40e08ccfae09aea7d2e241404b6acbd33948c01abe8bf30e7b17164dac",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-io.lfe",
+      "sha256": "70708077f382167a0550b8cc9b7161c45c788664fbf207c8fc3d17e98d8823bd",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-net-sup.lfe",
+      "sha256": "c40c58994614dd714f01bed64979489c2623b119f44a907e5147e76159c55ed7",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-output.lfe",
+      "sha256": "e4a212355043ceeb521f7cc5489d68cf60d86d213c111850abd14b7d4e8c8d41",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-session-manager.lfe",
+      "sha256": "d605850e3f9ad904c2896cb5dd4034a59e9d0b80134c321b71cdd4439ec39fbf",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-session-sup.lfe",
+      "sha256": "594171760a13879ca89021d0639136ec46c34f86ec0a0498717f3cdebf2c40a9",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-session.lfe",
+      "sha256": "e958d4b6fecf08bb174f951fe5aac05d1d038755f0e4af3f5c84aeeb69b01e7e",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-shell-echo.lfe",
+      "sha256": "c593a5b25a689565c52750339f87a1cadced3ccdf19c44f1fe6165ec9fbf5ab1",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-shell-fns.lfe",
+      "sha256": "9102b57b6b0551bff898600fc107609f39da3165ddd5a029dbfa19f4d755644f",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-shell-lfe.lfe",
+      "sha256": "819ed613b924ded81a029aa5ffc0ca3111afaf0a97023be2969bd5a2291de60d",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-shell.lfe",
+      "sha256": "742db87bf25e096ce1404082e8b04c037d709365a67996a3273c22b9472b11a0",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-store.lfe",
+      "sha256": "1220e46016b86f785615c4ba79f6fac0ec5b205016804fa10754fe4bd42c17d8",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-sup.lfe",
+      "sha256": "196444692f58d3a3b3bd5ad0d4ea1d1a708078b4ac7c73238928b7748e5f92ca",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-tcp-handler.lfe",
+      "sha256": "ddc7536d44d8430b1e996e77ba0b4f5d7ca50da9acc4fcf08044578eb6bc5a1a",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-transport-stdio.lfe",
+      "sha256": "e65f3a0c46921b1cc1f219d264cecde486fc5e942e30e46a3e9f18676b4686f2",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-transport.lfe",
+      "sha256": "2285fa17b6b2f1ce43d1c6638d8a91ff697f39ef43abe6e25042350e97fa4d88",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl-vsn.lfe",
+      "sha256": "9bf153c5b5760cbbb74a40b448f79d620c80db3c73958cb2da39645fe93cd657",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl.app.src",
+      "sha256": "9cef059fbba37f671d7d58f9a09b03e73c136aacb25bc483f4d6dc4fb1c60aa5",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xrepl.lfe",
+      "sha256": "9bcb705f564d858feeae4fb4b8e5d06dfa5fedc601859605f77bd47095aef88a",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xs-bundle.lfe",
+      "sha256": "567c370cef85cb6b656f81741c699a2888db63148189317b03536f0e97ed520f",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xs-engine.lfe",
+      "sha256": "88e8ccce10a4810e3f1071fca516c0d463afaa81dd40ecc4ac1d4f31fc0f6c69",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xs-shell.lfe",
+      "sha256": "17abc835d6b12bf4f0e58890f5427c72f13c4318187bbb2388e5a8738f208a2a",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xs-world.lfe",
+      "sha256": "c6d60ac371ab8ed624a9d0295cddbd19bf302534a9e8b3b086c5e9fb70d64588",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "src/xs.lfe",
+      "sha256": "dcd34e967d7f534db18fe403e0f690ae31f8236a9a59df3d4568e54ef8f3b3f9",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "test/xrepl-config-tests.lfe",
+      "sha256": "1e75bd4bcbeb4e2de102d3f1f4264437a89d565601c4818d8bca99f21f719017",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "test/xrepl-decode-error-tests.lfe",
+      "sha256": "0e1cdb08b486051596ce7349b39b0eec755c6453add27a0f5cfd5f7778a6d69e",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "test/xrepl-keepalive-tests.lfe",
+      "sha256": "4376cf492753813dae7fc7c623f15ac88aba42c63b14d4832c4e4b44a1fa982c",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "test/xrepl-multi-session-tests.lfe",
+      "sha256": "425bd308625e221a0aa440265525dd5670167e4a808becba57d56893065b0e4e",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "test/xrepl-prompt-tests.lfe",
+      "sha256": "b469a53419bf4b65e59efa5c2ecf06cef75db111273adbe840351ed54a95e861",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "test/xrepl-session-manager-tests.lfe",
+      "sha256": "d0864f55dfbde643b3a4f6a6b2870fd5ab13a84710f24301860ede30812688f8",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "test/xrepl-shell-echo-tests.lfe",
+      "sha256": "75327bf43e5e168c576fda11ce49e74021623a187e3df027188a6519f5c15fe5",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "test/xrepl-shell-lfe-tests.lfe",
+      "sha256": "bf5cd9b9b141c3808694bc66a4b120171458ae98e9951f5a5f8212dfcb59d22b",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "test/xrepl-shell-pluggability-spike-tests.lfe",
+      "sha256": "31663a02a0c26df27afd4c597c5234115ae69ab8c23d58c7506ede61a7dc8ce0",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "test/xrepl-shell-switching-tests.lfe",
+      "sha256": "1c9fb64eb8d3e5a67bf4c04189d2380318289832f07083f4030d9a506f573b0e",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "test/xrepl-store-phase2-tests.lfe",
+      "sha256": "b573737edfd706e9c8c8ce29fa4b9802b88bec34c6222597d7a995d8101fae09",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "test/xs-bundle-tests.lfe",
+      "sha256": "6a55fb40bab46767550bae91db21d24612eea4652e6ef6714402e76aa00bb0a0",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "test/xs-engine-tests.lfe",
+      "sha256": "5bc252ea71283f332a5b9ab4230d9a72bc0c4f8b75e7677877b521320728846d",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "test/xs-shell-tests.lfe",
+      "sha256": "ffeab74beaadbfcf18b4e0c5e5154b3a833c0aee23b5e1bd965d3d6253c8e43d",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    },
+    {
+      "path": "test/xs-world-tests.lfe",
+      "sha256": "773d657e7cba4b74bf04bf16f793ca719f514bb89facf74a8c38f4464c446a3f",
+      "disposition": "Full LFE/OTP CC source/test/support read; see LFE evidence; shared support also inspected by Rust CC/coordinator."
+    }
+  ]
+}

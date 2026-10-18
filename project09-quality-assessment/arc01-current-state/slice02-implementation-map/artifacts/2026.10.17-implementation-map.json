@@ -35,7 +35,13 @@
       "implementation_paths": [
         "src/xrepl-session.lfe"
       ],
-      "evidence_limit": "isolated process exists; concurrency/failure paths need audit"
+      "evidence_limit": "LFE-001/002/003/004 reproduce attribution, stack and lifecycle failures; process isolation alone is insufficient.",
+      "audit_findings": [
+        "LFE-001",
+        "LFE-002",
+        "LFE-003",
+        "LFE-004"
+      ]
     },
     {
       "id": "OBL-F03",
@@ -53,7 +59,11 @@
         "src/xrepl-sup.lfe",
         "src/xrepl-io.lfe"
       ],
-      "evidence_limit": "application starts in test suite; real interactive/EOF acceptance not yet demonstrated"
+      "evidence_limit": "Local incomplete input crashes before multiline handling; interactive/EOF acceptance remains open.",
+      "audit_findings": [
+        "LFE-007",
+        "LFE-020"
+      ]
     },
     {
       "id": "OBL-F04",
@@ -70,7 +80,10 @@
         "bin/xrepl",
         "README.md"
       ],
-      "evidence_limit": "launcher exists; interactive flag matrix not run"
+      "evidence_limit": "Launcher exists; banner and hybrid UNIX/auth option plumbing have source-supported defects; full mode matrix unrun.",
+      "audit_findings": [
+        "LFE-020"
+      ]
     },
     {
       "id": "OBL-F05",
@@ -103,7 +116,10 @@
       "implementation_paths": [
         "src/xrepl-history.lfe"
       ],
-      "evidence_limit": "history API exists; saver lifecycle and ownership remain audit candidates"
+      "evidence_limit": "History API exists, but saver ownership/shared paths and disabled-history plumbing remain source-supported risks.",
+      "audit_findings": [
+        "LFE-016"
+      ]
     },
     {
       "id": "OBL-F07",
@@ -121,7 +137,12 @@
         "src/xrepl-session-manager.lfe",
         "test/xrepl-multi-session-tests.lfe"
       ],
-      "evidence_limit": "native tests cover CRUD/isolation; unvalidated imports and expiry remain"
+      "evidence_limit": "CRUD/isolation tests pass; same-session overlap, metadata preservation and expiry fail neutral probes.",
+      "audit_findings": [
+        "LFE-001",
+        "LFE-004",
+        "LFE-011"
+      ]
     },
     {
       "id": "OBL-F08",
@@ -133,12 +154,15 @@
         487
       ],
       "acceptance_summary": "filter nonserializable values, snapshot/save/close/reopen restores bindings",
-      "current_status": "demonstrated",
+      "current_status": "partial",
       "implementation_paths": [
         "src/xrepl-shell-lfe.lfe",
         "test/xrepl-shell-lfe-tests.lfe"
       ],
-      "evidence_limit": "strict saved12345 roundtrip present and suite passes; not VM durability"
+      "evidence_limit": "Explicit saved simple-binding roundtrip passes; graceful close loses unsaved binding. Filtering/automatic persistence criteria remain unproved.",
+      "audit_findings": [
+        "LFE-003"
+      ]
     },
     {
       "id": "OBL-F09",
@@ -171,7 +195,10 @@
         "src/xrepl-store.lfe",
         "src/xrepl-session-sup.lfe"
       ],
-      "evidence_limit": "expiry deletes metadata but only logs live process"
+      "evidence_limit": "Neutral expiry probe deletes metadata yet leaves process alive and evaluable.",
+      "audit_findings": [
+        "LFE-004"
+      ]
     },
     {
       "id": "OBL-F11",
@@ -188,7 +215,11 @@
         "src/xrepl-session-manager.lfe",
         "src/xrepl-commands.lfe"
       ],
-      "evidence_limit": "tests cover common paths; hex-looking names still require audit"
+      "evidence_limit": "Common paths pass; neutral hex-looking name face fails resolution while actual ID attach works.",
+      "audit_findings": [
+        "LFE-012",
+        "LFE-014"
+      ]
     },
     {
       "id": "OBL-F12",
@@ -206,7 +237,10 @@
         "src/xrepl-session.lfe",
         "src/xrepl-history.lfe"
       ],
-      "evidence_limit": "validation exists, but save-interval/history caps not uniformly consumed"
+      "evidence_limit": "Values can be stored/validated while execution sites ignore several exposed settings.",
+      "audit_findings": [
+        "LFE-017"
+      ]
     },
     {
       "id": "OBL-F13",
@@ -225,7 +259,11 @@
         "src/xrepl-client.lfe",
         "bin/xrepl"
       ],
-      "evidence_limit": "real UNIX regression tests pass; no full mode/load/TCP auth matrix"
+      "evidence_limit": "Existing UNIX regressions pass; schema and done-action contracts fail source/public-boundary review; no full TCP/auth/load matrix.",
+      "audit_findings": [
+        "LFE-014",
+        "LFE-015"
+      ]
     },
     {
       "id": "OBL-F14",
@@ -260,7 +298,10 @@
         "src/xrepl-tcp-handler.lfe",
         "src/xrepl-session.lfe"
       ],
-      "evidence_limit": "several declared controls lack enforcement"
+      "evidence_limit": "Configured frame/rate/connection controls are not fully enforced; source-supported risk, no oversized allocation test.",
+      "audit_findings": [
+        "LFE-010"
+      ]
     },
     {
       "id": "OBL-F16",
@@ -277,7 +318,11 @@
         "src/xrepl-dispatcher.lfe",
         "src/xrepl-client.lfe"
       ],
-      "evidence_limit": "load_file placeholder; switch_session/interrupt absent; correlation needs audit"
+      "evidence_limit": "load_file placeholder and absent switch_session/interrupt remain; done-action handling and response-ID correlation need repair.",
+      "audit_findings": [
+        "LFE-014",
+        "LFE-015"
+      ]
     },
     {
       "id": "OBL-F17",
@@ -295,7 +340,11 @@
         "src/xrepl-dispatcher.lfe",
         "src/xrepl-shell-fns.lfe"
       ],
-      "evidence_limit": "formatted command responses exist; arbitrary evaluator IO not proxied"
+      "evidence_limit": "Formatted responses exist but UTF8 is double-encoded; arbitrary evaluator IO is not proxied.",
+      "audit_findings": [
+        "LFE-006",
+        "LFE-021"
+      ]
     },
     {
       "id": "OBL-F18",
@@ -363,7 +412,10 @@
         "src/xrepl-client-shell.lfe",
         "src/xrepl-shell-fns.lfe"
       ],
-      "evidence_limit": "calls local term checkout; no graphics-terminal smoke in this assessment"
+      "evidence_limit": "Neutral real renderer returns {ok,displayed}; xrepl wrapper crashes on that success. Hardware/graphics acceptance unrun.",
+      "audit_findings": [
+        "LFE-009"
+      ]
     },
     {
       "id": "OBL-F22",
@@ -477,7 +529,10 @@
         "src/xs-bundle.lfe",
         "test/xs-bundle-tests.lfe"
       ],
-      "evidence_limit": "synthetic bundle tests pass; schema robustness/flags not fully validated"
+      "evidence_limit": "Normal synthetic parser tests pass; undeclared flags and malformed condition forms demonstrate validation gaps.",
+      "audit_findings": [
+        "LFE-019"
+      ]
     },
     {
       "id": "OBL-F29",
@@ -494,7 +549,10 @@
         "src/xs-bundle.lfe",
         "src/xs-world.lfe"
       ],
-      "evidence_limit": "deferred owner omitted from later done criteria; preserve open obligation"
+      "evidence_limit": "Undeclared flag is accepted in neutral bundle; deferred validation owner never implemented this requirement.",
+      "audit_findings": [
+        "LFE-019"
+      ]
     },
     {
       "id": "OBL-F30",
@@ -511,7 +569,10 @@
         "src/xs-world.lfe",
         "test/xs-world-tests.lfe"
       ],
-      "evidence_limit": "normal grammar tested; adversarial malformed subforms still need audit"
+      "evidence_limit": "Normal grammar works; improper and-form crashes public condition evaluator.",
+      "audit_findings": [
+        "LFE-019"
+      ]
     },
     {
       "id": "OBL-F31",
@@ -528,7 +589,10 @@
         "src/xs-engine.lfe",
         "test/xs-engine-tests.lfe"
       ],
-      "evidence_limit": "substantial synthetic tests pass; whole malformed-input contract not yet proved"
+      "evidence_limit": "Synthetic transition controls pass; malformed condition and codepoint text boundaries still fail.",
+      "audit_findings": [
+        "LFE-019"
+      ]
     },
     {
       "id": "OBL-F32",
@@ -540,13 +604,17 @@
         145
       ],
       "acceptance_summary": "prebuilt state sentinel, routing, graceful absent archive, neutral integration",
-      "current_status": "demonstrated",
+      "current_status": "partial",
       "implementation_paths": [
         "src/xs-shell.lfe",
         "src/xs.lfe",
         "test/xs-shell-tests.lfe"
       ],
-      "evidence_limit": "neutral integration tested; real archive separateF39"
+      "evidence_limit": "Neutral shell entry/routing/end controls pass; raw input truncates multiword commands. Native archive-absence fixture is environment-dependent.",
+      "audit_findings": [
+        "LFE-008",
+        "LFE-018"
+      ]
     },
     {
       "id": "OBL-F33",
@@ -558,12 +626,12 @@
         145
       ],
       "acceptance_summary": "join multi-text output on supported OTP floor",
-      "current_status": "demonstrated",
+      "current_status": "partial",
       "implementation_paths": [
         "src/xs-shell.lfe",
         "src/xrepl-history.lfe"
       ],
-      "evidence_limit": "lists:join+iolist_to_binary exists; current OTP28 tests pass, full OTP matrix not run"
+      "evidence_limit": "Portable join implementation and OTP28 tests pass; supported OTP25+ matrix was not executed."
     },
     {
       "id": "OBL-F34",
@@ -600,7 +668,10 @@
         "src/xs-shell.lfe",
         "test/xs-shell-tests.lfe"
       ],
-      "evidence_limit": "neutral bytes/fallback path exists; image/terminal acceptance not observed"
+      "evidence_limit": "Lazy byte path exists; neutral successful renderer crashes wrapper. No actual terminal/private-image acceptance.",
+      "audit_findings": [
+        "LFE-009"
+      ]
     },
     {
       "id": "OBL-F36",
@@ -617,7 +688,10 @@
         "src/xs-engine.lfe",
         "src/xs-shell.lfe"
       ],
-      "evidence_limit": "string tests pass; actual form normalization/dirs later obligations remain"
+      "evidence_limit": "String movement controls pass; raw multiword reader truncation and parsed list normalization fail; dirs requirement remains open.",
+      "audit_findings": [
+        "LFE-008"
+      ]
     },
     {
       "id": "OBL-F37",
@@ -652,7 +726,12 @@
         "src/xs-shell.lfe",
         "src/xs-engine.lfe"
       ],
-      "evidence_limit": "current normalize-input treats all lists as character lists; no dirs branch; live requirement open"
+      "evidence_limit": "Wire Unicode length is 2 instead of 1, formatted bytes double-encode, and parsed multiword list crashes; dirs remains absent.",
+      "audit_findings": [
+        "LFE-006",
+        "LFE-008",
+        "LFE-019"
+      ]
     },
     {
       "id": "OBL-F39",
@@ -666,7 +745,10 @@
       "acceptance_summary": "clean12-node/5-image load, first chapter/suspend/resume/prose and manual image smoke",
       "current_status": "unverified",
       "implementation_paths": [],
-      "evidence_limit": "requires Operator private archive/graphics-terminal witness; intentionally not accessed"
+      "evidence_limit": "No prescribed private-archive/graphics-terminal witness. Native suite may incidentally load ambient archive; that is not acceptance.",
+      "audit_findings": [
+        "LFE-018"
+      ]
     },
     {
       "id": "OBL-F40",
@@ -717,7 +799,11 @@
         "crates/xrepl-core/src/input.rs",
         "crates/xrepl-core/src/repl.rs"
       ],
-      "evidence_limit": "source compiles; PTY and failure teardown need focused probes"
+      "evidence_limit": "Normal/EOF PTY controls pass; backend panic strands prompt gating and input failure returns Ok.",
+      "audit_findings": [
+        "RUST-001",
+        "RUST-002"
+      ]
     },
     {
       "id": "OBL-F43",
@@ -751,7 +837,11 @@
         "crates/xrepl-core/src/render.rs",
         "crates/xrepl-core/src/repl.rs"
       ],
-      "evidence_limit": "normal source present; public peer-failure claim needs audit"
+      "evidence_limit": "Normal teardown works; neutral backend panic hangs beyond five seconds; input error is reported as successful completion.",
+      "audit_findings": [
+        "RUST-001",
+        "RUST-002"
+      ]
     },
     {
       "id": "OBL-F45",
@@ -829,7 +919,10 @@
         "src/xrepl-tcp-handler.lfe",
         "src/xrepl-net-sup.lfe"
       ],
-      "evidence_limit": "no packet_size or application max_connections wiring"
+      "evidence_limit": "No configured packet_size or declared application connection/rate-limit wiring; no allocation attack performed.",
+      "audit_findings": [
+        "LFE-010"
+      ]
     },
     {
       "id": "OBL-L03",
@@ -846,7 +939,10 @@
         "src/xrepl-session.lfe",
         "src/xrepl-history.lfe"
       ],
-      "evidence_limit": "binary_to_atom per session remains"
+      "evidence_limit": "Permanent session/history name atoms remain; arbitrary unknown story item text also mints atoms.",
+      "audit_findings": [
+        "LFE-005"
+      ]
     },
     {
       "id": "OBL-L04",
@@ -862,7 +958,10 @@
       "implementation_paths": [
         "src/xrepl-store.lfe"
       ],
-      "evidence_limit": "metadata removed, process left alive"
+      "evidence_limit": "Independent neutral probe confirms row deletion with live process remaining.",
+      "audit_findings": [
+        "LFE-004"
+      ]
     },
     {
       "id": "OBL-L05",
@@ -878,7 +977,10 @@
       "implementation_paths": [
         "src/xrepl-history.lfe"
       ],
-      "evidence_limit": "per-session table but global user monitor saver remains"
+      "evidence_limit": "Global-user monitor saver/shared-file ownership risks remain; no personal history used.",
+      "audit_findings": [
+        "LFE-016"
+      ]
     },
     {
       "id": "OBL-L06",
@@ -895,7 +997,10 @@
         "src/xrepl.app.src",
         "src/xrepl-net-sup.lfe"
       ],
-      "evidence_limit": "declarations without all consumers"
+      "evidence_limit": "Declared network controls lack consumers; authentication still occurs on TCP, so no auth-bypass proof.",
+      "audit_findings": [
+        "LFE-010"
+      ]
     },
     {
       "id": "OBL-L07",
@@ -912,7 +1017,12 @@
         "rebar.config",
         ".github/workflows/cicd.yml"
       ],
-      "evidence_limit": "EUnit CI exists; xref/dialyzer/coverage disabled; Rust gate absent"
+      "evidence_limit": "EUnit CI and local make xref exist; current xref fails, CI omits it, and Rust lacks CI/core behavioral coverage.",
+      "audit_findings": [
+        "LFE-018",
+        "RUST-003",
+        "RUST-004"
+      ]
     },
     {
       "id": "OBL-L08",
@@ -928,7 +1038,10 @@
       "implementation_paths": [
         "src/xrepl-dispatcher.lfe"
       ],
-      "evidence_limit": "binary_to_list still in binary-to-code"
+      "evidence_limit": "Neutral wire source Unicode probe reproduces length2 instead of1.",
+      "audit_findings": [
+        "LFE-006"
+      ]
     },
     {
       "id": "OBL-L09",
@@ -944,7 +1057,10 @@
       "implementation_paths": [
         "src/xrepl-session-manager.lfe"
       ],
-      "evidence_limit": "arbitrary hex-parseability still determines ID"
+      "evidence_limit": "Public face-name switch fails; actual ID attach succeeds.",
+      "audit_findings": [
+        "LFE-012"
+      ]
     },
     {
       "id": "OBL-L10",
@@ -960,7 +1076,8 @@
       "implementation_paths": [
         "src/xrepl.lfe"
       ],
-      "evidence_limit": "requires reachability/caller review"
+      "evidence_limit": "Current audit found vestigial EXIT clauses without trap_exit; reachability/recovery not dynamically proved.",
+      "audit_findings": []
     },
     {
       "id": "OBL-L11",
@@ -977,7 +1094,10 @@
         "src/xrepl-transport-stdio.lfe",
         "src/xrepl-output.lfe"
       ],
-      "evidence_limit": "dispatcher partly unified; local/remote seams still overlap"
+      "evidence_limit": "Unified dispatcher is useful; competing output/transport paths remain outside ordinary loop.",
+      "audit_findings": [
+        "LFE-021"
+      ]
     },
     {
       "id": "OBL-L12",
@@ -993,7 +1113,12 @@
       "implementation_paths": [
         "src/xrepl.lfe"
       ],
-      "evidence_limit": "current source audit needed"
+      "evidence_limit": "Loop remains nested; local reader/printer failure paths reproduced, without claiming a separate nesting-induced failure.",
+      "audit_findings": [
+        "LFE-006",
+        "LFE-007",
+        "LFE-008"
+      ]
     },
     {
       "id": "OBL-L13",
@@ -1011,7 +1136,10 @@
         "src/xrepl-shell-lfe.lfe",
         "src/xrepl-session.lfe"
       ],
-      "evidence_limit": "nested formatting/catches remain"
+      "evidence_limit": "Error formatting still flattens context and calls missing formatter, with fallback; old topology changed.",
+      "audit_findings": [
+        "LFE-013"
+      ]
     },
     {
       "id": "OBL-L14",
@@ -1094,7 +1222,10 @@
         "src/lfe_xrepl.erl",
         "src/xrepl-shell-fns.lfe"
       ],
-      "evidence_limit": "1182-line fork remains beside replacement shell stack"
+      "evidence_limit": "Full1182-line fork read; command helpers live, alternate exported engine/IO ownership requires compatibility review.",
+      "audit_findings": [
+        "LFE-021"
+      ]
     },
     {
       "id": "OBL-L19",
@@ -1128,7 +1259,12 @@
         "src/xrepl-store.lfe",
         "src/xrepl-session.lfe"
       ],
-      "evidence_limit": "duplicate process-name construction remains"
+      "evidence_limit": "Process-name and output/helper duplication persists; concrete atom and Unicode failures have separate findings.",
+      "audit_findings": [
+        "LFE-005",
+        "LFE-006",
+        "LFE-021"
+      ]
     },
     {
       "id": "OBL-L21",
@@ -1140,12 +1276,13 @@
         522
       ],
       "acceptance_summary": "Original L21 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans.",
-      "current_status": "demonstrated",
+      "current_status": "unverified",
       "implementation_paths": [
         "AGENTS.md",
         "docs/planning.md"
       ],
-      "evidence_limit": "source clean before checks; generated lock diff captured and restored"
+      "evidence_limit": "Tracked source is clean; original crash-triage/scratch obligations were not re-evaluated. Git status alone does not prove them."
     }
-  ]
+  ],
+  "revision": "v1.2: final audit reconciliation; four conservative disposition corrections retained; original IDs/criteria unchanged"
 }

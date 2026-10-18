@@ -1,6 +1,6 @@
 # Slice01 — existing-plan quality assessment
 
-Status: active; corpus lookup complete, coordinating assessment in progress.
+Status: assessment delivered; coordinator-authored evidence attested, Operator review pending.
 Created 2026-10-17.
 Parent: [Arc01](../arc-plan.md). Workflow: Operator-defined single coordinating
 context with optional CC agents; Expedited Mode enabled.
@@ -85,3 +85,9 @@ only when the applicable evidence and acceptance gates permit.
 - v1.0 — 2026-10-17: define scope, review criteria, evidence method and outputs.
 - v1.1 — 2026-10-17: apply the Operator's coordination/CC-agent and expedited
   commit/advancement instructions without changing the assessment scope.
+
+- v1.2 — 2026-10-17: all 157 corpus records and 68 obligation families delivered; plan-quality report and conservative provenance correction complete. This replaces the prior in-progress label, without claiming independent acceptance.
+
+Current disposition: earlier “active”, “not yet issued” and “now active” wording
+in assignment-history entries describes that dated transition. The current
+status above and reviewer/delivery records supersede those scheduling labels.

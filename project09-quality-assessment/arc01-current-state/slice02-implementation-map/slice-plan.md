@@ -1,6 +1,6 @@
 # Slice02 — implementation extent and validation
 
-Status: active; initial map delivered, audit reconciliation pending.
+Status: map/validation delivered; final audit reconciliation complete, Operator review pending.
 Source: `b865b31`; original planning corpus `09ff6af`.
 
 ## Outcome, inputs and method
@@ -23,7 +23,7 @@ locked missing packages; never upgrade a lockfile. Rebar checkout resolution
 may remove package locks for local siblings; preserve that generated diff and
 restore only this assessment's changes. Do not touch user state or repair code.
 
-Evidence already captured: `rebar3 as test eunit`175/175; Rust7 unit tests plus
+Evidence already captured: `rebar3 as test eunit`175/175; Rust 7 unit tests plus
 one compile-only doctest; Clippy pass; rustfmt fail; xref fail. Native CI has
 not been run remotely and the supported OTP matrix is not locally reproduced.
 Do not add benchmarking, private archives or hardware tests to fill gaps.
@@ -42,3 +42,5 @@ visible, without pretending the slice has independently closed.
 
 - v1.0 — 2026-10-17: open coordinator-owned mapping from the inventoried
   corpus; retain native receipts and initial implementation observations.
+
+- v1.1 — 2026-10-17: reconcile all 68 families with final language reports; tighten four overstrong dispositions and disclose ambient archive/hash intake. Original criteria unchanged; prior pending-reconciliation label superseded.

@@ -1,6 +1,7 @@
 # Slice04 — Rust audit and combined synthesis
 
-Status: active Rust audit; combined synthesis waits for LFE findings/map.
+Status: Rust CC contribution independently accepted; combined index/synthesis
+delivered by Sofie and attested, Operator acceptance pending.
 Source pin: `b865b3137e841269f9218d978817cc243e6b9278`.
 
 ## Outcome and scope
@@ -51,3 +52,9 @@ inside the no-source-edit and isolated-state boundaries.
 
 - v1.0 — 2026-10-17: open independent Rust work against the stable baseline;
   retain LFE/map dependency for final synthesis.
+
+- v1.1 — 2026-10-17: refined Rust return bef70af reconciles attributed36-guide coverage; coordinator replays confirm lifecycle findings. LFE/map inputs now delivered; combined27-finding synthesis replaces pending-synthesis label. No repair scope added.
+
+Current disposition: earlier “active”, “not yet issued” and “now active” wording
+in assignment-history entries describes that dated transition. The current
+status above and reviewer/delivery records supersede those scheduling labels.

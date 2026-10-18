@@ -104,7 +104,7 @@ when their inputs exist. There is no implementation arc in this project.
 
 | Arc | Outcome and destination | Required input | State |
 | --- | --- | --- | --- |
-| [arc01-current-state](arc01-current-state/arc-plan.md) | Plan review, implementation map, language audits and combined recommendations in slice artifacts | Existing source/planning corpus and supplied references; historical acceptance is not prerequisite to examining it | Active: setup complete; first slice prepared |
+| [arc01-current-state](arc01-current-state/arc-plan.md) | Plan review, implementation map, language audits and combined recommendations in slice artifacts | Existing source/planning corpus and supplied references; historical acceptance is not prerequisite to examining it | Assessment delivered; CC contributions reviewed, Operator acceptance pending |
 
 First usable increment: the plan-quality report identifies which records can
 guide resumed work and which claims need reconciliation. The implementation
@@ -118,3 +118,14 @@ map and audits complete the assessment. Setup does not complete these outputs.
   coordination with optional CC agents and enabled Expedited Mode. Record this
   extension, real assignment/reviewer identities and unchanged acceptance limits;
   setup is still self-checked and no CC assignment has yet been issued.
+
+- v1.2 — 2026-10-17: Arc01 delivers plan review,68-family implementation map, both language audits, shared-tooling findings and 27-finding synthesis. Replace setup-only current state; preserve all historical/private/matrix acceptance limits. No runtime repair or shared architecture work added.
+
+## Delivery and remaining acceptance
+
+Start at the [assessment index](arc01-current-state/slice04-rust-audit-and-synthesis/artifacts/2026.10.17-audit-index.md).
+The [delivery report](delivery-report.md) walks every project/arc row, identifies
+actual authors/reviewers and records the final checks. The inquiry and reports
+are delivered; Sofie-authored portions remain attested and require Operator
+review. This supersedes the prior setup-only scheduling state. Formal arc/
+project closure is not asserted while those gates remain open.

@@ -1,0 +1,9 @@
+PASS: 157 corpus hashes unchanged; 23420 logical lines; original/wrapper inventory preserved
+PASS: 87 source hashes/dispositions; source and both resolved sibling pins clean/unchanged
+PASS: attributed Rust36/32559 and Erlang17/7220 guide metadata plus Chineual/audit references match installed files; personal reading not inferred
+PASS: 68 stable family IDs, original criteria/locators unchanged; statuses={'absent': 9, 'ambiguous': 1, 'deferred': 1, 'demonstrated': 9, 'partial': 37, 'prospective': 5, 'source-present-unverified': 4, 'unverified': 2}
+PASS: 27 unique findings, every backlog row present exactly once; 13 High / 13 Medium / 1 Low
+PASS: all Project09 JSON parses; 200 local Markdown link targets exist (anchors/prose claims not inferred)
+PASS: all six ledgers retain six criteria and explicit dispositions; open acceptance is not silently closed
+PASS: authored reports/JSON/probe source have no trailing whitespace; raw logs/diffs preserved verbatim
+LIMIT: structural checks are self-attested, not independent acceptance of coordinator-authored conclusions

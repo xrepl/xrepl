@@ -1,7 +1,7 @@
 # Slice03 — LFE/OTP audit
 
-Status: active inspection against source `b865b31`; final reconciliation awaits
-the implementation map. Parent: Arc01. Operator-defined optional-CC workflow,
+Status: LFE/OTP CC audit independently accepted by Sofie against source `b865b31`;
+all 6 slice rows done. Operator project acceptance remains pending. Parent: Arc01. Operator-defined optional-CC workflow,
 Expedited Mode. Artifacts live under this slice's `artifacts/`.
 
 Audit every first-party LFE module/test, the Erlang shell fork, launcher and
@@ -26,3 +26,9 @@ reviews the actual source, probes and report before accepting CC claims.
 - v1.0 / 2026-10-17: issue initial `cc-prompt.md`; active. LFE inspection can
   proceed on the pinned source while corpus/map synthesis is assembled; final
   cross-language acceptance still consumes those outputs.
+
+- v1.1 — 2026-10-17: CC returned dc56a75 after full G2 guidance completion; Sofie independently replayed all 5 probes and accepted the bounded language audit. Findings feed final map/synthesis; initial active assignment label superseded.
+
+Current disposition: earlier “active”, “not yet issued” and “now active” wording
+in assignment-history entries describes that dated transition. The current
+status above and reviewer/delivery records supersede those scheduling labels.
