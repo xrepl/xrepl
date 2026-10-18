@@ -1,0 +1,26 @@
+===> Verifying dependencies...
+===> App xrepl_term is a checkout dependency and cannot be locked.
+===> App xrepl_protocol is a checkout dependency and cannot be locked.
+===> Analyzing applications...
+===> Compiling xrepl_protocol
+===> Compiling ranch
+===> Compiling xrepl_term
+===> Analyzing applications...
+===> Compiling xrepl
+===> Compiling src/xrepl-tcp-handler.lfe
+===> Compiling src/xrepl-vsn.lfe
+===> Compiling src/xrepl-client.lfe
+===> Running cross reference analysis...
+===> src/xrepl.lfe:344: Warning: xrepl:format-form/1 is unused local function (Xref)
+src/xrepl-sup.lfe:50: Warning: xrepl-sup:child/3 is unused local function (Xref)
+_build/default/lib/lfe/src/lfe_env.erl: Warning: lfe_env:get_vbindings/1 is undefined function (Xref)
+_build/default/lib/lfe/src/lfe_lib.erl: Warning: lfe_lib:format_exception/6 is undefined function (Xref)
+Warning: mod:format_error/1 is undefined function (Xref)
+Warning: mod:module_info/0 is undefined function (Xref)
+src/lfe_xrepl.erl:209: Warning: lfe_xrepl:report_exception/3 calls undefined function lfe_lib:format_exception/6 (Xref)
+src/xrepl-env.lfe:587: Warning: xrepl-env:get-bindings/1 calls undefined function lfe_env:get_vbindings/1 (Xref)
+src/xrepl-eval.lfe:23: Warning: xrepl-eval:format-error/3 calls undefined function lfe_lib:format_exception/6 (Xref)
+src/xrepl-eval.lfe:239: Warning: xrepl-eval:list-ews/2 calls undefined function mod:format_error/1 (Xref)
+src/xrepl-io.lfe:110: Warning: xrepl-io:format-error/3 calls undefined function lfe_lib:format_exception/6 (Xref)
+src/xrepl-shell-fns.lfe:209: Warning: xrepl-shell-fns:module-info-string/1 calls undefined function mod:module_info/0 (Xref)
+

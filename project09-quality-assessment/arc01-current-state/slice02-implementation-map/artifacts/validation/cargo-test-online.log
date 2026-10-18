@@ -1,0 +1,99 @@
+ Downloading crates ...
+  Downloaded mio v1.2.1
+  Downloaded log v0.4.32
+  Downloaded itertools v0.12.1
+  Downloaded tokio v1.52.3
+  Downloaded reedline v0.38.0
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.45
+   Compiling libc v0.2.186
+   Compiling serde_core v1.0.228
+   Compiling autocfg v1.5.1
+   Compiling serde v1.0.228
+   Compiling cfg-if v1.0.4
+   Compiling parking_lot_core v0.9.12
+   Compiling signal-hook v0.3.18
+   Compiling rustix v0.38.44
+   Compiling rustversion v1.0.22
+   Compiling scopeguard v1.2.0
+   Compiling log v0.4.32
+   Compiling rustix v1.1.4
+   Compiling num-traits v0.2.19
+   Compiling smallvec v1.15.2
+   Compiling lock_api v0.4.14
+   Compiling thiserror v1.0.69
+   Compiling memchr v2.8.2
+   Compiling core-foundation-sys v0.8.7
+   Compiling vte v0.14.1
+   Compiling iana-time-zone v0.1.65
+   Compiling either v1.16.0
+   Compiling thiserror v2.0.18
+   Compiling syn v2.0.117
+   Compiling heck v0.5.0
+   Compiling itertools v0.12.1
+   Compiling strip-ansi-escapes v0.2.1
+   Compiling unicode-width v0.1.14
+   Compiling strum v0.26.3
+   Compiling errno v0.3.14
+   Compiling mio v1.2.1
+   Compiling pin-project-lite v0.2.17
+   Compiling signal-hook-registry v1.4.8
+   Compiling unicode-segmentation v1.13.3
+   Compiling nu-ansi-term v0.50.3
+   Compiling parking_lot v0.12.5
+   Compiling bitflags v2.13.0
+   Compiling signal-hook-mio v0.2.5
+   Compiling fd-lock v4.0.4
+   Compiling serde_derive v1.0.228
+   Compiling thiserror-impl v1.0.69
+   Compiling strum_macros v0.26.4
+   Compiling thiserror-impl v2.0.18
+   Compiling tokio-macros v2.7.0
+   Compiling tokio v1.52.3
+   Compiling chrono v0.4.45
+   Compiling crossterm v0.28.1
+   Compiling reedline v0.38.0
+   Compiling xrepl-core v0.0.0 (/Users/oubiwann/lab/lfe/xrepl/xrepl/crates/xrepl-core)
+   Compiling xrepl-adventure v0.0.0 (/Users/oubiwann/lab/lfe/xrepl/xrepl/crates/xrepl-adventure)
+   Compiling xrepl v0.0.0 (/Users/oubiwann/lab/lfe/xrepl/xrepl/crates/xrepl)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.77s
+     Running unittests src/main.rs (target/debug/deps/xrepl-5ad6df3fbffec217)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/xrepl_adventure-758bf907f426e530)
+
+running 7 tests
+test tests::banner_opens_on_the_scene ... ok
+test tests::a_bare_direction_changes_room ... ok
+test tests::cannot_take_what_isnt_there ... ok
+test tests::item_taken_is_gone_from_the_room ... ok
+test tests::starts_in_the_cockpit ... ok
+test tests::take_then_inventory_shows_the_item ... ok
+test tests::unknown_verb_is_reported_not_panicked ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/xrepl_core-442b4260aacfcbf7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests xrepl_adventure
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests xrepl_core
+
+running 1 test
+test crates/xrepl-core/src/lib.rs - (line 27) - compile ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+all doctests ran in 0.50s; merged doctests compilation took 0.33s

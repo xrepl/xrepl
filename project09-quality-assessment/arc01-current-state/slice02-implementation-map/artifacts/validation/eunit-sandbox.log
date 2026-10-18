@@ -1,0 +1,13 @@
+===> Failed to update package rebar3_hex from repo hexpm
+===> Errors loading plugin rebar3_hex. Run rebar3 with DEBUG=1 set to see errors.
+===> Failed to update package rebar3_lfe from repo hexpm
+===> Errors loading plugin {rebar3_lfe,"~> 0.5"}. Run rebar3 with DEBUG=1 set to see errors.
+===> Failed to update package rebar3_proper from repo hexpm
+===> Errors loading plugin {rebar3_proper,"~> 0.12"}. Run rebar3 with DEBUG=1 set to see errors.
+===> Failed to update package rebar3_proper from repo hexpm
+===> Errors loading plugin {rebar3_proper,"~> 0.12"}. Run rebar3 with DEBUG=1 set to see errors.
+===> Failed to update package rebar3_proper from repo hexpm
+===> Errors loading plugin {rebar3_proper,"~> 0.12"}. Run rebar3 with DEBUG=1 set to see errors.
+===> Verifying dependencies...
+===> Failed to update package ltest from repo hexpm
+===> Package not found in any repo: ltest ~> 0.13

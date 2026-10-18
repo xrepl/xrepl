@@ -1,0 +1,757 @@
+{
+  "planning_pin": "09ff6af",
+  "source_pin": "b865b31",
+  "granularity": "68 normalized capability/remediation families; not equal-sized acceptance rows or an implementation percentage",
+  "overlap": "F families describe product plans; L families recheck original audit remediation and overlap F rows. Never sum them as distinct delivered features.",
+  "child_criteria": "Original cited ranges remain normative; summaries do not replace or weaken child criteria.",
+  "rows": [
+    {
+      "id": "OBL-F01",
+      "title": "Standalone eval and environment",
+      "intent": "assigned",
+      "source": "project01-repl-foundations/arc01-standalone-repl/cc-prompt.md",
+      "lines": [
+        45,
+        201
+      ],
+      "acceptance_summary": "macro expansion, progn/set/records/functions/macros, shell vars and commands"
+    },
+    {
+      "id": "OBL-F02",
+      "title": "Evaluator isolation and recovery",
+      "intent": "assigned",
+      "source": "project01-repl-foundations/arc01-standalone-repl/cc-prompt.md",
+      "lines": [
+        205,
+        319
+      ],
+      "acceptance_summary": "per-session evaluator, recovery, bounded calls, clean stop"
+    },
+    {
+      "id": "OBL-F03",
+      "title": "Local REPL and application supervision",
+      "intent": "assigned",
+      "source": "project01-repl-foundations/arc01-standalone-repl/cc-prompt.md",
+      "lines": [
+        390,
+        675
+      ],
+      "acceptance_summary": "start/banner/default session/prompt/stdio/recovery/EOF"
+    },
+    {
+      "id": "OBL-F04",
+      "title": "CLI modes and environment flags",
+      "intent": "assigned",
+      "source": "project01-repl-foundations/arc01-standalone-repl/cli-addendum.md",
+      "lines": [
+        13,
+        202
+      ],
+      "acceptance_summary": "help/version/banner/history/node/cookie and VM flags"
+    },
+    {
+      "id": "OBL-F05",
+      "title": "Line editing and completion",
+      "intent": "assigned",
+      "source": "project01-repl-foundations/arc01-standalone-repl/cli-addendum.md",
+      "lines": [
+        206,
+        296
+      ],
+      "acceptance_summary": "edlin movement, arrows, tab; Ctrl-R only if available"
+    },
+    {
+      "id": "OBL-F06",
+      "title": "Persistent bounded history",
+      "intent": "assigned",
+      "source": "project01-repl-foundations/arc01-standalone-repl/cli-addendum.md",
+      "lines": [
+        300,
+        672
+      ],
+      "acceptance_summary": "load/save/atomic rename/duplicates/1000 cap/save on exit/history commands"
+    },
+    {
+      "id": "OBL-F07",
+      "title": "Multi-session CRUD and isolation",
+      "intent": "assigned",
+      "source": "project01-repl-foundations/arc02-multi-session/cc-prompt.md",
+      "lines": [
+        57,
+        297
+      ],
+      "acceptance_summary": "metadata/config/IDs/list/import/export and failed-create cleanup"
+    },
+    {
+      "id": "OBL-F08",
+      "title": "Explicit saved-binding session-process recovery",
+      "intent": "assigned",
+      "source": "project01-repl-foundations/arc02-multi-session/cc-prompt.md",
+      "lines": [
+        301,
+        487
+      ],
+      "acceptance_summary": "filter nonserializable values, snapshot/save/close/reopen restores bindings"
+    },
+    {
+      "id": "OBL-F09",
+      "title": "Whole-application restart persistence",
+      "intent": "ambiguous-contract",
+      "source": "project01-repl-foundations/arc02-multi-session/cc-prompt.md",
+      "lines": [
+        1478,
+        1493
+      ],
+      "acceptance_summary": "restart executable and recover named session/bindings"
+    },
+    {
+      "id": "OBL-F10",
+      "title": "Session expiry lifecycle",
+      "intent": "assigned",
+      "source": "project01-repl-foundations/arc02-multi-session/cc-prompt.md",
+      "lines": [
+        1431,
+        1448
+      ],
+      "acceptance_summary": "expired session metadata/process/history cleaned automatically"
+    },
+    {
+      "id": "OBL-F11",
+      "title": "Session names/current/session commands",
+      "intent": "assigned",
+      "source": "project01-repl-foundations/arc02-multi-session/cc-prompt.md",
+      "lines": [
+        491,
+        1029
+      ],
+      "acceptance_summary": "switch by ID/name, attach/detach, current-per-process, next-loop prompt"
+    },
+    {
+      "id": "OBL-F12",
+      "title": "Validated runtime configuration",
+      "intent": "assigned",
+      "source": "project01-repl-foundations/arc02-multi-session/cc-prompt.md",
+      "lines": [
+        1033,
+        1144
+      ],
+      "acceptance_summary": "default/get/set/merge/validate per-session state and behavior"
+    },
+    {
+      "id": "OBL-F13",
+      "title": "Ranch/MessagePack TCP and UNIX",
+      "intent": "assigned",
+      "source": "project01-repl-foundations/arc03-networked-repl/plan.md",
+      "lines": [
+        1,
+        146
+      ],
+      "acceptance_summary": "network disabled default; standalone/server/client/hybrid; concurrent clients"
+    },
+    {
+      "id": "OBL-F14",
+      "title": "Authentication and filesystem security",
+      "intent": "ambiguous-contract",
+      "source": "project01-repl-foundations/arc03-networked-repl/plan.md",
+      "lines": [
+        270,
+        320
+      ],
+      "acceptance_summary": "random token, verification lifetime, rotation, loopback, UNIX permissions"
+    },
+    {
+      "id": "OBL-F15",
+      "title": "Rate/connection/frame/eval limits",
+      "intent": "assigned",
+      "source": "project01-repl-foundations/arc03-networked-repl/plan.md",
+      "lines": [
+        300,
+        320
+      ],
+      "acceptance_summary": "request/rate/connection bounds and evaluation timeout"
+    },
+    {
+      "id": "OBL-F16",
+      "title": "Wire ops, IDs and session association",
+      "intent": "assigned",
+      "source": "project01-repl-foundations/arc03-networked-repl/plan.md",
+      "lines": [
+        259,
+        267
+      ],
+      "acceptance_summary": "eval/clone/close/ls_sessions/switch_session/load_file/interrupt/describe/ping"
+    },
+    {
+      "id": "OBL-F17",
+      "title": "Transport-aware command output",
+      "intent": "assigned",
+      "source": "project01-repl-foundations/lfe-repl-reusability-analysis-xrepl-design.md",
+      "lines": [
+        462,
+        523
+      ],
+      "acceptance_summary": "stdout/stderr/result/error visible to appropriate local/remote consumer"
+    },
+    {
+      "id": "OBL-F18",
+      "title": "Middleware stacks and additional transports",
+      "intent": "prospective",
+      "source": "project01-repl-foundations/lfe-repl-reusability-analysis-xrepl-design.md",
+      "lines": [
+        175,
+        319
+      ],
+      "acceptance_summary": "composable middleware; SSH/HTTP/WebSocket/nREPL"
+    },
+    {
+      "id": "OBL-F19",
+      "title": "Distributed storage/migration/reload",
+      "intent": "prospective",
+      "source": "project01-repl-foundations/lfe-repl-reusability-analysis-xrepl-design.md",
+      "lines": [
+        413,
+        460
+      ],
+      "acceptance_summary": "Mnesia replication/migration/conflicts and later watched reload"
+    },
+    {
+      "id": "OBL-F20",
+      "title": "LFE feature parity, metrics and docs",
+      "intent": "prospective",
+      "source": "project01-repl-foundations/lfe-repl-reusability-analysis-xrepl-design.md",
+      "lines": [
+        862,
+        1081
+      ],
+      "acceptance_summary": "parity, full system/property tests, measured performance and docs"
+    },
+    {
+      "id": "OBL-F21",
+      "title": "Terminal image rendering integration",
+      "intent": "assigned",
+      "source": "project02-terminal-visualization/arc01-terminal-graphics/slice01-design/artifacts/xrepl-graphics-impl.md",
+      "lines": [
+        37,
+        1083
+      ],
+      "acceptance_summary": "detection, iTerm2/Kitty, local/remote client render, errors/help"
+    },
+    {
+      "id": "OBL-F22",
+      "title": "Rich charts/history/GUI",
+      "intent": "prospective",
+      "source": "project02-terminal-visualization/arc02-rich-visualization/slice01-design/artifacts/xrepl-graphics-vision.md",
+      "lines": [
+        658,
+        901
+      ],
+      "acceptance_summary": "VlConvert/plot API/history/save/replay/fallback; wx later alternative"
+    },
+    {
+      "id": "OBL-F23",
+      "title": "Emacs connection and IDE support",
+      "intent": "prospective",
+      "source": "project03-emacs-integration/slice01-client-design/artifacts/xrepl-emacs-guide.md",
+      "lines": [
+        894,
+        1063
+      ],
+      "acceptance_summary": "client MVP connect/eval/comint/session UI; optional completion/eldoc/xref"
+    },
+    {
+      "id": "OBL-F24",
+      "title": "Shell behavior/default LFE extraction",
+      "intent": "assigned",
+      "source": "project06-pluggable-shells/arc06-multishell/slice02-shell-behaviour/cc-prompt.md",
+      "lines": [
+        41,
+        158
+      ],
+      "acceptance_summary": "faithful init/eval/describe and exact errors with no language behavior change"
+    },
+    {
+      "id": "OBL-F25",
+      "title": "Per-session shell delegation and snapshots",
+      "intent": "assigned",
+      "source": "project06-pluggable-shells/arc06-multishell/slice03-session-rewire/cc-prompt.md",
+      "lines": [
+        20,
+        145
+      ],
+      "acceptance_summary": "opaque shell state, eval isolation, snapshot contract and get-env semantics"
+    },
+    {
+      "id": "OBL-F26",
+      "title": "Shell switch/init failure and describe",
+      "intent": "assigned",
+      "source": "project06-pluggable-shells/arc06-multishell/slice04-switching-echo/cc-prompt.md",
+      "lines": [
+        22,
+        99
+      ],
+      "acceptance_summary": "echo-to-LFE arithmetic and preserve state on failed target initialization"
+    },
+    {
+      "id": "OBL-F27",
+      "title": "No-hijack eight-word suggestions",
+      "intent": "assigned",
+      "source": "project06-pluggable-shells/arc06-multishell/slice05-did-you-mean/bait-words-tweak.md",
+      "lines": [
+        6,
+        43
+      ],
+      "acceptance_summary": "only unbound matching arity; exact bait list; unchanged state/normal eval"
+    },
+    {
+      "id": "OBL-F28",
+      "title": "Bundle parser and reference validation",
+      "intent": "assigned",
+      "source": "project07-story-runtime/arc07-xs-engine/slice01-bundle-loader/cc-prompt.md",
+      "lines": [
+        32,
+        113
+      ],
+      "acceptance_summary": "manifest/nodes/duplicates/dangling refs/images warn; pure IR"
+    },
+    {
+      "id": "OBL-F29",
+      "title": "Declared flag-reference validation",
+      "intent": "explicit-deferral",
+      "source": "project07-story-runtime/arc07-xs-engine/slice01-bundle-loader/cc-prompt.md",
+      "lines": [
+        90,
+        93
+      ],
+      "acceptance_summary": "validate condition/set flag references in world follow-on"
+    },
+    {
+      "id": "OBL-F30",
+      "title": "World and total conditions",
+      "intent": "assigned",
+      "source": "project07-story-runtime/arc07-xs-engine/slice02-xs-world/cc-prompt.md",
+      "lines": [
+        19,
+        100
+      ],
+      "acceptance_summary": "node/flags/visits/items; malformed condition false+warning"
+    },
+    {
+      "id": "OBL-F31",
+      "title": "Pure transition engine/ordering",
+      "intent": "assigned",
+      "source": "project07-story-runtime/arc07-xs-engine/slice03-xs-engine/cc-prompt.md",
+      "lines": [
+        27,
+        144
+      ],
+      "acceptance_summary": "normalize fields; enter effects/visits/render; choice/meta/password/items; no IO"
+    },
+    {
+      "id": "OBL-F32",
+      "title": "Story entry/goto/end/suspend/LFE return",
+      "intent": "assigned",
+      "source": "project07-story-runtime/arc08-xs-shell/slice01-shell-core/cc-prompt.md",
+      "lines": [
+        34,
+        145
+      ],
+      "acceptance_summary": "prebuilt state sentinel, routing, graceful absent archive, neutral integration"
+    },
+    {
+      "id": "OBL-F33",
+      "title": "Portable text joining",
+      "intent": "assigned",
+      "source": "project07-story-runtime/arc08-xs-shell/slice01-shell-core/cc-prompt.md",
+      "lines": [
+        34,
+        145
+      ],
+      "acceptance_summary": "join multi-text output on supported OTP floor"
+    },
+    {
+      "id": "OBL-F34",
+      "title": "Story save/resume world and live session context",
+      "intent": "assigned",
+      "source": "project07-story-runtime/arc08-xs-shell/slice02-save-resume/cc-prompt.md",
+      "lines": [
+        36,
+        107
+      ],
+      "acceptance_summary": "quit/suspend save; done clears; stale save; resume no extra visit; live evaluator current"
+    },
+    {
+      "id": "OBL-F35",
+      "title": "Lazy image bytes and graceful render",
+      "intent": "assigned",
+      "source": "project07-story-runtime/arc08-xs-shell/slice03-images/cc-prompt.md",
+      "lines": [
+        17,
+        88
+      ],
+      "acceptance_summary": "stem/exact assets, start/eval/resume, text survives missing graphics"
+    },
+    {
+      "id": "OBL-F36",
+      "title": "Movement prefixes/help/moves",
+      "intent": "assigned",
+      "source": "project07-story-runtime/arc08-xs-shell/slice04-navigation-ux/cc-prompt.md",
+      "lines": [
+        32,
+        80
+      ],
+      "acceptance_summary": "raw/prefix matching, no invented target, choice-derived exits, aliases"
+    },
+    {
+      "id": "OBL-F37",
+      "title": "Shell-aware prompt",
+      "intent": "assigned",
+      "source": "project07-story-runtime/arc08-xs-shell/slice05-xs-prompt/cc-prompt.md",
+      "lines": [
+        12,
+        58
+      ],
+      "acceptance_summary": "xs label/session name; default label and describe-failure fallback"
+    },
+    {
+      "id": "OBL-F38",
+      "title": "Unicode and parsed multiword commands",
+      "intent": "assigned",
+      "source": "project07-story-runtime/arc08-xs-shell/slice07-unicode-multiword/cc-prompt.md",
+      "lines": [
+        19,
+        64
+      ],
+      "acceptance_summary": "raw binary display and binary/string/atom/LFE-form command normalization; dirs alias"
+    },
+    {
+      "id": "OBL-F39",
+      "title": "Real archive and terminal acceptance",
+      "intent": "assigned",
+      "source": "project07-story-runtime/arc08-xs-shell/slice08-real-archive-acceptance/cc-prompt.md",
+      "lines": [
+        9,
+        87
+      ],
+      "acceptance_summary": "clean12-node/5-image load, first chapter/suspend/resume/prose and manual image smoke"
+    },
+    {
+      "id": "OBL-F40",
+      "title": "Logjam diagnostic work",
+      "intent": "assigned",
+      "source": "project07-story-runtime/arc08-xs-shell/slice09-logjam-debug-instrumentation/cc-prompt.md",
+      "lines": [
+        13,
+        75
+      ],
+      "acceptance_summary": "dependency/formatter/config plus bracket transport/render logs and real hang evidence"
+    },
+    {
+      "id": "OBL-F41",
+      "title": "Rust single event-channel spine",
+      "intent": "assigned",
+      "source": "project05-rust-frontend/arc02-event-core/slice01-infrastructure-poc/artifacts/2026.06.13-rust-core-poc-notes.md",
+      "lines": [
+        18,
+        70
+      ],
+      "acceptance_summary": "tokio producers and sole event consumer, monotonic eval attribution"
+    },
+    {
+      "id": "OBL-F42",
+      "title": "Rust input thread/prompt gating",
+      "intent": "assigned",
+      "source": "project05-rust-frontend/arc02-event-core/slice01-infrastructure-poc/artifacts/2026.06.13-rust-core-poc-notes.md",
+      "lines": [
+        18,
+        70
+      ],
+      "acceptance_summary": "reedline on dedicated OS thread, blocking_send off runtime, pulse gating"
+    },
+    {
+      "id": "OBL-F43",
+      "title": "Rust pluggable backend/adventure",
+      "intent": "assigned",
+      "source": "project05-rust-frontend/arc02-event-core/slice01-infrastructure-poc/artifacts/2026.06.13-rust-core-poc-notes.md",
+      "lines": [
+        18,
+        70
+      ],
+      "acceptance_summary": "pure sync Backend seam on task; two-room neutral backend"
+    },
+    {
+      "id": "OBL-F44",
+      "title": "Rust renderer and teardown",
+      "intent": "assigned",
+      "source": "project05-rust-frontend/arc02-event-core/slice01-infrastructure-poc/artifacts/2026.06.13-rust-core-poc-notes.md",
+      "lines": [
+        62,
+        70
+      ],
+      "acceptance_summary": "renderer seam; peers finish and terminal restores on exit/failure"
+    },
+    {
+      "id": "OBL-F45",
+      "title": "Rust streaming/interrupt/shutdown extensions",
+      "intent": "explicit-deferral",
+      "source": "project05-rust-frontend/arc01-architecture/slice01-architecture-review/artifacts/2026.06.11-rust-core-architecture-review-addendum.md",
+      "lines": [
+        18,
+        102
+      ],
+      "acceptance_summary": "G01 output frames, G02 evaluator interrupt, G03 server shutdown and sibling schemas"
+    },
+    {
+      "id": "OBL-F46",
+      "title": "Rust M1-M5 packaging/typed/distribution/views",
+      "intent": "prospective",
+      "source": "project05-rust-frontend/arc01-architecture/slice01-architecture-review/artifacts/2026.06.10-rust-core-architecture-review.md",
+      "lines": [
+        318,
+        349
+      ],
+      "acceptance_summary": "real BEAM client/embedded payload/detection; views/typed/distribution/live panes later"
+    },
+    {
+      "id": "OBL-F47",
+      "title": "D02 large-value representation decision",
+      "intent": "open-decision",
+      "source": "project05-rust-frontend/arc01-architecture/slice01-architecture-review/artifacts/2026.06.11-rust-core-architecture-review-addendum.md",
+      "lines": [
+        79,
+        91
+      ],
+      "acceptance_summary": "preview/cache/handle/GC/paging vs whole EETF; lock beforeM2"
+    },
+    {
+      "id": "OBL-L01",
+      "title": "Idle keepalive desynchronization",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        33,
+        58
+      ],
+      "acceptance_summary": "Original L01 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L02",
+      "title": "Frame size and max-connections",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        62,
+        80
+      ],
+      "acceptance_summary": "Original L02 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L03",
+      "title": "Atom-free session registry/history/caps",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        84,
+        107
+      ],
+      "acceptance_summary": "Original L03 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L04",
+      "title": "Expiry lifecycle ownership",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        111,
+        137
+      ],
+      "acceptance_summary": "Original L04 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L05",
+      "title": "History ownership/save-on-terminate",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        141,
+        165
+      ],
+      "acceptance_summary": "Original L05 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L06",
+      "title": "Enforced security configuration",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        237,
+        258
+      ],
+      "acceptance_summary": "Original L06 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L07",
+      "title": "Real static/coverage/CI gates",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        404,
+        432
+      ],
+      "acceptance_summary": "Original L07 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L08",
+      "title": "UTF8 source decoding",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        169,
+        188
+      ],
+      "acceptance_summary": "Original L08 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L09",
+      "title": "Shape-correct ID/name resolution",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        192,
+        211
+      ],
+      "acceptance_summary": "Original L09 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L10",
+      "title": "Dead facade EXIT handling",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        215,
+        231
+      ],
+      "acceptance_summary": "Original L10 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L11",
+      "title": "Load-bearing transport/output seams",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        262,
+        284
+      ],
+      "acceptance_summary": "Original L11 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L12",
+      "title": "Local loop liveness and structure",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        288,
+        307
+      ],
+      "acceptance_summary": "Original L12 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L13",
+      "title": "Single error boundary with original stack",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        313,
+        335
+      ],
+      "acceptance_summary": "Original L13 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L14",
+      "title": "Evaluator unknown-message policy",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        337,
+        355
+      ],
+      "acceptance_summary": "Original L14 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L15",
+      "title": "Store read/ETS filtering architecture",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        361,
+        381
+      ],
+      "acceptance_summary": "Original L15 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L16",
+      "title": "Private parent directory before token/socket",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        383,
+        398
+      ],
+      "acceptance_summary": "Original L16 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L17",
+      "title": "Exported specs and dialyzer",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        438,
+        452
+      ],
+      "acceptance_summary": "Original L17 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L18",
+      "title": "Copied shell consolidation",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        454,
+        474
+      ],
+      "acceptance_summary": "Original L18 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L19",
+      "title": "Explicit current-session context",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        476,
+        493
+      ],
+      "acceptance_summary": "Original L19 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L20",
+      "title": "Helper deduplication",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        495,
+        507
+      ],
+      "acceptance_summary": "Original L20 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    },
+    {
+      "id": "OBL-L21",
+      "title": "Crash/scratch/dirty hygiene",
+      "intent": "planned-remediation",
+      "source": "project04-repl-remediation/arc01-beam-audit/slice01-audit/artifacts/2026.06.10-audit-results-lfe.md",
+      "lines": [
+        509,
+        522
+      ],
+      "acceptance_summary": "Original L21 finding and its assigned remediation; preserve child criteria in Project04 program/arc plans."
+    }
+  ]
+}
