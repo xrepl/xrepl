@@ -18,3 +18,8 @@ tokio = { workspace = true }
 
 [lints]
 workspace = true
+
+[dependencies.clap]
+workspace = true
+[dependencies.cayrn-protocol]
+workspace = true

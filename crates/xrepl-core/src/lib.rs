@@ -22,6 +22,10 @@
 //! `#[non_exhaustive]` [`Event`] enum, the per-frame `eval_id`/[`Stream`], and
 //! the [`Renderer`] type are the hooks those will hang from.
 //!
+//! The separate [`cayrn`] consumer now supports live Cayrn/LFE sessions using
+//! the shared SDK and bounded presentation spool. It bypasses the synchronous
+//! mock backend seam; existing IF behavior remains unchanged.
+//!
 //! # Example
 //!
 //! ```no_run
@@ -41,6 +45,7 @@
 //! ```
 
 pub mod backend;
+pub mod cayrn;
 pub mod error;
 pub mod event;
 pub mod input;

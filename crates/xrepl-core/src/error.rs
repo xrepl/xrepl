@@ -9,6 +9,9 @@
 #[non_exhaustive]
 #[derive(Debug, thiserror::Error)]
 pub enum XreplError {
+    /// A Cayrn protocol, session or capture failure.
+    #[error("cayrn: {0}")]
+    Cayrn(#[from] cayrn_protocol::Fault),
     /// A terminal or stream I/O failure.
     #[error("terminal i/o error: {0}")]
     Io(#[from] std::io::Error),

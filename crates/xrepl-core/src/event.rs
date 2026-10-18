@@ -44,13 +44,21 @@ impl OutputFrame {
     /// A normal-output frame on [`Stream::Stdout`].
     #[must_use]
     pub fn stdout(eval_id: u64, text: impl Into<String>) -> Self {
-        Self { eval_id, stream: Stream::Stdout, text: text.into() }
+        Self {
+            eval_id,
+            stream: Stream::Stdout,
+            text: text.into(),
+        }
     }
 
     /// A diagnostic / meta frame on [`Stream::Meta`].
     #[must_use]
     pub fn meta(eval_id: u64, text: impl Into<String>) -> Self {
-        Self { eval_id, stream: Stream::Meta, text: text.into() }
+        Self {
+            eval_id,
+            stream: Stream::Meta,
+            text: text.into(),
+        }
     }
 }
 

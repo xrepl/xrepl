@@ -91,7 +91,10 @@ pub async fn run<B: Backend>(backend: B) -> Result<()> {
                         break;
                     } else {
                         eval_id += 1;
-                        let command = Command { eval_id, line: trimmed.to_owned() };
+                        let command = Command {
+                            eval_id,
+                            line: trimmed.to_owned(),
+                        };
                         // Wait for the backend to reply (BackendIdle) before
                         // prompting again — do not pulse here.
                         if command_tx.send(command).await.is_err() {

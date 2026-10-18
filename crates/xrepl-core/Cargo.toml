@@ -14,3 +14,12 @@ tokio = { workspace = true }
 
 [lints]
 workspace = true
+
+[dependencies.cayrn-client]
+workspace = true
+[dependencies.cayrn-protocol]
+workspace = true
+[dependencies.serde_json]
+workspace = true
+[dependencies.uuid]
+workspace = true

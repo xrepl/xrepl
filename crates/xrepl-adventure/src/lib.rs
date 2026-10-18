@@ -75,13 +75,19 @@ impl Adventure {
             },
         );
 
-        Self { rooms, here: "cockpit", carrying: Vec::new() }
+        Self {
+            rooms,
+            here: "cockpit",
+            carrying: Vec::new(),
+        }
     }
 
     /// The room the player is currently in. Panics only if the world is
     /// internally inconsistent (`here` always names a room by construction).
     fn current(&self) -> &Room {
-        self.rooms.get(self.here).expect("`here` always names a known room")
+        self.rooms
+            .get(self.here)
+            .expect("`here` always names a known room")
     }
 
     fn look(&self, eval_id: u64) -> Vec<OutputFrame> {
@@ -97,7 +103,10 @@ impl Adventure {
             ));
         }
         let dirs: Vec<&str> = room.exits.iter().map(|(dir, _)| *dir).collect();
-        out.push(OutputFrame::stdout(eval_id, format!("Exits: {}.", dirs.join(", "))));
+        out.push(OutputFrame::stdout(
+            eval_id,
+            format!("Exits: {}.", dirs.join(", ")),
+        ));
         out
     }
 
@@ -116,7 +125,10 @@ impl Adventure {
                 self.here = id;
                 self.look(eval_id)
             }
-            None => vec![OutputFrame::stdout(eval_id, format!("You can't go {dir} from here."))],
+            None => vec![OutputFrame::stdout(
+                eval_id,
+                format!("You can't go {dir} from here."),
+            )],
         }
     }
 
@@ -133,7 +145,10 @@ impl Adventure {
         if present {
             vec![OutputFrame::stdout(eval_id, describe_item(what))]
         } else {
-            vec![OutputFrame::stdout(eval_id, format!("You see no {what} here."))]
+            vec![OutputFrame::stdout(
+                eval_id,
+                format!("You see no {what} here."),
+            )]
         }
     }
 
@@ -141,13 +156,22 @@ impl Adventure {
         if what.is_empty() {
             return vec![OutputFrame::stdout(eval_id, "Take what?")];
         }
-        let room = self.rooms.get_mut(self.here).expect("`here` always names a known room");
+        let room = self
+            .rooms
+            .get_mut(self.here)
+            .expect("`here` always names a known room");
         if let Some(pos) = room.items.iter().position(|i| i.eq_ignore_ascii_case(what)) {
             let item = room.items.remove(pos);
             self.carrying.push(item);
-            vec![OutputFrame::stdout(eval_id, format!("You take the {item}."))]
+            vec![OutputFrame::stdout(
+                eval_id,
+                format!("You take the {item}."),
+            )]
         } else {
-            vec![OutputFrame::stdout(eval_id, format!("There is no {what} to take."))]
+            vec![OutputFrame::stdout(
+                eval_id,
+                format!("There is no {what} to take."),
+            )]
         }
     }
 
@@ -155,16 +179,26 @@ impl Adventure {
         if what.is_empty() {
             return vec![OutputFrame::stdout(eval_id, "Drop what?")];
         }
-        if let Some(pos) = self.carrying.iter().position(|i| i.eq_ignore_ascii_case(what)) {
+        if let Some(pos) = self
+            .carrying
+            .iter()
+            .position(|i| i.eq_ignore_ascii_case(what))
+        {
             let item = self.carrying.remove(pos);
             self.rooms
                 .get_mut(self.here)
                 .expect("`here` always names a known room")
                 .items
                 .push(item);
-            vec![OutputFrame::stdout(eval_id, format!("You set down the {item}."))]
+            vec![OutputFrame::stdout(
+                eval_id,
+                format!("You set down the {item}."),
+            )]
         } else {
-            vec![OutputFrame::stdout(eval_id, format!("You aren't carrying a {what}."))]
+            vec![OutputFrame::stdout(
+                eval_id,
+                format!("You aren't carrying a {what}."),
+            )]
         }
     }
 
@@ -191,7 +225,10 @@ impl Adventure {
             "  help (?)             — this list",
             "  quit                 — leave",
         ];
-        LINES.iter().map(|line| OutputFrame::stdout(eval_id, *line)).collect()
+        LINES
+            .iter()
+            .map(|line| OutputFrame::stdout(eval_id, *line))
+            .collect()
     }
 }
 
@@ -215,8 +252,8 @@ impl Backend for Adventure {
             "look" | "l" => self.look(eval_id),
             "go" | "move" | "walk" => self.go(eval_id, &arg),
             // Bare compass / ship directions move you directly.
-            "north" | "n" | "south" | "s" | "east" | "e" | "west" | "w" | "aft" | "fore"
-            | "in" | "out" | "up" | "down" => self.go(eval_id, &verb),
+            "north" | "n" | "south" | "s" | "east" | "e" | "west" | "w" | "aft" | "fore" | "in"
+            | "out" | "up" | "down" => self.go(eval_id, &verb),
             "examine" | "x" | "inspect" => self.examine(eval_id, &arg),
             "take" | "get" | "grab" => self.take(eval_id, &arg),
             "drop" | "leave" => self.drop_item(eval_id, &arg),
@@ -224,7 +261,10 @@ impl Backend for Adventure {
             "help" | "?" | "commands" => Self::help(eval_id),
             "" => Vec::new(),
             other => {
-                vec![OutputFrame::stdout(eval_id, format!("I don't know how to \"{other}\"."))]
+                vec![OutputFrame::stdout(
+                    eval_id,
+                    format!("I don't know how to \"{other}\"."),
+                )]
             }
         }
     }
@@ -233,14 +273,11 @@ impl Backend for Adventure {
 /// Flavour text for an item, whether it's on the floor or in hand.
 fn describe_item(item: &str) -> String {
     match item.to_ascii_lowercase().as_str() {
-        "logbook" => {
-            "The skiff's logbook. The last entry is in a hand you don't recognise, and \
+        "logbook" => "The skiff's logbook. The last entry is in a hand you don't recognise, and \
              it stops mid-sentence."
-                .to_owned()
-        }
+            .to_owned(),
         "lichen" => {
-            "A pale lichen that keeps a faint blue light even when it's in your shadow."
-                .to_owned()
+            "A pale lichen that keeps a faint blue light even when it's in your shadow.".to_owned()
         }
         other => format!("It's a perfectly ordinary {other}."),
     }
@@ -253,21 +290,31 @@ mod tests {
 
     /// Collapse a frame batch to one string for easy assertions.
     fn text(frames: &[OutputFrame]) -> String {
-        frames.iter().map(|f| f.text.as_str()).collect::<Vec<_>>().join("\n")
+        frames
+            .iter()
+            .map(|f| f.text.as_str())
+            .collect::<Vec<_>>()
+            .join("\n")
     }
 
     #[test]
     fn starts_in_the_cockpit() {
         let mut game = Adventure::new();
         let out = text(&game.handle(1, "look"));
-        assert!(out.contains("Cockpit"), "expected to start in the cockpit, got:\n{out}");
+        assert!(
+            out.contains("Cockpit"),
+            "expected to start in the cockpit, got:\n{out}"
+        );
     }
 
     #[test]
     fn a_bare_direction_changes_room() {
         let mut game = Adventure::new();
         let out = text(&game.handle(1, "out"));
-        assert!(out.contains("Gangway"), "expected to reach the gangway, got:\n{out}");
+        assert!(
+            out.contains("Gangway"),
+            "expected to reach the gangway, got:\n{out}"
+        );
     }
 
     #[test]
@@ -275,7 +322,10 @@ mod tests {
         let mut game = Adventure::new();
         let _ = game.handle(1, "take logbook");
         let out = text(&game.handle(2, "inventory"));
-        assert!(out.contains("logbook"), "logbook should be carried, got:\n{out}");
+        assert!(
+            out.contains("logbook"),
+            "logbook should be carried, got:\n{out}"
+        );
     }
 
     #[test]
@@ -283,14 +333,20 @@ mod tests {
         let mut game = Adventure::new();
         let _ = game.handle(1, "take logbook");
         let out = text(&game.handle(2, "look"));
-        assert!(!out.contains("logbook"), "logbook should be gone from the room, got:\n{out}");
+        assert!(
+            !out.contains("logbook"),
+            "logbook should be gone from the room, got:\n{out}"
+        );
     }
 
     #[test]
     fn unknown_verb_is_reported_not_panicked() {
         let mut game = Adventure::new();
         let out = text(&game.handle(1, "xyzzy"));
-        assert!(out.contains("don't know"), "unknown verb should be reported, got:\n{out}");
+        assert!(
+            out.contains("don't know"),
+            "unknown verb should be reported, got:\n{out}"
+        );
     }
 
     #[test]
@@ -304,6 +360,9 @@ mod tests {
     fn banner_opens_on_the_scene() {
         let game = Adventure::new();
         let out = text(&game.banner());
-        assert!(out.contains("Cockpit"), "banner should show the opening scene, got:\n{out}");
+        assert!(
+            out.contains("Cockpit"),
+            "banner should show the opening scene, got:\n{out}"
+        );
     }
 }

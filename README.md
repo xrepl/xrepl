@@ -604,3 +604,34 @@ Copyright © 2024, The LFE Community <http://lfe.io>.
 [version]: https://github.com/ORG/xrepl/blob/main/.github/workflows/cicd.yml
 [github-tags]: https://github.com/ORG/xrepl/tags
 [github-tags-badge]: https://img.shields.io/github/tag/lfe/xrepl.svg
+
+## Experimental Cayrn session client
+
+The Rust terminal can use Cayrn's shared SDK with the reusable `cayrn-lfe` OTP
+agent. Requires Rust 1.95+, the sibling Cayrn checkout and a running native-agent
+Cayrn host. Existing LFE shell commands and default Rust IF demo are preserved.
+
+```sh
+make build-rust
+./target/debug/xrepl --cayrn /path/to/cayrn-state
+./target/debug/xrepl --cayrn /path/to/cayrn-state --session SESSION_ID --after CURSOR
+```
+
+A new session is created when `--session` is omitted. A terminal and another
+client can submit and observe the same session. Quit/EOF detaches only this
+terminal. Resume cursors are explicit last-displayed positions; there is no
+automatic persistent cursor across terminal process crashes. Incoming output is
+spooled (8MiB cap) while editing, then flushed between prompts; a full local spool
+stops attachment without deleting the host's transcript. Foreground results and
+late output retain operation attribution. `--cayrn-json` reads one source line per
+turn and writes metadata plus complete event JSON for tools/tests.
+
+Shared SDK dependencies currently use local paths under `../../../oxur/cayrn`.
+The runtime agent lives at `../../cayrn-lfe` relative to this checkout. It is not
+an xrepl dependency cycle or an automatic migration of old stored sessions, shell
+extensions, completion or debugging services. The native application can run in
+a shared BEAM node; individual terminal detach never shuts that node down.
+
+From the Cayrn checkout, `make test-xrepl` exercises both Rust workspaces and the
+real LFE agent, including a PTY draft-preservation check. No crates.io/Hex release
+is implied by this local integration.
