@@ -19,6 +19,8 @@
 .PHONY: help-lfe
 help-lfe:
 	@echo "$(GREEN)LFE / BEAM (rebar3):$(RESET)"
+	@echo "  $(YELLOW)make build-agent$(RESET)      - Build the independent Cayrn LFE agent"
+	@echo "  $(YELLOW)make check-agent$(RESET)      - Test the independent Cayrn LFE agent"
 	@echo "  $(YELLOW)make compile-lfe$(RESET)      - Compile the LFE/OTP app"
 	@echo "  $(YELLOW)make test-lfe$(RESET)         - Run eunit + Common Test"
 	@echo "  $(YELLOW)make test-unit-lfe$(RESET)    - Run eunit only"
@@ -130,3 +132,11 @@ clean-lfe:
 distclean-lfe: clean-lfe
 	@rm -rf _build
 	@echo "$(GREEN)✓ LFE deep clean complete (_build removed)$(RESET)"
+
+# The reusable agent retains its component-local build/dependency boundary.
+.PHONY: build-agent check-agent
+build-agent:
+	$(MAKE) -C apps/cayrn_lfe build REBAR="$(REBAR)"
+
+check-agent:
+	$(MAKE) -C apps/cayrn_lfe check REBAR="$(REBAR)"

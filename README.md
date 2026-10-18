@@ -9,6 +9,28 @@
 
 *An experimental, general purpose LFE REPL*
 
+## Cayrn native agent (0.2.x development)
+
+The reusable OTP runtime agent now lives in [`apps/cayrn_lfe`](apps/cayrn_lfe).
+It is independently startable and does not require legacy xrepl services:
+
+```sh
+make build-agent check-agent
+# Choose a fresh private directory for the socket.
+mkdir -m 700 /tmp/xrepl-agent-demo
+./bin/cayrn-lfe /tmp/xrepl-agent-demo/agent.sock
+```
+
+`make build` builds the agent, retained legacy LFE application and Rust client.
+The root launcher delegates to the component-local build, starts only the native
+application and LFE, and accepts a single socket argument. Starting legacy
+`xrepl` does not automatically start the agent. See the component README for
+Cayrn host startup and current limits: 256 operations per context, 8KiB
+source/output/value previews, no program input or live-state restoration.
+This first import preserves the Erlang/LFE prototype; conversion to LFE and
+resource/size hardening follow separately. The native app remains 0.1.0 within
+xrepl's 0.2.0 development branch. Nothing new is published.
+
 ##### Table of Contents
 
 * [About](#about-)

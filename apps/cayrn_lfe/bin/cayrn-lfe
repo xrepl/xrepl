@@ -1,0 +1,7 @@
+#!/bin/sh
+set -eu
+root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+if [ "$#" -ne 1 ]; then printf 'Usage: %s /private/path/agent.sock\n' "$0" >&2; exit 2; fi
+export CAYRN_AGENT_SOCKET="$1"
+exec erl -noshell -pa "$root/_build/default/lib/"*/ebin \
+  -eval 'application:load(cayrn_lfe), application:set_env(cayrn_lfe, socket, os:getenv("CAYRN_AGENT_SOCKET")), {ok,_}=application:ensure_all_started(cayrn_lfe), receive stop -> ok end.'

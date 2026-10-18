@@ -1,0 +1,5 @@
+{application, cayrn_lfe,
+ [{description, "Thin LFE runtime agent for the shared Cayrn Rust connector"},
+  {vsn, "0.1.0"}, {modules, []}, {registered, [cayrn_lfe_sup, cayrn_lfe_listener]},
+  {applications, [kernel, stdlib, lfe]}, {mod, {cayrn_lfe_app, []}},
+  {env, []}, {licenses, ["Apache-2.0"]}]}.

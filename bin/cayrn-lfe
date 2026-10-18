@@ -1,0 +1,5 @@
+#!/bin/sh
+# Delegate to the independently built native OTP component.
+set -eu
+root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+exec "$root/apps/cayrn_lfe/bin/cayrn-lfe" "$@"

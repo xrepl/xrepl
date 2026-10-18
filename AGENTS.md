@@ -69,5 +69,9 @@ project01-shared-repl-architecture/arc02-native-agent-integration/.
 Use that current plan and slice returns; independent acceptance remains pending.
 This is separate from Project09 assessment authority. Preserve existing native
 LFE shells and the IF mock mode, and leave pre-existing docs/design untouched.
-The reusable agent lives in /Users/oubiwann/lab/lfe/cayrn-lfe and does not depend
-on xrepl. Rust SDK dependencies currently use the sibling Cayrn checkout.
+Project10 now imports the reusable agent into apps/cayrn_lfe; its OTP application
+starts independently and has no legacy xrepl startup dependency. The standalone
+/Users/oubiwann/lab/lfe/cayrn-lfe checkout is retained as provenance. Implementation
+of the first import slice targets release/0.2.x; LFE conversion and hardening are
+separate later slices. Read the current Project10 open set before agent work.
+Rust SDK dependencies currently use the sibling Cayrn checkout.

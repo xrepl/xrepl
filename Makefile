@@ -57,7 +57,7 @@ help-general:
 	@echo "$(CYAN)╚══════════════════════════════════════════════════════════╝$(RESET)"
 	@echo ""
 	@echo "$(GREEN)General (both languages):$(RESET)"
-	@echo "  $(YELLOW)make build$(RESET)            - Compile LFE + Rust"
+	@echo "  $(YELLOW)make build$(RESET)            - Compile LFE + native agent + Rust"
 	@echo "  $(YELLOW)make test$(RESET)             - Test LFE + Rust"
 	@echo "  $(YELLOW)make lint$(RESET)             - Lint LFE + Rust"
 	@echo "  $(YELLOW)make format$(RESET)           - Format LFE + Rust"
@@ -75,8 +75,8 @@ help-general:
 # ============================================================================
 .PHONY: build test lint format coverage docs check ci clean
 
-build: compile-lfe build-rust
-	@echo "$(GREEN)✓ Built LFE + Rust$(RESET)"
+build: compile-lfe build-agent build-rust
+	@echo "$(GREEN)✓ Built LFE + native agent + Rust$(RESET)"
 
 test: test-lfe test-rust
 	@echo ""
