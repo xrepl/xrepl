@@ -1,7 +1,8 @@
 # xrepl planning
 
 Canonical planning lives on the orphan `planning` branch in `.worktrees/planning`.
-Implementation and user documentation remain on `main`. These branches must not
+Implementation and user documentation live on source branches; Project10 targets
+`release/0.2.x`. These branches must not
 be merged into one another.
 
 | Project | Scope | Status |
@@ -15,6 +16,7 @@ be merged into one another.
 | [project07-story-runtime](project07-story-runtime/project-plan.md) | story runtime | imported-unreconciled |
 | [project08-planning-migration](project08-planning-migration/project-plan.md) | Preserve and relocate the planning corpus | implemented; human acceptance pending |
 | [project09-quality-assessment](project09-quality-assessment/project-plan.md) | Assess plans, implementation and LFE/Rust code quality | assessment delivered; human acceptance pending |
+| [project10-shared-repl-architecture](project10-shared-repl-architecture/project-plan.md) | xrepl 0.2.x migration to Cayrn; integrated native LFE agent and legacy feature preservation | current planning; first open set prepared |
 
 Project01–07 plans are new retrospective navigation, not new implementation
 acceptance. Original prompts, ledgers, addenda, failed attempts and verification

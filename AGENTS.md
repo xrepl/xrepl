@@ -50,3 +50,14 @@ CC assignment may have real coordinator review. Do not simulate independence.
 This approval is separate from Project08's migration-only delegation grant.
 Project09 produces assessments, not runtime repairs or a replacement shared
 REPL architecture. Preserve the historical corpus and its acceptance gaps.
+
+## Project10 — xrepl 0.2.x on Cayrn
+
+On 2026-10-18 the Operator retained `project10-shared-repl-architecture/` and
+refocused it on the complete xrepl migration to Cayrn. Implementation targets
+`release/0.2.x`; plans stay on this orphan `planning` branch. Read Project10's
+current AGENTS.md, project plan, design and first open set. Its original
+formulation is preserved byte-for-byte in artifacts/formulation-v1/. Project09
+workflow/delegation and Expedited Mode do not transfer. Future assistant-authored
+commits include both `Co-authored-by: Codex <noreply@openai.com>` and
+`Co-authored-by: Billo AI <ai-engineering@billo.systems>` trailers.
