@@ -37,3 +37,16 @@ Git does not store filesystem timestamps. Follow the migration manifest and
 restoration procedure before asserting their preservation. Restore directory
 modification times after child writes and validation; new wrappers have their
 actual creation/edit dates. Preserve source-vs-planning commit boundaries.
+
+## Project09 quality assessment
+
+The Operator approved `project09-quality-assessment` on 2026-10-17 and then
+selected One-Contributor coordination with Sofie owning CDC/CRC duties and
+creating well-informed, well-prompted CC agents at her discretion. This is an
+explicit extension of the framework's strict single-context definition.
+Project09's local `AGENTS.md` governs actual assignment/review responsibilities,
+the language references and Expedited Mode. Self-checks remain attested; a real
+CC assignment may have real coordinator review. Do not simulate independence.
+This approval is separate from Project08's migration-only delegation grant.
+Project09 produces assessments, not runtime repairs or a replacement shared
+REPL architecture. Preserve the historical corpus and its acceptance gaps.

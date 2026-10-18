@@ -14,6 +14,7 @@ be merged into one another.
 | [project06-pluggable-shells](project06-pluggable-shells/project-plan.md) | pluggable shells | imported-unreconciled |
 | [project07-story-runtime](project07-story-runtime/project-plan.md) | story runtime | imported-unreconciled |
 | [project08-planning-migration](project08-planning-migration/project-plan.md) | Preserve and relocate the planning corpus | implemented; human acceptance pending |
+| [project09-quality-assessment](project09-quality-assessment/project-plan.md) | Assess plans, implementation and LFE/Rust code quality | active; setup complete, assessment pending |
 
 Project01–07 plans are new retrospective navigation, not new implementation
 acceptance. Original prompts, ledgers, addenda, failed attempts and verification
