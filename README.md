@@ -635,3 +635,10 @@ a shared BEAM node; individual terminal detach never shuts that node down.
 From the Cayrn checkout, `make test-xrepl` exercises both Rust workspaces and the
 real LFE agent, including a PTY draft-preservation check. No crates.io/Hex release
 is implied by this local integration.
+
+In Cayrn mode, Ctrl-C while evaluating requests the agent's advertised interruption
+mode. LFE's current mode discards that session's environment; a cooperative agent
+can retain its context. Ctrl-C while editing only clears the draft. `:close`
+requests the managed close barrier and detaches; inspect session state for actual
+completion. Quit/EOF continue to detach without closing or killing the BEAM.
+The Rust workspace now requires 1.95, matching the consumed Cayrn crates.

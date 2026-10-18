@@ -33,7 +33,7 @@ xrepl-adventure = { path = "crates/xrepl-adventure" }
 # here. The surface this PoC uses (Reedline::create, read_line, Signal) has been
 # stable across many releases.
 reedline = "0.38"
-tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time", "signal"] }
 thiserror = "2"
 cayrn-client = { path = "../../../oxur/cayrn/crates/client" }
 cayrn-protocol = { path = "../../../oxur/cayrn/crates/protocol" }

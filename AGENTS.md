@@ -59,3 +59,15 @@ build output, story assets or sibling repositories are migration inputs.
 Git checkouts do not restore filesystem modification/creation dates. Follow the
 committed planning timestamp manifest/helper after a fresh checkout or pull.
 Keep source and planning changes in separate commits with explicit path lists.
+
+## Cayrn first-consumer prototype
+
+The Operator authorized all three Cayrn native-agent/LFE integration increments
+on 2026-10-18, including this Rust terminal consumer. The cross-repository source
+of truth is /Users/oubiwann/lab/oxur/cayrn/.worktrees/planning/
+project01-shared-repl-architecture/arc02-native-agent-integration/.
+Use that current plan and slice returns; independent acceptance remains pending.
+This is separate from Project09 assessment authority. Preserve existing native
+LFE shells and the IF mock mode, and leave pre-existing docs/design untouched.
+The reusable agent lives in /Users/oubiwann/lab/lfe/cayrn-lfe and does not depend
+on xrepl. Rust SDK dependencies currently use the sibling Cayrn checkout.

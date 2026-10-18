@@ -102,6 +102,13 @@ pub async fn run(
     let result=async {
         loop {
             tokio::select! {
+                signal=tokio::signal::ctrl_c(),if pending.is_some()=>{
+                    signal?;
+                    if let Some(operation)=pending.as_ref() {
+                        let reply=commands.request(Request::Cancel {session:session.id.clone(),operation:operation.clone()}).await?;
+                        if let Response::Control {disposition}=reply {eprintln!("Interrupt: {disposition}");}
+                    }
+                },
                 event=event_rx.recv()=>match event {
                     Some(Event::Input(line))=>{
                         editing=false;
@@ -109,6 +116,11 @@ pub async fn run(
                         if let Some(error)=failure.take() {return Err(XreplError::Cayrn(error));}
                         let line=line.trim();
                         if matches!(line,":quit"|":q"|"quit"|"exit") {break;}
+                        if line==":close" {
+                            commands.request(Request::Close {session:session.id.clone()}).await?;
+                            eprintln!("Close requested; inspect the session for its barrier/completion.");
+                            break;
+                        }
                         if !line.is_empty() {
                             let id=uuid::Uuid::new_v4().to_string();
                             commands.request(Request::Submit {submission:Submission {session:session.id.clone(),generation:session.generation.clone(),operation:id.clone(),client:client_id.clone(),source:line.into()}}).await?;
@@ -208,6 +220,8 @@ async fn drain(
                         "[{operation} {phase:?}] {}",
                         value.unwrap_or_default()
                     )?,
+                    EventKind::SessionClosing => writeln!(output, "[session closing]")?,
+                    EventKind::SessionClosed => writeln!(output, "[session closed]")?,
                     EventKind::StateLost { reason } => writeln!(output, "[state lost] {reason}")?,
                     EventKind::Accepted { submission } => {
                         writeln!(output, "[{}] {}", submission.client, submission.source)?
