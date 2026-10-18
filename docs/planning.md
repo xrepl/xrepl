@@ -17,6 +17,7 @@ Do not merge these two branches.
 | Pluggable shells | project06-pluggable-shells |
 | Story runtime | project07-story-runtime |
 | Planning migration | project08-planning-migration |
+| Quality assessment | project09-quality-assessment |
 
 Start with README.md and the owning project-plan.md in the planning checkout.
 Original payloads are preserved at planning import commit094e72b. New
