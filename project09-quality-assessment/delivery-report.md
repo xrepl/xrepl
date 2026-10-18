@@ -127,7 +127,10 @@ language audit final. No methodology or installed skill files were changed.
 | bef70af | Rust refinement and applied guidance reconciliation |
 | dc56a75 | LFE/OTP full-guidance report and five neutral probes |
 
-Final coordinator delivery commit: pending until this packet is committed;
-a short follow-up receipt will record the actual hash. Every changed path is
-explicitly enumerated in the commit, and source/planning remain separate.
+Final coordinator delivery commit: `9a8dfe458ba2e714d0631158d0ce30280bb84eb5` (42 explicitly
+enumerated planning paths). This subsequent receipt edits only this delivery
+report. Staged `git diff --cached --check` passed before delivery commit; the
+retained structural verifier passed, including 200 local link targets. Source,
+protocol and term checkouts are clean and unchanged. Source/planning remain
+separate; formal acceptance status remains pending.
 No push or publication was performed.
