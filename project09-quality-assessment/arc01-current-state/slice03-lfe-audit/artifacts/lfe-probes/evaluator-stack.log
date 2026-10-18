@@ -1,0 +1,6 @@
+eval_count=0 {stack_size,9}
+eval_count=100 {stack_size,909}
+eval_count=200 {stack_size,1809}
+eval_count=300 {stack_size,2709}
+eval_count=400 {stack_size,3609}
+eval_count=500 {stack_size,4509}
