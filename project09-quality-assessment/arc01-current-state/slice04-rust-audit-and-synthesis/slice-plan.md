@@ -41,6 +41,11 @@ or source mutation decision is delegated. Agent may decide local probe mechanics
 inside the no-source-edit and isolated-state boundaries.
 
 - 2026-10-17: `cc-prompt.md` issued to a fresh CC execution context; active.
+- 2026-10-17: source/probe candidate returned at `553a6b6`; original CC
+  full-guide intake was incomplete. Remaining32 guides fully read in two
+  attributed lookup passes. `cc-prompt-iteration01.md` is now the active
+  refinement: distribute guide loading explicitly, apply relevant sections
+  in the author context, preserve the original intake and return updated prose.
 
 ## Version history
 

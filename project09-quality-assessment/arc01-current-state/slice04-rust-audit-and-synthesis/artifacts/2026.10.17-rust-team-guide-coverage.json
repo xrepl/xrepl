@@ -1,0 +1,298 @@
+{
+  "population": "all existing files under installed Rust guides; no files omitted",
+  "files": 36,
+  "lines": 32559,
+  "original_CC_intake": "4 files; original single-context full-read requirement was not met; preserve the original receipt",
+  "completion": "32 remaining files read completely in two attributed finite lookup passes before final coordinator review",
+  "missing_reference": "14-cli-tools/09-common-pitfalls.md referenced by entrypoint/README but absent; not counted as read",
+  "records": [
+    {
+      "path": "guides/01-core-idioms.md",
+      "sha256": "52a9522f615eda231120697675e61e0225d66b83995878e3511b2507ad70ab83",
+      "lines": 1415,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/02-api-design.md",
+      "sha256": "cb280b2cd2ed79597c098bf24ce7b01214e75102a4c3e5e20de41c6ef3db4636",
+      "lines": 1721,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/03-error-handling.md",
+      "sha256": "2fc72e85c5f1d7d76d6083b62fb436a84e0d8adc76ad462522370e9aef27f327",
+      "lines": 1514,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/04-ownership-borrowing.md",
+      "sha256": "2de91433431aa2846b2e7f5a2542bbe04f2b5ed467d978063500dca9fb023732",
+      "lines": 1034,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/05-type-design.md",
+      "sha256": "2b2f62aa56b696c21acf9c469131a2507486cdd9460a59d40a152ebc9919f595",
+      "lines": 1125,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/06-traits.md",
+      "sha256": "cbc0d281f3ca41028ae5acd4948affed707697f3d4cd688e9f8b9f5a0e0bc238",
+      "lines": 1278,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/07-concurrency-async.md",
+      "sha256": "546887de785fa92909165b07111af3f36f3db7cf8854ab92223942e42214826f",
+      "lines": 1663,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_b (Rust CC)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/08-performance.md",
+      "sha256": "763c3903fcf677bd999316f1bcfadd4ca8c0a4c7f3afa830867844dfbd0c1170",
+      "lines": 1409,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/09-unsafe-ffi.md",
+      "sha256": "c5958b78b64e088b4f8aa592cb35dcd8dabc2356241aa7f73db6f3061330dfd0",
+      "lines": 1856,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/10-macros.md",
+      "sha256": "d6de8b7fd5244a5e6c7d372a4d2321e2fea0cfefbb03140f4000fe154b52838b",
+      "lines": 1045,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/11-anti-patterns.md",
+      "sha256": "a00c0db80ee1373e872bce6c0673599aa32539bc441b0e88a66018cc2433c676",
+      "lines": 2188,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_b (Rust CC)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/12-project-structure.md",
+      "sha256": "9f4aa520f31d4711a3cbc44b92098accf84ff4e7aca5ff1606e1091037ce3d62",
+      "lines": 1153,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/13-documentation.md",
+      "sha256": "83f6792f904b959ad2ec31867e4ed5281171d2017e1d186bd8edbc30ce49bd51",
+      "lines": 1242,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/14-cli-tools/01-project-setup.md",
+      "sha256": "ba5eb25b76d988c0ce39082490f447edbcb87bb6109c32c057cc207bd206ea60",
+      "lines": 339,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/14-cli-tools/02-argument-parsing.md",
+      "sha256": "fa65694cbbceba04337bd2d22374ef82a0bd1058aa7e363c4c08e767cfe3cd60",
+      "lines": 1091,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/14-cli-tools/03-error-handling.md",
+      "sha256": "3abbd378518141f19d702463b03a290f5aebc71dc0d8dbaca163bd7ced6bf425",
+      "lines": 660,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_b (Rust CC)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/14-cli-tools/04-output-and-ux.md",
+      "sha256": "2108af8066a8893ca9f80e6df4eba36858908fce6841c49b4bd6686dba3c3bf7",
+      "lines": 954,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/14-cli-tools/05-configuration.md",
+      "sha256": "aecbc12841a4731909aed254e76fff9694cfef78d73f3c5484d4a20ebb4bb14a",
+      "lines": 645,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/14-cli-tools/06-testing.md",
+      "sha256": "71ac2f567b2f08a54d6bc2c8b97d9c3506702570d8e730ff66181b6c5c5a3e02",
+      "lines": 564,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/14-cli-tools/07-distribution.md",
+      "sha256": "58a0c91f67faef4ed959ccd91e736b8b5f4739c87434e7978577f305c9a1fc86",
+      "lines": 432,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/14-cli-tools/08-advanced-topics.md",
+      "sha256": "7f7a498de6e81153409dc24e9407f60944f9f25a7888b3cb2bfdf58299f597b6",
+      "lines": 313,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/14-cli-tools/README.md",
+      "sha256": "c014634f85e39dafb54586db7662be4cabd710cb23491a8246d3fb2fb2d6f84b",
+      "lines": 455,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/15-cargo/01-cargo-basics.md",
+      "sha256": "df89a88ff9f4563fd90f761b771013e60f3574083788dca881095697df9284ac",
+      "lines": 683,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/15-cargo/02-cargo-build-system.md",
+      "sha256": "1b4cc9819ae99e31c7f471f17150c55a6b5207f1bfe0dea91f5a7fb3ad582fce",
+      "lines": 829,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/15-cargo/03-cargo-plugins.md",
+      "sha256": "f89aad1bbad9874eba840fa910e3dce6bbb464afe6ddf46400631a1901678ad1",
+      "lines": 918,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/15-cargo/04-cargo-publishing.md",
+      "sha256": "6ffc14e5f68ae7b274929e57df28f88b09f2c31a789d0c85b1e1e3da40f5b99d",
+      "lines": 732,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/15-cargo/05-cargo-configuration.md",
+      "sha256": "f7e535ad7e461f97231ea987162e965f2ddfc35787623fbbfe1b0f9521787377",
+      "lines": 707,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/15-cargo/06-cargo-advanced.md",
+      "sha256": "988b74c3a3dd89a87453c65a457b3b198cf1b265cf2000fb76ae852cf8ceab64",
+      "lines": 1003,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/15-cargo/07-lints-and-formatters.md",
+      "sha256": "eb4f0007ed004b17615d6170600a17220334e9191bff77a8e834cafe0be92097",
+      "lines": 372,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_b (Rust CC)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/15-cargo/08-manifest-and-workspace-advanced.md",
+      "sha256": "06ea8572a3655553cbc7be7868a7a08abd9c33796cf12224b6db13b77c20af0d",
+      "lines": 443,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/15-cargo/CHECKPOINT.md",
+      "sha256": "193a935ed04444b234f17a490708ca8493616cac5c93b04ea3f0be8008379019",
+      "lines": 330,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/15-cargo/README.md",
+      "sha256": "c2f1d7ca36124aca66904c2a39666aa8823d1aba96fd1b2a62aaa3bf1bd8d50b",
+      "lines": 270,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/16-editions.md",
+      "sha256": "cd06f26ee364c082a537aa456564519f3f8e45b3a138a06903c868d73976e115",
+      "lines": 900,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/17-observability.md",
+      "sha256": "ebbd1f23396af66f5028440dbdb2eda78a0a78d5f3def6a89032d799747e1845",
+      "lines": 815,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/MERGE_REPORT.md",
+      "sha256": "96cf81940db7169d2d2799a59a27d2366069b2a4806d2d5745457d239a0e1660",
+      "lines": 201,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    },
+    {
+      "path": "guides/README.md",
+      "sha256": "9f2f47506b7a2d484ffe49780adbfa7a760cf89a4577442c1991fb6ee78a6255",
+      "lines": 260,
+      "loaded_extent": "1-EOF",
+      "actual_reader": "plan_sources_a (bounded guide lookup)",
+      "evidence_strength": "attested by named context; not transferred personal reading"
+    }
+  ]
+}
