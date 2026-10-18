@@ -1,0 +1,23 @@
+[1;34mRunning eunit...[0m
+===> Failed to restore /Users/oubiwann/lab/lfe/xrepl/xrepl/_build/test/plugins/.rebar3/rebar_compiler_erl/source_apps.dag file. Discarding it.
+
+===> Analyzing applications...
+===> Compiling rebar3_proper
+===> Verifying dependencies...
+===> Compiling 1 LFE application(s)
+===> Failed to restore /Users/oubiwann/lab/lfe/xrepl/xrepl/_build/test/lib/.rebar3/rebar_compiler_erl/source_apps.dag file. Discarding it.
+
+===> Analyzing applications...
+===> Compiling msgpack
+===> Compiling color
+===> Compiling xrepl_term
+===> Compiling xrepl_protocol
+===> Compiling ranch
+===> Compiling lfe
+===> Compiling bbmustache
+===> Compiling proper
+===> Compiling ltest
+src/cl.lfe: error writing file
+===> Hook for app_compile failed!
+
+make: *** [test-unit-lfe] Error 1

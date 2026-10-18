@@ -1,0 +1,15 @@
+[1;34mCompiling LFE/OTP app...[0m
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+===> Compiling xrepl
+[1;32m✓ LFE compiled[0m
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C apps/cayrn_lfe build REBAR="rebar3"
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+[1;34mBuilding xrepl (Rust)...[0m
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.04s
+[1;32m✓ Rust build complete[0m
+[1;32m✓ Built LFE + native agent + Rust[0m

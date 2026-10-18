@@ -1,0 +1,36 @@
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C apps/cayrn_lfe build REBAR="rebar3"
+rebar3 compile
+===> Fetching rebar3_lfe v0.5.5
+===> Fetching lfe v2.2.0
+===> Analyzing applications...
+===> Compiling lfe
+===> Compiling rebar3_lfe
+src/cl.lfe:472: Warning: redefining core function car/1
+src/cl.lfe:479: Warning: redefining core function cdr/1
+===> Verifying dependencies...
+===> Fetching lfe v2.2.0
+===> Analyzing applications...
+===> Compiling _build/default/lib/lfe/src/clj.lfe
+===> Compiling _build/default/lib/lfe/src/cl.lfe
+===> Compiling lfe
+src/cl.lfe:472: Warning: redefining core function car/1
+src/cl.lfe:479: Warning: redefining core function cdr/1
+===> Analyzing applications...
+===> Compiling src/cayrn-lfe-eval.lfe
+===> Compiling cayrn_lfe
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C apps/cayrn_lfe check REBAR="rebar3"
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn-lfe-eval.lfe
+===> Compiling src/cayrn-lfe-eval.lfe
+===> Compiling cayrn_lfe
+===> Performing EUnit tests...
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m
+Finished in 0.101 seconds
+[0;32m6 tests, 0 failures
+[0m

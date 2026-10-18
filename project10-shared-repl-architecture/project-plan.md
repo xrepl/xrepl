@@ -1,6 +1,6 @@
 ---
 project: project10-shared-repl-architecture
-status: refocused-planned-open-set-prepared
+status: first-slice-candidate-acceptance-pending
 depends-on: [cayrn-project02-bounded-contracts]
 blocks: [xrepl-0.2.x-core-migration-candidate]
 related: [cayrn-project01-shared-repl-architecture, project05-rust-frontend, project06-pluggable-shells, project07-story-runtime, project09-quality-assessment, xrepl_protocol, xrepl_term]
@@ -167,3 +167,9 @@ will be manufactured. The Operator authorized planning commits and starting the
 first slices. Push/publication and later-slice execution are not authorized here.
 Prepared cc-prompt.md files remain the canonical implementation contracts under
 the existing ledger convention; their names do not imply a separate CC actor.
+
+## First-slice return — 2026-10-18
+
+[Slice01 return](arc01-integrated-native-agent/slice01-import-agent-application/closing-report.md) records the delivered candidate,
+checks and residual owners. All8 slice rows are proposed done with attested
+evidence; acceptance gates remain open. No second slice or publication occurred.

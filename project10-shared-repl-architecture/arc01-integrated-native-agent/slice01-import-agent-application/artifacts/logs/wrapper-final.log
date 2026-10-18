@@ -1,0 +1,2 @@
+{"value": "(cayrn_lfe compiler kernel lfe stdlib)", "kind": "outcome", "operation": "apps", "phase": "succeeded"}
+PASS: root wrapper from /private/tmp, socket path contains spaces; required native apps present; legacy services absent (LFE may load OTP compiler)

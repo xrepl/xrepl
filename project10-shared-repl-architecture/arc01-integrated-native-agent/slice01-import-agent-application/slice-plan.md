@@ -143,3 +143,10 @@ contributor. Earlier prepared/not-started entries remain historical. No other
 reviewer or CC is dispatched. Self-checks remain attested and existing independent
 acceptance gates remain pending. Source pins/open rows are unchanged; next action
 owner is Sofie after the planning commit. Scope is this first slice only.
+
+## Implementation return — 2026-10-18
+
+First-slice candidate implemented and self-checked; see [return](closing-report.md)
+and [execution evidence](artifacts/execution.md). Source remains uncommitted.
+All8 rows are proposed done, attested; acceptance and formal close remain pending.
+No later slice is executed by this return.

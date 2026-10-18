@@ -1,0 +1,186 @@
+{
+  "source_repo": "/Users/oubiwann/lab/lfe/cayrn-lfe",
+  "source_commit": "1b04c15ac325731aab68a7491d23e4a9fecaa47a",
+  "license": "Apache-2.0, preserved LICENSE",
+  "population": {
+    "tracked": 17,
+    "excluded": 1,
+    "imported": 16,
+    "identical": 15,
+    "adapted_readme": 1
+  },
+  "files": [
+    {
+      "source": ".gitignore",
+      "source_sha256": "da409d38dcfe4285271c31e0659846543f9c4495a222ff32f299372b8f808774",
+      "source_mode": "100644",
+      "destination": "apps/cayrn_lfe/.gitignore",
+      "result_sha256": "da409d38dcfe4285271c31e0659846543f9c4495a222ff32f299372b8f808774",
+      "result_mode": "100644",
+      "disposition": "identical"
+    },
+    {
+      "source": "AGENTS.md",
+      "source_sha256": "df71fe7ad94bf7deb568e34ae598b962bdc3d7110cd0e923356f975199a2b59d",
+      "source_mode": "100644",
+      "disposition": "excluded",
+      "reason": "Predecessor instructions superseded by current component authority"
+    },
+    {
+      "source": "LICENSE",
+      "source_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "source_mode": "100644",
+      "destination": "apps/cayrn_lfe/LICENSE",
+      "result_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "result_mode": "100644",
+      "disposition": "identical"
+    },
+    {
+      "source": "Makefile",
+      "source_sha256": "bc0993c07194a64bc0ae9455345f09507252c938a02e502aa64daac4c95f0270",
+      "source_mode": "100644",
+      "destination": "apps/cayrn_lfe/Makefile",
+      "result_sha256": "bc0993c07194a64bc0ae9455345f09507252c938a02e502aa64daac4c95f0270",
+      "result_mode": "100644",
+      "disposition": "identical"
+    },
+    {
+      "source": "README.md",
+      "source_sha256": "093761514c81b743580c689348c4e0afb0589839370b89f21bcc473028508a79",
+      "source_mode": "100644",
+      "destination": "apps/cayrn_lfe/README.md",
+      "result_sha256": "a078909b1220b5400acb25e4214d4ecfb04acfa6164018d232700530fa7f513e",
+      "result_mode": "100644",
+      "disposition": "adapted",
+      "reason": "Dated import provenance, component home and independent root entrypoints documented"
+    },
+    {
+      "source": "bin/cayrn-lfe",
+      "source_sha256": "daaf7cfbca9d57e272b526d3391ad677315d50d909dedae8b4741a5835884fad",
+      "source_mode": "100755",
+      "destination": "apps/cayrn_lfe/bin/cayrn-lfe",
+      "result_sha256": "daaf7cfbca9d57e272b526d3391ad677315d50d909dedae8b4741a5835884fad",
+      "result_mode": "100755",
+      "disposition": "identical"
+    },
+    {
+      "source": "rebar.config",
+      "source_sha256": "1b8ecd6cfeb1bad08dc9ef00bc10a0406a76d3522b50d9ac70857eb178cb3da3",
+      "source_mode": "100644",
+      "destination": "apps/cayrn_lfe/rebar.config",
+      "result_sha256": "1b8ecd6cfeb1bad08dc9ef00bc10a0406a76d3522b50d9ac70857eb178cb3da3",
+      "result_mode": "100644",
+      "disposition": "identical"
+    },
+    {
+      "source": "rebar.lock",
+      "source_sha256": "e19bc76be33c1751218cd32f62c5719d30926454b2a2a83acc72a693c4d3b8e4",
+      "source_mode": "100644",
+      "destination": "apps/cayrn_lfe/rebar.lock",
+      "result_sha256": "e19bc76be33c1751218cd32f62c5719d30926454b2a2a83acc72a693c4d3b8e4",
+      "result_mode": "100644",
+      "disposition": "identical"
+    },
+    {
+      "source": "src/cayrn-lfe-eval.lfe",
+      "source_sha256": "16ffae22648e9c82696aee208dbe6dab3913c5aef9816c5973ba6ad2af0b91d2",
+      "source_mode": "100644",
+      "destination": "apps/cayrn_lfe/src/cayrn-lfe-eval.lfe",
+      "result_sha256": "16ffae22648e9c82696aee208dbe6dab3913c5aef9816c5973ba6ad2af0b91d2",
+      "result_mode": "100644",
+      "disposition": "identical"
+    },
+    {
+      "source": "src/cayrn_lfe.app.src",
+      "source_sha256": "98273af701ab79e0e59d4d7c91d57f18c4bf6eb48133e9ffffbef9bb54cb7cb7",
+      "source_mode": "100644",
+      "destination": "apps/cayrn_lfe/src/cayrn_lfe.app.src",
+      "result_sha256": "98273af701ab79e0e59d4d7c91d57f18c4bf6eb48133e9ffffbef9bb54cb7cb7",
+      "result_mode": "100644",
+      "disposition": "identical"
+    },
+    {
+      "source": "src/cayrn_lfe_app.erl",
+      "source_sha256": "de924f0036122912519714993d74aa56b53dda6112403db7de703cfddbdb0824",
+      "source_mode": "100644",
+      "destination": "apps/cayrn_lfe/src/cayrn_lfe_app.erl",
+      "result_sha256": "de924f0036122912519714993d74aa56b53dda6112403db7de703cfddbdb0824",
+      "result_mode": "100644",
+      "disposition": "identical"
+    },
+    {
+      "source": "src/cayrn_lfe_context.erl",
+      "source_sha256": "98aa576a4c18ea59070e7da53258db11842a0e17fbd4017fc3c54d2b049c74d4",
+      "source_mode": "100644",
+      "destination": "apps/cayrn_lfe/src/cayrn_lfe_context.erl",
+      "result_sha256": "98aa576a4c18ea59070e7da53258db11842a0e17fbd4017fc3c54d2b049c74d4",
+      "result_mode": "100644",
+      "disposition": "identical"
+    },
+    {
+      "source": "src/cayrn_lfe_io.erl",
+      "source_sha256": "ea187d998631676ae38ebc89073607c017fe147a7947b1ad7fd094c3042991ef",
+      "source_mode": "100644",
+      "destination": "apps/cayrn_lfe/src/cayrn_lfe_io.erl",
+      "result_sha256": "ea187d998631676ae38ebc89073607c017fe147a7947b1ad7fd094c3042991ef",
+      "result_mode": "100644",
+      "disposition": "identical"
+    },
+    {
+      "source": "src/cayrn_lfe_listener.erl",
+      "source_sha256": "e0596abe2911ad3b7afc42dcb769098f0b16ddfb52d03c18784af7ec27d4faaf",
+      "source_mode": "100644",
+      "destination": "apps/cayrn_lfe/src/cayrn_lfe_listener.erl",
+      "result_sha256": "e0596abe2911ad3b7afc42dcb769098f0b16ddfb52d03c18784af7ec27d4faaf",
+      "result_mode": "100644",
+      "disposition": "identical"
+    },
+    {
+      "source": "src/cayrn_lfe_sup.erl",
+      "source_sha256": "8b40d7f0413403cac1cacd974f6b6c520053c65380624ec9f2a65583bc160497",
+      "source_mode": "100644",
+      "destination": "apps/cayrn_lfe/src/cayrn_lfe_sup.erl",
+      "result_sha256": "8b40d7f0413403cac1cacd974f6b6c520053c65380624ec9f2a65583bc160497",
+      "result_mode": "100644",
+      "disposition": "identical"
+    },
+    {
+      "source": "test/cayrn_lfe_eval_tests.erl",
+      "source_sha256": "cd233e7993572fcc5f79bed2a7ec3ee2f499328f72bed13b16fe3e5d2c16c009",
+      "source_mode": "100644",
+      "destination": "apps/cayrn_lfe/test/cayrn_lfe_eval_tests.erl",
+      "result_sha256": "cd233e7993572fcc5f79bed2a7ec3ee2f499328f72bed13b16fe3e5d2c16c009",
+      "result_mode": "100644",
+      "disposition": "identical"
+    },
+    {
+      "source": "test/cayrn_lfe_io_tests.erl",
+      "source_sha256": "32cd890875cb8cd76d77d19d4b56fea58e810c77c800d25b416e8a1f0eceafe3",
+      "source_mode": "100644",
+      "destination": "apps/cayrn_lfe/test/cayrn_lfe_io_tests.erl",
+      "result_sha256": "32cd890875cb8cd76d77d19d4b56fea58e810c77c800d25b416e8a1f0eceafe3",
+      "result_mode": "100644",
+      "disposition": "identical"
+    }
+  ],
+  "new_files": [
+    {
+      "destination": "apps/cayrn_lfe/AGENTS.md",
+      "sha256": "646d1ca5f040a0d12b1f3a95432ffd94ba24a9a230980b87e47b685eac5f24a7",
+      "mode": "100644",
+      "reason": "Current authority"
+    },
+    {
+      "destination": "apps/cayrn_lfe/test/cayrn_lfe_application_tests.erl",
+      "sha256": "9fd305da344ecbd8cf0b76702e1140a02ba986f06300ec343ac73400a7574972",
+      "mode": "100644",
+      "reason": "Independent application boundary test"
+    },
+    {
+      "destination": "bin/cayrn-lfe",
+      "sha256": "2d20e530fb7450e7c4ad8e76ffd8f45bc2855e5b7712b353941cf0ff197c5486",
+      "mode": "100755",
+      "reason": "Cwd-independent argv-preserving root exec wrapper"
+    }
+  ]
+}

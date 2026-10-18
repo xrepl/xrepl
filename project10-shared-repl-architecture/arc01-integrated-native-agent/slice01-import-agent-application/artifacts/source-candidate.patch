@@ -1,0 +1,992 @@
+diff --git a/AGENTS.md b/AGENTS.md
+index bf9ddb9..a14d7a1 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -69,5 +69,9 @@ project01-shared-repl-architecture/arc02-native-agent-integration/.
+ Use that current plan and slice returns; independent acceptance remains pending.
+ This is separate from Project09 assessment authority. Preserve existing native
+ LFE shells and the IF mock mode, and leave pre-existing docs/design untouched.
+-The reusable agent lives in /Users/oubiwann/lab/lfe/cayrn-lfe and does not depend
+-on xrepl. Rust SDK dependencies currently use the sibling Cayrn checkout.
++Project10 now imports the reusable agent into apps/cayrn_lfe; its OTP application
++starts independently and has no legacy xrepl startup dependency. The standalone
++/Users/oubiwann/lab/lfe/cayrn-lfe checkout is retained as provenance. Implementation
++of the first import slice targets release/0.2.x; LFE conversion and hardening are
++separate later slices. Read the current Project10 open set before agent work.
++Rust SDK dependencies currently use the sibling Cayrn checkout.
+diff --git a/Makefile b/Makefile
+index 2ccaf98..33fb803 100644
+--- a/Makefile
++++ b/Makefile
+@@ -57,7 +57,7 @@ help-general:
+ 	@echo "$(CYAN)╚══════════════════════════════════════════════════════════╝$(RESET)"
+ 	@echo ""
+ 	@echo "$(GREEN)General (both languages):$(RESET)"
+-	@echo "  $(YELLOW)make build$(RESET)            - Compile LFE + Rust"
++	@echo "  $(YELLOW)make build$(RESET)            - Compile LFE + native agent + Rust"
+ 	@echo "  $(YELLOW)make test$(RESET)             - Test LFE + Rust"
+ 	@echo "  $(YELLOW)make lint$(RESET)             - Lint LFE + Rust"
+ 	@echo "  $(YELLOW)make format$(RESET)           - Format LFE + Rust"
+@@ -75,8 +75,8 @@ help-general:
+ # ============================================================================
+ .PHONY: build test lint format coverage docs check ci clean
+ 
+-build: compile-lfe build-rust
+-	@echo "$(GREEN)✓ Built LFE + Rust$(RESET)"
++build: compile-lfe build-agent build-rust
++	@echo "$(GREEN)✓ Built LFE + native agent + Rust$(RESET)"
+ 
+ test: test-lfe test-rust
+ 	@echo ""
+diff --git a/README.md b/README.md
+index fec0e7e..7d5703c 100644
+--- a/README.md
++++ b/README.md
+@@ -9,6 +9,28 @@
+ 
+ *An experimental, general purpose LFE REPL*
+ 
++## Cayrn native agent (0.2.x development)
++
++The reusable OTP runtime agent now lives in [`apps/cayrn_lfe`](apps/cayrn_lfe).
++It is independently startable and does not require legacy xrepl services:
++
++```sh
++make build-agent check-agent
++# Choose a fresh private directory for the socket.
++mkdir -m 700 /tmp/xrepl-agent-demo
++./bin/cayrn-lfe /tmp/xrepl-agent-demo/agent.sock
++```
++
++`make build` builds the agent, retained legacy LFE application and Rust client.
++The root launcher delegates to the component-local build, starts only the native
++application and LFE, and accepts a single socket argument. Starting legacy
++`xrepl` does not automatically start the agent. See the component README for
++Cayrn host startup and current limits: 256 operations per context, 8KiB
++source/output/value previews, no program input or live-state restoration.
++This first import preserves the Erlang/LFE prototype; conversion to LFE and
++resource/size hardening follow separately. The native app remains 0.1.0 within
++xrepl's 0.2.0 development branch. Nothing new is published.
++
+ ##### Table of Contents
+ 
+ * [About](#about-)
+diff --git a/mk/lfe.mk b/mk/lfe.mk
+index 98318ee..30179d9 100644
+--- a/mk/lfe.mk
++++ b/mk/lfe.mk
+@@ -19,6 +19,8 @@
+ .PHONY: help-lfe
+ help-lfe:
+ 	@echo "$(GREEN)LFE / BEAM (rebar3):$(RESET)"
++	@echo "  $(YELLOW)make build-agent$(RESET)      - Build the independent Cayrn LFE agent"
++	@echo "  $(YELLOW)make check-agent$(RESET)      - Test the independent Cayrn LFE agent"
+ 	@echo "  $(YELLOW)make compile-lfe$(RESET)      - Compile the LFE/OTP app"
+ 	@echo "  $(YELLOW)make test-lfe$(RESET)         - Run eunit + Common Test"
+ 	@echo "  $(YELLOW)make test-unit-lfe$(RESET)    - Run eunit only"
+@@ -130,3 +132,11 @@ clean-lfe:
+ distclean-lfe: clean-lfe
+ 	@rm -rf _build
+ 	@echo "$(GREEN)✓ LFE deep clean complete (_build removed)$(RESET)"
++
++# The reusable agent retains its component-local build/dependency boundary.
++.PHONY: build-agent check-agent
++build-agent:
++	$(MAKE) -C apps/cayrn_lfe build REBAR="$(REBAR)"
++
++check-agent:
++	$(MAKE) -C apps/cayrn_lfe check REBAR="$(REBAR)"
+diff --git a/src/xrepl.app.src b/src/xrepl.app.src
+index a6bfdec..7e33929 100644
+--- a/src/xrepl.app.src
++++ b/src/xrepl.app.src
+@@ -1,6 +1,6 @@
+ {application, 'xrepl', [
+     {description, "An experimental, general purpose LFE REPL with network support"},
+-    {vsn, "0.1.0"},
++    {vsn, "0.2.0"},
+     {registered, []},
+     {mod, {'xrepl-app', []}},
+     {applications, [
+diff --git a/apps/cayrn_lfe/.gitignore b/apps/cayrn_lfe/.gitignore
+new file mode 100644
+index 0000000..ad7bdf0
+--- /dev/null
++++ b/apps/cayrn_lfe/.gitignore
+@@ -0,0 +1,5 @@
++/_build/
++/ebin/
++/rebar3.crashdump
++/erl_crash.dump
++/.worktrees/
+diff --git a/apps/cayrn_lfe/AGENTS.md b/apps/cayrn_lfe/AGENTS.md
+new file mode 100644
+index 0000000..d70bf44
+--- /dev/null
++++ b/apps/cayrn_lfe/AGENTS.md
+@@ -0,0 +1,16 @@
++# Native Cayrn LFE agent
++
++Sofie (she/her) is the assistant. Current authority is xrepl's orphan planning
++worktree, project10-shared-repl-architecture, Arc01. This is a reusable,
++independently startable OTP application. Rust Cayrn owns durable session policy;
++this component owns live LFE contexts, capture and native control only.
++
++Imported from cayrn-lfe 1b04c15ac325731aab68a7491d23e4a9fecaa47a with its license.
++The first slice preserves source/test/config/launcher semantics and bytes; the
++LFE conversion and resource/size fixes are later work. Do not add legacy xrepl
++services to the startup dependency graph. No automatic replay after runtime loss.
++Use make build/check here or root make build-agent/check-agent. Keep planning
++records in the planning worktree and preserve the standalone predecessor.
++Follow root AGENTS.md, OTP guidance and the Operator-selected LFE style guide
++when editing language implementation. Self-review is attested, not independent.
++Assistant-authored commits require the root planning Codex/Billo AI trailers.
+diff --git a/apps/cayrn_lfe/LICENSE b/apps/cayrn_lfe/LICENSE
+new file mode 100644
+index 0000000..261eeb9
+--- /dev/null
++++ b/apps/cayrn_lfe/LICENSE
+@@ -0,0 +1,201 @@
++                                 Apache License
++                           Version 2.0, January 2004
++                        http://www.apache.org/licenses/
++
++   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
++
++   1. Definitions.
++
++      "License" shall mean the terms and conditions for use, reproduction,
++      and distribution as defined by Sections 1 through 9 of this document.
++
++      "Licensor" shall mean the copyright owner or entity authorized by
++      the copyright owner that is granting the License.
++
++      "Legal Entity" shall mean the union of the acting entity and all
++      other entities that control, are controlled by, or are under common
++      control with that entity. For the purposes of this definition,
++      "control" means (i) the power, direct or indirect, to cause the
++      direction or management of such entity, whether by contract or
++      otherwise, or (ii) ownership of fifty percent (50%) or more of the
++      outstanding shares, or (iii) beneficial ownership of such entity.
++
++      "You" (or "Your") shall mean an individual or Legal Entity
++      exercising permissions granted by this License.
++
++      "Source" form shall mean the preferred form for making modifications,
++      including but not limited to software source code, documentation
++      source, and configuration files.
++
++      "Object" form shall mean any form resulting from mechanical
++      transformation or translation of a Source form, including but
++      not limited to compiled object code, generated documentation,
++      and conversions to other media types.
++
++      "Work" shall mean the work of authorship, whether in Source or
++      Object form, made available under the License, as indicated by a
++      copyright notice that is included in or attached to the work
++      (an example is provided in the Appendix below).
++
++      "Derivative Works" shall mean any work, whether in Source or Object
++      form, that is based on (or derived from) the Work and for which the
++      editorial revisions, annotations, elaborations, or other modifications
++      represent, as a whole, an original work of authorship. For the purposes
++      of this License, Derivative Works shall not include works that remain
++      separable from, or merely link (or bind by name) to the interfaces of,
++      the Work and Derivative Works thereof.
++
++      "Contribution" shall mean any work of authorship, including
++      the original version of the Work and any modifications or additions
++      to that Work or Derivative Works thereof, that is intentionally
++      submitted to Licensor for inclusion in the Work by the copyright owner
++      or by an individual or Legal Entity authorized to submit on behalf of
++      the copyright owner. For the purposes of this definition, "submitted"
++      means any form of electronic, verbal, or written communication sent
++      to the Licensor or its representatives, including but not limited to
++      communication on electronic mailing lists, source code control systems,
++      and issue tracking systems that are managed by, or on behalf of, the
++      Licensor for the purpose of discussing and improving the Work, but
++      excluding communication that is conspicuously marked or otherwise
++      designated in writing by the copyright owner as "Not a Contribution."
++
++      "Contributor" shall mean Licensor and any individual or Legal Entity
++      on behalf of whom a Contribution has been received by Licensor and
++      subsequently incorporated within the Work.
++
++   2. Grant of Copyright License. Subject to the terms and conditions of
++      this License, each Contributor hereby grants to You a perpetual,
++      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
++      copyright license to reproduce, prepare Derivative Works of,
++      publicly display, publicly perform, sublicense, and distribute the
++      Work and such Derivative Works in Source or Object form.
++
++   3. Grant of Patent License. Subject to the terms and conditions of
++      this License, each Contributor hereby grants to You a perpetual,
++      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
++      (except as stated in this section) patent license to make, have made,
++      use, offer to sell, sell, import, and otherwise transfer the Work,
++      where such license applies only to those patent claims licensable
++      by such Contributor that are necessarily infringed by their
++      Contribution(s) alone or by combination of their Contribution(s)
++      with the Work to which such Contribution(s) was submitted. If You
++      institute patent litigation against any entity (including a
++      cross-claim or counterclaim in a lawsuit) alleging that the Work
++      or a Contribution incorporated within the Work constitutes direct
++      or contributory patent infringement, then any patent licenses
++      granted to You under this License for that Work shall terminate
++      as of the date such litigation is filed.
++
++   4. Redistribution. You may reproduce and distribute copies of the
++      Work or Derivative Works thereof in any medium, with or without
++      modifications, and in Source or Object form, provided that You
++      meet the following conditions:
++
++      (a) You must give any other recipients of the Work or
++          Derivative Works a copy of this License; and
++
++      (b) You must cause any modified files to carry prominent notices
++          stating that You changed the files; and
++
++      (c) You must retain, in the Source form of any Derivative Works
++          that You distribute, all copyright, patent, trademark, and
++          attribution notices from the Source form of the Work,
++          excluding those notices that do not pertain to any part of
++          the Derivative Works; and
++
++      (d) If the Work includes a "NOTICE" text file as part of its
++          distribution, then any Derivative Works that You distribute must
++          include a readable copy of the attribution notices contained
++          within such NOTICE file, excluding those notices that do not
++          pertain to any part of the Derivative Works, in at least one
++          of the following places: within a NOTICE text file distributed
++          as part of the Derivative Works; within the Source form or
++          documentation, if provided along with the Derivative Works; or,
++          within a display generated by the Derivative Works, if and
++          wherever such third-party notices normally appear. The contents
++          of the NOTICE file are for informational purposes only and
++          do not modify the License. You may add Your own attribution
++          notices within Derivative Works that You distribute, alongside
++          or as an addendum to the NOTICE text from the Work, provided
++          that such additional attribution notices cannot be construed
++          as modifying the License.
++
++      You may add Your own copyright statement to Your modifications and
++      may provide additional or different license terms and conditions
++      for use, reproduction, or distribution of Your modifications, or
++      for any such Derivative Works as a whole, provided Your use,
++      reproduction, and distribution of the Work otherwise complies with
++      the conditions stated in this License.
++
++   5. Submission of Contributions. Unless You explicitly state otherwise,
++      any Contribution intentionally submitted for inclusion in the Work
++      by You to the Licensor shall be under the terms and conditions of
++      this License, without any additional terms or conditions.
++      Notwithstanding the above, nothing herein shall supersede or modify
++      the terms of any separate license agreement you may have executed
++      with Licensor regarding such Contributions.
++
++   6. Trademarks. This License does not grant permission to use the trade
++      names, trademarks, service marks, or product names of the Licensor,
++      except as required for reasonable and customary use in describing the
++      origin of the Work and reproducing the content of the NOTICE file.
++
++   7. Disclaimer of Warranty. Unless required by applicable law or
++      agreed to in writing, Licensor provides the Work (and each
++      Contributor provides its Contributions) on an "AS IS" BASIS,
++      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
++      implied, including, without limitation, any warranties or conditions
++      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
++      PARTICULAR PURPOSE. You are solely responsible for determining the
++      appropriateness of using or redistributing the Work and assume any
++      risks associated with Your exercise of permissions under this License.
++
++   8. Limitation of Liability. In no event and under no legal theory,
++      whether in tort (including negligence), contract, or otherwise,
++      unless required by applicable law (such as deliberate and grossly
++      negligent acts) or agreed to in writing, shall any Contributor be
++      liable to You for damages, including any direct, indirect, special,
++      incidental, or consequential damages of any character arising as a
++      result of this License or out of the use or inability to use the
++      Work (including but not limited to damages for loss of goodwill,
++      work stoppage, computer failure or malfunction, or any and all
++      other commercial damages or losses), even if such Contributor
++      has been advised of the possibility of such damages.
++
++   9. Accepting Warranty or Additional Liability. While redistributing
++      the Work or Derivative Works thereof, You may choose to offer,
++      and charge a fee for, acceptance of support, warranty, indemnity,
++      or other liability obligations and/or rights consistent with this
++      License. However, in accepting such obligations, You may act only
++      on Your own behalf and on Your sole responsibility, not on behalf
++      of any other Contributor, and only if You agree to indemnify,
++      defend, and hold each Contributor harmless for any liability
++      incurred by, or claims asserted against, such Contributor by reason
++      of your accepting any such warranty or additional liability.
++
++   END OF TERMS AND CONDITIONS
++
++   APPENDIX: How to apply the Apache License to your work.
++
++      To apply the Apache License to your work, attach the following
++      boilerplate notice, with the fields enclosed by brackets "[]"
++      replaced with your own identifying information. (Don't include
++      the brackets!)  The text should be enclosed in the appropriate
++      comment syntax for the file format. We also recommend that a
++      file or class name and description of purpose be included on the
++      same "printed page" as the copyright notice for easier
++      identification within third-party archives.
++
++   Copyright [yyyy] [name of copyright owner]
++
++   Licensed under the Apache License, Version 2.0 (the "License");
++   you may not use this file except in compliance with the License.
++   You may obtain a copy of the License at
++
++       http://www.apache.org/licenses/LICENSE-2.0
++
++   Unless required by applicable law or agreed to in writing, software
++   distributed under the License is distributed on an "AS IS" BASIS,
++   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++   See the License for the specific language governing permissions and
++   limitations under the License.
+diff --git a/apps/cayrn_lfe/Makefile b/apps/cayrn_lfe/Makefile
+new file mode 100644
+index 0000000..1d11313
+--- /dev/null
++++ b/apps/cayrn_lfe/Makefile
+@@ -0,0 +1,10 @@
++REBAR ?= rebar3
++.PHONY: help build check clean
++help:
++	@printf 'cayrn-lfe: make build | make check | make clean\n'
++build:
++	$(REBAR) compile
++check: build
++	$(REBAR) eunit
++clean:
++	$(REBAR) clean
+diff --git a/apps/cayrn_lfe/README.md b/apps/cayrn_lfe/README.md
+new file mode 100644
+index 0000000..e070a4b
+--- /dev/null
++++ b/apps/cayrn_lfe/README.md
+@@ -0,0 +1,108 @@
++# cayrn-lfe
++
++Imported into xrepl on 2026-10-18 from standalone cayrn-lfe
++`1b04c15ac325731aab68a7491d23e4a9fecaa47a` under its included Apache-2.0 license.
++This README adapts the component home; implementation/tests remain unchanged.
++
++Reusable thin LFE/OTP runtime agent for Cayrn. The Rust host owns session policy,
++durable admission, journals and replay; this application owns native evaluator
++contexts and I/O. It depends on LFE, not xrepl. No Rust crate is required here.
++
++Requires OTP 27+ (built-in JSON), rebar3, and LFE 2.2.0 (resolved by rebar3).
++Initially exercised on OTP 28. Native LFE semantics are in `cayrn-lfe-eval.lfe`;
++small Erlang/OTP modules provide supervision, socket control and native I/O.
++
++```sh
++cd apps/cayrn_lfe # from the xrepl checkout
++make check
++mkdir -m 700 /tmp/cayrn-agent-demo
++./bin/cayrn-lfe /tmp/cayrn-agent-demo/agent.sock
++```
++
++In another terminal, from the Cayrn Rust checkout:
++
++```sh
++make build
++./bin/cayrn serve-agent --state-dir /tmp/cayrn-agent-demo/host \
++  --agent-socket /tmp/cayrn-agent-demo/agent.sock
++./bin/cayrn request --state-dir /tmp/cayrn-agent-demo/host '{"op":"create"}'
++```
++
++Use the returned session and generation with Cayrn's submit/inspect/read requests.
++For example, submit `(set x 41)` followed by `(+ x 1)`. All client attachments
++may disconnect; the host's separate agent connection keeps the environment alive.
++The launcher runs a dedicated node; the OTP application can also be started in an
++existing node by setting its `socket` application environment before startup.
++It refuses an existing socket path; choose a fresh private directory after an
++unclean node exit, rather than deleting an endpoint another process may own.
++
++The internal agent wire is bounded, four-byte big-endian length-prefixed JSON,
++version 1 independently of public client RPC. Hello carries session, generation
++and authority; dispatch carries operation/source and expected generation/authority.
++Output has a canonical decimal-string capture position and immutable operation
++attribution. Rust must commit output before sending its ACK. Ordinary results
++and errors remain separate. Agent IDs are binaries, never dynamically made atoms.
++
++The prototype supports persistent bindings, top-level functions/macros, value
++previews, foreground and late output through inherited group leaders, and ordinary
++error recovery. Program input returns `enotsup`. Explicit global I/O devices,
++including global stderr, are outside the initial capture profile. This evaluates
++trusted code in the node; it is not a sandbox or rollback system. Definitions
++made earlier in a failed multi-form request are not committed to the saved
++environment; external effects and process-dictionary changes are not rolled back.
++
++Limits: 64 live contexts, 256 operations per context, 64 pending I/O writes,
++8192-byte source/output/value previews, 256KiB frames, and 4096 context identities
++per application lifetime. Operation I/O servers are retained to attribute late
++writers, with the context budget bounding them. Identity tombstones and the
++volatile duplicate guard are not evicted to make a stale dispatch executable.
++Create a fresh session when the operation budget is exhausted. Restarting the
++application loses contexts and its volatile identity guard; Rust must report
++state loss, never recreate an old environment from transcript history.
++
++Host-agent link loss terminates that context and marks its state uncertain/lost;
++it never kills the shared BEAM or peer contexts. Host restart retains the Rust
++journal but does not restore native environments or rerun evaluations. Agent
++control/recovery capabilities remain experimental; use the documented Cayrn
++profile, not arbitrary retries of native dispatch messages.
++
++`make check` runs native evaluator tests. Cayrn's `make test-agent` runs the
++real host/BEAM socket path, including reconnect, deduplication and failure cases.
++Nothing has been published to Hex or crates.io.
++
++## Native control capabilities
++
++The handshake advertises `interrupt: session_destructive` and `close_barrier: true`.
++An interrupt receipt is not success: the agent monitors evaluator death before
++reporting Cancelled, then retires the context and exposes possible capture-tail
++uncertainty. Peers in the node remain alive. A completed evaluation can win a
++cancel race. Cooperative interruption is a separate capability supported by the
++shared Rust contract, not currently by this LFE implementation.
++
++Close stops the owned foreground evaluator, seals all operation I/O servers,
++waits for their seal messages and Rust's outstanding capture ACKs, then emits a
++close barrier. Sealed I/O cannot append later output. Unmanaged external processes
++are not rolled back or silently claimed stopped. A five-second barrier timeout
++reports incomplete close; socket EOF is never a close acknowledgement. Rust
++alone seals the archive and rejects later mutation. Native supervision or context
++replacement never restores a heap or automatically retries an uncertain operation.
++
++The test suite includes I/O false-ACK and seal-order negative controls; the real
++Cayrn/xrepl gate additionally exercises context/agent/host failure, SQLite aborts,
++shared-node peer preservation and actual keyboard Ctrl-C in a PTY. Physical disk/
++fsync/power-loss durability and production security remain unverified.
++
++## xrepl repository entrypoints
++
++From the repository root, `make build-agent check-agent` builds/tests this
++component independently. `make build` includes the agent, legacy LFE app and
++Rust client. `./bin/cayrn-lfe /private/path/agent.sock` delegates to this
++component's launcher; it uses this component's `_build/default/lib/*/ebin`.
++It starts `cayrn_lfe` and `lfe`, without starting legacy `xrepl`, Ranch,
++`xrepl_protocol` or `xrepl_term`. Root and component Rebar caches are separate.
++The component version stays 0.1.0 while the enclosing xrepl release is 0.2.0.
++
++For Cayrn's real native/terminal tests, explicitly set `CAYRN_LFE_DIR` to this
++`apps/cayrn_lfe` directory and `XREPL_BIN` to the built xrepl Rust binary.
++The independent app startup test complements the six preserved evaluator/I/O
++tests; it does not claim that resource limits or oversized previews are fixed.
+diff --git a/apps/cayrn_lfe/bin/cayrn-lfe b/apps/cayrn_lfe/bin/cayrn-lfe
+new file mode 100755
+index 0000000..3b71ae3
+--- /dev/null
++++ b/apps/cayrn_lfe/bin/cayrn-lfe
+@@ -0,0 +1,7 @@
++#!/bin/sh
++set -eu
++root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
++if [ "$#" -ne 1 ]; then printf 'Usage: %s /private/path/agent.sock\n' "$0" >&2; exit 2; fi
++export CAYRN_AGENT_SOCKET="$1"
++exec erl -noshell -pa "$root/_build/default/lib/"*/ebin \
++  -eval 'application:load(cayrn_lfe), application:set_env(cayrn_lfe, socket, os:getenv("CAYRN_AGENT_SOCKET")), {ok,_}=application:ensure_all_started(cayrn_lfe), receive stop -> ok end.'
+diff --git a/apps/cayrn_lfe/rebar.config b/apps/cayrn_lfe/rebar.config
+new file mode 100644
+index 0000000..8d5f3ee
+--- /dev/null
++++ b/apps/cayrn_lfe/rebar.config
+@@ -0,0 +1,3 @@
++{erl_opts, [debug_info, warnings_as_errors]}.
++{deps, [{lfe, "2.2.0"}]}.
++{plugins, [{rebar3_lfe, "~> 0.5"}]}.
+diff --git a/apps/cayrn_lfe/rebar.lock b/apps/cayrn_lfe/rebar.lock
+new file mode 100644
+index 0000000..d8c1ad5
+--- /dev/null
++++ b/apps/cayrn_lfe/rebar.lock
+@@ -0,0 +1,8 @@
++{"1.2.0",
++[{<<"lfe">>,{pkg,<<"lfe">>,<<"2.2.0">>},0}]}.
++[
++{pkg_hash,[
++ {<<"lfe">>, <<"BC64671F39551E05442B51134D35B1A5392E2A7F766881AFC2215FAF1BDB64AA">>}]},
++{pkg_hash_ext,[
++ {<<"lfe">>, <<"C09223CC0BF3EC120B791371F6AA3F10CD5A1D1FEEB43FB08B3F4A31D6717749">>}]}
++].
+diff --git a/apps/cayrn_lfe/src/cayrn-lfe-eval.lfe b/apps/cayrn_lfe/src/cayrn-lfe-eval.lfe
+new file mode 100644
+index 0000000..a84cb9c
+--- /dev/null
++++ b/apps/cayrn_lfe/src/cayrn-lfe-eval.lfe
+@@ -0,0 +1,57 @@
++(defmodule cayrn-lfe-eval
++  "Native parser/macro/evaluator seam; environments remain opaque to Rust."
++  (export (new 0) (run 2)))
++
++(defun new () (lfe_env:new))
++
++(defun run (source env)
++  (try
++    (case (lfe_io:read_string (unicode:characters_to_list source))
++      (`#(ok ,forms)
++       (let* ((`#(,value ,next-env)
++               (lists:foldl
++                 (lambda (form acc)
++                   (eval-form form (element 2 acc)))
++                 (tuple '() env) forms))
++              (text (unicode:characters_to_binary (lfe_io:prettyprint1 value))))
++         (tuple 'ok text next-env)))
++      (`#(error ,reason) (tuple 'error (preview reason) env)))
++    (catch
++      ((tuple class reason _stack)
++       (tuple 'error (preview (tuple class reason)) env)))))
++
++(defun preview (value)
++  (unicode:characters_to_binary (lfe_io:prettyprint1 value)))
++
++(defun eval-form (form env)
++  (case (lfe_macro:expand_fileforms (list (tuple form 1)) env 'false 'true)
++    (`#(ok ,expanded ,macro-env ,_warnings)
++     (lists:foldl
++       (lambda (item acc) (eval-expanded (element 1 item) (element 2 acc)))
++       (tuple '() macro-env) expanded))
++    (`#(error ,errors ,_warnings) (error (tuple 'compile errors)))))
++
++(defun eval-expanded
++  ((`(progn . ,forms) env)
++   (lists:foldl
++     (lambda (form acc) (eval-expanded form (element 2 acc)))
++     (tuple '() env) forms))
++  ((`(set ,pattern ,expr) env)
++   (let ((value (lfe_eval:expr expr env)))
++     (case (lfe_eval:match pattern value env)
++       (`#(yes ,bindings)
++        (tuple value
++          (lists:foldl
++            (lambda (binding acc)
++              (lfe_env:add_vbinding (element 1 binding) (element 2 binding) acc))
++            env bindings)))
++       ('no (error (tuple 'badmatch value))))))
++  ((`(define-function ,name ,_metadata ,definition) env)
++   (tuple name (lfe_eval:add_dynamic_func name (arity definition) definition env)))
++  ((`(define-macro ,name ,_metadata ,definition) env)
++   (tuple name (lfe_env:add_mbinding name definition env)))
++  ((expr env) (tuple (lfe_eval:expr expr env) env)))
++
++(defun arity
++  ((`(lambda ,args . ,_)) (length args))
++  ((`(match-lambda (,patterns . ,_) . ,_)) (length patterns)))
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe.app.src b/apps/cayrn_lfe/src/cayrn_lfe.app.src
+new file mode 100644
+index 0000000..56f6925
+--- /dev/null
++++ b/apps/cayrn_lfe/src/cayrn_lfe.app.src
+@@ -0,0 +1,5 @@
++{application, cayrn_lfe,
++ [{description, "Thin LFE runtime agent for the shared Cayrn Rust connector"},
++  {vsn, "0.1.0"}, {modules, []}, {registered, [cayrn_lfe_sup, cayrn_lfe_listener]},
++  {applications, [kernel, stdlib, lfe]}, {mod, {cayrn_lfe_app, []}},
++  {env, []}, {licenses, ["Apache-2.0"]}]}.
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_app.erl b/apps/cayrn_lfe/src/cayrn_lfe_app.erl
+new file mode 100644
+index 0000000..cfbad09
+--- /dev/null
++++ b/apps/cayrn_lfe/src/cayrn_lfe_app.erl
+@@ -0,0 +1,7 @@
++-module(cayrn_lfe_app).
++-behaviour(application).
++-export([start/2, stop/1]).
++-spec start(application:start_type(), term()) -> {ok, pid()} | {error, term()}.
++start(_, _) -> cayrn_lfe_sup:start_link().
++-spec stop(term()) -> ok.
++stop(_) -> ok.
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_context.erl b/apps/cayrn_lfe/src/cayrn_lfe_context.erl
+new file mode 100644
+index 0000000..9839d63
+--- /dev/null
++++ b/apps/cayrn_lfe/src/cayrn_lfe_context.erl
+@@ -0,0 +1,146 @@
++%% A connection owns one live execution context; client attachments end at Rust.
++-module(cayrn_lfe_context).
++-behaviour(gen_server).
++-export([start_link/1, init/1, handle_info/2, handle_call/3, handle_cast/2, terminate/2]).
++-spec start_link(port()) -> {ok, pid()} | {error, term()}.
++start_link(Socket) -> gen_server:start_link(?MODULE, Socket, []).
++-spec init(port()) -> {ok, map(), timeout()}.
++init(Socket) ->
++    process_flag(trap_exit, true),
++    {ok, #{socket => Socket, identity => undefined, env => 'cayrn-lfe-eval':new(),
++        active => undefined, seen => #{}, ios => [], pending => #{}, seq => 0, closing => undefined}, 5000}.
++-spec handle_info(term(), map()) -> {noreply, map()} | {noreply, map(), timeout()} | {stop, term(), map()}.
++handle_info(activate, #{socket := Socket} = State) ->
++    ok = inet:setopts(Socket, [{active, once}]),
++    {noreply, State, 5000};
++handle_info({tcp, Socket, Binary}, #{socket := Socket} = State) ->
++    try command(json:decode(Binary), State) of
++        {continue, Next} ->
++            ok = inet:setopts(Socket, [{active, once}]), {noreply, Next};
++        {stop, Next} -> {stop, normal, Next}
++    catch _:_ -> {stop, invalid_agent_command, State} end;
++handle_info({capture, From, Ref, Op, Text}, State) ->
++    Pending = maps:get(pending, State),
++    case map_size(Pending) < 64 of
++        true ->
++            N = maps:get(seq, State) + 1,
++            Position = integer_to_binary(N),
++            ok = send(State, #{kind => output, operation => Op, position => Position, text => Text}),
++            {noreply, State#{seq => N, pending => Pending#{Position => {From, Ref}}}};
++        false ->
++            From ! {io_reply, Ref, {error, enobufs}},
++            {stop, capture_overflow, State}
++    end;
++handle_info({evaluated, Pid, Op, Status, Text, Env}, #{active := {Pid, Mon, Op}} = State) ->
++    erlang:demonitor(Mon, [flush]),
++    true = byte_size(Text) =< 8192,
++    ok = send(State, #{kind => outcome, operation => Op, phase => Status, value => Text}),
++    transition(progress(State#{active => undefined, env => Env}));
++handle_info({'DOWN', Mon, process, Pid, _Reason}, #{active := {Pid, Mon, Op}, closing := Mode} = State)
++        when Mode =:= close; Mode =:= cancel ->
++    ok = send(State, #{kind => outcome, operation => Op, phase => cancelled,
++        value => <<"native evaluator terminated; environment discarded">>}),
++    transition(progress(State#{active => undefined}));
++handle_info({'DOWN', Mon, process, Pid, Reason}, #{active := {Pid, Mon, _}} = State) ->
++    {stop, {evaluator_lost, Reason}, State};
++handle_info({sealed, Io}, #{waiting := Waiting} = State) ->
++    transition(progress(State#{waiting => lists:delete(Io, Waiting)}));
++handle_info(close_timeout, #{closing := Mode} = State) when Mode =/= undefined ->
++    ok = send(State, #{kind => lost, reason => <<"native close/interrupt incomplete: producer or capture barrier timed out">>}),
++    {stop, normal, State};
++handle_info({tcp_closed, _}, State) -> {stop, normal, State};
++handle_info({tcp_error, _, Reason}, State) -> {stop, Reason, State};
++handle_info(timeout, #{identity := undefined} = State) -> {stop, handshake_timeout, State};
++handle_info({'EXIT', _, Reason}, State) -> {stop, {io_lost, Reason}, State};
++handle_info(_, State) -> {noreply, State}.
++command(#{<<"kind">> := <<"hello">>, <<"version">> := 1,
++          <<"session">> := Sid, <<"generation">> := Gen, <<"authority">> := Authority},
++        #{identity := undefined} = State) ->
++    true = valid_id(Sid) andalso valid_id(Gen) andalso valid_id(Authority),
++    true = ets:info(cayrn_lfe_contexts, size) < 4096,
++    true = ets:insert_new(cayrn_lfe_contexts, {Sid, Gen, Authority}),
++    ok = send(State, #{kind => ready, version => 1, backend => <<"lfe">>, interrupt => <<"session_destructive">>, close_barrier => true}),
++    {continue, State#{identity => {Sid, Gen, Authority}}};
++command(#{<<"kind">> := <<"dispatch">>, <<"operation">> := Op,
++          <<"source">> := Source, <<"generation">> := Gen, <<"authority">> := Authority},
++        #{identity := {_, Gen, Authority}, active := undefined, seen := Seen, closing := undefined} = State)
++        when is_binary(Source), byte_size(Source) =< 8192, map_size(Seen) < 256 ->
++    true = valid_id(Op),
++    false = maps:is_key(Op, Seen),
++    Owner = self(),
++    Io = cayrn_lfe_io:start(Owner, Op),
++    Env = maps:get(env, State),
++    {Pid, Mon} = spawn_monitor(fun() ->
++        receive evaluate ->
++            {Status, Value, Next} = 'cayrn-lfe-eval':run(Source, Env),
++            Phase = case Status of ok -> succeeded; error -> failed end,
++            Owner ! {evaluated, self(), Op, Phase, Value, Next}
++        end
++    end),
++    true = group_leader(Io, Pid),
++    Pid ! evaluate,
++    {continue, State#{active => {Pid, Mon, Op}, seen => Seen#{Op => true},
++        ios => [Io | maps:get(ios, State)]}};
++command(#{<<"kind">> := <<"ack">>, <<"position">> := Position}, State) ->
++    {{From, Ref}, Pending} = maps:take(Position, maps:get(pending, State)),
++    From ! {io_reply, Ref, ok},
++    progress(State#{pending => Pending});
++command(#{<<"kind">> := <<"close">>}, #{closing := undefined} = State) ->
++    begin_stop(close, State);
++command(#{<<"kind">> := <<"close">>}, State) -> {continue, State};
++command(#{<<"kind">> := <<"cancel">>, <<"operation">> := Op},
++        #{active := {_, _, Op}, closing := undefined} = State) -> begin_stop(cancel, State);
++command(#{<<"kind">> := <<"cancel">>, <<"operation">> := Op},
++        #{active := undefined, seen := Seen, closing := undefined} = State) ->
++    case maps:is_key(Op, Seen) of
++        true -> {continue, State};
++        false ->
++            ok = send(State, #{kind => lost, reason => <<"interrupt won before native dispatch; context retired">>}),
++            {stop, State}
++    end;
++command(#{<<"kind">> := <<"cancel">>}, State) -> {continue, State};
++command(#{<<"kind">> := <<"stop">>}, State) -> {stop, State};
++command(_, _) -> error(invalid_agent_command).
++begin_stop(Mode, State) ->
++    _ = erlang:send_after(5000, self(), close_timeout),
++    case maps:get(active, State) of
++        {Pid, _, _} -> exit(Pid, kill);
++        undefined -> ok
++    end,
++    progress(State#{closing => Mode}).
++progress(#{closing := cancel, active := undefined} = State) ->
++    ok = send(State, #{kind => lost, reason => <<"session-destructive interruption ended native context; capture tail may be uncertain">>}),
++    {stop, State};
++progress(#{closing := close, active := undefined} = State) ->
++    case maps:find(waiting, State) of
++        error ->
++            Io = maps:get(ios, State),
++            lists:foreach(fun(Pid) -> Pid ! {seal, self()} end, Io),
++            progress(State#{waiting => Io});
++        {ok, []} ->
++            case map_size(maps:get(pending, State)) of
++                0 -> ok = send(State, #{kind => closed}), {stop, State};
++                _ -> {continue, State}
++            end;
++        _ -> {continue, State}
++    end;
++progress(State) -> {continue, State}.
++transition({continue, State}) -> {noreply, State};
++transition({stop, State}) -> {stop, normal, State}.
++valid_id(Id) when is_binary(Id), byte_size(Id) > 0, byte_size(Id) =< 128 ->
++    re:run(Id, <<"^[A-Za-z0-9_-]+$">>, [{capture, none}]) =:= match;
++valid_id(_) -> false.
++send(#{socket := Socket}, Data) -> gen_tcp:send(Socket, json:encode(Data)).
++-spec handle_call(term(), gen_server:from(), map()) -> {reply, term(), map()}.
++handle_call(_, _, State) -> {reply, {error, unsupported}, State}.
++-spec handle_cast(term(), map()) -> {noreply, map()}.
++handle_cast(_, State) -> {noreply, State}.
++-spec terminate(term(), map()) -> ok.
++terminate(_, State) ->
++    case maps:get(active, State) of
++        {Pid, _, _} -> exit(Pid, kill);
++        undefined -> ok
++    end,
++    lists:foreach(fun(Pid) -> exit(Pid, kill) end, maps:get(ios, State)),
++    gen_tcp:close(maps:get(socket, State)),
++    ok.
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_io.erl b/apps/cayrn_lfe/src/cayrn_lfe_io.erl
+new file mode 100644
+index 0000000..8c7cc04
+--- /dev/null
++++ b/apps/cayrn_lfe/src/cayrn_lfe_io.erl
+@@ -0,0 +1,38 @@
++%% One immutable operation attribution per I/O server, including late writers.
++-module(cayrn_lfe_io).
++-export([start/2, loop/2]).
++-spec start(pid(), binary()) -> pid().
++start(Owner, Operation) -> spawn_link(?MODULE, loop, [Owner, Operation]).
++-spec loop(pid(), binary()) -> no_return().
++loop(Owner, Operation) -> loop(Owner, Operation, false).
++loop(Owner, Operation, Closed) ->
++    receive
++        {seal, Owner} ->
++            Owner ! {sealed, self()},
++            loop(Owner, Operation, true);
++        {io_request, From, Ref, _} when Closed ->
++            From ! {io_reply, Ref, {error, terminated}},
++            loop(Owner, Operation, Closed);
++        {io_request, From, Ref, Request} ->
++            case output(Request) of
++                {ok, Text} when byte_size(Text) =< 8192 ->
++                    Owner ! {capture, From, Ref, Operation, Text};
++                {ok, _} -> From ! {io_reply, Ref, {error, emsgsize}};
++                {error, Reason} -> From ! {io_reply, Ref, {error, Reason}}
++            end,
++            loop(Owner, Operation, Closed);
++        _ -> loop(Owner, Operation, Closed)
++    end.
++output({put_chars, Encoding, Text}) -> text(Text, Encoding);
++output({put_chars, Text}) -> text(Text, unicode);
++output({put_chars, Encoding, Module, Function, Args}) ->
++    try text(apply(Module, Function, Args), Encoding)
++    catch _:_ -> {error, badarg} end;
++output({put_chars, Module, Function, Args}) ->
++    output({put_chars, unicode, Module, Function, Args});
++output(_) -> {error, enotsup}.
++text(Text, Encoding) ->
++    try unicode:characters_to_binary(Text, Encoding, utf8) of
++        Binary when is_binary(Binary) -> {ok, Binary};
++        _ -> {error, badarg}
++    catch _:_ -> {error, badarg} end.
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_listener.erl b/apps/cayrn_lfe/src/cayrn_lfe_listener.erl
+new file mode 100644
+index 0000000..8137eae
+--- /dev/null
++++ b/apps/cayrn_lfe/src/cayrn_lfe_listener.erl
+@@ -0,0 +1,50 @@
++-module(cayrn_lfe_listener).
++-behaviour(gen_server).
++-export([start_link/0, init/1, handle_info/2, handle_call/3, handle_cast/2, terminate/2]).
++-spec start_link() -> {ok, pid()} | {error, term()}.
++start_link() -> gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
++-spec init([]) -> {ok, map()} | {stop, term()}.
++init([]) ->
++    _ = ets:new(cayrn_lfe_contexts, [named_table, public, set, {write_concurrency, true}]),
++    {ok, Path} = application:get_env(cayrn_lfe, socket),
++    case gen_tcp:listen(0, [binary, {active, false}, {packet, 4},
++            {packet_size, 262144}, {ifaddr, {local, Path}}, {backlog, 64}]) of
++        {ok, Socket} ->
++            ok = file:change_mode(Path, 8#600),
++            self() ! accept,
++            {ok, #{socket => Socket, path => Path}};
++        Error -> {stop, Error}
++    end.
++-spec handle_info(term(), map()) -> {noreply, map()}.
++handle_info(accept, #{socket := Listener} = State) ->
++    case gen_tcp:accept(Listener, 100) of
++        {ok, Socket} ->
++            case supervisor:count_children(cayrn_lfe_sup) of
++                Counts ->
++                    case proplists:get_value(active, Counts) =< 64 of
++                        true ->
++                            case cayrn_lfe_sup:context(Socket) of
++                                {ok, Pid} ->
++                                    ok = gen_tcp:controlling_process(Socket, Pid),
++                                    Pid ! activate;
++                                _ -> gen_tcp:close(Socket)
++                            end;
++                        false -> gen_tcp:close(Socket)
++                    end
++            end;
++        {error, timeout} -> ok;
++        {error, closed} -> exit(listener_closed);
++        {error, Reason} -> exit(Reason)
++    end,
++    self() ! accept,
++    {noreply, State};
++handle_info(_, State) -> {noreply, State}.
++-spec handle_call(term(), gen_server:from(), map()) -> {reply, term(), map()}.
++handle_call(_, _, State) -> {reply, {error, unsupported}, State}.
++-spec handle_cast(term(), map()) -> {noreply, map()}.
++handle_cast(_, State) -> {noreply, State}.
++-spec terminate(term(), map()) -> ok.
++terminate(_, #{socket := Socket, path := Path}) ->
++    gen_tcp:close(Socket),
++    _ = file:delete(Path),
++    ok.
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_sup.erl b/apps/cayrn_lfe/src/cayrn_lfe_sup.erl
+new file mode 100644
+index 0000000..f79d7c1
+--- /dev/null
++++ b/apps/cayrn_lfe/src/cayrn_lfe_sup.erl
+@@ -0,0 +1,15 @@
++-module(cayrn_lfe_sup).
++-behaviour(supervisor).
++-export([start_link/0, init/1, context/1]).
++-spec start_link() -> {ok, pid()} | {error, term()}.
++start_link() -> supervisor:start_link({local, ?MODULE}, ?MODULE, []).
++-spec context(port()) -> supervisor:startchild_ret().
++context(Socket) ->
++    supervisor:start_child(?MODULE, #{id => make_ref(),
++        start => {cayrn_lfe_context, start_link, [Socket]},
++        restart => temporary, shutdown => 2000}).
++-spec init([]) -> {ok, {supervisor:sup_flags(), [supervisor:child_spec()]}}.
++init([]) ->
++    {ok, {#{strategy => one_for_all, intensity => 3, period => 10},
++        [#{id => cayrn_lfe_listener, start => {cayrn_lfe_listener, start_link, []},
++           restart => permanent, shutdown => 2000}]}}.
+diff --git a/apps/cayrn_lfe/test/cayrn_lfe_application_tests.erl b/apps/cayrn_lfe/test/cayrn_lfe_application_tests.erl
+new file mode 100644
+index 0000000..4028f19
+--- /dev/null
++++ b/apps/cayrn_lfe/test/cayrn_lfe_application_tests.erl
+@@ -0,0 +1,38 @@
++%% Isolate the startup oracle from services started by the legacy test suite.
++-module(cayrn_lfe_application_tests).
++-include_lib("eunit/include/eunit.hrl").
++-include_lib("kernel/include/file.hrl").
++
++independent_application_start_test_() ->
++    {timeout, 30, fun independent_application_start/0}.
++
++independent_application_start() ->
++    Dir = filename:join("/private/tmp", "cayrn-app-" ++ os:getpid() ++ "-" ++
++        integer_to_list(erlang:unique_integer([positive, monotonic]))),
++    ok = file:make_dir(Dir),
++    ok = file:change_mode(Dir, 8#700),
++    Socket = filename:join(Dir, "agent socket.sock"),
++    try
++        %% Standard I/O control requires neither distribution nor a live user node.
++        {ok, Peer, _Node} = peer:start_link(#{connection => standard_io,
++            args => ["-pa" | code:get_path()]}),
++        try
++            ok = peer:call(Peer, application, load, [cayrn_lfe]),
++            ok = peer:call(Peer, application, set_env, [cayrn_lfe, socket, Socket]),
++            {ok, _} = peer:call(Peer, application, ensure_all_started, [cayrn_lfe]),
++            Running = [App || {App, _, _} <-
++                peer:call(Peer, application, which_applications, [])],
++            ?assert(lists:member(cayrn_lfe, Running)),
++            ?assert(lists:member(lfe, Running)),
++            lists:foreach(fun(App) -> ?assertNot(lists:member(App, Running)) end,
++                [xrepl, ranch, xrepl_protocol, xrepl_term]),
++            {ok, Info} = file:read_file_info(Socket),
++            ?assertEqual(other, Info#file_info.type),
++            ?assertEqual(8#600, Info#file_info.mode band 8#777)
++        after
++            peer:stop(Peer)
++        end
++    after
++        file:delete(Socket),
++        file:del_dir(Dir)
++    end.
+diff --git a/apps/cayrn_lfe/test/cayrn_lfe_eval_tests.erl b/apps/cayrn_lfe/test/cayrn_lfe_eval_tests.erl
+new file mode 100644
+index 0000000..8424a56
+--- /dev/null
++++ b/apps/cayrn_lfe/test/cayrn_lfe_eval_tests.erl
+@@ -0,0 +1,20 @@
++-module(cayrn_lfe_eval_tests).
++-include_lib("eunit/include/eunit.hrl").
++
++persistent_bindings_test() ->
++    Env='cayrn-lfe-eval':new(),
++    {ok, <<"41">>, Next}='cayrn-lfe-eval':run(<<"(set x 41)">>, Env),
++    {ok, <<"42">>, _}='cayrn-lfe-eval':run(<<"(+ x 1)">>, Next).
++
++errors_preserve_committed_environment_test() ->
++    {ok, _, Env}='cayrn-lfe-eval':run(<<"(set x 41)">>, 'cayrn-lfe-eval':new()),
++    {error, _, Env}='cayrn-lfe-eval':run(<<"(/ 1 0)">>, Env),
++    {error, _, Env}='cayrn-lfe-eval':run(<<"(">>, Env),
++    {ok, <<"41">>, _}='cayrn-lfe-eval':run(<<"x">>, Env).
++
++functions_and_macro_context_test() ->
++    {ok, _, Env}='cayrn-lfe-eval':run(<<"(defun inc (x) (+ x 1))">>, 'cayrn-lfe-eval':new()),
++    {ok, <<"42">>, _}='cayrn-lfe-eval':run(<<"(inc 41)">>, Env).
++
++ordinary_error_atom_is_a_value_test() ->
++    {ok, <<"error">>, _}='cayrn-lfe-eval':run(<<"'error">>, 'cayrn-lfe-eval':new()).
+diff --git a/apps/cayrn_lfe/test/cayrn_lfe_io_tests.erl b/apps/cayrn_lfe/test/cayrn_lfe_io_tests.erl
+new file mode 100644
+index 0000000..269ef75
+--- /dev/null
++++ b/apps/cayrn_lfe/test/cayrn_lfe_io_tests.erl
+@@ -0,0 +1,29 @@
++-module(cayrn_lfe_io_tests).
++-include_lib("eunit/include/eunit.hrl").
++
++capture_requires_owner_ack_test() ->
++    Io=cayrn_lfe_io:start(self(), <<"operation">>),
++    Ref=make_ref(),
++    try
++        Io ! {io_request, self(), Ref, {put_chars, unicode, <<"hello">>}},
++        receive {capture, From, Ref, <<"operation">>, <<"hello">>} -> ?assertEqual(self(), From)
++        after 1000 -> error(missing_capture) end,
++        receive {io_reply, Ref, _} -> error(false_native_ack)
++        after 20 -> ok end
++    after unlink(Io), exit(Io, kill) end.
++
++seal_orders_prior_capture_and_rejects_late_writes_test() ->
++    Io=cayrn_lfe_io:start(self(), <<"origin">>),
++    Ref=make_ref(),
++    try
++        Io ! {io_request, self(), Ref, {put_chars, unicode, <<"before">>}},
++        Io ! {seal, self()},
++        receive First -> ?assertMatch({capture, _, Ref, <<"origin">>, <<"before">>}, First)
++        after 1000 -> error(missing_capture) end,
++        receive Second -> ?assertEqual({sealed, Io}, Second)
++        after 1000 -> error(missing_seal) end,
++        Later=make_ref(),
++        Io ! {io_request, self(), Later, {put_chars, unicode, <<"after">>}},
++        receive {io_reply, Later, Reply} -> ?assertEqual({error, terminated}, Reply)
++        after 1000 -> error(missing_late_rejection) end
++    after unlink(Io), exit(Io, kill) end.
+diff --git a/bin/cayrn-lfe b/bin/cayrn-lfe
+new file mode 100755
+index 0000000..283d098
+--- /dev/null
++++ b/bin/cayrn-lfe
+@@ -0,0 +1,5 @@
++#!/bin/sh
++# Delegate to the independently built native OTP component.
++set -eu
++root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
++exec "$root/apps/cayrn_lfe/bin/cayrn-lfe" "$@"

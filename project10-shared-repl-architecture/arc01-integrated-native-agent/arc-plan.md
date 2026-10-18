@@ -1,6 +1,6 @@
 # Arc01 — integrated, independently startable native LFE agent
 
-Version 1.0, 2026-10-18. Planned; first open set prepared. Deliver the native agent
+Version 1.1, 2026-10-18. In progress; first-slice candidate returned, acceptance pending. Deliver the native agent
 from xrepl's release/0.2.x source tree while preserving its greenfield boundary,
 then convert its implementation/tests to LFE with the real runtime contract intact.
 
@@ -19,8 +19,8 @@ untracked docs/design content. No changes to sibling term/protocol repositories.
 
 | Slice | Useful delivered result | Dependencies | State |
 | --- | --- | --- | --- |
-| [Slice01 — import agent application](slice01-import-agent-application/slice-plan.md) | Existing Erlang/LFE agent runs from apps/cayrn_lfe through xrepl entrypoints and passes real host/terminal tests | Pinned native source; current public/agent interfaces | Prepared |
-| Slice02 — LFE implementation | Five Erlang modules and native tests become LFE; independent application, capture/control, identity and isolation contracts still hold | Slice01 accepted import; fully resolved translation/callback map and style guidance | Scope only; next prompt after import evidence |
+| [Slice01 — import agent application](slice01-import-agent-application/slice-plan.md) | Existing Erlang/LFE agent runs from apps/cayrn_lfe through xrepl entrypoints and passes real host/terminal tests | Pinned native source; current public/agent interfaces | Candidate returned; attested, acceptance pending |
+| Slice02 — LFE implementation | Five Erlang modules and native tests (including the new startup boundary test) become LFE; independent application, capture/control, identity and isolation contracts still hold | Slice01 accepted import; fully resolved translation/callback map and style guidance | Scope only; next prompt after import evidence |
 
 No standalone investigation arc, untranslated halfway runtime or source-only port
 counts as the completed arc. Build, startup and real tests accompany each slice.
@@ -44,3 +44,12 @@ available until later explicitly agreed retirement.
 
 - v1.0 — 2026-10-18: preserve/import first, then translate, with real composition
   and separate application ownership at both steps.
+
+- v1.1 —2026-10-18: Slice01 added a startup-boundary regression test. Include it
+  in Slice02’s native-test conversion inventory so the import’s proof is retained;
+  no change to runtime scope or acceptance gates.
+
+## Slice01 bubble-up — 2026-10-18
+
+[Implementation return](slice01-import-agent-application/closing-report.md): usable candidate implemented
+and self-checked; acceptance remains pending. No sequencing/architecture change.

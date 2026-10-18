@@ -1,0 +1,6 @@
+{"value": "(cayrn_lfe compiler kernel lfe stdlib)", "kind": "outcome", "operation": "apps", "phase": "succeeded"}
+Traceback (most recent call last):
+  File "/private/tmp/cayrn-wrapper-smoke.py", line 30, in <module>
+    assert result['value']=='(cayrn_lfe kernel lfe stdlib)',result
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'value': '(cayrn_lfe compiler kernel lfe stdlib)', 'kind': 'outcome', 'operation': 'apps', 'phase': 'succeeded'}

@@ -1,0 +1,291 @@
+[1;34mRunning eunit...[0m
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+===> Compiling xrepl
+===> Performing EUnit tests...
+======================== EUnit ========================
+file "xrepl.app"
+  application 'xrepl'
+    module 'lfe_xrepl'
+    module 'xrepl-app'
+    module 'xrepl-auth'
+    module 'xrepl-client-shell-fns'
+    module 'xrepl-client-shell'
+    module 'xrepl-client-sup'
+    module 'xrepl-client'
+    module 'xrepl-commands'
+    module 'xrepl-config-tests'
+      xrepl-config-tests: config_persistence_test...[0.033 s] ok
+      xrepl-config-tests: default_config_test...ok
+      xrepl-config-tests: get_set_config_test...ok
+      xrepl-config-tests: merge_config_test...ok
+      xrepl-config-tests: session_config_integration_test...ok
+      xrepl-config-tests: validate_boolean_fields_test...ok
+      xrepl-config-tests: validate_full_config_invalid_test...ok
+      xrepl-config-tests: validate_full_config_valid_test...ok
+      xrepl-config-tests: validate_integer_fields_test...ok
+      xrepl-config-tests: validate_prompt_test...ok
+      xrepl-config-tests: validate_unknown_key_test...ok
+      [done in 0.066 s]
+    module 'xrepl-config'
+    module 'xrepl-consts'
+    xrepl-decode-error-tests: decode-error-keeps-connection-body (module 'xrepl-decode-error-tests')...=INFO REPORT==== 18-Oct-2026::16:09:34.151093 ===
+Message decode failed: not_just_binary
+[0.070 s] ok
+    module 'xrepl-dispatcher'
+    module 'xrepl-env'
+    module 'xrepl-eval'
+    module 'xrepl-help-remote'
+    module 'xrepl-history'
+    module 'xrepl-io'
+    xrepl-keepalive-tests: no-keepalive-after-idle-body (module 'xrepl-keepalive-tests')...[31.506 s] ok
+    module 'xrepl-multi-session-tests'
+      xrepl-multi-session-tests: concurrent_sessions_test...[0.002 s] ok
+      xrepl-multi-session-tests: isolated_sessions_test...[0.005 s] ok
+      xrepl-multi-session-tests: multiple_sessions_performance_test...[0.001 s] ok
+      xrepl-multi-session-tests: session_commands_integration_test...ok
+      xrepl-multi-session-tests: session_lifecycle_test...ok
+      xrepl-multi-session-tests: session_persistence_basic_test...ok
+      xrepl-multi-session-tests: session_recovery_test...ok
+      xrepl-multi-session-tests: session_restore_roundtrip_test...ok
+      [done in 0.032 s]
+    module 'xrepl-net-sup'
+    module 'xrepl-output'
+    module 'xrepl-prompt-tests'
+      xrepl-prompt-tests: shell_label_bad_session_id_returns_xrepl_test...ok
+      xrepl-prompt-tests: shell_label_default_session_returns_xrepl_test...ok
+      xrepl-prompt-tests: shell_name_>label_echo_returns_xrepl_test...ok
+      xrepl-prompt-tests: shell_name_>label_lfe_returns_xrepl_test...ok
+      xrepl-prompt-tests: shell_name_>label_xs_returns_xs_test...ok
+      xrepl-prompt-tests: xs_shell_describe_name_is_xs_test...ok
+      [done in 0.018 s]
+    module 'xrepl-session-manager-tests'
+      xrepl-session-manager-tests: attach_session_test...[0.001 s] ok
+      xrepl-session-manager-tests: create_named_session_test...ok
+      xrepl-session-manager-tests: create_session_test...ok
+      xrepl-session-manager-tests: current_session_test...ok
+      xrepl-session-manager-tests: destroy_session_test...ok
+      xrepl-session-manager-tests: detach_session_test...ok
+      xrepl-session-manager-tests: evaluator_registers_session_for_evald_code_test...ok
+      xrepl-session-manager-tests: get_info_test...ok
+      xrepl-session-manager-tests: is_active_test...ok
+      xrepl-session-manager-tests: list_detailed_test...ok
+      xrepl-session-manager-tests: list_sessions_test...ok
+      xrepl-session-manager-tests: switch_session_by_id_test...ok
+      xrepl-session-manager-tests: switch_session_by_name_test...ok
+      [done in 0.040 s]
+    module 'xrepl-session-manager'
+    module 'xrepl-session-sup'
+    module 'xrepl-session'
+    module 'xrepl-shell-echo-tests'
+      xrepl-shell-echo-tests: describe_has_name_echo_test...ok
+      xrepl-shell-echo-tests: eval_echoes_string_test...ok
+      xrepl-shell-echo-tests: eval_exit_triggers_switch_test...ok
+      xrepl-shell-echo-tests: eval_quit_triggers_switch_test...ok
+      xrepl-shell-echo-tests: init_returns_ok_test...ok
+      xrepl-shell-echo-tests: snapshot_returns_map_test...ok
+      [done in 0.018 s]
+    module 'xrepl-shell-echo'
+    module 'xrepl-shell-fns'
+    module 'xrepl-shell-lfe-tests'
+      xrepl-shell-lfe-tests: describe_returns_name_lfe_test...ok
+      xrepl-shell-lfe-tests: dym_no_hijack_bound_function_test...ok
+      xrepl-shell-lfe-tests: dym_normal_eval_unaffected_test...ok
+      xrepl-shell-lfe-tests: dym_open_returns_hint_test...ok
+      xrepl-shell-lfe-tests: dym_passwd_returns_hint_test...ok
+      xrepl-shell-lfe-tests: dym_sesame_returns_hint_test...ok
+      xrepl-shell-lfe-tests: dym_unlock_with_args_test...ok
+      xrepl-shell-lfe-tests: dym_zzznope_not_a_trigger_test...ok
+      xrepl-shell-lfe-tests: eval_parse_error_test...ok
+      xrepl-shell-lfe-tests: eval_simple_arithmetic_test...ok
+      xrepl-shell-lfe-tests: eval_threads_env_test...ok
+      xrepl-shell-lfe-tests: eval_unbound_function_error_test...ok
+      xrepl-shell-lfe-tests: eval_update_shell_vars_test...ok
+      xrepl-shell-lfe-tests: init_empty_opts_test...ok
+      xrepl-shell-lfe-tests: init_with_env_and_session_id_test...ok
+      xrepl-shell-lfe-tests: prompt_returns_binary_test...ok
+      xrepl-shell-lfe-tests: snapshot_contains_directly_added_binding_test...ok
+      xrepl-shell-lfe-tests: snapshot_contains_set_binding_test...ok
+      xrepl-shell-lfe-tests: snapshot_excludes_closures_test...ok
+      xrepl-shell-lfe-tests: snapshot_restore_via_init_test...ok
+      xrepl-shell-lfe-tests: snapshot_returns_bindings_map_test...ok
+      [done in 0.063 s]
+    module 'xrepl-shell-lfe'
+    module 'xrepl-shell-pluggability-spike-tests'
+      xrepl-shell-pluggability-spike-tests: q1_a_unknown_op_rejected_test...ok
+      xrepl-shell-pluggability-spike-tests: q1_b_session_switch_signal_detected_test...ok
+      xrepl-shell-pluggability-spike-tests: q2_metadata_ignored_by_eval_path_test...ok
+      xrepl-shell-pluggability-spike-tests: q3_a_unbound_fn_session_error_shape_test...ok
+      xrepl-shell-pluggability-spike-tests: q3_b_unbound_fn_dispatcher_response_shape_test...ok
+      xrepl-shell-pluggability-spike-tests: q4_a_describe_hardcoded_ops_test...ok
+      xrepl-shell-pluggability-spike-tests: q4_b_metadata_survives_close_reopen_test...ok
+      xrepl-shell-pluggability-spike-tests: q4_c_extra_field_survives_msgpack_roundtrip_test...ok
+      [done in 0.025 s]
+    module 'xrepl-shell-switching-tests'
+      xrepl-shell-switching-tests: create_session_in_echo_shell_test...ok
+      xrepl-shell-switching-tests: describe_reports_echo_for_echo_session_test...ok
+      xrepl-shell-switching-tests: describe_reports_lfe_for_default_session_test...ok
+      xrepl-shell-switching-tests: describe_updates_after_switch_test...ok
+      xrepl-shell-switching-tests: switch_echo_to_lfe_and_eval_test...ok
+      [done in 0.015 s]
+    module 'xrepl-shell'
+    module 'xrepl-store-phase2-tests'
+      xrepl-store-phase2-tests: export_import_test...ok
+      xrepl-store-phase2-tests: find_sessions_test...ok
+      xrepl-store-phase2-tests: list_sessions_detailed_test...ok
+      xrepl-store-phase2-tests: multiple_sessions_test...ok
+      xrepl-store-phase2-tests: session_config_test...ok
+      xrepl-store-phase2-tests: session_data_structure_test...ok
+      xrepl-store-phase2-tests: session_metadata_test...ok
+      xrepl-store-phase2-tests: session_timeout_test...[2.002 s] ok
+      xrepl-store-phase2-tests: touch_session_test...[1.001 s] ok
+      [done in 3.030 s]
+    module 'xrepl-store'
+    module 'xrepl-sup'
+    module 'xrepl-tcp-handler'
+    module 'xrepl-transport-stdio'
+    module 'xrepl-transport'
+    module 'xrepl-vsn'
+    module 'xrepl'
+    module 'xs-bundle-tests'
+      xs-bundle-tests: dangling_entry_test...[0.011 s] ok
+      xs-bundle-tests: dangling_to_ref_test...ok
+      xs-bundle-tests: duplicate_node_id_test...ok
+      xs-bundle-tests: good_bundle_loads_test...ok
+      xs-bundle-tests: image_bytes_exact_match_test...ok
+      xs-bundle-tests: image_bytes_missing_returns_error_test...ok
+      xs-bundle-tests: image_bytes_stem_match_test...ok
+      xs-bundle-tests: known_image_in_image_assets_test...ok
+      =WARNING REPORT==== 18-Oct-2026::16:10:09.015655 ===
+xs-bundle: node 'room-a' references image "no-such-img.png" not in bundle
+xs-bundle-tests: missing_image_warns_but_loads_test...ok
+      xs-bundle-tests: node_type_and_choices_stored_test...ok
+      =WARNING REPORT==== 18-Oct-2026::16:10:09.021663 ===
+xs-bundle: node 'room-a' references image "no-pic" not in bundle
+xs-bundle-tests: stem_ref_genuinely_missing_still_warns_test...ok
+      xs-bundle-tests: stem_ref_with_matching_asset_no_warning_test...ok
+      [done in 0.047 s]
+    module 'xs-bundle'
+    module 'xs-engine-tests'
+      xs-engine-tests: all_movement_prefixes_match_test...ok
+      xs-engine-tests: as_list_bare_string_test...ok
+      xs-engine-tests: as_list_empty_test...ok
+      xs-engine-tests: as_list_list_of_choices_test...ok
+      xs-engine-tests: as_list_list_of_strings_test...ok
+      xs-engine-tests: as_list_single_set_form_test...ok
+      xs-engine-tests: as_list_single_tagged_form_choice_test...ok
+      xs-engine-tests: as_list_single_tagged_form_stream_test...ok
+      xs-engine-tests: enter_gate_test...ok
+      xs-engine-tests: enter_start_first_visit_test...ok
+      xs-engine-tests: enter_start_second_visit_test...ok
+      xs-engine-tests: enter_vault_test...ok
+      xs-engine-tests: exitless_node_help_exits_test...ok
+      xs-engine-tests: exits_command_lists_exits_test...ok
+      xs-engine-tests: exits_excludes_action_choices_test...ok
+      xs-engine-tests: go_prefix_matches_bare_cmd_test...ok
+      xs-engine-tests: go_prefix_no_false_match_test...ok
+      xs-engine-tests: handle_back_choice_test...ok
+      xs-engine-tests: handle_choice_north_test...ok
+      xs-engine-tests: handle_correct_password_test...ok
+      xs-engine-tests: handle_help_test...ok
+      xs-engine-tests: handle_inventory_empty_test...ok
+      xs-engine-tests: handle_take_key_2nd_visit_test...ok
+      xs-engine-tests: handle_take_key_not_takeable_1st_visit_test...ok
+      xs-engine-tests: handle_unmatched_scene_test...ok
+      xs-engine-tests: handle_wrong_password_test...ok
+      xs-engine-tests: help_blank_line_before_moves_test...ok
+      xs-engine-tests: help_lists_exits_test...ok
+      xs-engine-tests: help_mentions_movement_test...ok
+      xs-engine-tests: look_prints_full_body_test...ok
+      xs-engine-tests: moves_label_test...ok
+      xs-engine-tests: multi_paragraph_unicode_enter_test...ok
+      xs-engine-tests: scene_change_prints_room_test...ok
+      xs-engine-tests: unicode_paragraph_renders_test...ok
+      [done in 0.102 s]
+    module 'xs-engine'
+    module 'xs-shell-tests'
+      xs-shell-tests: describe_name_is_xs_test...[0.001 s] ok
+      xs-shell-tests: eval_back_choice_returns_to_start_test...ok
+      xs-shell-tests: eval_correct_password_ends_story_test...ok
+      xs-shell-tests: eval_done_clears_save_from_metadata_test...ok
+      xs-shell-tests: eval_north_goes_to_gate_test...ok
+      xs-shell-tests: eval_quit_saves_world_to_metadata_test...ok
+      xs-shell-tests: eval_wrong_password_returns_fail_text_test...[0.001 s] ok
+=WARNING REPORT==== 18-Oct-2026::16:10:09.162437 ===
+xs-bundle: node start references image "no-such.png" not in bundle
+      xs-shell-tests: missing_image_does_not_break_text_turn_test...[0.001 s] ok
+      xs-shell-tests: multi_text_body_joined_by_newline_test...ok
+      xs-shell-tests: node_with_image_still_renders_text_test...[0.010 s] ok
+      xs-shell-tests: prompt_returns_gt_test...ok
+      xs-shell-tests: resume_renders_current_room_test...ok
+      xs-shell-tests: resume_stale_save_test...ok
+      xs-shell-tests: save_returns_world_map_test...ok
+      xs-shell-tests: sentinel_recognised_by_lfe_shell_test...ok
+      xs-shell-tests: snapshot_returns_world_test...ok
+      xs-shell-tests: start_returns_ok_and_opening_test...ok
+      xs-shell-tests: xs_run_graceful_when_no_xsf_test...[0.006 s] ok
+      [done in 0.073 s]
+    module 'xs-shell'
+    module 'xs-world-tests'
+      xs-world-tests: add_item_has_item_round_trip_test...ok
+      xs-world-tests: bump_visit_increments_test...ok
+      xs-world-tests: bump_visit_per_node_isolation_test...ok
+      xs-world-tests: eval_cond_and_all_true_test...ok
+      xs-world-tests: eval_cond_and_one_false_test...ok
+=WARNING REPORT==== 18-Oct-2026::16:10:09.228442 ===
+xs-world: unrecognised condition [broken,99]
+      xs-world-tests: eval_cond_bad_subform_degrades_gracefully_test...ok
+      xs-world-tests: eval_cond_flag_falsy_test...ok
+      xs-world-tests: eval_cond_flag_truthy_test...ok
+      xs-world-tests: eval_cond_literals_test...ok
+=WARNING REPORT==== 18-Oct-2026::16:10:09.240192 ===
+xs-world: unrecognised condition whatever
+      xs-world-tests: eval_cond_non_list_atom_returns_false_test...ok
+      xs-world-tests: eval_cond_not_test...ok
+      xs-world-tests: eval_cond_or_test...=WARNING REPORT==== 18-Oct-2026::16:10:09.249608 ===
+xs-world: unrecognised condition ['bogus-form',1,2]
+ok
+      xs-world-tests: eval_cond_unknown_form_returns_false_test...ok
+      xs-world-tests: eval_cond_visits_eq_test...ok
+      xs-world-tests: eval_cond_visits_gte_test...ok
+      xs-world-tests: flag_set_flag_round_trip_test...ok
+      xs-world-tests: new_items_empty_test...ok
+      xs-world-tests: new_seeds_flag_defaults_test...ok
+      xs-world-tests: new_sets_entry_node_test...ok
+      xs-world-tests: new_visits_empty_test...ok
+      xs-world-tests: set_node_round_trips_test...ok
+      xs-world-tests: visits_start_at_zero_test...ok
+      [done in 0.066 s]
+    module 'xs-world'
+    module 'xs'
+    [done in 35.266 s]
+  [done in 35.270 s]
+file "cayrn_lfe.app"
+  application 'cayrn_lfe'
+    module 'cayrn-lfe-eval'
+    module 'cayrn_lfe_app'
+    cayrn_lfe_application_tests: independent_application_start (module 'cayrn_lfe_application_tests')...[0.239 s] ok
+    module 'cayrn_lfe_context'
+    module 'cayrn_lfe_eval_tests'
+      cayrn_lfe_eval_tests: persistent_bindings_test...[0.001 s] ok
+      cayrn_lfe_eval_tests: errors_preserve_committed_environment_test...ok
+      cayrn_lfe_eval_tests: functions_and_macro_context_test...ok
+      cayrn_lfe_eval_tests: ordinary_error_atom_is_a_value_test...ok
+      [done in 0.013 s]
+    module 'cayrn_lfe_io'
+      module 'cayrn_lfe_io_tests'
+        cayrn_lfe_io_tests: capture_requires_owner_ack_test...[0.022 s] ok
+        cayrn_lfe_io_tests: seal_orders_prior_capture_and_rejects_late_writes_test...ok
+        [done in 0.028 s]
+      [done in 0.028 s]
+    module 'cayrn_lfe_io_tests'
+      cayrn_lfe_io_tests: capture_requires_owner_ack_test...[0.021 s] ok
+      cayrn_lfe_io_tests: seal_orders_prior_capture_and_rejects_late_writes_test...ok
+      [done in 0.027 s]
+    module 'cayrn_lfe_listener'
+    module 'cayrn_lfe_sup'
+    [done in 0.320 s]
+  [done in 0.322 s]
+=======================================================
+  All 184 tests passed.

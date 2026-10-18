@@ -1,0 +1,42 @@
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C apps/cayrn_lfe check REBAR="rebar3"
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+===> Performing EUnit tests...
+[0;32m.[0m[0;32m.[0m[0;31mF[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m
+Failures:
+
+  1) cayrn_lfe_application_tests:independent_application_start/0: module 'cayrn_lfe_application_tests'
+[0;31m     Failure/Error: {error,
+                        {badmatch,{ok,<0.584.0>,nonode@nohost}},
+                        [{cayrn_lfe_application_tests,
+                             independent_application_start,0,
+                             [{file,
+                                  "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_application_tests.erl"},
+                              {line,17}]},
+                         {eunit_test,run_testfun,1,
+                             [{file,"eunit_test.erl"},{line,83}]},
+                         {eunit_proc,run_test,1,
+                             [{file,"eunit_proc.erl"},{line,554}]},
+                         {eunit_proc,with_timeout,3,
+                             [{file,"eunit_proc.erl"},{line,379}]},
+                         {eunit_proc,handle_test,2,
+                             [{file,"eunit_proc.erl"},{line,537}]},
+                         {eunit_proc,tests_inorder,3,
+                             [{file,"eunit_proc.erl"},{line,479}]},
+                         {eunit_proc,with_timeout,3,
+                             [{file,"eunit_proc.erl"},{line,369}]},
+                         {eunit_proc,run_group,2,
+                             [{file,"eunit_proc.erl"},{line,593}]}]}
+[0m
+
+Finished in 0.301 seconds
+[0;31m7 tests, 1 failures
+[0m===> Error running tests
+make[1]: *** [check] Error 1
+make: *** [check-agent] Error 2

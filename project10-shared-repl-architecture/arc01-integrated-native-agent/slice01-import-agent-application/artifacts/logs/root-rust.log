@@ -1,0 +1,71 @@
+[1;34mCompiling LFE/OTP app...[0m
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling apps/cayrn_lfe/src/cayrn-lfe-eval.lfe
+===> Compiling cayrn_lfe
+===> Compiling xrepl
+[1;32m✓ LFE compiled[0m
+[1;34mBuilding xrepl (Rust)...[0m
+   Compiling cayrn-protocol v0.1.0 (/Users/oubiwann/lab/oxur/cayrn/crates/protocol)
+   Compiling cayrn-client v0.1.0 (/Users/oubiwann/lab/oxur/cayrn/crates/client)
+   Compiling xrepl-core v0.0.0 (/Users/oubiwann/lab/lfe/xrepl/xrepl/crates/xrepl-core)
+   Compiling xrepl-adventure v0.0.0 (/Users/oubiwann/lab/lfe/xrepl/xrepl/crates/xrepl-adventure)
+   Compiling xrepl v0.0.0 (/Users/oubiwann/lab/lfe/xrepl/xrepl/crates/xrepl)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.06s
+[1;32m✓ Rust build complete[0m
+[1;34mRunning Rust linters...[0m
+[1;36m• clippy...[0m
+    Checking cayrn-protocol v0.1.0 (/Users/oubiwann/lab/oxur/cayrn/crates/protocol)
+    Checking cayrn-client v0.1.0 (/Users/oubiwann/lab/oxur/cayrn/crates/client)
+    Checking xrepl-core v0.0.0 (/Users/oubiwann/lab/lfe/xrepl/xrepl/crates/xrepl-core)
+    Checking xrepl-adventure v0.0.0 (/Users/oubiwann/lab/lfe/xrepl/xrepl/crates/xrepl-adventure)
+    Checking xrepl v0.0.0 (/Users/oubiwann/lab/lfe/xrepl/xrepl/crates/xrepl)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.92s
+[1;32m✓ clippy passed[0m
+[1;36m• format check...[0m
+[1;32m✓ format check passed[0m
+[1;34mRunning Rust workspace tests...[0m
+   Compiling xrepl-core v0.0.0 (/Users/oubiwann/lab/lfe/xrepl/xrepl/crates/xrepl-core)
+   Compiling xrepl-adventure v0.0.0 (/Users/oubiwann/lab/lfe/xrepl/xrepl/crates/xrepl-adventure)
+   Compiling xrepl v0.0.0 (/Users/oubiwann/lab/lfe/xrepl/xrepl/crates/xrepl)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.70s
+     Running unittests src/main.rs (target/debug/deps/xrepl-24e9083b8ec39764)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/xrepl_adventure-fea08a1eea4698f6)
+
+running 7 tests
+test tests::starts_in_the_cockpit ... ok
+test tests::cannot_take_what_isnt_there ... ok
+test tests::take_then_inventory_shows_the_item ... ok
+test tests::a_bare_direction_changes_room ... ok
+test tests::banner_opens_on_the_scene ... ok
+test tests::item_taken_is_gone_from_the_room ... ok
+test tests::unknown_verb_is_reported_not_panicked ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/xrepl_core-cf78c1a807e76d0c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests xrepl_adventure
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests xrepl_core
+
+running 1 test
+test crates/xrepl-core/src/lib.rs - (line 31) - compile ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+all doctests ran in 0.43s; merged doctests compilation took 0.28s
+[1;32m✓ Rust tests passed[0m
