@@ -1,0 +1,11 @@
+[package]
+name = "xrepl-p09-lifecycle-probe"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+xrepl-core = { path = "/Users/oubiwann/lab/lfe/xrepl/xrepl/crates/xrepl-core" }
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+
+[workspace]

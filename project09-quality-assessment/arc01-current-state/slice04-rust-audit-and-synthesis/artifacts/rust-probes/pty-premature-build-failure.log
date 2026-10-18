@@ -1,0 +1,9 @@
+MODE=normal timeout=False wait_status=256
+b'Traceback (most recent call last):\r\n  File "/Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning/project09-quality-assessment/arc01-current-state/slice04-rust-audit-and-synthesis/artifacts/rust-probes/pty_probe.py", line 76, in <module>\r\n    exercise(probe_mode)\r\n  File "/Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning/project09-quality-assessment/arc01-current-state/slice04-rust-audit-and-synthesis/artifacts/rust-probes/pty_probe.py", line 22, in exercise\r\n    os.execv(sys.argv[1], [sys.argv[1], mode])\r\nFileNotFoundError: [Errno 2] No such file or directory\r\n'
+Traceback (most recent call last):
+  File "/Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning/project09-quality-assessment/arc01-current-state/slice04-rust-audit-and-synthesis/artifacts/rust-probes/pty_probe.py", line 76, in <module>
+    exercise(probe_mode)
+  File "/Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning/project09-quality-assessment/arc01-current-state/slice04-rust-audit-and-synthesis/artifacts/rust-probes/pty_probe.py", line 70, in exercise
+    assert not timed_out and b"PROBE_RETURNED:Ok(())" in output
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
