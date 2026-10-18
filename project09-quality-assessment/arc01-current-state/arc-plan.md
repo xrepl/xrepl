@@ -1,6 +1,7 @@
 # Arc01 — xrepl current-state assessment
 
-Status: active; first slice prepared, execution pending. Created 2026-10-17.
+Status: active; plan assessment and independent Rust inspection in progress.
+Created 2026-10-17.
 Parent: [Project09](../project-plan.md).
 
 ## Capability and slice roadmap
@@ -14,10 +15,13 @@ or map, preserving original evidence and unresolved gaps for later consumers.
 | [slice01-plan-assessment](slice01-plan-assessment/slice-plan.md) | Cited plan-quality report, source/corpus inventory and obligation IDs | Project01–07 originals/navigation, Project08 provenance, source structure | Prepared |
 | slice02-implementation-map | Capability status map and native build/test receipts | Slice01 obligations/baseline plus code/test inspection | Planned; detail after Slice01 |
 | slice03-lfe-audit | LFE/OTP audit report with severity, evidence and coverage | Existing inventory/map, Chineual guide and applicable OTP/Erlang guidance | Planned; detail after Slice02 |
-| slice04-rust-audit-and-synthesis | Rust audit, index, cross-language analysis and prioritized combined backlog | Existing map/evidence, LFE findings and full Rust audit guidance | Planned; detail after Slice03 |
+| [slice04-rust-audit-and-synthesis](slice04-rust-audit-and-synthesis/slice-plan.md) | Rust audit, index, cross-language analysis and prioritized combined backlog | Pinned Rust source permits independent inspection now; combined synthesis waits for map/LFE findings | Rust CC assignment active; synthesis pending |
 
 Later slices remain roadmap entries, not empty directories or issued prompts.
 No artificial implementation work is needed to make assessment useful.
+Rust inspection has no dependency on the LFE review's conclusions. Run that
+bounded source audit alongside plan assessment; retain map/LFE dependencies
+for the final synthesis. Sofie still owns cross-language design and review.
 
 ## Method and composition
 
@@ -60,3 +64,6 @@ roadmap; scope changes go to the Operator. Commit and advance as gates permit.
   detail until its evidence inputs exist.
 - v1.1 — 2026-10-17: carry the Operator's optional-CC coordination and
   Expedited Mode selection into arc execution; deliverable scope is unchanged.
+- v1.2 — 2026-10-17: original corpus lookup completed across three bounded
+  helpers; start independent Rust inspection on the unchanged source while
+  plan assessment proceeds. This changes scheduling, not audit scope or gates.

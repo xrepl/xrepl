@@ -1,6 +1,7 @@
 # Slice01 — existing-plan quality assessment
 
-Status: prepared; execution pending. Created 2026-10-17.
+Status: active; corpus lookup complete, coordinating assessment in progress.
+Created 2026-10-17.
 Parent: [Arc01](../arc-plan.md). Workflow: Operator-defined single coordinating
 context with optional CC agents; Expedited Mode enabled.
 
@@ -26,6 +27,9 @@ and status before execution and record drift.
 1. Inventory originals and wrappers, map former paths, distinguish duplicates,
    and give every in-scope document a read/disposition record. Recover truncated
    reads. Establish supersession by chronology/evidence without erasing failures.
+   Attribute full-document lookup reads to the actual helper context; the
+   coordinator checks primary witnesses before making judgments. Do not claim
+   that another context's reading was loaded wholesale into this one.
 2. Map tracked first-party source, tests, crate/build entrypoints and dependency
    boundaries. Identify exclusions and remaining audit coverage explicitly.
    Exclude private assistant state, vendored/build trees and personal runtime data.
