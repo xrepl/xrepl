@@ -1,6 +1,6 @@
 ---
 project: project10-shared-repl-architecture
-status: slice02-candidate-returned
+status: resource-slices-prepared
 depends-on: [cayrn-project02-bounded-contracts]
 blocks: [xrepl-0.2.x-core-migration-candidate]
 related: [cayrn-project01-shared-repl-architecture, project05-rust-frontend, project06-pluggable-shells, project07-story-runtime, project09-quality-assessment, xrepl_protocol, xrepl_term]
@@ -8,7 +8,7 @@ related: [cayrn-project01-shared-repl-architecture, project05-rust-frontend, pro
 
 # xrepl 0.2.x — migration onto Cayrn
 
-Version 2.0, 2026-10-18. Author: Sofie, current design/planning context. The
+Version 2.1, 2026-10-18. Author: Sofie, current design/planning context. The
 Operator explicitly retained this project name and approved the core migration,
 agent consolidation and LFE conversion; UX follows in a separate future project.
 This turn prepares plans/open sets, not implementation or release acceptance.
@@ -55,6 +55,10 @@ historical, not proof of the new plan. Cayrn's transfer checker resolves this
 preserved snapshot when checking original source bytes after refocus.
 
 ## Workflow and authority
+
+The original workflow text below is historical. The later Operator-selected
+one-contributor section and Current resource planning section govern these new
+prepared slices; commit approval does not change independent evidence strength.
 
 Default Two-Contributor Workflow; no CRC, delegation or Expedited Mode inferred
 from Project09 or prior prototype work. Sofie prepares design/first slices with
@@ -106,8 +110,8 @@ actual upstream results. A held contract is resolved before dependent work.
 
 | Arc | Useful outcome and delivery home | Actual prerequisites | State |
 | --- | --- | --- | --- |
-| [Arc01 — integrated native agent](arc01-integrated-native-agent/arc-plan.md) | Existing agent runs from apps/cayrn_lfe, independently startable; then an LFE implementation preserves behavior | Pinned standalone source and current xrepl/Cayrn interfaces; no whole Cayrn hardening prerequisite | Import committed; LFE conversion prepared |
-| Arc02 — sustainable native evaluation | Native resource retirement/fencing and safe size-limited previews/output support long sessions | Arc01; Cayrn C-RESOURCE for native resource contract; existing bounded wire for size-safe native fixes | Roadmap only |
+| [Arc01 — integrated native agent](arc01-integrated-native-agent/arc-plan.md) | Existing agent runs from apps/cayrn_lfe, independently startable; then an LFE implementation preserves behavior | Pinned standalone source and current xrepl/Cayrn interfaces; no whole Cayrn hardening prerequisite | Import and LFE conversion committed; independent gates pending |
+| [Arc02 — sustainable native evaluation](arc02-sustainable-native-evaluation/arc-plan.md) | Native resource retirement/fencing and safe size-limited previews/output support long sessions | Arc01; Cayrn C-RESOURCE for native resource contract; existing bounded wire for size-safe native fixes | Arc/first slice prepared; actual Cayrn C03 return required |
 | Arc03 — Cayrn-backed session and LFE services | Cayrn authority for catalog/names/metadata/lifecycle plus supported LFE developer helpers and history semantics | Bounded Cayrn administration APIs and Arc02 runtime; Project09/source contracts | Roadmap only |
 | Arc04 — input and shell services | Correlated program input, multiline/multiform payloads and shell switching preserve session identity/state ownership | Shared input contract; Arc03 semantic services; native hooks | Roadmap only |
 | Arc05 — application and legacy compatibility | Story/save/resume/graphics path plus explicit old transport/client and snapshot compatibility, with obsolete infrastructure retired after proof | Earlier core paths and supported-feature map; bounded compatibility/security decisions | Roadmap only |
@@ -146,6 +150,10 @@ project. Formal release remains gated on that later UX outcome or an explicit
 Operator re-scope, plus package validation and publication approval.
 
 ## Version history
+
+- v2.1 —2026-10-18: Slice02 returns identify actual resource holders; prepare
+  paired native2 journal/fencing/capture work and name node-identity/size owners.
+  Plans only; source commits recorded separately, previous gates preserved.
 
 - v2.1 —2026-10-18: Operator-approved first implementation commits recorded;
   next Slice02 open set prepared under the same one-contributor workflow.
@@ -210,3 +218,33 @@ UX or historical acceptance scope was closed.
 Source `f261152fc150a1addf3286a97b6a1a0324a42869` records the validated candidate unchanged.
 The Operator approved implementation/return commits and next resource planning;
 prior independent/Operator gates remain distinct from this commit approval.
+
+## Current resource planning —2026-10-18
+
+The Operator authorized committing Slice02 implementation/returns, then planning
+next resource slices with the same one-collaborator method. Completed commits:
+Cayrn722d086 + return dabdb51; xreplf261152 + return34a7ee9. All tested source bytes
+matched saved candidates before commit. This is not independent reproduction,
+a formal child/parent acceptance or authority to execute new resource changes.
+
+The prepared sequence is C03 (journal-backed native identities/native2 Rust
+connector with non-language proof) → xrepl Arc02/Slice01 (native token fencing,
+producer-aware collector retirement/pressure, full matching real-client gate).
+Public operation IDs/RPC1 stay intact; native wire2 deliberately requires the
+matching agent, with no protocol1 fallback. The real gate is held only until its
+bounded native consumer exists, and must run at that landing. No earlier result
+is relabeled as native2 evidence. Source pins come from actual returns.
+
+Canonical proposed contract: /Users/oubiwann/lab/oxur/cayrn/.worktrees/planning/project02-core-hardening/arc01-native-session-hardening/slice03-journal-backed-native-identities/artifacts/native-resource-contract.md.
+It replaces the formerly unresolved **per-operation** resource decision for this
+prepared pair; native node-lifetime4096 tombstones remain an unresolved, named
+xrepl Arc02/Slice02 decision, and size-safe previews/output remain Slice03.
+Cayrn Arc01/Slice04 consumes the capture, node-identity and size results before
+full sustained-use composition. This adds detail/owners, not a missing-obligation
+waiver. Rooted local producer lifetimes are runtime-specific; Rust retains all
+admission/durability/identity policy. Other runtimes supply equivalent completion
+proofs under their own adapters, not LFE tracing baked into Rust.
+
+New open sets are prepared for review, not executed or automatically committed.
+No whole-project close, new investigation, UX work or publication. Existing
+X-UX-01/C-UX-01, Project01/Project09 and independent gates remain intact.

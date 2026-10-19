@@ -81,3 +81,15 @@ Output hardening must retain the complete supported captured stream as ordered,
 bounded chunks. Explicitly bounded/truncated **value previews** do not authorize
 silent truncation of output or pruning a live session's transcript. Capture
 failure must not be acknowledged as durable output.
+
+
+## Proposed operation-resource design —2026-10-18
+
+The previous reserved operation-resource decision is now specified for the next
+prepared pair in /Users/oubiwann/lab/oxur/cayrn/.worktrees/planning/project02-core-hardening/arc01-native-session-hardening/slice03-journal-backed-native-identities/artifacts/native-resource-contract.md. This is a proposed native2 design for Operator review,
+not an implemented result. It uses durable admission tokens/indexed correlation
+in Rust and native producer/drain proofs; no durable authority migrates to LFE.
+Only that per-operation decision is replaced here. Node context/authority
+retirement, size-safe result/output and later input decisions retain their named
+owners/gates. See current project resource-planning section for sequence and
+compatibility; no original complete-transcript/failure requirement is relaxed.

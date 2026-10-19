@@ -55,3 +55,14 @@ validated, byte-identified converted-agent candidate/return is the bounded input
 for Cayrn, even if its implementation commit has not yet been requested. No
 independent acceptance, whole-arc close, push/publication or later slice is implied.
 The staged sequence is authorized without intermediate routine approval.
+
+
+## Resource-planning authorization —2026-10-18
+
+The Operator authorized Slice02 implementation/return commits and next resource
+plans with one collaborator, Sofie. Those commits are recorded in project-plan.md.
+Current open sets are Cayrn Arc01/Slice03 and xrepl Arc02/Slice01. Preparing them
+is not execution or source/new-plan commit authority; xrepl requires the actual
+new Rust native2 return before dependent edits. Do not extend Slice02's earlier
+execution activation to these new slices. Preserve prior self-attested versus
+independent/Operator gates and deferred UX ownership. No delegation/push/publish.
