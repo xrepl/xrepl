@@ -248,3 +248,13 @@ proofs under their own adapters, not LFE tracing baked into Rust.
 New open sets are prepared for review, not executed or automatically committed.
 No whole-project close, new investigation, UX work or publication. Existing
 X-UX-01/C-UX-01, Project01/Project09 and independent gates remain intact.
+
+
+## Autonomous Mode — 2026-10-18
+
+Operator-authorized collaboration-framework 2.8.0 Autonomous Mode applies only
+to the remainder of [arc02-sustainable-native-evaluation](arc02-sustainable-native-evaluation/arc-plan.md#autonomous-mode-activation--2026-10-18).
+That dated activation is the current scope/branch/role/review/commit authority,
+superseding earlier one-contributor and planning-only holds for this arc.
+Historical evidence and outstanding independent/Operator gates retain their
+meaning. No push/publication, later arc or UX work is authorized.

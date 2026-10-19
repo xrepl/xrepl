@@ -179,3 +179,13 @@ commands/exits/counts (including filtered, failed, blocked, unrun), candidate id
 complete artifact inventory, scope-as-specified/delivered and bubble-up to the arc.
 Self-check evidence is attested. Never turn a missing native prerequisite into a
 green skip or claim physical durability from injected transaction aborts.
+
+
+## Assignment transition — Autonomous Mode
+
+2026-10-18: initial `cc-prompt.md` preserved, superseded only in execution/
+contributor authority by `cc-prompt-iteration01.md` (current, issued to a separate
+CC context). Technical contract/rows/allowlists unchanged. No implementation pass
+previously executed; correction budget zero of five. CDC /root independently
+reviews CC work and owns planning commits/retrospective. Actual CC acknowledgment
+and source intake go in artifacts/execution.md.

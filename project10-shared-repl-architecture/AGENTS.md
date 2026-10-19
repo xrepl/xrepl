@@ -66,3 +66,13 @@ is not execution or source/new-plan commit authority; xrepl requires the actual
 new Rust native2 return before dependent edits. Do not extend Slice02's earlier
 execution activation to these new slices. Preserve prior self-attested versus
 independent/Operator gates and deferred UX ownership. No delegation/push/publish.
+
+
+## Autonomous Mode — 2026-10-18
+
+Operator-authorized collaboration-framework 2.8.0 Autonomous Mode applies only
+to the remainder of [arc02-sustainable-native-evaluation](arc02-sustainable-native-evaluation/arc-plan.md#autonomous-mode-activation--2026-10-18).
+That dated activation is the current scope/branch/role/review/commit authority,
+superseding earlier one-contributor and planning-only holds for this arc.
+Historical evidence and outstanding independent/Operator gates retain their
+meaning. No push/publication, later arc or UX work is authorized.

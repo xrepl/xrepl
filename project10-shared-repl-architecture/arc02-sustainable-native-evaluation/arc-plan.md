@@ -71,3 +71,46 @@ results, not speculative future pins.
 - v1.0 —2026-10-18: Arc01/Slice02 conversion/profile returns identify concrete
   resource holders. Prepare native capture/fencing slice paired with Rust C03,
   split remaining node identity and size obligations into explicit later owners.
+
+
+## Autonomous Mode activation — 2026-10-18
+
+The Operator explicitly selected collaboration-framework **2.8.0 Autonomous
+Mode** for the remainder of this arc. This supersedes earlier planning-only,
+one-contributor/no-delegation and per-commit approval restrictions for this
+authorized scope; it does not rewrite historical prompts or upgrade prior
+self-attested evidence. Endpoint: **arc02-sustainable-native-evaluation**, including remaining slices,
+iterations, independent review, remediation, local commits, composition checks
+and CDC retrospectives. No later arc, project acceptance, push, merge, registry
+publication or UX scope is authorized. Existing Project01/Project09 and Operator
+gates remain pending unless actually discharged under their own contracts.
+
+Source: `/Users/oubiwann/lab/lfe/xrepl/xrepl` on **release/0.2.x**, intake HEAD `f261152fc150a1addf3286a97b6a1a0324a42869`;
+plans remain in `/Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning` on orphan `planning`.
+These existing non-default source branches are reused. Preserve unrelated work,
+including xrepl's untracked docs/design. Source/planning commits use separate
+explicit allowlists and both required co-author trailers.
+
+CDC: Sofie in the primary /root context, owning design, integration and
+retrospectives. Substantive slices use Two-Contributor execution: a fully
+briefed CC subagent implements; CDC independently inspects source and reproduces
+evidence, recording the actual author/context in `cdc-verification.md`. If CDC
+implements a repair, assign a different reviewer before acceptance. Independent
+arc composition uses a fresh reviewer context. One-Contributor is reserved for
+bounded mechanical tasks with recorded rationale and self-checks. Routine
+handoffs use contributor tools with preserved assignments; arrangement changes
+retain findings, iteration counts and evidence state. Five-pass limits remain.
+
+Current open work: Cayrn Arc01/Slice03 and xrepl Arc02/Slice01. Every opening row
+is still open. Earlier Slice01/02 returns retain their attested/pending status.
+Cayrn native2 implementation returns before dependent xrepl source changes;
+matching-agent real gates remain held until xrepl returns. No whole-arc dependency
+cycle or retroactive conformance claim. Later roadmap slices require complete
+engineering-ready open sets before implementation. Material architecture/scope
+changes or ambiguities go to the Operator; pause affected work only.
+
+Expedited Mode applies within this endpoint. Close/bubble up only against actual
+reviewed evidence, and write `cdc-retrospective.md` at every newly closing scale.
+The initial prepared prompt remains preserved; activation and actual CC assignment
+are in the slice's `cc-prompt-iteration01.md`. CDC is next-action owner until the
+CC acknowledges its exact packet.
