@@ -1,0 +1,1481 @@
+diff --git a/README.md b/README.md
+index 2f03974..d9f4044 100644
+--- a/README.md
++++ b/README.md
+@@ -25,11 +25,17 @@ mkdir -m 700 /tmp/xrepl-agent-demo
+ The root launcher delegates to the component-local build, starts only the native
+ application and LFE, and accepts a single socket argument. Starting legacy
+ `xrepl` does not automatically start the agent. See the component README for
+-Cayrn host startup and current limits: 256 operations per context, 8KiB
+-source/output/value previews, no program input or live-state restoration.
+-The native OTP implementation and its tests are now written in LFE, preserving
+-the prototype contract. Resource/size hardening follows separately. The native app remains 0.1.0 within
+-xrepl's 0.2.0 development branch. Nothing new is published.
++Cayrn host startup and current limits: 64 live capture origins per context,
++8KiB source/output/value previews, 4096 node-lifetime context identities, no
++program input or live-state restoration. Native2 uses sparse admission tokens
++and retires drained capture origins; quiet sessions have no total-operation
++count limit. Background writers preserve their original attribution. A full
++origin budget refuses evaluation explicitly while preserving the environment.
++See the component README for its trusted local-descendant capture boundary.
++The native OTP implementation/tests are written in LFE; remaining node-identity
++and size hardening follows separately. Native2 requires the matching rebuilt
++Cayrn host, while public client RPC remains version 1. The native app remains
++0.1.0 within xrepl's 0.2.0 development branch. Nothing new is published.
+ 
+ ##### Table of Contents
+ 
+diff --git a/apps/cayrn_lfe/AGENTS.md b/apps/cayrn_lfe/AGENTS.md
+index b6c2ed8..8bc78b4 100644
+--- a/apps/cayrn_lfe/AGENTS.md
++++ b/apps/cayrn_lfe/AGENTS.md
+@@ -1,14 +1,16 @@
+ # Native Cayrn LFE agent
+ 
+ Sofie (she/her) is the assistant. Current authority is xrepl's orphan planning
+-worktree, project10-shared-repl-architecture, Arc01. This is a reusable,
++worktree, project10-shared-repl-architecture, Arc02. This is a reusable,
+ independently startable OTP application. Rust Cayrn owns durable session policy;
+ this component owns live LFE contexts, capture and native control only.
+ 
+ Imported from cayrn-lfe 1b04c15ac325731aab68a7491d23e4a9fecaa47a with its license.
+ The first slice preserved pinned source/test bytes. Slice02 converts all five
+ OTP runtime modules and three native test modules to LFE while preserving
+-semantics and metadata/launcher identities. Resource/size fixes are later work. Do not add legacy xrepl
++semantics and metadata/launcher identities. Arc02 adds native2 token fencing
++and producer-aware capture retirement; node identity and size hardening remain
++later slices. Do not add legacy xrepl
+ services to the startup dependency graph. No automatic replay after runtime loss.
+ Use make build/check here or root make build-agent/check-agent. Keep planning
+ records in the planning worktree and preserve the standalone predecessor.
+@@ -16,7 +18,13 @@ Follow root AGENTS.md, OTP guidance and the Operator-selected LFE style guide
+ when editing language implementation. Self-review is attested, not independent.
+ Assistant-authored commits require the root planning Codex/Billo AI trailers.
+ 
+-All seven native cases must be discovered by make check. The I/O companion
+-suite includes evaluator/application tests explicitly because Rebar's default
+-EUnit discovery does not enumerate all LFE test source files. Preserve declared
++All native evaluator, I/O, application and resource cases must be discovered by
++make check. The I/O companion suite includes evaluator/application/resource
++tests explicitly because Rebar's default
++EUnit discovery does not enumerate all LFE test source files. Preserve strict
++producer birth/exit/delivery, send/request-count and durable ACK drain witnesses;
++a root outcome, empty mailbox or timer cannot authorize natural retirement.
++Quiet results wait for exact collector DOWN, and all trace sessions have explicit
++ownership/teardown. Keep the 64 live-origin budget distinct from lifetime calls.
++Preserve declared
+ callback/test names and classify LFE compiler-generated exports separately.
+diff --git a/apps/cayrn_lfe/README.md b/apps/cayrn_lfe/README.md
+index b2c0baf..5d1fb09 100644
+--- a/apps/cayrn_lfe/README.md
++++ b/apps/cayrn_lfe/README.md
+@@ -38,11 +38,14 @@ It refuses an existing socket path; choose a fresh private directory after an
+ unclean node exit, rather than deleting an endpoint another process may own.
+ 
+ The internal agent wire is bounded, four-byte big-endian length-prefixed JSON,
+-version 1 independently of public client RPC. Hello carries session, generation
+-and authority; dispatch carries operation/source and expected generation/authority.
+-Output has a canonical decimal-string capture position and immutable operation
+-attribution. Rust must commit output before sending its ACK. Ordinary results
+-and errors remain separate. Agent IDs are binaries, never dynamically made atoms.
++version 2 independently of public client RPC version 1. Hello carries session,
++generation and authority. Dispatch/cancel/output/outcome use canonical positive
++decimal admission tokens (1..i64::MAX); tokens may be sparse. Rust maps them to
++public operation IDs using its durable journal. A scalar high-water fence rejects
++stale/replayed native dispatches without retaining all past operation identities.
++Output has an independent canonical decimal-string capture position and immutable
++origin attribution. Rust must commit output before sending its ACK. Ordinary
++results and errors remain separate. Agent IDs are binaries, never dynamically made atoms.
+ 
+ The prototype supports persistent bindings, top-level functions/macros, value
+ previews, foreground and late output through inherited group leaders, and ordinary
+@@ -52,14 +55,37 @@ trusted code in the node; it is not a sandbox or rollback system. Definitions
+ made earlier in a failed multi-form request are not committed to the saved
+ environment; external effects and process-dictionary changes are not rolled back.
+ 
+-Limits: 64 live contexts, 256 operations per context, 64 pending I/O writes,
+-8192-byte source/output/value previews, 256KiB frames, and 4096 context identities
+-per application lifetime. Operation I/O servers are retained to attribute late
+-writers, with the context budget bounding them. Identity tombstones and the
+-volatile duplicate guard are not evicted to make a stale dispatch executable.
+-Create a fresh session when the operation budget is exhausted. Restarting the
+-application loses contexts and its volatile identity guard; Rust must report
+-state loss, never recreate an old environment from transcript history.
++Limits: 64 live contexts, 64 live capture origins per context, 64 pending I/O
++writes, 8192-byte source/output/value previews, 256KiB frames, and 4096 context
++identities per application lifetime. There is no total-operation count limit.
++A quiet evaluation returns its origin credit only after the collector has
++physically stopped. Late descendants retain their original collector/token.
++At 64 live origins a new valid token receives the ordinary Failed preview
++`native resource limit: 64 live capture origins; source not evaluated`.
++Its source does not run or change the saved environment, and its token remains
++consumed. Capacity recovers when producers finish; retry requires a new public
++operation ID. If every producer needs another evaluation to release it, external
++runtime work or close is needed. Control remains available at full capacity.
++
++Each origin owns an isolated OTP trace session on its paused evaluator and local
++spawn descendants. Producer birth/exit/delivery witnesses, traced I/O sends,
++actual I/O requests and durable-write ACKs jointly establish quiescence. Quiet
++foreground results wait for collector DOWN; results with live background
++producers can publish while retaining that origin. Capture tracing is destroyed
++explicitly without changing independently configured trace sessions.
++This covers inherited-group-leader local `spawn`, `spawn_link`, `spawn_monitor`
++and `spawn_opt`, including asynchronous I/O senders that exit before an ACK.
++Assigning an old group leader to unrelated existing processes, remote processes,
++explicit devices and user tampering with tracing are outside this trusted
++profile. User process/heap/message fanout is not sandboxed by origin credits.
++
++The 4096 cumulative context-identity guard remains a known node-lifetime limit;
++large-value assertions/output chunking and capture-pressure behavior also remain
++for later hardening. These limits are not silently evicted or called resolved.
++Restarting the application loses contexts and its volatile identity guard; Rust
++must report state loss, never recreate an environment from transcript history.
++Native2 requires a matching rebuilt Cayrn host; there is no native1 fallback.
++The standalone native1 predecessor remains usable with its prior pinned host.
+ 
+ Host-agent link loss terminates that context and marks its state uncertain/lost;
+ it never kills the shared BEAM or peer contexts. Host restart retains the Rust
+@@ -80,8 +106,9 @@ uncertainty. Peers in the node remain alive. A completed evaluation can win a
+ cancel race. Cooperative interruption is a separate capability supported by the
+ shared Rust contract, not currently by this LFE implementation.
+ 
+-Close stops the owned foreground evaluator, seals all operation I/O servers,
+-waits for their seal messages and Rust's outstanding capture ACKs, then emits a
++Close stops a running foreground evaluator or publishes an already computed
++result, seals Live capture origins and waits for their seal messages, all
++Retiring collector DOWNs and Rust's outstanding capture ACKs before emitting a
+ close barrier. Sealed I/O cannot append later output. Unmanaged external processes
+ are not rolled back or silently claimed stopped. A five-second barrier timeout
+ reports incomplete close; socket EOF is never a close acknowledgement. Rust
+@@ -103,13 +130,13 @@ It starts `cayrn_lfe` and `lfe`, without starting legacy `xrepl`, Ranch,
+ `xrepl_protocol` or `xrepl_term`. Root and component Rebar caches are separate.
+ The component version stays 0.1.0 while the enclosing xrepl release is 0.2.0.
+ 
+-For Cayrn's real native/terminal tests, explicitly set `CAYRN_LFE_DIR` to this
+-`apps/cayrn_lfe` directory and `XREPL_BIN` to the built xrepl Rust binary.
+-The independent app startup test complements the six preserved evaluator/I/O
+-tests; it does not claim that resource limits or oversized previews are fixed.
+-
+-The LFE EUnit companion module explicitly includes the evaluator and application
+-test modules, so component-only `make check` executes all seven native cases.
+-Callback/module names retain underscores for OTP and wire compatibility; new
+-private helpers use LFE conventions. Resource budgets and oversized-value
+-behavior remain unchanged pending deliberate hardening.
++Cayrn's native/terminal targets default to this integrated component and the
++sibling xrepl Rust binary; explicit `CAYRN_LFE_DIR` and `XREPL_BIN` overrides are
++available. Component-only `make check` explicitly discovers evaluator, application
++and resource tests through the I/O companion generator. Resource cases cover
++512 quiet sparse dispatches, 64/65 origin pressure, replay non-execution, producer
++and request/trace order inversions, ACK/close races, physical retirement and
++independent tracing. The matching Cayrn integration fixture performs 1024 further
++evaluations while retaining an early late writer's attribution. Callback/module
++names retain underscores for OTP/wire compatibility; private helpers use LFE
++conventions. Remaining node-identity/size limits are recorded above.
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_context.lfe b/apps/cayrn_lfe/src/cayrn_lfe_context.lfe
+index dca1f07..ddf9bdf 100644
+--- a/apps/cayrn_lfe/src/cayrn_lfe_context.lfe
++++ b/apps/cayrn_lfe/src/cayrn_lfe_context.lfe
+@@ -14,11 +14,11 @@
+ (defspec (init 1) (((port)) (tuple 'ok (map) (timeout))))
+ 
+ (defun init (socket)
+-  "Create an opaque evaluator environment and bounded capture/control state."
++  "Create an opaque environment, scalar fence and bounded live origins."
+   (process_flag 'trap_exit 'true)
+   (tuple 'ok
+     (map 'socket socket 'identity 'undefined 'env (cayrn-lfe-eval:new)
+-         'active 'undefined 'seen (map) 'ios '() 'pending (map)
++         'active 'undefined 'last-token 0 'origins (map) 'pending (map)
+          'seq 0 'closing 'undefined)
+     5000))
+ 
+@@ -28,43 +28,71 @@
+            (tuple 'stop (term) (map)))))
+ 
+ (defun handle_info
+-  "Process native control, evaluator and capture events in mailbox order."
++  "Process native control, evaluator, collector and capture events."
+   (('activate (= (map 'socket socket) state))
+    (let (('ok (inet:setopts socket '(#(active once)))))
+      (tuple 'noreply state 5000)))
+   (((tuple 'tcp socket bytes) (= (map 'socket socket) state))
+-   (try
+-     (case (command (json:decode bytes) state)
++   (let ((result
++           (try (command (json:decode bytes) state)
++             (catch
++               ((tuple _ _ _) (tuple 'invalid state))))))
++     (case result
+        ((tuple 'continue next)
+-        (let (('ok (inet:setopts socket '(#(active once)))))
+-          (tuple 'noreply next)))
+-       ((tuple 'stop next) (tuple 'stop 'normal next)))
+-     (catch ((tuple _ _ _) (tuple 'stop 'invalid_agent_command state)))))
+-  (((tuple 'capture from ref operation text) state)
+-   (let ((pending (map-get state 'pending)))
++        ;; A successful dispatch has transferred acquired resources to next.
++        ;; Rearm failure must terminate that state, never its predecessor.
++        (case (inet:setopts socket '(#(active once)))
++          ('ok (tuple 'noreply next))
++          ((tuple 'error reason) (tuple 'stop reason next))))
++       ((tuple 'stop next) (tuple 'stop 'normal next))
++       ((tuple 'invalid previous)
++        (tuple 'stop 'invalid_agent_command previous)))))
++
++  (((tuple 'capture io from ref operation text) state)
++   (let* (((tuple stored-operation _ _ 'live) (origin io state))
++          ('true (=:= operation stored-operation))
++          (pending (map-get state 'pending)))
+      (if (< (map_size pending) 64)
+        (let* ((n (+ (map-get state 'seq) 1))
+-              (position (integer_to_binary n)))
+-         (let (('ok (send-event state
+-                      (map 'kind 'output 'operation operation
+-                           'position position 'text text))))
+-           (tuple 'noreply
+-             (map-set state 'seq n
+-               'pending (map-set pending position (tuple from ref))))))
++              (position (integer_to_binary n))
++              ('ok (send-event state
++                     (map 'kind 'output 'operation operation
++                          'position position 'text text))))
++         (tuple 'noreply
++           (map-set state 'seq n
++             'pending (map-set pending position (tuple io from ref)))))
+        (progn
+          (! from (tuple 'io_reply ref '#(error enobufs)))
+          (tuple 'stop 'capture_overflow state)))))
+   (((tuple 'evaluated pid operation status text env)
+-    (= (map 'active (tuple pid monitor operation)) state))
++    (= (map 'active (tuple pid monitor operation io)) state))
+    (erlang:demonitor monitor '(flush))
+    (let* (('true (=< (byte_size text) 8192))
+-         ('ok (send-event state
+-                (map 'kind 'outcome 'operation operation
+-                     'phase status 'value text))))
+-     (transition
+-       (progress (map-set state 'active 'undefined 'env env)))))
++          (next (map-set state 'env env
++                  'active (tuple 'finishing operation io status text))))
++     (cayrn_lfe_io:finished io (self))
++     (if (=:= (map-get state 'closing) 'undefined)
++       (tuple 'noreply next)
++       (transition (progress (publish next))))))
++  (((tuple 'foreground_ready io operation) state)
++   (let* (((tuple stored-operation _ _ 'live) (origin io state))
++          ('true (=:= operation stored-operation)))
++     (transition (progress (publish-origin io state)))))
++  (((tuple 'retire_ready io operation) state)
++   (let* (((tuple stored-operation trace monitor 'live) (origin io state))
++          ('true (=:= operation stored-operation)))
++     (if (=:= (map-get state 'closing) 'undefined)
++       (let* (('false (pending-origin? io state))
++              ('true (unlink io))
++              (origins (map-get state 'origins))
++              (next (map-set state 'origins
++                      (map-set origins io
++                        (tuple operation trace monitor 'retiring)))))
++         (cayrn_lfe_io:retire io (self))
++         (tuple 'noreply next))
++       (tuple 'noreply state))))
+   (((tuple 'DOWN monitor 'process pid _reason)
+-    (= (map 'active (tuple pid monitor operation) 'closing mode) state))
++    (= (map 'active (tuple pid monitor operation _io) 'closing mode) state))
+    (when (orelse (=:= mode 'close) (=:= mode 'cancel)))
+    (let (('ok (send-event state
+                 (map 'kind 'outcome 'operation operation 'phase 'cancelled
+@@ -72,11 +100,24 @@
+                                "environment discarded")))))
+      (transition (progress (map-set state 'active 'undefined)))))
+   (((tuple 'DOWN monitor 'process pid reason)
+-    (= (map 'active (tuple pid monitor _)) state))
++    (= (map 'active (tuple pid monitor _ _) ) state))
+    (tuple 'stop (tuple 'evaluator_lost reason) state))
+-  (((tuple 'sealed io) (= (map 'waiting waiting) state))
+-   (transition
+-     (progress (map-set state 'waiting (lists:delete io waiting)))))
++  (((tuple 'DOWN monitor 'process io reason) state)
++   (case (maps:find io (map-get state 'origins))
++     ((tuple 'ok (tuple _ trace stored-monitor 'retiring))
++      (when (=:= reason 'normal) (=:= monitor stored-monitor))
++      (trace:session_destroy trace)
++      (let* ((next (map-set state 'origins
++                     (maps:remove io (map-get state 'origins))))
++             (published (publish-origin io next)))
++        (transition (progress published))))
++     (_ (tuple 'stop (tuple 'collector_lost reason) state))))
++  (((tuple 'sealed io operation) (= (map 'waiting waiting) state))
++   (let* (((tuple stored-operation _ _ 'live) (origin io state))
++          ('true (=:= operation stored-operation))
++          ('true (lists:member io waiting)))
++     (transition
++       (progress (map-set state 'waiting (lists:delete io waiting))))))
+   (('close_timeout (= (map 'closing mode) state))
+    (when (=/= mode 'undefined))
+    (let (('ok (send-event state
+@@ -93,82 +134,142 @@
+   ((_ state) (tuple 'noreply state)))
+ 
+ (defun command
+-  (((map #b("kind") #b("hello") #b("version") 1
++  (((map #b("kind") #b("hello") #b("version") 2
+          #b("session") sid #b("generation") generation
+          #b("authority") authority)
+     (= (map 'identity 'undefined) state))
+    (let* (('true (andalso (valid-id? sid) (valid-id? generation)
+                          (valid-id? authority)))
+-         ('true (< (ets:info 'cayrn_lfe_contexts 'size) 4096))
+-         ('true (ets:insert_new 'cayrn_lfe_contexts
+-                  (tuple sid generation authority)))
+-         ('ok (send-event state
+-                (map 'kind 'ready 'version 1 'backend #b("lfe")
+-                     'interrupt #b("session_destructive")
+-                     'close_barrier 'true))))
++          ('true (< (ets:info 'cayrn_lfe_contexts 'size) 4096))
++          ('true (ets:insert_new 'cayrn_lfe_contexts
++                   (tuple sid generation authority)))
++          ('ok (send-event state
++                 (map 'kind 'ready 'version 2 'backend #b("lfe")
++                      'interrupt #b("session_destructive")
++                      'close_barrier 'true))))
+      (tuple 'continue
+        (map-set state 'identity (tuple sid generation authority)))))
+   (((map #b("kind") #b("dispatch") #b("operation") operation
+          #b("source") source #b("generation") generation
+          #b("authority") authority)
+     (= (map 'identity (tuple _ generation authority)
+-            'active 'undefined 'seen seen 'closing 'undefined) state))
+-   (when (is_binary source) (=< (byte_size source) 8192)
+-         (< (map_size seen) 256))
+-   (let* (('true (valid-id? operation))
+-         ('false (maps:is_key operation seen)))
+-     (let* ((owner (self))
+-            (io (cayrn_lfe_io:start owner operation))
+-            (env (map-get state 'env))
+-            ((tuple pid monitor)
+-             (spawn_monitor
+-               (lambda ()
+-                 (receive
+-                   ('evaluate
+-                    (let* (((tuple status value next)
+-                            (cayrn-lfe-eval:run source env))
+-                           (phase (case status
+-                                    ('ok 'succeeded)
+-                                    ('error 'failed))))
+-                      (! owner (tuple 'evaluated (self) operation
+-                                      phase value next)))))))))
+-       (let* (('true (group_leader io pid)))
+-         (! pid 'evaluate)
+-         (tuple 'continue
+-           (map-set state 'active (tuple pid monitor operation)
+-                    'seen (map-set seen operation 'true)
+-                    'ios (cons io (map-get state 'ios))))))))
++            'active 'undefined 'closing 'undefined) state))
++   (when (is_binary source) (=< (byte_size source) 8192))
++   (let* ((n (token operation))
++          ('true (> n (map-get state 'last-token)))
++          (next (map-set state 'last-token n)))
++     (if (=:= 64 (map_size (map-get state 'origins)))
++       (let (('ok (send-event next
++                    (map 'kind 'outcome 'operation operation 'phase 'failed
++                         'value #b("native resource limit: 64 live capture "
++                                   "origins; source not evaluated")))))
++         (tuple 'continue next))
++       (evaluate operation source next))))
+   (((map #b("kind") #b("ack") #b("position") position) state)
+-   (let* (((tuple (tuple from ref) pending)
++   (let* (((tuple (tuple io from ref) pending)
+            (maps:take position (map-get state 'pending))))
+-     (! from (tuple 'io_reply ref 'ok))
++     (origin io state)
++     (cayrn_lfe_io:committed io from ref)
+      (progress (map-set state 'pending pending))))
+   (((map #b("kind") #b("close"))
+     (= (map 'closing 'undefined) state))
+    (begin-stop 'close state))
+   (((map #b("kind") #b("close")) state) (tuple 'continue state))
+-  (((map #b("kind") #b("cancel") #b("operation") operation)
+-    (= (map 'active (tuple _ _ operation) 'closing 'undefined) state))
+-   (begin-stop 'cancel state))
+-  (((map #b("kind") #b("cancel") #b("operation") operation)
+-    (= (map 'active 'undefined 'seen seen 'closing 'undefined) state))
+-   (if (maps:is_key operation seen)
+-     (tuple 'continue state)
+-     (let (('ok (send-event state
+-                  (map 'kind 'lost
+-                       'reason #b("interrupt won before native dispatch; "
+-                                  "context retired")))))
+-       (tuple 'stop state))))
+-  (((map #b("kind") #b("cancel")) state) (tuple 'continue state))
++  (((map #b("kind") #b("cancel") #b("operation") operation) state)
++   (let ((n (token operation)))
++     (case (map-get state 'active)
++       ((tuple _ _ active-operation _)
++        (when (=:= active-operation operation))
++        (if (=:= (map-get state 'closing) 'undefined)
++          (begin-stop 'cancel state)
++          (tuple 'continue state)))
++       ('undefined
++        (if (andalso (=:= (map-get state 'closing) 'undefined)
++                     (> n (map-get state 'last-token)))
++          (let (('ok (send-event state
++                       (map 'kind 'lost
++                            'reason #b("interrupt won before native dispatch; "
++                                       "context retired")))))
++            (tuple 'stop state))
++          (tuple 'continue state)))
++       (_ (tuple 'continue state)))))
+   (((map #b("kind") #b("stop")) state) (tuple 'stop state))
+   ((_ _) (error 'invalid_agent_command)))
+ 
++(defun evaluate (operation source state)
++  (let* ((owner (self))
++         (env (map-get state 'env))
++         ((tuple pid monitor)
++          (spawn_monitor
++            (lambda ()
++              (receive
++                ('evaluate
++                 (let* (((tuple status value next)
++                         (cayrn-lfe-eval:run source env))
++                        (phase (case status
++                                 ('ok 'succeeded)
++                                 ('error 'failed))))
++                   (! owner (tuple 'evaluated (self) operation
++                                   phase value next)))))))))
++    (try
++      (let (((tuple 'ok io trace) (cayrn_lfe_io:start owner operation pid)))
++        (try
++          (let* ((io-monitor (monitor 'process io))
++                 ('true (group_leader io pid)))
++            (! pid 'evaluate)
++            (tuple 'continue
++              (map-set state 'active (tuple pid monitor operation io)
++                'origins (map-set (map-get state 'origins) io
++                           (tuple operation trace io-monitor 'live)))))
++          (catch
++            ((tuple class reason stack)
++             (trace:session_destroy trace)
++             (unlink io)
++             (exit io 'kill)
++             (erlang:raise class reason stack)))))
++      (catch
++        ((tuple class reason stack)
++         (exit pid 'kill)
++         (erlang:demonitor monitor '(flush))
++         (erlang:raise class reason stack))))))
++
++(defun token
++  ((value) (when (is_binary value) (> (byte_size value) 0)
++                 (=< (byte_size value) 19))
++   (let* ((n (binary_to_integer value))
++          ('true (andalso (> n 0) (=< n 9223372036854775807)
++                          (=:= value (integer_to_binary n)))))
++     n))
++  ((_) (error 'invalid_native_token)))
++
++(defun origin (io state)
++  (map-get (map-get state 'origins) io))
++
++(defun pending-origin? (io state)
++  (lists:any (match-lambda
++               (((tuple incoming _ _)) (=:= incoming io)))
++    (maps:values (map-get state 'pending))))
++
++(defun publish-origin
++  ((io (= (map 'active (tuple 'finishing _ io _ _)) state))
++   (publish state))
++  ((_io state) state))
++
++(defun publish
++  (((= (map 'active (tuple 'finishing operation _ phase text)) state))
++   (let (('ok (send-event state
++                (map 'kind 'outcome 'operation operation
++                     'phase phase 'value text))))
++     (map-set state 'active 'undefined)))
++  ((state) state))
++
+ (defun begin-stop (mode state)
+   (erlang:send_after 5000 (self) 'close_timeout)
+-  (case (map-get state 'active)
+-    ((tuple pid _ _) (exit pid 'kill))
+-    ('undefined 'ok))
+-  (progress (map-set state 'closing mode)))
++  (let ((next (map-set state 'closing mode)))
++    (case (map-get next 'active)
++      ((tuple 'finishing _ _ _ _) (progress (publish next)))
++      ((tuple pid _ _ _) (exit pid 'kill) (progress next))
++      ('undefined (progress next)))))
+ 
+ (defun progress
+   (((= (map 'closing 'cancel 'active 'undefined) state))
+@@ -181,17 +282,29 @@
+   (((= (map 'closing 'close 'active 'undefined) state))
+    (case (maps:find 'waiting state)
+      ('error
+-      (let ((ios (map-get state 'ios)))
+-        (lists:foreach (lambda (pid) (! pid (tuple 'seal (self)))) ios)
+-        (progress (map-set state 'waiting ios))))
++      (let ((live (lists:filtermap
++                    (match-lambda
++                      (((tuple io (tuple _ _ _ 'live))) (tuple 'true io))
++                      ((_entry) 'false))
++                    (maps:to_list (map-get state 'origins)))))
++        (lists:foreach (lambda (io) (cayrn_lfe_io:seal io (self))) live)
++        (progress (map-set state 'waiting live))))
+      ((tuple 'ok '())
+-      (if (=:= (map_size (map-get state 'pending)) 0)
++      (if (andalso (=:= (map_size (map-get state 'pending)) 0)
++                   (not (retiring? state)))
+         (let (('ok (send-event state (map 'kind 'closed))))
+           (tuple 'stop state))
+         (tuple 'continue state)))
+      (_ (tuple 'continue state))))
+   ((state) (tuple 'continue state)))
+ 
++(defun retiring? (state)
++  (lists:any
++    (match-lambda
++      (((tuple _ _ _ 'retiring)) 'true)
++      ((_entry) 'false))
++    (maps:values (map-get state 'origins))))
++
+ (defun transition
+   (((tuple 'continue state)) (tuple 'noreply state))
+   (((tuple 'stop state)) (tuple 'stop 'normal state)))
+@@ -223,10 +336,15 @@
+ (defspec (terminate 2) (((term) (map)) 'ok))
+ 
+ (defun terminate (_reason state)
+-  "Stop only this context's evaluator, capture servers and socket."
++  "Stop only this context's evaluator, tracing, capture and socket."
+   (case (map-get state 'active)
+-    ((tuple pid _ _) (exit pid 'kill))
+-    ('undefined 'ok))
+-  (lists:foreach (lambda (pid) (exit pid 'kill)) (map-get state 'ios))
++    ((tuple pid _ _ _) (exit pid 'kill))
++    (_ 'ok))
++  (maps:foreach
++    (lambda (io entry)
++      (trace:session_destroy (element 2 entry))
++      (unlink io)
++      (exit io 'kill))
++    (map-get state 'origins))
+   (gen_tcp:close (map-get state 'socket))
+   'ok)
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_io.lfe b/apps/cayrn_lfe/src/cayrn_lfe_io.lfe
+index 201cd6c..249b397 100644
+--- a/apps/cayrn_lfe/src/cayrn_lfe_io.lfe
++++ b/apps/cayrn_lfe/src/cayrn_lfe_io.lfe
+@@ -1,37 +1,209 @@
+-;;;; Immutable operation attribution, including output from late writers.
++;;;; Immutable capture origin with producer and durable-write drain proof.
+ (defmodule cayrn_lfe_io
+-  (export (loop 2) (start 2)))
++  (behaviour gen_server)
++  (export (committed 3) (finished 2)
++          (handle_call 3) (handle_cast 2) (handle_info 2)
++          (init 1) (retire 2) (seal 2) (start 3) (terminate 2)))
+ 
+-(defspec (start 2) (((pid) (binary)) (pid)))
++(defrecord capture
++  owner operation root trace
++  (producers (map)) (deliveries (map)) (pending (map))
++  (sent 0) (observed 0) (finished 'false) (root-accounted 'false)
++  (announced 'false) (ready 'false) (sealed 'false))
+ 
+-(defun start (owner operation)
+-  "Start linked capture with one immutable operation identity."
+-  (spawn_link (MODULE) 'loop (list owner operation)))
++(defrecord producer (born 'false) (exited 'false) (delivered 'false))
+ 
+-(defspec (loop 2) (((pid) (binary)) (no_return)))
++(defspec (start 3)
++  (((pid) (binary) (pid)) (tuple 'ok (pid) (term))))
+ 
+-(defun loop (owner operation)
+-  "Run the native I/O protocol until its owner terminates it."
+-  (loop owner operation 'false))
++(defun start (owner operation root)
++  "Start linked capture and trace a paused root before it can evaluate."
++  (let* (((tuple 'ok pid)
++          (gen_server:start_link (MODULE) (tuple owner operation root) '()))
++         (trace (try (gen_server:call pid 'trace)
++                  (catch
++                    ((tuple class reason stack)
++                     (unlink pid)
++                     (exit pid 'kill)
++                     (erlang:raise class reason stack))))))
++    (tuple 'ok pid trace)))
+ 
+-(defun loop (owner operation closed)
+-  (receive
+-    ((tuple 'seal incoming-owner) (when (=:= incoming-owner owner))
+-     (! owner (tuple 'sealed (self)))
+-     (loop owner operation 'true))
+-    ((tuple 'io_request from ref _) (when (=:= closed 'true))
+-     (! from (tuple 'io_reply ref (tuple 'error 'terminated)))
+-     (loop owner operation closed))
+-    ((tuple 'io_request from ref request)
++(defspec (committed 3) (((pid) (pid) (reference)) 'ok))
++
++(defun committed (io from ref)
++  "Release one exact pending writer only after durable host commitment."
++  (gen_server:cast io (tuple 'committed (self) from ref)))
++
++(defspec (finished 2) (((pid) (pid)) 'ok))
++
++(defun finished (io owner)
++  "Record that the owner has received the foreground evaluation result."
++  (gen_server:cast io (tuple 'finished owner)))
++
++(defspec (retire 2) (((pid) (pid)) 'ok))
++
++(defun retire (io owner)
++  "Grant a previously proven natural retirement after owner unlink."
++  (gen_server:cast io (tuple 'retire owner)))
++
++(defspec (seal 2) (((pid) (pid)) 'ok))
++
++(defun seal (io owner)
++  "Stop accepting output and acknowledge the owner's forced close barrier."
++  (gen_server:cast io (tuple 'seal owner)))
++
++(defspec (init 1) (((tuple)) (tuple 'ok (tuple))))
++
++(defun init
++  "Install only this origin's filtered, inherited local process tracing."
++  (((tuple owner operation root))
++   (let ((trace (trace:session_create 'cayrn_capture (self) '())))
++     (try
++       (let* ((1 (trace:send trace
++                   (list (tuple
++                           (list (self) (tuple 'io_request '_ '_ '_))
++                           '() '())) '()))
++              (1 (trace:process trace root 'true '(procs set_on_spawn send))))
++         (tuple 'ok
++           (make-capture owner owner operation operation root root trace trace
++             producers (map root (make-producer born 'true)))))
++       (catch
++         ((tuple class reason stack)
++          (trace:session_destroy trace)
++          (erlang:raise class reason stack)))))))
++
++(defspec (handle_call 3)
++  (((term) (call 'gen_server 'from) (tuple))
++   (tuple 'reply (term) (tuple))))
++
++(defun handle_call
++  "Expose the owned trace handle only to the startup wrapper."
++  (('trace _from state) (tuple 'reply (capture-trace state) state))
++  ((_request _from state) (tuple 'reply '#(error unsupported) state)))
++
++(defspec (handle_cast 2)
++  (((term) (tuple))
++   (UNION (tuple 'noreply (tuple)) (tuple 'stop (term) (tuple)))))
++
++(defun handle_cast
++  "Process owner notifications without blocking capture or control."
++  (((tuple 'finished owner) (= (match-capture owner owner) state))
++   (continue (set-capture-finished state 'true)))
++  (((tuple 'committed owner from ref)
++    (= (match-capture owner owner pending pending) state))
++   (let* (((tuple 'true next) (maps:take (tuple from ref) pending)))
++     (! from (tuple 'io_reply ref 'ok))
++     (continue (set-capture-pending state next))))
++  (((tuple 'seal owner) (= (match-capture owner owner) state))
++   (! owner (tuple 'sealed (self) (capture-operation state)))
++   (tuple 'noreply (set-capture-sealed state 'true)))
++  (((tuple 'retire owner)
++    (= (match-capture owner owner ready 'true sealed 'false) state))
++   (let (('true (drained? state)))
++     (tuple 'stop 'normal state)))
++  ((_request _state) (error 'invalid_capture_control)))
++
++(defspec (handle_info 2) (((term) (tuple)) (tuple 'noreply (tuple))))
++
++(defun handle_info
++  "Account births, exits, trace delivery and actual I/O independently."
++  (((tuple 'io_request from ref _)
++    (= (match-capture sealed 'true) state))
++   (! from (tuple 'io_reply ref '#(error terminated)))
++   (tuple 'noreply state))
++  (((tuple 'io_request from ref request) state)
++   (let* ((key (tuple from ref))
++          (pending (capture-pending state))
++          ('false (maps:is_key key pending))
++          (next (set-capture-observed state (+ 1 (capture-observed state)))))
+      (case (output request)
+        ((tuple 'ok text) (when (=< (byte_size text) 8192))
+-        (! owner (tuple 'capture from ref operation text)))
++        (! (capture-owner state)
++           (tuple 'capture (self) from ref (capture-operation state) text))
++        (continue (set-capture-pending next (map-set pending key 'true))))
+        ((tuple 'ok _)
+-        (! from (tuple 'io_reply ref (tuple 'error 'emsgsize))))
++        (! from (tuple 'io_reply ref '#(error emsgsize)))
++        (continue next))
+        ((tuple 'error reason)
+-        (! from (tuple 'io_reply ref (tuple 'error reason)))))
+-     (loop owner operation closed))
+-    (_ (loop owner operation closed))))
++        (! from (tuple 'io_reply ref (tuple 'error reason)))
++        (continue next)))))
++  (((tuple 'trace _parent 'spawn child _entry) state)
++   (let* ((producers (capture-producers state))
++          (p (maps:get child producers (make-producer)))
++          ('false (producer-born p)))
++     (continue (prune child
++                 (set-capture-producers state
++                   (map-set producers child (set-producer-born p 'true)))))))
++  (((tuple 'trace _pid 'spawned _parent _entry) state)
++   (tuple 'noreply state))
++  (((tuple 'trace pid 'exit _reason) state)
++   (let* ((producers (capture-producers state))
++          (p (maps:get pid producers (make-producer)))
++          ('false (producer-exited p))
++          (ref (trace:delivered (capture-trace state) pid)))
++     (continue
++       (set-capture-deliveries
++         (set-capture-producers state
++           (map-set producers pid (set-producer-exited p 'true)))
++         (map-set (capture-deliveries state) ref pid)))))
++  (((tuple 'trace_delivered pid ref) state)
++   (let* (((tuple incoming deliveries)
++           (maps:take ref (capture-deliveries state)))
++          ('true (=:= incoming pid))
++          (producers (capture-producers state))
++          (p (map-get producers pid))
++          ('true (producer-exited p)))
++     (continue
++       (prune pid
++         (set-capture-producers
++           (set-capture-deliveries state deliveries)
++           (map-set producers pid (set-producer-delivered p 'true)))))))
++  (((tuple 'trace _pid 'send (tuple 'io_request _ _ _) destination) state)
++   (when (=:= destination (self)))
++   (continue (set-capture-sent state (+ 1 (capture-sent state)))))
++  ((_message state) (tuple 'noreply state)))
++
++(defun prune (pid state)
++  (let* ((producers (capture-producers state))
++         (p (map-get producers pid)))
++    (if (andalso (producer-born p) (producer-exited p)
++                 (producer-delivered p))
++      (set-capture-root-accounted
++        (set-capture-producers state (maps:remove pid producers))
++        (orelse (capture-root-accounted state)
++                (=:= pid (capture-root state))))
++      state)))
++
++(defun drained? (state)
++  (andalso (capture-finished state) (capture-root-accounted state)
++           (=:= 0 (map_size (capture-producers state)))
++           (=:= 0 (map_size (capture-deliveries state)))
++           (=:= (capture-sent state) (capture-observed state))
++           (=:= 0 (map_size (capture-pending state)))))
++
++(defun continue
++  (((= (match-capture sealed 'true) state)) (tuple 'noreply state))
++  (((= (match-capture ready 'true) state)) (tuple 'noreply state))
++  ((state)
++   (cond
++     ((drained? state)
++      (! (capture-owner state)
++         (tuple 'retire_ready (self) (capture-operation state)))
++      (tuple 'noreply (set-capture-ready state 'true)))
++     ((andalso (capture-finished state) (capture-root-accounted state)
++               (> (map_size (capture-producers state)) 0)
++               (not (capture-announced state)))
++      (! (capture-owner state)
++         (tuple 'foreground_ready (self) (capture-operation state)))
++      (tuple 'noreply (set-capture-announced state 'true)))
++     ('true (tuple 'noreply state)))))
++
++(defspec (terminate 2) (((term) (tuple)) 'ok))
++
++(defun terminate (_reason state)
++  "Destroy only this origin's trace session on every orderly shutdown."
++  (trace:session_destroy (capture-trace state))
++  'ok)
+ 
+ (defun output
+   (((tuple 'put_chars encoding chars)) (text chars encoding))
+diff --git a/apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe b/apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe
+index 9c58903..a64c87a 100644
+--- a/apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe
++++ b/apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe
+@@ -11,19 +11,22 @@
+ (defun native_agent_companions_test_ ()
+   "Discover all native cases without depending on Erlang source files."
+   (list '#(module cayrn_lfe_eval_tests)
+-        '#(module cayrn_lfe_application_tests)))
++        '#(module cayrn_lfe_application_tests)
++        '#(module cayrn_lfe_resource_tests)))
+ 
+ (defun capture_requires_owner_ack_test ()
+   "Never acknowledge a native write before its owner commits capture."
+-  (let ((io (cayrn_lfe_io:start (self) #b("operation")))
++  (let* ((root (spawn (lambda () (receive ('stop 'ok)))))
++         ((tuple 'ok io _trace)
++          (cayrn_lfe_io:start (self) #b("2") root))
+         (ref (make_ref)))
+     (try
+       (progn
+         (! io (tuple 'io_request (self) ref
+                      (tuple 'put_chars 'unicode #b("hello"))))
+         (receive
+-          ((tuple 'capture from incoming-ref #b("operation") #b("hello"))
+-           (when (=:= incoming-ref ref))
++          ((tuple 'capture incoming-io from incoming-ref #b("2") #b("hello"))
++           (when (=:= incoming-ref ref) (=:= incoming-io io))
+            (assertEqual (self) from))
+           (after 1000 (error 'missing_capture)))
+         (receive
+@@ -33,24 +36,32 @@
+           (after 20 'ok)))
+       (after
+         (unlink io)
+-        (exit io 'kill)))))
++        (exit io 'kill)
++        (exit root 'kill)))))
+ 
+ (defun seal_orders_prior_capture_and_rejects_late_writes_test ()
+   "Seal after earlier capture and reject subsequent writes explicitly."
+-  (let ((io (cayrn_lfe_io:start (self) #b("origin")))
++  (let* ((root (spawn (lambda () (receive ('stop 'ok)))))
++         ((tuple 'ok io _trace)
++          (cayrn_lfe_io:start (self) #b("5") root))
+         (ref (make_ref)))
+     (try
+       (progn
+         (! io (tuple 'io_request (self) ref
+                      (tuple 'put_chars 'unicode #b("before"))))
+-        (! io (tuple 'seal (self)))
++        (cayrn_lfe_io:seal io (self))
+         (receive
+-          (first
+-           (assertEqual (tuple 'capture (self) ref #b("origin") #b("before"))
++          ((= (tuple 'capture incoming-io _ _ _ _) first)
++           (when (=:= incoming-io io))
++           (assertEqual (tuple 'capture io (self) ref #b("5") #b("before"))
+              first))
++          ((tuple 'sealed incoming-io _) (when (=:= incoming-io io))
++           (error 'seal_preceded_capture))
+           (after 1000 (error 'missing_capture)))
+         (receive
+-          (second (assertEqual (tuple 'sealed io) second))
++          ((= (tuple 'sealed incoming-io _) second)
++           (when (=:= incoming-io io))
++           (assertEqual (tuple 'sealed io #b("5")) second))
+           (after 1000 (error 'missing_seal)))
+         (let ((later (make_ref)))
+           (! io (tuple 'io_request (self) later
+@@ -62,4 +73,5 @@
+             (after 1000 (error 'missing_late_rejection)))))
+       (after
+         (unlink io)
+-        (exit io 'kill)))))
++        (exit io 'kill)
++        (exit root 'kill)))))
+diff --git a/apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe b/apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe
+new file mode 100644
+index 0000000..e7f570f
+--- /dev/null
++++ b/apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe
+@@ -0,0 +1,595 @@
++;;;; Native token fences, physical collector credits and drain-order proofs.
++(defmodule cayrn_lfe_resource_tests
++  (export (async_descendants_wait_for_commit_test_ 0)
++          (closed_socket_retains_acquired_cleanup_state_test 0)
++          (quiet_result_waits_for_exact_down_test 0)
++          (trace_session_isolation_test 0)
++          (retiring_down_and_close_barriers_test 0)
++          (callback_order_inversions_test 0)
++          (capacity_refusal_and_recovery_test_ 0)
++          (collector_failure_is_context_local_test_ 0)
++          (full_capacity_close_test_ 0)
++          (ownership_and_monitor_mismatches_test 0)
++          (quiet_sparse_evaluations_reclaim_origins_test_ 0)
++          (retirement_close_orderings_test_ 0)
++          (stale_cancel_preserves_active_evaluation_test_ 0)
++          (token_replay_and_invalid_tokens_test_ 0)))
++
++(include-lib "eunit/include/eunit.hrl")
++
++(defun quiet_sparse_evaluations_reclaim_origins_test_ ()
++  "Exercise 512 sparse admissions with physical reclamation before each result."
++  (tuple 'timeout 60 #'quiet-sparse-evaluations/0))
++
++(defun quiet-sparse-evaluations ()
++  (with-peer
++    (lambda (peer socket context)
++      (lists:foreach
++        (lambda (i)
++          (let* ((token (integer_to_binary (+ 2 (* 3 (- i 1)))))
++                 (source (if (=:= i 1) #b("(set counter 1)")
++                           #b("(set counter (+ counter 1))")))
++                 (result (evaluate socket token source)))
++            (assertEqual #b("succeeded") (map-get result #b("phase")))
++            (assertEqual (integer_to_binary i) (map-get result #b("value")))
++            (assertEqual 0 (map_size (origins peer context)))
++            (assertEqual '(#(legacy default))
++              (peer:call peer 'trace 'session_info '(all)))))
++        (lists:seq 1 512)))))
++
++(defun token_replay_and_invalid_tokens_test_ ()
++  "Fence native replay before its visible side effect and reject bad tokens."
++  (tuple 'timeout 60 #'token-replay-and-invalid/0))
++
++(defun token-replay-and-invalid ()
++  (with-peer
++    (lambda (peer socket _context)
++      (assertEqual #b("2")
++        (map-get (evaluate socket #b("2") #b("2")) #b("value")))
++      (assertEqual #b("5")
++        (map-get (evaluate socket #b("5") #b("5")) #b("value")))
++      (assertEqual #b("9")
++        (map-get (evaluate socket #b("9") #b("9")) #b("value")))
++      (let ((path (++ "/private/tmp/cayrn-replay-" (os:getpid) "-"
++                     (integer_to_list (erlang:unique_integer '(positive))))))
++        (try
++          (progn
++            (dispatch socket #b("5")
++              (unicode:characters_to_binary
++                (io_lib:format "(file:write_file ~p ~p)" (list path "BAD"))))
++            (assertEqual '#(error closed) (gen_tcp:recv socket 0 1000))
++            (assertEqual '#(error enoent) (file:read_file path))
++            (assert (is_pid (peer:call peer 'erlang 'whereis
++                              '(cayrn_lfe_listener)))))
++          (after (file:delete path))))))
++  (lists:foreach
++    (lambda (token)
++      (with-peer
++        (lambda (_peer socket _context)
++          (dispatch socket token #b("42"))
++          (assertEqual '#(error closed) (gen_tcp:recv socket 0 1000)))))
++    (list #b("0") #b("01") #b("+1") #b("-1") #b("1.0")
++          #b("9223372036854775808") 2))
++  (with-peer
++    (lambda (_peer socket _context)
++      (assertEqual #b("42")
++        (map-get (evaluate socket #b("9223372036854775807") #b("42"))
++          #b("value"))))))
++
++(defun capacity_refusal_and_recovery_test_ ()
++  "Refuse operation65 without evaluation, then recover a physical origin."
++  (tuple 'timeout 60 #'capacity-refusal-and-recovery/0))
++
++(defun capacity-refusal-and-recovery ()
++  (with-peer
++    (lambda (peer socket context)
++      (let ((children (hold-origins peer socket 64)))
++        (assertEqual 64 (map_size (origins peer context)))
++        (let ((refused (evaluate socket #b("1000")
++                         #b("(set pressure-mutated 1)"))))
++          (assertEqual #b("failed") (map-get refused #b("phase")))
++          (assertEqual
++            #b("native resource limit: 64 live capture origins; "
++               "source not evaluated")
++            (map-get refused #b("value"))))
++        (assertEqual 64 (map_size (origins peer context)))
++        ;; The refused token is consumed: idle cancel must see an old token.
++        (send-frame socket (map 'kind 'cancel 'operation #b("1000")))
++        (peer:call peer 'erlang 'send (list (car children) 'release))
++        (await-origins peer context 63)
++        (assertEqual #b("failed")
++          (map-get (evaluate socket #b("1003") #b("pressure-mutated"))
++            #b("phase")))
++        (assertEqual #b("42")
++          (map-get (evaluate socket #b("1006") #b("(+ 20 22)"))
++            #b("value")))
++        (lists:foreach
++          (lambda (pid) (peer:call peer 'erlang 'send (list pid 'release)))
++          (cdr children))
++        (await-origins peer context 0)
++        (assertEqual '(#(legacy default))
++              (peer:call peer 'trace 'session_info '(all)))))))
++
++(defun full_capacity_close_test_ ()
++  "Close remains available while all64 origin credits are held."
++  (tuple 'timeout 60
++    (lambda ()
++      (with-peer
++        (lambda (_peer socket _context)
++          (hold-origins _peer socket 64)
++          (send-frame socket (map 'kind 'close))
++          (assertEqual #b("closed") (map-get (read-frame socket) #b("kind")))
++          (assertEqual '#(error closed) (gen_tcp:recv socket 0 1000)))))))
++
++(defun async_descendants_wait_for_commit_test_ ()
++  "Inherited spawn forms keep attribution after sender exit and withheld ACK."
++  (tuple 'timeout 60 #'async-descendants/0))
++
++(defun async-descendants ()
++  (lists:foreach
++    (match-lambda
++      (((tuple spawn-form options))
++       (with-peer
++         (lambda (peer socket context)
++           (let ((source
++                   (unicode:characters_to_binary
++                     (io_lib:format
++                       (++ "(progn (~s (lambda () (! (group_leader) "
++                           "(tuple 'io_request (self) (make_ref) "
++                           "(tuple 'put_chars 'unicode "
++                           "(pid_to_list (self))))))~s) 'scheduled)")
++                       (list spawn-form options)))))
++             ;; First prove natural retirement after a sender exits before ACK.
++             (dispatch socket #b("2") source)
++             (let* (((tuple output earlier) (until-output socket '()))
++                    (sender (peer:call peer 'erlang 'list_to_pid
++                              (list (binary_to_list
++                                      (map-get output #b("text")))))))
++               (await-dead peer sender 500)
++               (assertEqual #b("2") (map-get output #b("operation")))
++               (assertEqual 1 (map_size (origins peer context)))
++               (send-frame socket
++                 (map 'kind 'ack 'position (map-get output #b("position"))))
++               (if (lists:any
++                         (lambda (frame)
++                           (=:= #b("outcome") (map-get frame #b("kind"))))
++                         earlier)
++                 'ok
++                 (until-kind socket #b("outcome")))
++               (await-origins peer context 0))
++             ;; A separate forced-close path must wait for its withheld ACK.
++             (dispatch socket #b("5") source)
++             (let* (((tuple output _earlier) (until-output socket '()))
++                    (sender (peer:call peer 'erlang 'list_to_pid
++                              (list (binary_to_list
++                                      (map-get output #b("text")))))))
++               (await-dead peer sender 500)
++               (send-frame socket (map 'kind 'close))
++               (assertNot
++                 (lists:any #'closed-event?/1 (drain-available socket '())))
++               (send-frame socket
++                 (map 'kind 'ack 'position (map-get output #b("position"))))
++               (assertEqual #b("closed")
++                 (map-get (until-kind socket #b("closed")) #b("kind")))))))))
++    '(#("spawn" "") #("spawn_link" "") #("spawn_monitor" "")
++      #("spawn_opt" " ()"))))
++
++(defun await-dead
++  ((_peer _pid 0) (error 'sender_exit_timeout))
++  ((peer pid attempts)
++   (if (peer:call peer 'erlang 'is_process_alive (list pid))
++     (progn (timer:sleep 2) (await-dead peer pid (- attempts 1)))
++     'ok)))
++
++(defun collector_failure_is_context_local_test_ ()
++  "An unexpected collector death loses its context, never its native peer."
++  (tuple 'timeout 30
++    (lambda ()
++      (with-peer
++        (lambda (peer socket context)
++          (hold-origins peer socket 1)
++          (let ((io (car (maps:keys (origins peer context)))))
++            (peer:call peer 'erlang 'exit (list io 'kill))
++            (assertEqual '#(error closed) (gen_tcp:recv socket 0 1000))
++            (assert (is_pid (peer:call peer 'erlang 'whereis
++                              '(cayrn_lfe_listener))))))))))
++
++(defun stale_cancel_preserves_active_evaluation_test_ ()
++  "Cancelling an old token cannot interrupt a different active root."
++  (tuple 'timeout 30
++    (lambda ()
++      (with-peer
++        (lambda (_peer socket _context)
++          (evaluate socket #b("2") #b("1"))
++          (dispatch socket #b("5")
++            #b("(progn (io:format \"CANCEL-GATE\" ()) 42)"))
++          (let ((output (read-frame socket)))
++            (assertEqual #b("output") (map-get output #b("kind")))
++            (assertEqual #b("CANCEL-GATE") (map-get output #b("text")))
++            ;; Both commands precede ACK, while the foreground is blocked.
++            (send-frame socket (map 'kind 'cancel 'operation #b("2")))
++            (send-frame socket (map 'kind 'cancel 'operation #b("99")))
++            (send-frame socket
++              (map 'kind 'ack 'position (map-get output #b("position")))))
++          (let ((result (until-kind socket #b("outcome"))))
++            (assertEqual #b("succeeded") (map-get result #b("phase")))
++            (assertEqual #b("42") (map-get result #b("value")))))))))
++
++(defun retirement_close_orderings_test_ ()
++  "Close handles both live retire-ready and already-granted retirement."
++  (tuple 'timeout 30
++    (lambda ()
++      (lists:foreach
++        (lambda (grant-first)
++          (with-peer
++            (lambda (peer socket context)
++              ;; Hold a descendant so a known collector can be suspended.
++              (let* ((children (hold-origins peer socket 1))
++                     (io (car (maps:keys (origins peer context)))))
++                (peer:call peer 'sys 'suspend (list io))
++                (peer:call peer 'erlang 'send (list (car children) 'release))
++                (if grant-first
++                  (progn
++                    (peer:call peer 'sys 'resume (list io))
++                    (await-origins peer context 0)
++                    (send-frame socket (map 'kind 'close)))
++                  (progn
++                    (send-frame socket (map 'kind 'close))
++                    (peer:call peer 'sys 'resume (list io))))
++                (assertEqual #b("closed")
++                  (map-get (until-kind socket #b("closed")) #b("kind")))))))
++        '(false true)))))
++
++(defun ownership_and_monitor_mismatches_test ()
++  "Reject forged collector tokens and wrong monitor identity via real handlers."
++  (let* ((io (self)) (monitor (make_ref)) (wrong (make_ref))
++         (state (map 'origins (map io (tuple #b("2") 'unused monitor 'live))
++                     'pending (map) 'closing 'undefined)))
++    (assertException 'error _
++      (cayrn_lfe_context:handle_info
++        (tuple 'capture io (self) (make_ref) #b("5") #b("wrong")) state))
++    (assertException 'error _
++      (cayrn_lfe_context:handle_info
++        (tuple 'foreground_ready io #b("5")) state))
++    (assertException 'error _
++      (cayrn_lfe_context:handle_info
++        (tuple 'retire_ready io #b("5")) state))
++    (assertException 'error _
++      (cayrn_lfe_context:handle_info
++        (tuple 'sealed io #b("5")) (map-set state 'waiting (list io))))
++    (assertMatch (tuple 'stop (tuple 'collector_lost 'normal) _)
++      (cayrn_lfe_context:handle_info
++        (tuple 'DOWN wrong 'process io 'normal)
++        (map-set state 'origins
++          (map io (tuple #b("2") 'unused monitor 'retiring)))))))
++
++(defun callback_order_inversions_test ()
++  "Drive actual lifecycle handlers with reversed delivery and I/O witnesses."
++  (with-callback-state
++    (lambda (_root state)
++      (let ((ref (make_ref)))
++        (assertException 'error _
++          (cayrn_lfe_io:handle_cast
++            (tuple 'committed (self) (self) ref) state))
++        (receive
++          ((tuple 'io_reply incoming _) (when (=:= incoming ref))
++           (error 'false_unknown_commit_ack))
++          (after 0 'ok)))))
++  (lists:foreach
++    (lambda (finish-first)
++      (with-callback-state
++        (lambda (root state)
++          (let* ((before (if finish-first (finish-state state) state))
++                 (accounted (exit-delivered root before))
++                 (complete (if finish-first accounted
++                             (finish-state accounted))))
++            (assert-ready)
++            (assertMatch (tuple 'noreply _) (tuple 'noreply complete))))))
++    '(false true))
++  ;; An orphan exit/delivery cannot disappear before the parent's birth trace.
++  (with-callback-state
++    (lambda (root state)
++      (let* ((child (spawn (lambda () 'ok)))
++             (orphan (exit-delivered child state))
++             (born (info-state (tuple 'trace root 'spawn child 'entry) orphan)))
++        (exit-delivered root (finish-state born))
++        (assert-ready))))
++  (lists:foreach
++    (lambda (send-first)
++      (with-callback-state
++        (lambda (root state)
++          (let* ((ref (make_ref))
++                 (request (tuple 'io_request (self) ref
++                            (tuple 'put_chars 'unicode #b("ordered"))))
++                 (witness (tuple 'trace root 'send request (self)))
++                 (first (if send-first witness request))
++                 (second (if send-first request witness))
++                 (partial (info-state first state))
++                 (accounted (exit-delivered root (finish-state partial))))
++            (assert-no-ready)
++            (let ((both (info-state second accounted)))
++              (receive
++                ((tuple 'capture _ _ incoming _ _) (when (=:= incoming ref))
++                 'ok)
++                (after 1000 (error 'missing_ordered_capture)))
++              (assert-no-ready)
++              (cayrn_lfe_io:handle_cast
++                (tuple 'committed (self) (self) ref) both)
++              (receive
++                ((tuple 'io_reply incoming 'ok) (when (=:= incoming ref)) 'ok)
++                (after 1000 (error 'missing_committed_reply)))
++              (assert-ready))))))
++    '(false true)))
++
++(defun closed_socket_retains_acquired_cleanup_state_test ()
++  "A socket rearm failure returns the newly acquired root/origin for teardown."
++  (with-control-state
++    (lambda (_client state _io _monitor)
++      (let* ((socket (map-get state 'socket))
++             ('ok (gen_tcp:close socket))
++             (before
++               (map-set state 'active 'undefined 'origins (map)
++                 'last-token 0 'seq 0 'env (cayrn-lfe-eval:new)
++                 'identity (tuple #b("s") #b("g") #b("a"))))
++             ((tuple 'stop _reason acquired)
++              (cayrn_lfe_context:handle_info
++                (tuple 'tcp socket
++                  (iolist_to_binary
++                    (json:encode
++                      (map 'kind 'dispatch 'operation #b("2")
++                           'generation #b("g") 'authority #b("a")
++                           'source #b("(timer:sleep 10000)"))))) before))
++             ((tuple root monitor _ origin) (map-get acquired 'active))
++             ((tuple _ _ origin-monitor _)
++              (map-get (map-get acquired 'origins) origin)))
++        (assertEqual 1 (map_size (map-get acquired 'origins)))
++        (assert (is_process_alive root))
++        (cayrn_lfe_context:terminate 'normal acquired)
++        (receive
++          ((tuple 'DOWN incoming 'process pid 'killed)
++           (when (=:= incoming monitor) (=:= pid root)) 'ok)
++          (after 1000 (error 'acquired_root_leaked)))
++        (receive
++          ((tuple 'DOWN incoming 'process pid 'killed)
++           (when (=:= incoming origin-monitor) (=:= pid origin)) 'ok)
++          (after 1000 (error 'acquired_collector_leaked)))
++        (assertNot (is_process_alive origin))))))
++
++(defun trace_session_isolation_test ()
++  "Destroying capture leaves an independently configured session intact."
++  (let* ((root (spawn (lambda () (receive ('stop 'ok)))))
++         (independent (trace:session_create 'x21_independent (self) '()))
++         (1 (trace:process independent root 'true '(procs)))
++         ((tuple 'ok state)
++          (cayrn_lfe_io:init (tuple (self) #b("2") root))))
++    (try
++      (progn
++        (cayrn_lfe_io:terminate 'normal state)
++        (assertEqual '#(flags (procs)) (trace:info independent root 'flags)))
++      (after
++        (trace:session_destroy independent)
++        (exit root 'kill)))))
++
++(defun quiet_result_waits_for_exact_down_test ()
++  "Retire-ready cannot publish a quiet result or return a physical credit."
++  (with-control-state
++    (lambda (client state io monitor)
++      (let* (((tuple 'noreply retiring)
++              (cayrn_lfe_context:handle_info
++                (tuple 'retire_ready io #b("2")) state)))
++        (assertEqual 1 (map_size (map-get retiring 'origins)))
++        (assertEqual '#(error timeout) (gen_tcp:recv client 0 20))
++        (! io 'exit)
++        (receive
++          ((= (tuple 'DOWN incoming 'process pid 'normal) down)
++           (when (=:= incoming monitor) (=:= pid io))
++           (let (((tuple 'noreply next)
++                  (cayrn_lfe_context:handle_info down retiring)))
++             (assertEqual 0 (map_size (map-get next 'origins)))
++             (assertEqual #b("42") (map-get (read-frame client) #b("value")))))
++          (after 1000 (error 'missing_exact_collector_down)))))))
++
++(defun retiring_down_and_close_barriers_test ()
++  "Close waits for a granted retirement and never grants after forced seal."
++  (with-control-state
++    (lambda (client state io monitor)
++      (let* (((tuple 'noreply retiring)
++              (cayrn_lfe_context:handle_info
++                (tuple 'retire_ready io #b("2")) state))
++             ((tuple 'noreply closing) (close-state retiring)))
++        (assertEqual #b("outcome") (map-get (read-frame client) #b("kind")))
++        (assertEqual '#(error timeout) (gen_tcp:recv client 0 20))
++        (! io 'exit)
++        (receive
++          ((= (tuple 'DOWN incoming 'process pid 'normal) down)
++           (when (=:= incoming monitor) (=:= pid io))
++           (assertMatch (tuple 'stop 'normal _)
++             (cayrn_lfe_context:handle_info down closing))
++           (assertEqual #b("closed") (map-get (read-frame client) #b("kind"))))
++          (after 1000 (error 'missing_retiring_close_down))))))
++  (with-control-state
++    (lambda (client state io _monitor)
++      (let* (((tuple 'noreply closing) (close-state state))
++             ((tuple 'noreply held)
++              (cayrn_lfe_context:handle_info
++                (tuple 'retire_ready io #b("2")) closing)))
++        (assertEqual #b("outcome") (map-get (read-frame client) #b("kind")))
++        (assertEqual '#(error timeout) (gen_tcp:recv client 0 20))
++        (assertMatch (tuple 'stop 'normal _)
++          (cayrn_lfe_context:handle_info (tuple 'sealed io #b("2")) held))
++        (assertEqual #b("closed") (map-get (read-frame client) #b("kind")))))))
++
++(defun close-state (state)
++  (cayrn_lfe_context:handle_info
++    (tuple 'tcp (map-get state 'socket)
++      (iolist_to_binary (json:encode (map 'kind 'close)))) state))
++
++(defun with-control-state (function)
++  (let* (((tuple 'ok listener)
++          (gen_tcp:listen 0 '(binary #(active false) #(packet 4)
++                             #(ip #(127 0 0 1)))))
++         ((tuple 'ok port) (inet:port listener))
++         ((tuple 'ok client)
++          (gen_tcp:connect '#(127 0 0 1) port
++            '(binary #(active false) #(packet 4)) 1000))
++         ((tuple 'ok server) (gen_tcp:accept listener))
++         ((tuple io monitor)
++          (spawn_monitor (lambda () (receive ('exit 'ok)))))
++         (trace (trace:session_create 'x21_control (self) '()))
++         (state (map 'socket server 'active
++                     (tuple 'finishing #b("2") io 'succeeded #b("42"))
++                     'origins (map io (tuple #b("2") trace monitor 'live))
++                     'pending (map) 'closing 'undefined)))
++    (link io)
++    (try (funcall function client state io monitor)
++      (after
++        (unlink io)
++        (exit io 'kill)
++        (erlang:demonitor monitor '(flush))
++        (trace:session_destroy trace)
++        (gen_tcp:close server)
++        (gen_tcp:close client)
++        (gen_tcp:close listener)))))
++
++(defun with-callback-state (function)
++  (let* ((root (spawn (lambda () (receive ('stop 'ok)))))
++         ((tuple 'ok state)
++          (cayrn_lfe_io:init (tuple (self) #b("2") root))))
++    (try (funcall function root state)
++      (after
++        (cayrn_lfe_io:terminate 'normal state)
++        (exit root 'kill)))))
++
++(defun finish-state (state)
++  (let (((tuple 'noreply next)
++         (cayrn_lfe_io:handle_cast (tuple 'finished (self)) state)))
++    next))
++
++(defun info-state (message state)
++  (let (((tuple 'noreply next) (cayrn_lfe_io:handle_info message state))) next))
++
++(defun exit-delivered (pid state)
++  (let ((exited (info-state (tuple 'trace pid 'exit 'normal) state)))
++    (receive
++      ((= (tuple 'trace_delivered incoming _) marker) (when (=:= incoming pid))
++       (info-state marker exited))
++      (after 1000 (error 'missing_trace_delivery)))))
++
++(defun assert-ready ()
++  (receive
++    ((tuple 'retire_ready _ #b("2")) 'ok)
++    (after 1000 (error 'missing_retire_ready))))
++
++(defun assert-no-ready ()
++  (receive
++    ((tuple 'retire_ready _ _) (error 'premature_retirement))
++    (after 0 'ok)))
++
++(defun with-peer (function)
++  (let* ((dir (++ "/private/tmp/cayrn-resource-" (os:getpid) "-"
++                 (integer_to_list
++                   (erlang:unique_integer '(positive monotonic)))))
++         ('ok (file:make_dir dir))
++         ('ok (file:change_mode dir #o700))
++         (path (filename:join dir "agent socket.sock")))
++    (try
++      (let (((tuple 'ok peer _)
++             (peer:start_link
++               (map 'connection 'standard_io
++                    'args (cons "-pa" (code:get_path))))))
++        (try
++          (let* (('ok (peer:call peer 'application 'load '(cayrn_lfe)))
++                 ('ok (peer:call peer 'application 'set_env
++                        (list 'cayrn_lfe 'socket path)))
++                 ((tuple 'ok _)
++                  (peer:call peer 'application 'ensure_all_started
++                    '(cayrn_lfe)))
++                 ((tuple 'ok socket)
++                  (gen_tcp:connect (tuple 'local path) 0
++                    '(binary #(active false) #(packet 4)) 1000)))
++            (try
++              (progn
++                (send-frame socket
++                  (map 'kind 'hello 'version 2 'session #b("resource-test")
++                       'generation #b("g") 'authority #b("a")))
++                (assertEqual #b("ready")
++                  (map-get (read-frame socket) #b("kind")))
++                (let* ((children (peer:call peer 'supervisor 'which_children
++                                   '(cayrn_lfe_sup)))
++                       ((list context)
++                        (lists:filtermap
++                          (match-lambda
++                            (((tuple 'cayrn_lfe_listener _ _ _)) 'false)
++                            (((tuple _ pid _ _)) (tuple 'true pid)))
++                          children)))
++                  (funcall function peer socket context)))
++              (after (gen_tcp:close socket))))
++          (after (peer:stop peer))))
++      (after
++        (file:delete path)
++        (file:del_dir dir)))))
++
++(defun origins (peer context)
++  (map-get (peer:call peer 'sys 'get_state (list context)) 'origins))
++
++(defun await-origins (peer context count)
++  (await-origins peer context count 500))
++
++(defun await-origins
++  ((_peer _context _count 0) (error 'origin_reclamation_timeout))
++  ((peer context count attempts)
++   (if (=:= count (map_size (origins peer context)))
++     'ok
++     (progn (timer:sleep 2)
++       (await-origins peer context count (- attempts 1))))))
++
++(defun hold-origins (peer socket count)
++  (lists:map
++    (lambda (i)
++      (let* ((result (evaluate socket (integer_to_binary (* 3 i))
++                      #b("(spawn (lambda () (receive ('release 'ok))))")))
++             (pid-text (binary_to_list (map-get result #b("value")))))
++        (peer:call peer 'erlang 'list_to_pid
++          (list (lists:nthtail 4 pid-text)))))
++    (lists:seq 1 count)))
++
++(defun dispatch (socket token source)
++  (send-frame socket
++    (map 'kind 'dispatch 'operation token 'source source
++         'generation #b("g") 'authority #b("a"))))
++
++(defun evaluate (socket token source)
++  (dispatch socket token source)
++  (until-kind socket #b("outcome")))
++
++(defun send-frame (socket value)
++  (let (('ok (gen_tcp:send socket (json:encode value)))) 'ok))
++
++(defun read-frame (socket)
++  (let (((tuple 'ok bytes) (gen_tcp:recv socket 0 3000))) (json:decode bytes)))
++
++(defun until-kind (socket kind)
++  (let ((frame (read-frame socket)))
++    (case (map-get frame #b("kind"))
++      (#b("output")
++       (send-frame socket (map 'kind 'ack 'position
++                            (map-get frame #b("position"))))
++       (until-kind socket kind))
++      (incoming (when (=:= incoming kind)) frame)
++      (_ (until-kind socket kind)))))
++
++(defun until-output (socket earlier)
++  (let ((frame (read-frame socket)))
++    (if (=:= #b("output") (map-get frame #b("kind")))
++      (tuple frame earlier)
++      (until-output socket (cons frame earlier)))))
++
++(defun closed-event? (frame)
++  (=:= #b("closed") (map-get frame #b("kind"))))
++
++(defun drain-available (socket events)
++  (case (gen_tcp:recv socket 0 20)
++    ((tuple 'error 'timeout) events)
++    ((tuple 'ok bytes)
++     (drain-available socket (cons (json:decode bytes) events)))
++    (error (error error))))

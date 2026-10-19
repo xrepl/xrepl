@@ -1,0 +1,32 @@
+{
+  "source": "7228183e2e584e0ab86e03dc6b9454d4b918cc38",
+  "source_path": "/private/tmp/x21-cdc-fresh.mdlgvhn3/apps/cayrn_lfe",
+  "command": [
+    "make",
+    "check"
+  ],
+  "exit": 0,
+  "archive_sha256": "601a47bac19f285d5c8736271d6bc28f414af9de4115b4f71fa3ca50aacb12f8",
+  "files": {
+    "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "Makefile": "bc0993c07194a64bc0ae9455345f09507252c938a02e502aa64daac4c95f0270",
+    "README.md": "cf6dd26662cd1c854a944117e5a0c9393dd1335405e945700c14f06e44d62c4b",
+    "rebar.lock": "e19bc76be33c1751218cd32f62c5719d30926454b2a2a83acc72a693c4d3b8e4",
+    ".gitignore": "da409d38dcfe4285271c31e0659846543f9c4495a222ff32f299372b8f808774",
+    "AGENTS.md": "ea74d164a93d9690e866dc36c6541422d4c0499e704a759514a37504c22c5295",
+    "rebar.config": "1b8ecd6cfeb1bad08dc9ef00bc10a0406a76d3522b50d9ac70857eb178cb3da3",
+    "test/cayrn_lfe_io_tests.lfe": "f45a39463ae52188b3ffd739218873a483bd5ea6aa09216466d8ed5ecf923451",
+    "test/cayrn_lfe_resource_tests.lfe": "28e9f662afac3e767f16e85008bb5611a543335d9e92ed7983cb90eed99e8aeb",
+    "test/cayrn_lfe_eval_tests.lfe": "1b3e2294625b6ab248a81e7e71d1c1085e8f74f9f2162a455599cb8bc59b4255",
+    "test/cayrn_lfe_application_tests.lfe": "8b246f2e88b1d40247f9390d426dc501ac93134941ed3aa17f77a3f60b47d2af",
+    "bin/cayrn-lfe": "daaf7cfbca9d57e272b526d3391ad677315d50d909dedae8b4741a5835884fad",
+    "src/cayrn_lfe_context.lfe": "27a9e54e5f7214d93df2b4dcc21da34b6badea479a1e26e3a8ec530f8a0752ec",
+    "src/cayrn_lfe_io.lfe": "380419f727eaed9c0dac379b489c9ad4e0baf7a3e09ceabe58cc286706fc50d3",
+    "src/cayrn_lfe_sup.lfe": "603ce74dfb191bbd0d55c88a7f6f24e112a31007e75c949344200e38a4364914",
+    "src/cayrn-lfe-eval.lfe": "16ffae22648e9c82696aee208dbe6dab3913c5aef9816c5973ba6ad2af0b91d2",
+    "src/cayrn_lfe_app.lfe": "c3611e97ca32bc16fc9a39e945fcb1bfdf56ef39bbc760034e97f91d666b1f24",
+    "src/cayrn_lfe.app.src": "98273af701ab79e0e59d4d7c91d57f18c4bf6eb48133e9ffffbef9bb54cb7cb7",
+    "src/cayrn_lfe_listener.lfe": "9980e62f9c2ce02779dbc8b4e3891b9f7dda9285cdcfd40e85ec3b1ddf618bf5"
+  },
+  "unchanged_after_test": true
+}

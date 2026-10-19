@@ -189,3 +189,11 @@ CC context). Technical contract/rows/allowlists unchanged. No implementation pas
 previously executed; correction budget zero of five. CDC /root independently
 reviews CC work and owns planning commits/retrospective. Actual CC acknowledgment
 and source intake go in artifacts/execution.md.
+
+## Current disposition — 2026-10-18
+
+The earlier prepared/held wording is historical. Executed assignment
+cc-prompt-iteration01.md returned7228183 paired with Cayrn7b27b0f; independent
+CDC acceptance of all8 rows is in cdc-verification.md, with closing retrospective.
+No returned correction iteration was required (0/5). Initial prompts/contract
+remain preserved. Next node-lifetime work requires its reserved Operator decision.

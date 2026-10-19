@@ -1,0 +1,5 @@
+
+Root wrapper cwd=/private/tmp, spaced socket: {"value": "(cayrn_lfe compiler kernel lfe stdlib)", "kind": "outcome", "operation": "2", "phase": "succeeded"}
+=INFO REPORT==== 18-Oct-2026::22:40:16.820951 ===
+SIGTERM received - shutting down
+

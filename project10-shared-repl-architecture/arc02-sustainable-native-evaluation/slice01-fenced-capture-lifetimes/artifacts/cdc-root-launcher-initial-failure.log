@@ -1,0 +1,48 @@
+=INFO REPORT==== 18-Oct-2026::22:49:12.408689 ===
+SIGTERM received - shutting down
+
+
+Independent /root launcher transcript:
+{
+  "cwd": "/private/tmp",
+  "endpoint": "/private/tmp/x21-cdc-launch.97ty2i8u/agent with spaces.sock",
+  "source": "7228183",
+  "records": [
+    {
+      "sent": {
+        "kind": "hello",
+        "version": 2,
+        "session": "cdc-launcher",
+        "generation": "g",
+        "authority": "a"
+      }
+    },
+    {
+      "received": {
+        "version": 2,
+        "interrupt": "session_destructive",
+        "kind": "ready",
+        "backend": "lfe",
+        "close_barrier": true
+      }
+    },
+    {
+      "sent": {
+        "kind": "dispatch",
+        "operation": "2",
+        "source": "(lists:sort (lists:map (lambda (app) (element 1 app)) (application:which_applications)))",
+        "generation": "g",
+        "authority": "a"
+      }
+    },
+    {
+      "received": {
+        "value": "(cayrn_lfe compiler kernel lfe stdlib)",
+        "kind": "outcome",
+        "operation": "2",
+        "phase": "succeeded"
+      }
+    }
+  ],
+  "owned_process_exit": 0
+}

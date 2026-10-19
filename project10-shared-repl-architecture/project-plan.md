@@ -1,6 +1,6 @@
 ---
 project: project10-shared-repl-architecture
-status: resource-slices-prepared
+status: autonomous-resource-work
 depends-on: [cayrn-project02-bounded-contracts]
 blocks: [xrepl-0.2.x-core-migration-candidate]
 related: [cayrn-project01-shared-repl-architecture, project05-rust-frontend, project06-pluggable-shells, project07-story-runtime, project09-quality-assessment, xrepl_protocol, xrepl_term]
@@ -267,3 +267,19 @@ now supply the actual bounded interface for Arc02/Slice01. The native CC
 /root/xrepl_x21 reconciled upstream hashes before edits. All native/consumer
 runtime gates remain pending its implementation and independent review. See
 Arc02 arc-plan.md's v1.1 status entry; no node/size/UX or historical gate is closed.
+
+## Current independently accepted resource result — 2026-10-18
+
+Arc02/Slice01 source7228183/Cayrn7b27b0f is independently accepted (8/8) by
+CDC /root; actual CC /root/xrepl_x21. See its cdc-verification.md and retrospective.
+The matching native2 gate passes; sustained operations/capture reclamation land
+without claiming node churn, size pressure, full migration or release readiness.
+Autonomous authority continues within Arc02; its next reserved architectural
+decision is pending Operator discussion, not assumed approved by elapsed time.
+
+Additional concrete backlog owners (not UX):
+
+| ID | Item | Owner | Re-entry / gate |
+| --- | --- | --- | --- |
+| X-PKG-01 | Fresh source checkout path containing spaces fails pinned Rebar/LFE hook; ordinary fresh source and spaced sockets pass | Arc06 packaging/install owner | Resolve or explicitly document/test supported checkout paths before packaging/release; evidence Arc02/Slice01 development log. No dependency/build change authorized in current slice. |
+| X-DOC-01 | Historical README shell example contains literal angle-bracket token placeholder and fails broad bash syntax checking | Later client/compatibility documentation owner | Repair when editing that example; rerun scoped/full example checks. Current changed docs pass; do not claim all historical examples executable. |

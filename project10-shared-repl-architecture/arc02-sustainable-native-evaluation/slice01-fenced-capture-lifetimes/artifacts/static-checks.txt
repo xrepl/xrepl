@@ -1,0 +1,5 @@
+PASS:7 allowed source paths;4 LFE files all lines<=80 and no trailing whitespace
+PASS: 1 relative links; 3 shell blocks in changed README intro and full component docs
+Excluded unchanged root README historical examples containing <TOKEN> placeholders; initial broader syntax check failed on that placeholder, no source behavior failure.
+PASS:6 tracked changed paths plus1 allowed new test; pre-existing untracked docs/design untouched
+Production hashes: {"apps/cayrn_lfe/src/cayrn_lfe_context.lfe": "27a9e54e5f7214d93df2b4dcc21da34b6badea479a1e26e3a8ec530f8a0752ec", "apps/cayrn_lfe/src/cayrn_lfe_io.lfe": "380419f727eaed9c0dac379b489c9ad4e0baf7a3e09ceabe58cc286706fc50d3"}

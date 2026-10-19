@@ -1,0 +1,339 @@
+
+## x21-native-first.log
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C apps/cayrn_lfe check REBAR="rebar3"
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_io.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling src/cayrn_lfe_io.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling test/cayrn_lfe_resource_tests.lfe
+===> Compiling test/cayrn_lfe_io_tests.lfe
+===> Failed to compile /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe
+===> File Errors: [{"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe",
+                    [{148,lfe_parse,{illegal,')'}}]}]
+===> Compiling test/cayrn_lfe_resource_tests.lfe failed
+/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:148: illegal ')'
+make[1]: *** [check] Error 1
+make: *** [check-agent] Error 2
+
+## x21-native-second.log
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C apps/cayrn_lfe check REBAR="rebar3"
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling test/cayrn_lfe_resource_tests.lfe
+===> Compiling src/cayrn_lfe_io.lfe
+===> Compiling test/cayrn_lfe_io_tests.lfe
+===> Failed to compile /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe
+===> File Errors: [{"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe",
+                    [{182,lfe_parse,missing_token}]}]
+===> Compiling test/cayrn_lfe_resource_tests.lfe failed
+/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:182: missing token
+make[1]: *** [check] Error 1
+make: *** [check-agent] Error 2
+
+## x21-native-third.log
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C apps/cayrn_lfe check REBAR="rebar3"
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_io.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling test/cayrn_lfe_resource_tests.lfe
+===> Compiling test/cayrn_lfe_io_tests.lfe
+===> Compiling cayrn_lfe
+===> Performing EUnit tests...
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;31mF[0m[0;31mF[0m[0;31mF[0m[0;32m.[0m[0;31mF[0m[0;31mF[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m
+Failures:
+
+  1) cayrn_lfe_resource_tests:capacity-refusal-and-recovery/0
+[0;31m     Failure/Error: {error,badarg,
+                        [{erlang,list_to_pid,
+                             ["#Pid<0.91.0>"],
+                             [{error_info,#{module => erl_erts_errors}}]},
+                         {peer,'-do_call/4-fun-0-',5,
+                             [{file,"peer.erl"},{line,1557}]}]}
+[0m
+  2) cayrn_lfe_resource_tests:-collector_failure_is_context_local_test_/0-fun-3-/0
+[0;31m     Failure/Error: {error,badarg,
+                        [{erlang,list_to_pid,
+                             ["#Pid<0.91.0>"],
+                             [{error_info,#{module => erl_erts_errors}}]},
+                         {peer,'-do_call/4-fun-0-',5,
+                             [{file,"peer.erl"},{line,1557}]}]}
+[0m
+  3) cayrn_lfe_resource_tests:-full_capacity_close_test_/0-fun-3-/0
+[0;31m     Failure/Error: {error,badarg,
+                        [{erlang,list_to_pid,
+                             ["#Pid<0.91.0>"],
+                             [{error_info,#{module => erl_erts_errors}}]},
+                         {peer,'-do_call/4-fun-0-',5,
+                             [{file,"peer.erl"},{line,1557}]}]}
+[0m
+  4) cayrn_lfe_resource_tests:quiet-sparse-evaluations/0
+[0;31m     Failure/Error: ?assertEqual([], (peer:call peer (quote trace) (quote session_info) (quote (all))))
+       expected: []
+            got: [{legacy,default}][0m
+[0;36m     %% /opt/homebrew/Cellar/erlang/28.5/lib/erlang/lib/eunit-2.10.3/include/eunit.hrl:312:in `cayrn_lfe_resource_tests:with-peer/1`[0m
+
+
+  5) cayrn_lfe_resource_tests:-retirement_close_orderings_test_/0-fun-3-/0
+[0;31m     Failure/Error: {error,undef,
+                        [{lists,foreach,
+                             [#Fun<cayrn_lfe_resource_tests.23.54312098>],
+                             []},
+                         {eunit_test,run_testfun,1,
+                             [{file,"eunit_test.erl"},{line,83}]},
+                         {eunit_proc,run_test,1,
+                             [{file,"eunit_proc.erl"},{line,554}]},
+                         {eunit_proc,with_timeout,3,
+                             [{file,"eunit_proc.erl"},{line,379}]},
+                         {eunit_proc,handle_test,2,
+                             [{file,"eunit_proc.erl"},{line,537}]},
+                         {eunit_proc,tests_inorder,3,
+                             [{file,"eunit_proc.erl"},{line,479}]},
+                         {eunit_proc,with_timeout,3,
+                             [{file,"eunit_proc.erl"},{line,369}]},
+                         {eunit_proc,run_group,2,
+                             [{file,"eunit_proc.erl"},{line,593}]}]}
+[0m
+
+Finished in 4.907 seconds
+[0;31m17 tests, 5 failures
+[0m===> Error running tests
+make[1]: *** [check] Error 1
+make: *** [check-agent] Error 2
+
+## x21-native-fourth.log
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C apps/cayrn_lfe check REBAR="rebar3"
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling src/cayrn_lfe_io.lfe
+===> Compiling test/cayrn_lfe_io_tests.lfe
+===> Compiling test/cayrn_lfe_resource_tests.lfe
+===> Compiling cayrn_lfe
+===> Performing EUnit tests...
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m
+Finished in 12.720 seconds
+[0;32m17 tests, 0 failures
+[0m
+## x21-native-fifth.log
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C apps/cayrn_lfe check REBAR="rebar3"
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_io.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling test/cayrn_lfe_resource_tests.lfe
+===> Compiling test/cayrn_lfe_io_tests.lfe
+===> Compiling cayrn_lfe
+===> Performing EUnit tests...
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;31mF[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m
+Failures:
+
+  1) cayrn_lfe_resource_tests:retiring_down_and_close_barriers_test/0
+[0;31m     Failure/Error: {error,
+                     {badmatch,
+                      {stop,invalid_agent_command,
+                       #{active =>
+                          {finishing,<<"2">>,<0.585.0>,succeeded,<<"42">>},
+                         pending => #{},socket => #Port<0.30>,
+                         closing => undefined,
+                         origins =>
+                          #{<0.585.0> =>
+                             {<<"2">>,
+                              {#Ref<0.2437188885.2430205954.106017>,
+                               {x21_control,7}},
+                              #Ref<0.2437188885.2430074882.106016>,
+                              retiring}}}}},
+                     [{cayrn_lfe_resource_tests,
+                       '-retiring_down_and_close_barriers_test/0-fun-4-',4,
+                       [{file,
+                         "/opt/homebrew/Cellar/erlang/28.5/lib/erlang/lib/eunit-2.10.3/include/eunit.hrl"},
+                        {line,317}]},
+                      {cayrn_lfe_resource_tests,'with-control-state',1,
+                       [{file,
+                         "/opt/homebrew/Cellar/erlang/28.5/lib/erlang/lib/eunit-2.10.3/include/eunit.hrl"},
+                        {line,351}]},
+                      {cayrn_lfe_resource_tests,
+                       retiring_down_and_close_barriers_test,0,
+                       [{file,
+                         "/opt/homebrew/Cellar/erlang/28.5/lib/erlang/lib/eunit-2.10.3/include/eunit.hrl"},
+                        {line,317}]},
+                      {eunit_test,'-mf_wrapper/2-fun-0-',2,
+                       [{file,"eunit_test.erl"},{line,285}]},
+                      {eunit_test,run_testfun,1,
+                       [{file,"eunit_test.erl"},{line,83}]},
+                      {eunit_proc,run_test,1,
+                       [{file,"eunit_proc.erl"},{line,554}]},
+                      {eunit_proc,with_timeout,3,
+                       [{file,"eunit_proc.erl"},{line,379}]},
+                      {eunit_proc,handle_test,2,
+                       [{file,"eunit_proc.erl"},{line,537}]}]}
+[0m
+
+Finished in 10.682 seconds
+[0;31m20 tests, 1 failures
+[0m===> Error running tests
+make[1]: *** [check] Error 1
+make: *** [check-agent] Error 2
+
+## x21-native-sixth.log
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C apps/cayrn_lfe check REBAR="rebar3"
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_io.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling test/cayrn_lfe_resource_tests.lfe
+===> Compiling test/cayrn_lfe_io_tests.lfe
+=ERROR REPORT==== 18-Oct-2026::22:36:55.729438 ===
+Can't load module 'gen_tcp' that resides in sticky dir
+
+===> Compiling cayrn_lfe
+===> Performing EUnit tests...
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m
+Finished in 12.520 seconds
+[0;32m20 tests, 0 failures
+[0m
+## x21-native-seventh.log
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C apps/cayrn_lfe check REBAR="rebar3"
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling src/cayrn_lfe_io.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling test/cayrn_lfe_resource_tests.lfe
+===> Compiling test/cayrn_lfe_io_tests.lfe
+===> Compiling cayrn_lfe
+===> Performing EUnit tests...
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;31mF[0m
+Failures:
+
+  1) cayrn_lfe_io_tests:seal_orders_prior_capture_and_rejects_late_writes_test/0
+[0;31m     Failure/Error: ?assertEqual({capture,<0.611.0>,<0.549.0>,#Ref<0.812397832.1624768513.242676>,<<53>>,<<98,101,102,111,114,101>>}, first)
+       expected: {capture,<0.611.0>,<0.549.0>,
+                          #Ref<0.812397832.1624768513.242676>,<<"5">>,
+                          <<"before">>}
+            got: {'DOWN',#Ref<0.812397832.1624768513.242416>,process,
+                         <0.579.0>,killed}[0m
+[0;36m     %% /opt/homebrew/Cellar/erlang/28.5/lib/erlang/lib/eunit-2.10.3/include/eunit.hrl:42:in `cayrn_lfe_io_tests:seal_orders_prior_capture_and_rejects_late_writes_test/0`[0m
+
+
+
+Finished in 14.529 seconds
+[0;31m21 tests, 1 failures
+[0m===> Error running tests
+make[1]: *** [check] Error 1
+make: *** [check-agent] Error 2
+
+## x21-native-final.log
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C apps/cayrn_lfe check REBAR="rebar3"
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_io.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling test/cayrn_lfe_resource_tests.lfe
+===> Compiling test/cayrn_lfe_io_tests.lfe
+===> Compiling cayrn_lfe
+===> Performing EUnit tests...
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m
+Finished in 11.795 seconds
+[0;32m21 tests, 0 failures
+[0m
+## x21-native-final2.log
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C apps/cayrn_lfe check REBAR="rebar3"
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling test/cayrn_lfe_resource_tests.lfe
+===> Failed to compile /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe
+===> Nested Errors: [{error,[{"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe",
+                              [{128,lfe_lint,
+                                {undefined_function,{unless,2}}}]}],
+                            []}]
+===> Compiling test/cayrn_lfe_resource_tests.lfe failed
+/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:128: function unless/2 undefined
+make[1]: *** [check] Error 1
+make: *** [check-agent] Error 2
+
+## x21-fresh.log
+Fresh component /private/tmp/x21-fresh-qrpnvb0y/native source; 19 source files; no inherited build products
+rebar3 compile
+===> Fetching rebar3_lfe v0.5.5
+===> Fetching lfe v2.2.0
+===> Analyzing applications...
+===> Compiling lfe
+===> Compiling rebar3_lfe
+source/_build/default/plugins/lfe/ebin.lfe:none: no such file or directory
+===> Hook for app_compile failed!
+
+===> Errors loading plugin {rebar3_lfe,"~> 0.5"}. Run rebar3 with DEBUG=1 set to see errors.
+===> Analyzing applications...
+===> Compiling lfe
+===> Compiling rebar3_lfe
+source/_build/default/plugins/lfe/ebin.lfe:none: no such file or directory
+===> Hook for app_compile failed!
+
+===> Errors loading plugin {rebar3_lfe,"~> 0.5"}. Run rebar3 with DEBUG=1 set to see errors.
+===> Verifying dependencies...
+===> Fetching lfe v2.2.0
+===> Analyzing applications...
+===> Compiling lfe
+source/_build/default/lib/lfe/ebin.lfe:none: no such file or directory
+===> Hook for app_compile failed!
+
+make: *** [build] Error 1
+Exit 2
+
+## Additional disclosed command failures
+The first ownership-cleanup source edit had one extra LFE closing parenthesis:
+make build-agent exited2, corrected before any final gate.
+The first broad README shell syntax check's Python subprocess exited1 at the
+pre-existing historical example --token <TOKEN>; the enclosing shell ended0
+because git diff --check followed it. Final bounded static checks explicitly
+cover the changed intro and full component docs, with unchanged historical
+placeholder examples excluded rather than edited.

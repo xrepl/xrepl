@@ -93,3 +93,14 @@ Only that per-operation decision is replaced here. Node context/authority
 retirement, size-safe result/output and later input decisions retain their named
 owners/gates. See current project resource-planning section for sequence and
 compatibility; no original complete-transcript/failure requirement is relaxed.
+
+
+## Proposed next node-lifetime boundary — 2026-10-18
+
+The current implementation is native2; node4096 identity and size limits remain.
+The Arc02 arc-plan now carries a concrete **unapproved** Slice02 direction:
+connection-owned host-authority leases/context tickets, with a simpler
+per-context challenge alternative. This is a decision proposal, not a change
+to the implemented ownership model or an issued CC assignment. Rust retains
+durable public-session authority in either option. Operator discussion precedes
+a complete Slice02 open set and any affected protocol/source work.

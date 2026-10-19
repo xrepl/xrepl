@@ -1,0 +1,16 @@
+{
+  "base": "f261152fc150a1addf3286a97b6a1a0324a42869",
+  "branch": "release/0.2.x",
+  "state": "committed validated candidate; author-attested, independent CDC review pending",
+  "upstream_cayrn": "7b27b0f4a24d9dd85918fd590760b472a60798a3",
+  "files": {
+    "README.md": "c058078f7ee65d2ff605d1c6c150e7cfc108dec6b4cbb0471463a11bb83b7614",
+    "apps/cayrn_lfe/AGENTS.md": "ea74d164a93d9690e866dc36c6541422d4c0499e704a759514a37504c22c5295",
+    "apps/cayrn_lfe/README.md": "cf6dd26662cd1c854a944117e5a0c9393dd1335405e945700c14f06e44d62c4b",
+    "apps/cayrn_lfe/src/cayrn_lfe_context.lfe": "27a9e54e5f7214d93df2b4dcc21da34b6badea479a1e26e3a8ec530f8a0752ec",
+    "apps/cayrn_lfe/src/cayrn_lfe_io.lfe": "380419f727eaed9c0dac379b489c9ad4e0baf7a3e09ceabe58cc286706fc50d3",
+    "apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe": "f45a39463ae52188b3ffd739218873a483bd5ea6aa09216466d8ed5ecf923451",
+    "apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe": "28e9f662afac3e767f16e85008bb5611a543335d9e92ed7983cb90eed99e8aeb"
+  },
+  "commit": "7228183e2e584e0ab86e03dc6b9454d4b918cc38"
+}

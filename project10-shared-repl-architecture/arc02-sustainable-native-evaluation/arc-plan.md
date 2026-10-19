@@ -131,3 +131,80 @@ their separate later owners and required decisions.
 
 Version history v1.1: scoped Autonomous Mode2.8.0 and the real C03 handoff change
 workflow/status/dependency identity, without changing architecture or acceptance.
+
+
+## Slice02 design decision — proposed, awaiting Operator discussion
+
+Source inspection after Slice01 confirms that the listener's public ETS table
+retains one entry for every Hello session identity and stops normal sequential
+admission at4096. Removing entries on close would permit an old Hello/dispatch
+stream to create a fresh evaluator under an old identity. Neither TTL eviction
+nor silent tombstone deletion satisfies the preserved no-replay/fencing contract.
+This choice was already reserved in Slice02's roadmap; no implementation prompt
+is issued until it is resolved. Source-space build support remains a separate
+packaging follow-up, not a reason to change this protocol decision.
+
+**CDC recommendation:** introduce a connection-owned host-authority lease in the
+shared Rust connector, retaining separate per-session runtime sockets. Here
+“lease” has no clock or timeout expiry: one live authority connection owns it.
+A native boot identity and monotonically issued lease identity prevent a retired
+authority handle from becoming current again; native metadata tracks only live
+leases. Each lease keeps a scalar context-admission high-water mark and bounded
+live contexts, replacing the historical session-ID set. Rust serializes context
+creation handshakes per lease and assigns sparse increasing context tickets;
+failed attempts consume tickets. Evaluations retain the existing journal-backed
+operation token, independent of the context ticket. A lost session socket loses
+that context; loss of the host-authority channel retires all contexts belonging
+to that host. Other hosts/leases remain independent.
+
+| Owner | State / responsibility |
+| --- | --- |
+| Shared Rust | Host-authority channel lifecycle, serialized context-ticket allocation, durable public session/generation/operation admission and no native reconnect/replay |
+| Thin native agent | Current boot/lease handles, per-live-lease high-water scalar and bounded live-context ownership; reject retired/replayed tickets and enforce native control/capture hooks |
+| Journal | Complete historical public identities/transcript; no new native durable authority or transcript replay |
+
+Native handshake changes need a separately versioned paired native protocol
+revision; public client RPC need not change for this direction. Support multiple
+Rust hosts with a bounded active-lease budget, rather than keeping past host
+identities forever. Boot-handle generation, limits, atomic admission/retirement,
+connect/disconnect races and exact errors must be specified against source in
+the complete open set before implementation. The native permanent guard would
+then protect lease/context tickets, while Rust remains responsible for never
+allocating a new native context for a closed/lost public session. This boundary
+is explicit: a deliberately rewritten Hello with a NEW valid context ticket is
+not the same message replay; the native agent is not a second durable public
+session registry. Keep bounded duplicate-live-session checks where applicable.
+
+**Tradeoff:** the authority channel introduces another failure path whose loss
+ends all of one host's live contexts, even if individual sockets were healthy.
+It gives stronger native protection against accidental reissue of an old
+context ticket and a clear bounded ownership hierarchy, at the cost of one
+additional connection and a native transient lease registry. Thin LFE/Lua/JS
+agents would implement only that native registry/hooks; common policy remains
+Rust. No heartbeat, distributed leader election or clock-based lease is proposed.
+
+**Alternative:** give every new context connection a fresh native challenge,
+remove historical native IDs, and rely entirely on Rust's durable public-session
+admission/no-reconnect policy. This keeps per-context failure isolation and a
+smaller native adapter; it fences verbatim old handshakes but supplies less
+protection against a host incorrectly constructing a fresh connection for an
+old public session. Persistent native tombstones are not recommended because
+they add a second historical store instead of solving ownership.
+
+Operator decision requested: endorse the host-authority lease direction, prefer
+the per-context challenge boundary, or discuss another approach. Existing
+Slice01/native2 acceptance work proceeds independently. Slice02 and the dependent
+Cayrn Slice04 composition remain held only at this architectural decision; the
+separate size/preview design also remains to be made explicit before its prompt.
+No implementation or external research is commissioned by this proposal.
+
+## Slice01 accepted — 2026-10-18
+
+Actual source7228183/Cayrn7b27b0f independently accepted by CDC /root,
+implementer /root/xrepl_x21. [Verification](slice01-fenced-capture-lifetimes/cdc-verification.md)
+and [retrospective](slice01-fenced-capture-lifetimes/cdc-retrospective.md) retain
+27 ordinary/12 native/3 client/21 unique native and236 root EUnit executions,
+fresh source and root launcher evidence. This discharges the matching-native2
+runtime hold; XA02-01/02 are done at their bounded scope, not whole-arc acceptance.
+Node4096/size8192/slow-pressure/full composition and historical gates remain.
+The proposed Slice02 architecture below remains unapproved pending Operator reply.
