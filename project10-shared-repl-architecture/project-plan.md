@@ -258,3 +258,12 @@ That dated activation is the current scope/branch/role/review/commit authority,
 superseding earlier one-contributor and planning-only holds for this arc.
 Historical evidence and outstanding independent/Operator gates retain their
 meaning. No push/publication, later arc or UX work is authorized.
+
+
+## Active resource handoff — 2026-10-18
+
+Cayrn's independently reviewed native2 C03 source7b27b0f and planningcdec989
+now supply the actual bounded interface for Arc02/Slice01. The native CC
+/root/xrepl_x21 reconciled upstream hashes before edits. All native/consumer
+runtime gates remain pending its implementation and independent review. See
+Arc02 arc-plan.md's v1.1 status entry; no node/size/UX or historical gate is closed.

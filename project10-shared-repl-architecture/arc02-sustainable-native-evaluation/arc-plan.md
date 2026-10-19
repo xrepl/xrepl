@@ -1,7 +1,8 @@
 # Arc02 — sustainable native evaluation
 
-Version1.0, 2026-10-18. Prepared, not executed. Project10 source release/0.2.x.
-Sofie remains the sole contributor; self-review is attested. Arc01's import and
+Version1.1, 2026-10-18. Active under scoped Autonomous Mode. Project10 source release/0.2.x.
+Original prepared one-contributor wording is superseded by the activation below.
+Sofie CDC independently reviews the assigned CC implementation. Arc01's import and
 LFE conversion are committed at ea844f5/f261152 with pending independent gates.
 Those bounded working interfaces and the Operator's next-planning request suffice
 to prepare this arc; no formal Arc01 close or independent acceptance is invented.
@@ -28,7 +29,7 @@ final system size/churn checks are additional composition, not deferred-only QA.
 
 | Slice | Usable result / delivery | Actual dependency | State |
 | --- | --- | --- | --- |
-| [Slice01 — fenced capture lifetimes](slice01-fenced-capture-lifetimes/slice-plan.md) | More-than 256 native evaluations; scalar token fence,64 live capture origins, collector retirement with late-output/ACK/close proof | Actual Cayrn C03 native v2 identity/journal return | Fully prepared; dependency-held and not activated |
+| [Slice01 — fenced capture lifetimes](slice01-fenced-capture-lifetimes/slice-plan.md) | More-than 256 native evaluations; scalar token fence,64 live capture origins, collector retirement with late-output/ACK/close proof | Actual Cayrn C03 native v2 identity/journal return | Active; actual C03 return7b27b0f reconciled before native edits |
 | Slice02 — bounded node identity lifecycle | Remove4096 cumulative context-tombstone lifetime guard while retaining stale generation/authority and concurrent-context protection | X01 actual ownership/retirement behavior; resolved authority/tombstone design | Roadmap only; do not issue implementation until design/Operator decision |
 | Slice03 — size-safe previews and captured streams | Bounded explicit value previews and complete bounded-chunk captured output, pressure paths preserving environment/capture ACK correctness | LFE conversion; stable wire budgets; align with current native v2 if after X01 | Roadmap only; may proceed independently of node churn after design |
 
@@ -114,3 +115,19 @@ reviewed evidence, and write `cdc-retrospective.md` at every newly closing scale
 The initial prepared prompt remains preserved; activation and actual CC assignment
 are in the slice's `cc-prompt-iteration01.md`. CDC is next-action owner until the
 CC acknowledges its exact packet.
+
+
+## Accepted upstream and active Slice01 — 2026-10-18
+
+Cayrn C03 native2 source7b27b0f4a24d9dd85918fd590760b472a60798a3 is the actual
+consumed interface; its bounded Rust acceptance and retrospective are committed
+in Cayrn planning cdec989. Native CC /root/xrepl_x21 acknowledged and reconciled
+all41 baseline paths and the10 approved upstream deltas before native source
+edits. Source remains release/0.2.x overf261152, with docs/design excluded.
+The prepared dependency hold above is superseded only by this real handoff.
+All12 native +3 consumer runtime gates are now assigned to X01 at matching pins;
+no native runtime pass is yet claimed. Node identity and size designs retain
+their separate later owners and required decisions.
+
+Version history v1.1: scoped Autonomous Mode2.8.0 and the real C03 handoff change
+workflow/status/dependency identity, without changing architecture or acceptance.
