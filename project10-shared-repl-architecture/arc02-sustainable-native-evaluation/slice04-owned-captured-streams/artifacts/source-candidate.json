@@ -1,0 +1,537 @@
+{
+  "status": "Actual CC attested proposed done; independent CDC pending",
+  "base": "7427d1c8e43183b25012e6870937347c39425606",
+  "branch": "release/0.2.x",
+  "commit": "cf1f1a2d94f1e6f4cb6f867ab71c9537348faa31",
+  "cayrn_source": "34af63eb9f07a0e019495378045852ad69d00284",
+  "x03_planning_acceptance": "a683721a2f2402973405c45d4eab07902f9f2224",
+  "planning_initial_issue": "a1054e36729043ae85b788da0c610b2e79e5794f",
+  "planning_current_issue": "1ac11a017e65dc96b5c12c1e1f20424c5d89fcdc",
+  "assignment": "cc-prompt-iteration02.md with initial and iteration01 retained",
+  "executed_refinements": 2,
+  "before": {
+    "apps/cayrn_lfe/src/cayrn_lfe_context.lfe": "45d7c1054dc93a793a0486337a8bbf735ce949f3a6872f0f28566ef479524db1",
+    "apps/cayrn_lfe/src/cayrn_lfe_io.lfe": "380419f727eaed9c0dac379b489c9ad4e0baf7a3e09ceabe58cc286706fc50d3",
+    "apps/cayrn_lfe/src/cayrn-lfe-stream.lfe": null,
+    "apps/cayrn_lfe/src/cayrn_lfe_writer.lfe": null,
+    "apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe": "09d0adb39a072f11a0fad7f93d5981a12f3185208bea7bcb6c75c54285b5da75",
+    "apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe": "3c2c685486900e4caaea9f38ce62787928b89e23333c8dd6e7ac03b44ddd1495",
+    "apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe": "ca0ba320fbf18c4727fd04c9d3883cb519377c9fd4771c1eea162dd158e5dbcf",
+    "apps/cayrn_lfe/test/cayrn_lfe_stream_tests.lfe": null,
+    "apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe": null,
+    "apps/cayrn_lfe/README.md": "91e4d3a92ff6c1e5ae153c0f39cc1bcac88accca6dca3df564a1e9ed2c2125ba",
+    "apps/cayrn_lfe/AGENTS.md": "ed9f0f04a92a2f035d55668b99948ab279452c6c2b30343669a566f6ae91ca91",
+    "README.md": "a7b06be23fc1c2d5befe4b213ab2cd09adbd9df3b609e7781c6c9441e818ea3b"
+  },
+  "after": {
+    "apps/cayrn_lfe/src/cayrn_lfe_context.lfe": "bda37c689f9075dc9151069764c2708f99e0cac66fb4caa6c644e51880283be7",
+    "apps/cayrn_lfe/src/cayrn_lfe_io.lfe": "a7630c19f0f40962954c2531565229ac59ed50a600a9709c796ce94884a72fe1",
+    "apps/cayrn_lfe/src/cayrn-lfe-stream.lfe": "ce6b9e13c66395148a6b84eec79216b7462fd2e9f841abfd3739a847a6d37fa3",
+    "apps/cayrn_lfe/src/cayrn_lfe_writer.lfe": "ff2c983b5d4c8ed189cefdd444dc0a114b58cd9d5f92fc4f3b414d1f853fee7f",
+    "apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe": "a105d939fd57e4e08e5ce67f57e58681e05db1504f4a3f486cfa09554a161351",
+    "apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe": "3759eda477d61a361365917982c63093dd42b4ef51a69103bc1b9585eb193f6a",
+    "apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe": "fc35a44c126495cf523f6713c518dd4e4d97ba75dd6f05ed226a47eaefdfe6b8",
+    "apps/cayrn_lfe/test/cayrn_lfe_stream_tests.lfe": "d24420dfc7260e22ae3b1fc053545eece3a3e3a90a6e13058ad574344146c0bf",
+    "apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe": "59668ebebf69fb9f7352ad151910e1a5879ac4d18cacc0f8dbf092c1c7336916",
+    "apps/cayrn_lfe/README.md": "d174eb70808ad57a5f87c234347a0881b542633732238d6ecdd8212a5308ec42",
+    "apps/cayrn_lfe/AGENTS.md": "50ddb72e66f76e4f02ad5f90fc0cc36292a42a1af0e20a7768591b89170e1297",
+    "README.md": "7d19de13521832b5f67cddd43006cd86a7392bb9ac477d7bab658cd5529cd425"
+  },
+  "private_native_version": 4,
+  "public_rpc_version": 1,
+  "patch_sha256": "3c1969f14907187be17daf855f02dba19e1e809a9cf53bc89ab8f6cd8b5966ce",
+  "patch_bytes": 171000,
+  "source_diff_stat": " README.md                                         |   15 +-\n apps/cayrn_lfe/AGENTS.md                          |   16 +-\n apps/cayrn_lfe/README.md                          |   49 +-\n apps/cayrn_lfe/src/cayrn-lfe-stream.lfe           |  112 +++\n apps/cayrn_lfe/src/cayrn_lfe_context.lfe          |  769 ++++++++++-----\n apps/cayrn_lfe/src/cayrn_lfe_io.lfe               |  406 +++++---\n apps/cayrn_lfe/src/cayrn_lfe_writer.lfe           |   26 +\n apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe |    4 +-\n apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe        |  130 +--\n apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe | 1088 +++++++++++++++++++++\n apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe  |  352 ++++---\n apps/cayrn_lfe/test/cayrn_lfe_stream_tests.lfe    |  226 +++++\n 12 files changed, 2579 insertions(+), 614 deletions(-)\n",
+  "gates": [
+    {
+      "label": "final2-current-test-precompile",
+      "argv": "['rebar3', 'as', 'test', 'compile']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "final2-component-verbose",
+      "argv": "['make', 'check']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "final2-root",
+      "argv": "['make', 'test-lfe', 'build-agent', 'check-agent', 'build', 'lint-rust', 'test-rust']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "final2-fresh-source",
+      "argv": "['python3', '/private/tmp/x04-fresh.py']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "final2-launcher",
+      "argv": "['python3', '/private/tmp/x03-launcher.py']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "final2-runtime-exports",
+      "argv": "['python3', '/private/tmp/x04-runtime.py']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "final2-cayrn-all",
+      "argv": "['make', 'check', 'lint-integration', 'test-xrepl']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    }
+  ],
+  "all_command_attempts": [
+    {
+      "label": "compile-01",
+      "argv": "['make', 'build']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "smoke-01",
+      "argv": "['python3', '/private/tmp/x03-launcher.py']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "testcompile-01",
+      "argv": "['rebar3', 'as', 'test', 'compile']",
+      "exit": 1,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "testcompile-02",
+      "argv": "['rebar3', 'as', 'test', 'compile']",
+      "exit": 1,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "testcompile-03",
+      "argv": "['rebar3', 'as', 'test', 'compile']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "stream-focused-01",
+      "argv": "['rebar3', 'eunit', '--module=cayrn_lfe_stream_tests']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "testcompile-04",
+      "argv": "['rebar3', 'as', 'test', 'compile']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "resource-focused-01",
+      "argv": "['rebar3', 'eunit', '--module=cayrn_lfe_resource_tests,cayrn_lfe_stream_tests']",
+      "exit": 1,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "testcompile-05",
+      "argv": "['rebar3', 'as', 'test', 'compile']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "resource-focused-02",
+      "argv": "['rebar3', 'eunit', '--module=cayrn_lfe_resource_tests,cayrn_lfe_stream_tests']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "testcompile-06",
+      "argv": "['rebar3', 'as', 'test', 'compile']",
+      "exit": 1,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "testcompile-07",
+      "argv": "['rebar3', 'as', 'test', 'compile']",
+      "exit": 1,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "testcompile-08",
+      "argv": "['rebar3', 'as', 'test', 'compile']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "ownership-focused-01",
+      "argv": "['rebar3', 'eunit', '--module=cayrn_lfe_ownership_tests']",
+      "exit": 1,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "testcompile-09",
+      "argv": "['rebar3', 'as', 'test', 'compile']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "ownership-focused-02",
+      "argv": "['rebar3', 'eunit', '--module=cayrn_lfe_ownership_tests']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "testcompile-10",
+      "argv": "['rebar3', 'as', 'test', 'compile']",
+      "exit": 1,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "testcompile-11",
+      "argv": "['rebar3', 'as', 'test', 'compile']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "ownership-focused-03",
+      "argv": "['rebar3', 'eunit', '--module=cayrn_lfe_ownership_tests']",
+      "exit": 1,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "testcompile-12",
+      "argv": "['rebar3', 'as', 'test', 'compile']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "component-draft-01",
+      "argv": "['make', 'check']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "final-current-test-precompile",
+      "argv": "['rebar3', 'as', 'test', 'compile']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "final-component-verbose",
+      "argv": "['make', 'check', 'REBAR=rebar3 -v']",
+      "exit": 0,
+      "runtime_evidence": "invalid zero-test version-only invocation"
+    },
+    {
+      "label": "final-root",
+      "argv": "['make', 'test-lfe', 'build-agent', 'check-agent', 'build', 'lint-rust', 'test-rust']",
+      "exit": 2,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "testcompile-13",
+      "argv": "['rebar3', 'as', 'test', 'compile']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "final2-current-test-precompile",
+      "argv": "['rebar3', 'as', 'test', 'compile']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "final2-component-verbose",
+      "argv": "['make', 'check']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "final2-root",
+      "argv": "['make', 'test-lfe', 'build-agent', 'check-agent', 'build', 'lint-rust', 'test-rust']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "final2-fresh-source",
+      "argv": "['python3', '/private/tmp/x04-fresh.py']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "final2-launcher",
+      "argv": "['python3', '/private/tmp/x03-launcher.py']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "final2-runtime-exports",
+      "argv": "['python3', '/private/tmp/x04-runtime.py']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    },
+    {
+      "label": "final2-cayrn-all",
+      "argv": "['make', 'check', 'lint-integration', 'test-xrepl']",
+      "exit": 0,
+      "runtime_evidence": "see actual raw population; compile is not runtime"
+    }
+  ],
+  "populations": {
+    "native_retained_unique": 56,
+    "native_new_stream_unique": 6,
+    "native_new_ownership_unique": 14,
+    "native_unique": 76,
+    "component_executions": 93,
+    "component_repeats": 17,
+    "root_legacy_executions": 175,
+    "root_native_executions": 243,
+    "root_native_repeats": 167,
+    "root_total": 418,
+    "common_test": 0,
+    "production_modules": 12,
+    "test_modules": 8,
+    "cayrn_ordinary": {
+      "cli": 0,
+      "client": 3,
+      "core": 3,
+      "host_private": 19,
+      "host_tests_agent": 14,
+      "host_tests_sessions": 9,
+      "protocol": 6,
+      "total": 54
+    },
+    "real_native_integration": 14,
+    "real_consumer_pty": 3,
+    "xrepl_adventure": 7,
+    "xrepl_core_ordinary": 0,
+    "xrepl_core_doctest": 1,
+    "final_failed": 0,
+    "final_ignored": 0,
+    "final_filtered": 0,
+    "required_final_gates_unrun": 0
+  },
+  "unavailable_injection": "OS allocation faults unavailable; source acquisition review not runtime injection",
+  "first_freeze_failure": {
+    "root_executions": 418,
+    "passed": 416,
+    "failed": 2,
+    "skipped": 0,
+    "cause": "Foreign prior fixture EXIT misrouted into direct callback fixture; isolated actual test-owned mailbox only. Production/other11 hashes unchanged.",
+    "downstream_then_unrun": [
+      "root remaining targets",
+      "fresh",
+      "launcher",
+      "exports",
+      "Cayrn"
+    ],
+    "subsequent_refreeze02": "all full required gates executed/passed"
+  },
+  "invalid_runtime_attempt": "final-component-verbose exit0 printed only Rebar version; zero tests and INVALID runtime evidence. Plain final2-component-verbose is merely a retained label: actual ARGV make check,93/0, no REBAR override.",
+  "rows": [
+    {
+      "id": "XS04-01",
+      "claim": "proposed done within contract; ledger OPEN",
+      "evidence": "Stream large_chardata/encoding_carry/native_complete_output plus source explicit1024-unit walker, copied<=4100 UTF8 payloads (wire<=8192). Actual aliases and both UTF16/32 byte orders, mixed list/binary and cross-prefix carry concatenate exactly; immutable origin operation retained."
+    },
+    {
+      "id": "XS04-02",
+      "claim": "proposed done within contract; ledger OPEN",
+      "evidence": "Withheld actual native ACK, collector done-before-normal-DOWN negative/positive, context job_done/DOWN both orders, Output sent/ACK both orders, invalid suffix/EOF carry and empty write. Original reply only after every ACK and collector physical/trace disposition; context credit waits both exact witnesses."
+    },
+    {
+      "id": "XS04-03",
+      "claim": "proposed done within contract; ledger OPEN",
+      "evidence": "Global64 actual jobs across two origins;65th ordinary enobufs, withheld ACK retains64, exact completion recovers63 and healthy next output. Nested MFA emits INNER/OUTER without deadlock. Owners perform no network send or user conversion/apply. Current-only64job/68frame maps and one pending chunk/job; no lifetime history."
+    },
+    {
+      "id": "XS04-04",
+      "claim": "proposed done within contract; ledger OPEN",
+      "evidence": "Real sys pre-handler gates at origin_ready/activate_origin kill either owner with marker absent. Root and MFA trap_exit under collector/context loss, exact watched owned PID/ref deaths, retained external trace handle, actual unlink-without-grant owner kill. Source acquisition rollback reviewed; OS allocation-fault injection explicitly unavailable/unrun."
+    },
+    {
+      "id": "XS04-05",
+      "claim": "proposed done within contract; ledger OPEN",
+      "evidence": "Positive send_pend=8751 observed before collector-only/context-only/listener/registry/application failure. Root and active MFA trap_exit=true; all known root/formatters/collector/writer/context watched for exact physical DOWN; known trace present before and absent after. No client drain or user-blocker release to help failure cleanup. C06 broader composition remains separate."
+    },
+    {
+      "id": "XS04-06",
+      "claim": "proposed done within contract; ledger OPEN",
+      "evidence": "Deferred Dispatch token consumed once/no actor before Outcome writer_sent; canceled source marker absent; third pipeline invalid;64origins rechecked at deferred activation; computed stale/current/future Cancel no-op. Four real acquired callback/socket preactivation Close/Cancel boundaries yield exact Cancelled(false) only after real root DOWN; activated diagnostic and result/expected-kill completion-wins retained. Strong seal both request/trace orders plus post-proof rejection race; terminal sent/DOWN both orders. Positive-pressure Close delivers504000 admitted bytes then physical Closed; perpetual hold and idle-future Cancel terminate bounded Lost/EOF without false Closed."
+    },
+    {
+      "id": "XS04-07",
+      "claim": "proposed done within contract; ledger OPEN",
+      "evidence": "All56 baseline native method identities retained;6stream+14ownership=76unique, actual root243native executions/167repeats plus175legacy=418. Plain component93, fresh93, full root/launcher/current20exports/BEAM identities. Matching Cayrn54ordinary+14realnative+3consumer/PTY; xrepl7adventure+1coredoctest. CT0, helpers excluded, final failed/ignored/filtered0."
+    },
+    {
+      "id": "XS04-08",
+      "claim": "proposed done within contract; ledger OPEN",
+      "evidence": "Exact12 before/after hashes, full171000-byte binary-safe patch, source commit, full readback/raw commands/failures and helper sources; all8 rows proposed done but OPEN until CDC independently accepts. Root assessment27finding owners preserved, no claimed quality closure. C06/tooling/package/docs/security/durability/UX/Operator holds explicit; no push."
+    }
+  ],
+  "helpers": [
+    {
+      "path": "/private/tmp/x04-assessment-overlap.py",
+      "bytes": 1970,
+      "sha256": "f0e36bc05ec4715de2d56140faec3b4414d76c9b0b1c9550bf12a77e2e86ab64"
+    },
+    {
+      "path": "/private/tmp/x04-complete-ownership.py",
+      "bytes": 15773,
+      "sha256": "6a4630353e00737162e99ba01883a4350e85e1927d5cf8ef3d27573557689c02"
+    },
+    {
+      "path": "/private/tmp/x04-doc-style.py",
+      "bytes": 9676,
+      "sha256": "d4137a736bb0cf27666bc57c8881410ebb8ade76bb0fde96deebe4263aebbef2"
+    },
+    {
+      "path": "/private/tmp/x04-final-assessment-recheck.py",
+      "bytes": 2646,
+      "sha256": "55668325526ae99c9dda89a8bdbf67f41e9282b63b8b7a0e385ca1539226fc43"
+    },
+    {
+      "path": "/private/tmp/x04-final-gates-01.py",
+      "bytes": 1652,
+      "sha256": "f82b9ba712369f8578a179c192c66f9a190dd5d41289abc6d366588ff4396452"
+    },
+    {
+      "path": "/private/tmp/x04-final-gates.py",
+      "bytes": 1641,
+      "sha256": "41b88de9a7613c8f27fce3fa156db2ef4e390feb8ae763c02775980e8b1adfe9"
+    },
+    {
+      "path": "/private/tmp/x04-final-specimens.py",
+      "bytes": 6043,
+      "sha256": "328fc55ec6d5645e95920c7a3a2771951917d6c873390816e4757296ad04c411"
+    },
+    {
+      "path": "/private/tmp/x04-fresh.py",
+      "bytes": 1091,
+      "sha256": "dadbbd703bc4d416ed29a4b5ea176527b346a83204c35d2647680d577dfd8794"
+    },
+    {
+      "path": "/private/tmp/x04-intake.py",
+      "bytes": 9937,
+      "sha256": "a2b817f5450570a92345482c5d428715333c590887ce0c4ebe27a0c5582ae58d"
+    },
+    {
+      "path": "/private/tmp/x04-issue02.py",
+      "bytes": 5491,
+      "sha256": "bd5304b6f3a3a376e1a72cb2091f302fec02b9ff99311fa294d17fb1243e3d7a"
+    },
+    {
+      "path": "/private/tmp/x04-iteration02.py",
+      "bytes": 7364,
+      "sha256": "bdb73ccc104c298672ef52f56b8cc5e13cd272e2eb66dbb5a6b34ad880e55ef1"
+    },
+    {
+      "path": "/private/tmp/x04-migrate-fixtures.py",
+      "bytes": 13699,
+      "sha256": "bba4861b4c0f6b35ce8ebe3485dc37ddcd190ad0dea11ee3922d8fd1d7f50a6e"
+    },
+    {
+      "path": "/private/tmp/x04-populations.py",
+      "bytes": 1896,
+      "sha256": "6c80d1bbf69351b7fd6994dc4b23f71f88d19f8b1e82a5f9bc9270e46741bf0a"
+    },
+    {
+      "path": "/private/tmp/x04-return.py",
+      "bytes": 23021,
+      "sha256": "6e5b78d8c00106a1c7acaeede2c7500f60c62571c36f91348f6e4e2eb196e923"
+    },
+    {
+      "path": "/private/tmp/x04-run.py",
+      "bytes": 1256,
+      "sha256": "fc0dfb1995bdb5466cf8d66b065d092e09cca0bf2ccd60fc6238a0687a6b0e07"
+    },
+    {
+      "path": "/private/tmp/x04-runtime.py",
+      "bytes": 3545,
+      "sha256": "8616ceb904d11a01dd6f66727ea9734cd231f93cc53a19b8542ccc2265428e39"
+    },
+    {
+      "path": "/private/tmp/x04-write-context.py",
+      "bytes": 24621,
+      "sha256": "5adfd564569487e302cdca326521287ee8a615e6cdddb1316192d2a15f44f2bf"
+    },
+    {
+      "path": "/private/tmp/x04-write-io.py",
+      "bytes": 15774,
+      "sha256": "36cd51bf998a7cf4b176524438e89cdabc00006859d814d719b26c9a80bfd371"
+    },
+    {
+      "path": "/private/tmp/x04-write-ownership.py",
+      "bytes": 26040,
+      "sha256": "e98784ba3ad15673727d0ec134a4d8180918480cfda05048f5da294f1581faec"
+    },
+    {
+      "path": "/private/tmp/x04-write-stream-tests.py",
+      "bytes": 13141,
+      "sha256": "05dd8a4cc4833c5db9bc3edf5b906fef106519d99d3ae6ce8376d29a95b5a5c1"
+    },
+    {
+      "path": "/private/tmp/x04-write-workers.py",
+      "bytes": 5840,
+      "sha256": "0fe109062a39aa942e004afa40b4a79ac08e38d01547b611a072c64170e1533f"
+    },
+    {
+      "path": "/private/tmp/x03-launcher.py",
+      "bytes": 2522,
+      "sha256": "e1de379305a03cd136f94da6757ff00551c3f4b8ab3fabe52c22d0fae820cf1f"
+    },
+    {
+      "path": "/private/tmp/x04-source-commit.txt",
+      "bytes": 462,
+      "sha256": "f4a7a6ec5b1506802b13e7f9f94795761e9e9828192b54a400037ebff4cf6e30"
+    },
+    {
+      "path": "/private/tmp/x04-planning-commit.txt",
+      "bytes": 338,
+      "sha256": "313fc342f0219864708235a166f93015ef7fe8545f219b02ec8c0163a864e32e"
+    },
+    {
+      "path": "/private/tmp/x04-freeze.json",
+      "bytes": 1335,
+      "sha256": "05f44631af2dd6f4833f77e2351ae4c1a7e922f47b8ec0abae59c9626cd4de15"
+    },
+    {
+      "path": "/private/tmp/x04-freeze02.json",
+      "bytes": 1335,
+      "sha256": "c6a706c8cc3334dce384ac193b94957a5e927b5750b5dc90219eed3f8a75c322"
+    }
+  ],
+  "residual_owners": {
+    "C06": "Sustained mixed/churn/large-value/two-observer/spool/storage composition; no arc closure from X04",
+    "X-TOOL-01": "Arc06 permanent Rebar ignored test-beam/cache tooling; current precompile/inventory/fresh proof retained",
+    "X-PKG-01": "Checkout-with-spaces packaging separate from passed spaced-socket launcher",
+    "X-DOC-01": "Historical shell placeholder remains separately tracked",
+    "Project09": "All27 assessment findings retain existing later owners; no blanket fixed claim",
+    "Later UX": "Separate project/backlog; no UX expansion",
+    "Operator": "Historical Project01/09/import/conversion, security, physical durability and publication gates remain"
+  },
+  "source_preservation": "Only pre-existing docs/design/ untracked; exact12 source commit, stagingempty, no push",
+  "documentation_checks": {
+    "changed_shell_fences": 0,
+    "new_local_links": 0
+  },
+  "binding_contract_sha256": "976ab5ff3301e1448ba4ae21e973c8636fe83960474f422d00bb962eb46adabc",
+  "issued_input_hashes": {
+    "cc-prompt.md": "e27e7f898ae6af40b072d3354103a075cdc2163d230b7b9f2a2dbcd6f24f9cbf",
+    "cc-prompt-iteration01.md": "153d34276a9017ecfa4429eec42141fce19fa3eb1224295c40344e1046869bc7",
+    "cc-prompt-iteration02.md": "6816312c80ad4cf7472db4b057eff9aa544dc739f7f1a00cc3b7975d1bece785",
+    "artifacts/iteration02-source-review.md": "ae9cf3ec7722efe759c2ca50fd3dec4e8b2186d2bb5248c52c88dfb2b36cd3cb",
+    "artifacts/inflight-source-review01/manifest.json": "27b85d098594c30ffc0c2a34fed42be0498f4dbd5d96770997353913b1820d69"
+  },
+  "planning_evidence_whitespace": {
+    "raw_staged_check_exit": 2,
+    "raw_findings": 56,
+    "scope": "Exact unified patch context markers and two original Make command trailing spaces only; preserve byte-exact evidence",
+    "source_check_exit": 0,
+    "nonraw_return_check_exit": 0
+  }
+}

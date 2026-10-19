@@ -1,0 +1,962 @@
+CWD /Users/oubiwann/lab/lfe/xrepl/xrepl
+ARGV ('git', 'rev-parse', 'HEAD')
+7427d1c8e43183b25012e6870937347c39425606
+EXIT 0
+
+CWD /Users/oubiwann/lab/lfe/xrepl/xrepl
+ARGV ('git', 'branch', '--show-current')
+release/0.2.x
+EXIT 0
+
+CWD /Users/oubiwann/lab/lfe/xrepl/xrepl
+ARGV ('git', 'worktree', 'list')
+/Users/oubiwann/lab/lfe/xrepl/xrepl                     7427d1c [release/0.2.x]
+/Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning a1054e3 [planning]
+EXIT 0
+
+CWD /Users/oubiwann/lab/lfe/xrepl/xrepl
+ARGV ('git', 'status', '--short')
+?? docs/design/
+EXIT 0
+
+CWD /Users/oubiwann/lab/lfe/xrepl/xrepl
+ARGV ('git', 'diff', '--cached', '--name-only')
+EXIT 0
+
+CWD /Users/oubiwann/lab/oxur/cayrn
+ARGV ('git', 'rev-parse', 'HEAD')
+34af63eb9f07a0e019495378045852ad69d00284
+EXIT 0
+
+CWD /Users/oubiwann/lab/oxur/cayrn
+ARGV ('git', 'branch', '--show-current')
+codex/core-session-lifecycle
+EXIT 0
+
+CWD /Users/oubiwann/lab/oxur/cayrn
+ARGV ('git', 'worktree', 'list')
+/Users/oubiwann/lab/oxur/cayrn                     34af63e [codex/core-session-lifecycle]
+/Users/oubiwann/lab/oxur/cayrn/.worktrees/planning a7a3e77 [planning]
+EXIT 0
+
+CWD /Users/oubiwann/lab/oxur/cayrn
+ARGV ('git', 'status', '--short')
+EXIT 0
+
+CWD /Users/oubiwann/lab/oxur/cayrn
+ARGV ('git', 'diff', '--cached', '--name-only')
+EXIT 0
+
+CWD /Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning
+ARGV ('git', 'rev-parse', 'HEAD')
+a1054e36729043ae85b788da0c610b2e79e5794f
+EXIT 0
+
+CWD /Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning
+ARGV ('git', 'branch', '--show-current')
+planning
+EXIT 0
+
+CWD /Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning
+ARGV ('git', 'status', '--short')
+EXIT 0
+
+CWD /Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning
+ARGV ('git', 'diff', '--cached', '--name-only')
+EXIT 0
+
+BEFORE apps/cayrn_lfe/src/cayrn_lfe_context.lfe 45d7c1054dc93a793a0486337a8bbf735ce949f3a6872f0f28566ef479524db1
+
+BEFORE apps/cayrn_lfe/src/cayrn_lfe_io.lfe 380419f727eaed9c0dac379b489c9ad4e0baf7a3e09ceabe58cc286706fc50d3
+
+BEFORE apps/cayrn_lfe/src/cayrn-lfe-stream.lfe None
+
+BEFORE apps/cayrn_lfe/src/cayrn_lfe_writer.lfe None
+
+BEFORE apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe 09d0adb39a072f11a0fad7f93d5981a12f3185208bea7bcb6c75c54285b5da75
+
+BEFORE apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe 3c2c685486900e4caaea9f38ce62787928b89e23333c8dd6e7ac03b44ddd1495
+
+BEFORE apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe ca0ba320fbf18c4727fd04c9d3883cb519377c9fd4771c1eea162dd158e5dbcf
+
+BEFORE apps/cayrn_lfe/test/cayrn_lfe_stream_tests.lfe None
+
+BEFORE apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe None
+
+BEFORE apps/cayrn_lfe/README.md 91e4d3a92ff6c1e5ae153c0f39cc1bcac88accca6dca3df564a1e9ed2c2125ba
+
+BEFORE apps/cayrn_lfe/AGENTS.md ed9f0f04a92a2f035d55668b99948ab279452c6c2b30343669a566f6ae91ca91
+
+BEFORE README.md a7b06be23fc1c2d5befe4b213ab2cd09adbd9df3b609e7781c6c9441e818ea3b
+
+CWD /Users/oubiwann/lab/lfe/xrepl/xrepl
+ARGV ('rg', '-n', 'gen_tcp:send|capture|committed|finished|retire|seal|cayrn_lfe_io:start|evaluated|foreground_ready|activate_origin|origin_ready|native_agent_companions|cayrn_lfe_context:handle|cayrn_lfe_io:handle', 'apps/cayrn_lfe/src', 'apps/cayrn_lfe/test')
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe:14:   (relative_path_survives_evaluated_cwd_test_ 0)
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe:258:(defspec (relative_path_survives_evaluated_cwd_test_ 0) (() (term)))
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe:259:(defun relative_path_survives_evaluated_cwd_test_ ()
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe:260:  "Resolve relative startup once; evaluated cwd cannot relocate restarts."
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe:326:  "Real captured AppState cannot remove replacement file, symlink or socket."
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe:360:        ;; Pin captured inode so the different-socket oracle cannot hit ABA.
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe:537:  (let (('ok (gen_tcp:send socket (json:encode frame)))) 'ok))
+apps/cayrn_lfe/src/cayrn_lfe_app.lfe:34:  ;; Capture identity BEFORE chmod; failed capture cannot authorize unlink.
+apps/cayrn_lfe/src/cayrn_lfe_app.lfe:35:  (case (try (capture-identity (endpoint-path provisional))
+apps/cayrn_lfe/src/cayrn_lfe_app.lfe:54:(defun capture-identity (path)
+apps/cayrn_lfe/src/cayrn_lfe_app.lfe:111:     (case (capture-identity path)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:70:  "33 exact owner retirements increase a scalar without historical maps."
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:333:              (gen_tcp:send partial #b(0))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:343:              (gen_tcp:send bad #b("not-json")) (lost bad)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:393:  "One raw unexpected byte retires an authority without a complete frame."
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:416:            (retire owner mode)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:442:  "Actual send_pend>0 remains positive through authority-only retirement."
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:486:              ;; Do not read client bytes or release evaluated code to help.
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:489:                (io:format 'user "retirement decision send_pend=~p~n"
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:698:        (gen_tcp:send socket
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:804:(defun retire (socket mode)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:808:           (gen_tcp:send socket #b(0)))))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:837:  (let (('ok (gen_tcp:send socket (json:encode value)))) 'ok))
+apps/cayrn_lfe/src/cayrn_lfe_registry.lfe:22:  "Grant this caller a fresh lease, without retaining retired owners."
+apps/cayrn_lfe/src/cayrn_lfe_registry.lfe:98:     (_ (tuple 'noreply (retire-owner pid ref state)))))
+apps/cayrn_lfe/src/cayrn_lfe_registry.lfe:101:(defun retire-owner (pid ref state)
+apps/cayrn_lfe/src/cayrn_lfe_registry.lfe:142:   (=:= (re:run id #b("^[A-Za-z0-9_-]+\\z") '(#(capture none))) 'match))
+apps/cayrn_lfe/test/cayrn_lfe_preview_tests.lfe:182:  "Huge exceptions and parse errors preserve the previously committed env."
+apps/cayrn_lfe/test/cayrn_lfe_preview_tests.lfe:269:  (let (('ok (gen_tcp:send socket (json:encode frame)))) 'ok))
+apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe:3:  (export (errors_preserve_committed_environment_test 0)
+apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe:18:(defun errors_preserve_committed_environment_test ()
+apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe:19:  "Preserve the committed environment across parse and evaluation errors."
+apps/cayrn_lfe/src/cayrn_lfe_authority.lfe:23:  "Grant once; thereafter any byte, EOF or error retires this owner."
+apps/cayrn_lfe/src/cayrn_lfe_authority.lfe:33:            ('ok (gen_tcp:send socket
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:14:          (retirement_close_orderings_test_ 0)
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:94:            #b("native resource limit: 64 live capture origins; "
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:95:               "source not evaluated")
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:144:             ;; First prove natural retirement after a sender exits before ACK.
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:220:(defun retirement_close_orderings_test_ ()
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:221:  "Close handles both live retire-ready and already-granted retirement."
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:251:      (cayrn_lfe_context:handle_info
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:252:        (tuple 'capture io (self) (make_ref) #b("5") #b("wrong")) state))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:254:      (cayrn_lfe_context:handle_info
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:255:        (tuple 'foreground_ready io #b("5")) state))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:257:      (cayrn_lfe_context:handle_info
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:258:        (tuple 'retire_ready io #b("5")) state))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:260:      (cayrn_lfe_context:handle_info
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:261:        (tuple 'sealed io #b("5")) (map-set state 'waiting (list io))))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:263:      (cayrn_lfe_context:handle_info
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:274:          (cayrn_lfe_io:handle_cast
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:275:            (tuple 'committed (self) (self) ref) state))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:314:                ((tuple 'capture _ _ incoming _ _) (when (=:= incoming ref))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:316:                (after 1000 (error 'missing_ordered_capture)))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:318:              (cayrn_lfe_io:handle_cast
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:319:                (tuple 'committed (self) (self) ref) both)
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:322:                (after 1000 (error 'missing_committed_reply)))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:337:              (cayrn_lfe_context:handle_info
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:361:  "Destroying capture leaves an independently configured session intact."
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:380:              (cayrn_lfe_context:handle_info
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:381:                (tuple 'retire_ready io #b("2")) state)))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:389:                  (cayrn_lfe_context:handle_info down retiring)))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:395:  "Close waits for a granted retirement and never grants after forced seal."
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:399:              (cayrn_lfe_context:handle_info
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:400:                (tuple 'retire_ready io #b("2")) state))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:409:             (cayrn_lfe_context:handle_info down closing))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:416:              (cayrn_lfe_context:handle_info
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:417:                (tuple 'retire_ready io #b("2")) closing)))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:421:          (cayrn_lfe_context:handle_info (tuple 'sealed io #b("2")) held))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:425:  (cayrn_lfe_context:handle_info
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:467:         (cayrn_lfe_io:handle_cast (tuple 'finished (self)) state)))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:471:  (let (((tuple 'noreply next) (cayrn_lfe_io:handle_info message state))) next))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:482:    ((tuple 'retire_ready _ #b("2")) 'ok)
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:483:    (after 1000 (error 'missing_retire_ready))))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:487:    ((tuple 'retire_ready _ _) (error 'premature_retirement))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:535:  (let (('ok (gen_tcp:send socket (json:encode value)))) 'ok))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:1:;;;; Immutable capture origin with producer and durable-write drain proof.
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:4:  (export (committed 3) (finished 2)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:6:          (init 1) (retire 2) (seal 2) (start 3) (terminate 2)))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:8:(defrecord capture
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:11:  (sent 0) (observed 0) (finished 'false) (root-accounted 'false)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:12:  (announced 'false) (ready 'false) (sealed 'false))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:20:  "Start linked capture and trace a paused root before it can evaluate."
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:31:(defspec (committed 3) (((pid) (pid) (reference)) 'ok))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:33:(defun committed (io from ref)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:35:  (gen_server:cast io (tuple 'committed (self) from ref)))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:37:(defspec (finished 2) (((pid) (pid)) 'ok))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:39:(defun finished (io owner)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:41:  (gen_server:cast io (tuple 'finished owner)))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:43:(defspec (retire 2) (((pid) (pid)) 'ok))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:45:(defun retire (io owner)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:46:  "Grant a previously proven natural retirement after owner unlink."
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:47:  (gen_server:cast io (tuple 'retire owner)))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:49:(defspec (seal 2) (((pid) (pid)) 'ok))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:51:(defun seal (io owner)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:53:  (gen_server:cast io (tuple 'seal owner)))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:60:   (let ((trace (trace:session_create 'cayrn_capture (self) '())))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:68:           (make-capture owner owner operation operation root root trace trace
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:81:  (('trace _from state) (tuple 'reply (capture-trace state) state))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:89:  "Process owner notifications without blocking capture or control."
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:90:  (((tuple 'finished owner) (= (match-capture owner owner) state))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:91:   (continue (set-capture-finished state 'true)))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:92:  (((tuple 'committed owner from ref)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:93:    (= (match-capture owner owner pending pending) state))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:96:     (continue (set-capture-pending state next))))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:97:  (((tuple 'seal owner) (= (match-capture owner owner) state))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:98:   (! owner (tuple 'sealed (self) (capture-operation state)))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:99:   (tuple 'noreply (set-capture-sealed state 'true)))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:100:  (((tuple 'retire owner)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:101:    (= (match-capture owner owner ready 'true sealed 'false) state))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:104:  ((_request _state) (error 'invalid_capture_control)))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:111:    (= (match-capture sealed 'true) state))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:116:          (pending (capture-pending state))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:118:          (next (set-capture-observed state (+ 1 (capture-observed state)))))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:121:        (! (capture-owner state)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:122:           (tuple 'capture (self) from ref (capture-operation state) text))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:123:        (continue (set-capture-pending next (map-set pending key 'true))))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:131:   (let* ((producers (capture-producers state))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:135:                 (set-capture-producers state
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:140:   (let* ((producers (capture-producers state))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:143:          (ref (trace:delivered (capture-trace state) pid)))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:145:       (set-capture-deliveries
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:146:         (set-capture-producers state
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:148:         (map-set (capture-deliveries state) ref pid)))))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:151:           (maps:take ref (capture-deliveries state)))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:153:          (producers (capture-producers state))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:158:         (set-capture-producers
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:159:           (set-capture-deliveries state deliveries)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:163:   (continue (set-capture-sent state (+ 1 (capture-sent state)))))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:167:  (let* ((producers (capture-producers state))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:171:      (set-capture-root-accounted
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:172:        (set-capture-producers state (maps:remove pid producers))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:173:        (orelse (capture-root-accounted state)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:174:                (=:= pid (capture-root state))))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:178:  (andalso (capture-finished state) (capture-root-accounted state)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:179:           (=:= 0 (map_size (capture-producers state)))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:180:           (=:= 0 (map_size (capture-deliveries state)))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:181:           (=:= (capture-sent state) (capture-observed state))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:182:           (=:= 0 (map_size (capture-pending state)))))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:185:  (((= (match-capture sealed 'true) state)) (tuple 'noreply state))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:186:  (((= (match-capture ready 'true) state)) (tuple 'noreply state))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:190:      (! (capture-owner state)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:191:         (tuple 'retire_ready (self) (capture-operation state)))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:192:      (tuple 'noreply (set-capture-ready state 'true)))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:193:     ((andalso (capture-finished state) (capture-root-accounted state)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:194:               (> (map_size (capture-producers state)) 0)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:195:               (not (capture-announced state)))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:196:      (! (capture-owner state)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:197:         (tuple 'foreground_ready (self) (capture-operation state)))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:198:      (tuple 'noreply (set-capture-announced state 'true)))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:205:  (trace:session_destroy (capture-trace state))
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:1:;;;; Capture ACK and sealing negative controls.
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:3:  (export (capture_requires_owner_ack_test 0)
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:4:          (native_agent_companions_test_ 0)
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:5:          (seal_orders_prior_capture_and_rejects_late_writes_test 0)))
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:11:(defun native_agent_companions_test_ ()
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:19:(defun capture_requires_owner_ack_test ()
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:20:  "Never acknowledge a native write before its owner commits capture."
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:23:          (cayrn_lfe_io:start (self) #b("2") root))
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:30:          ((tuple 'capture incoming-io from incoming-ref #b("2") #b("hello"))
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:33:          (after 1000 (error 'missing_capture)))
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:44:(defun seal_orders_prior_capture_and_rejects_late_writes_test ()
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:45:  "Seal after earlier capture and reject subsequent writes explicitly."
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:48:          (cayrn_lfe_io:start (self) #b("5") root))
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:54:        (cayrn_lfe_io:seal io (self))
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:56:          ((= (tuple 'capture incoming-io _ _ _ _) first)
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:58:           (assertEqual (tuple 'capture io (self) ref #b("5") #b("before"))
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:60:          ((tuple 'sealed incoming-io _) (when (=:= incoming-io io))
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:61:           (error 'seal_preceded_capture))
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:62:          (after 1000 (error 'missing_capture)))
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:64:          ((= (tuple 'sealed incoming-io _) second)
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:66:           (assertEqual (tuple 'sealed io #b("5")) second))
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:67:          (after 1000 (error 'missing_seal)))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:32:  "Process native control, evaluator, collector and capture events."
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:61:  (((tuple 'capture io from ref operation text) state)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:76:         (tuple 'stop 'capture_overflow state)))))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:77:  (((tuple 'evaluated pid operation status text omitted env)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:83:     (cayrn_lfe_io:finished io (self))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:87:  (((tuple 'foreground_ready io operation) state)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:91:  (((tuple 'retire_ready io operation) state)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:101:         (cayrn_lfe_io:retire io (self))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:126:  (((tuple 'sealed io operation) (= (map 'waiting waiting) state))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:137:                                "or capture barrier timed out")))))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:178:                         'value #b("native resource limit: 64 live capture "
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:179:                                   "origins; source not evaluated")))))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:186:     (cayrn_lfe_io:committed io from ref)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:206:                                       "context retired")))))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:226:                   (! owner (tuple 'evaluated (self) operation
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:229:      (let (((tuple 'ok io trace) (cayrn_lfe_io:start owner operation pid)))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:294:                                "native context; capture tail may be "
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:305:        (lists:foreach (lambda (io) (cayrn_lfe_io:seal io (self))) live)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:329:   (gen_tcp:send socket (json:encode data))))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:348:  "Stop only this context's evaluator, tracing, capture and socket."
+EXIT 0
+
+UNIQUE BASELINE METHODS excluding companion generator {
+  "cayrn_lfe_application_tests.lfe": [
+    "independent_application_start_test_",
+    "child_kill_keeps_endpoint_test_",
+    "queued_parent_call_survives_registry_kill_test_",
+    "relative_path_survives_evaluated_cwd_test_",
+    "application_stop_reaps_endpoint_test_",
+    "identity_guard_preserves_replacements_test_",
+    "startup_refusal_cleans_acquisition_test_"
+  ],
+  "cayrn_lfe_authority_tests.lfe": [
+    "context_churn_test_",
+    "authority_churn_test_",
+    "scope_and_numeric_fences_test_",
+    "authority_capacity_test_",
+    "context_capacity_test_",
+    "monitor_and_exhaustion_test_",
+    "router_transfer_failure_test_",
+    "first_frame_timeout_test_",
+    "preaccept_watermark_test_",
+    "authority_eof_test_",
+    "authority_partial_byte_test_",
+    "suspended_context_loss_test_",
+    "pending_output_loss_test_",
+    "context_only_loss_test_",
+    "registry_restart_test_",
+    "listener_restart_test_",
+    "paused_endpoint_timeout_test_"
+  ],
+  "cayrn_lfe_eval_tests.lfe": [
+    "persistent_bindings_test",
+    "errors_preserve_committed_environment_test",
+    "functions_and_macro_context_test",
+    "ordinary_error_atom_is_a_value_test"
+  ],
+  "cayrn_lfe_io_tests.lfe": [
+    "native_agent_companions_test_",
+    "capture_requires_owner_ack_test",
+    "seal_orders_prior_capture_and_rejects_late_writes_test"
+  ],
+  "cayrn_lfe_preview_tests.lfe": [
+    "scalar_spellings_test",
+    "structural_types_test",
+    "conservative_list_boundaries_test",
+    "integer_byte_boundaries_test",
+    "huge_integer_test",
+    "depth_boundaries_test",
+    "unicode_boundary_test",
+    "wide_collections_test_",
+    "delimiter_reservations_test",
+    "native_large_values_preserve_environment_test_",
+    "native_error_previews_preserve_environment_test_",
+    "native_cancel_reports_false_test_"
+  ],
+  "cayrn_lfe_resource_tests.lfe": [
+    "quiet_sparse_evaluations_reclaim_origins_test_",
+    "token_replay_and_invalid_tokens_test_",
+    "capacity_refusal_and_recovery_test_",
+    "full_capacity_close_test_",
+    "async_descendants_wait_for_commit_test_",
+    "collector_failure_is_context_local_test_",
+    "stale_cancel_preserves_active_evaluation_test_",
+    "retirement_close_orderings_test_",
+    "ownership_and_monitor_mismatches_test",
+    "callback_order_inversions_test",
+    "closed_socket_retains_acquired_cleanup_state_test",
+    "trace_session_isolation_test",
+    "quiet_result_waits_for_exact_down_test",
+    "retiring_down_and_close_barriers_test"
+  ]
+}
+TOTAL56
+
+CWD /Users/oubiwann/lab/lfe/xrepl/xrepl
+ARGV ('erl', '-noshell', '-pa', '/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/lfe/ebin', '/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/ebin', '/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test', '-eval', 'lists:foreach(fun(M) -> io:format("~p ~p ~p~n", [M,code:which(M),M:module_info(exports)]) end, [\'cayrn-lfe-eval\',\'cayrn-lfe-preview\',\'cayrn_lfe_app\',\'cayrn_lfe_authority\',\'cayrn_lfe_connection\',\'cayrn_lfe_context\',\'cayrn_lfe_io\',\'cayrn_lfe_listener\',\'cayrn_lfe_registry\',\'cayrn_lfe_sup\',\'cayrn_lfe_application_tests\',\'cayrn_lfe_authority_tests\',\'cayrn_lfe_eval_tests\',\'cayrn_lfe_io_tests\',\'cayrn_lfe_preview_tests\',\'cayrn_lfe_resource_tests\']),halt().')
+'cayrn-lfe-eval' "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn-lfe-eval.beam" [{'LFE-EXPAND-EXPORTED-MACRO',
+                                                                                                                           3},
+                                                                                                                          {'__info__',
+                                                                                                                           1},
+                                                                                                                          {new,
+                                                                                                                           0},
+                                                                                                                          {run,
+                                                                                                                           2},
+                                                                                                                          {module_info,
+                                                                                                                           0},
+                                                                                                                          {module_info,
+                                                                                                                           1}]
+'cayrn-lfe-preview' "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn-lfe-preview.beam" [{'LFE-EXPAND-EXPORTED-MACRO',
+                                                                                                                                 3},
+                                                                                                                                {'__info__',
+                                                                                                                                 1},
+                                                                                                                                {module_info,
+                                                                                                                                 0},
+                                                                                                                                {module_info,
+                                                                                                                                 1},
+                                                                                                                                {render,
+                                                                                                                                 1}]
+cayrn_lfe_app "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_app.beam" [{'LFE-EXPAND-EXPORTED-MACRO',
+                                                                                                                       3},
+                                                                                                                      {'__info__',
+                                                                                                                       1},
+                                                                                                                      {start,
+                                                                                                                       2},
+                                                                                                                      {stop,
+                                                                                                                       1},
+                                                                                                                      {module_info,
+                                                                                                                       0},
+                                                                                                                      {module_info,
+                                                                                                                       1}]
+cayrn_lfe_authority "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_authority.beam" [{'LFE-EXPAND-EXPORTED-MACRO',
+                                                                                                                                   3},
+                                                                                                                                  {'__info__',
+                                                                                                                                   1},
+                                                                                                                                  {handle_call,
+                                                                                                                                   3},
+                                                                                                                                  {handle_cast,
+                                                                                                                                   2},
+                                                                                                                                  {handle_info,
+                                                                                                                                   2},
+                                                                                                                                  {init,
+                                                                                                                                   1},
+                                                                                                                                  {start_link,
+                                                                                                                                   1},
+                                                                                                                                  {terminate,
+                                                                                                                                   2},
+                                                                                                                                  {module_info,
+                                                                                                                                   0},
+                                                                                                                                  {module_info,
+                                                                                                                                   1}]
+cayrn_lfe_connection "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_connection.beam" [{'LFE-EXPAND-EXPORTED-MACRO',
+                                                                                                                                     3},
+                                                                                                                                    {'__info__',
+                                                                                                                                     1},
+                                                                                                                                    {handle_call,
+                                                                                                                                     3},
+                                                                                                                                    {handle_cast,
+                                                                                                                                     2},
+                                                                                                                                    {handle_info,
+                                                                                                                                     2},
+                                                                                                                                    {init,
+                                                                                                                                     1},
+                                                                                                                                    {start_link,
+                                                                                                                                     1},
+                                                                                                                                    {terminate,
+                                                                                                                                     2},
+                                                                                                                                    {module_info,
+                                                                                                                                     0},
+                                                                                                                                    {module_info,
+                                                                                                                                     1}]
+cayrn_lfe_context "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_context.beam" [{'LFE-EXPAND-EXPORTED-MACRO',
+                                                                                                                               3},
+                                                                                                                              {'__info__',
+                                                                                                                               1},
+                                                                                                                              {handle_call,
+                                                                                                                               3},
+                                                                                                                              {handle_cast,
+                                                                                                                               2},
+                                                                                                                              {handle_info,
+                                                                                                                               2},
+                                                                                                                              {init,
+                                                                                                                               1},
+                                                                                                                              {start_link,
+                                                                                                                               1},
+                                                                                                                              {terminate,
+                                                                                                                               2},
+                                                                                                                              {module_info,
+                                                                                                                               0},
+                                                                                                                              {module_info,
+                                                                                                                               1}]
+cayrn_lfe_io "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_io.beam" [{'LFE-EXPAND-EXPORTED-MACRO',
+                                                                                                                     3},
+                                                                                                                    {'__info__',
+                                                                                                                     1},
+                                                                                                                    {handle_call,
+                                                                                                                     3},
+                                                                                                                    {handle_cast,
+                                                                                                                     2},
+                                                                                                                    {handle_info,
+                                                                                                                     2},
+                                                                                                                    {init,
+                                                                                                                     1},
+                                                                                                                    {terminate,
+                                                                                                                     2},
+                                                                                                                    {module_info,
+                                                                                                                     0},
+                                                                                                                    {seal,
+                                                                                                                     2},
+                                                                                                                    {retire,
+                                                                                                                     2},
+                                                                                                                    {finished,
+                                                                                                                     2},
+                                                                                                                    {start,
+                                                                                                                     3},
+                                                                                                                    {committed,
+                                                                                                                     3},
+                                                                                                                    {module_info,
+                                                                                                                     1}]
+cayrn_lfe_listener "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_listener.beam" [{'LFE-EXPAND-EXPORTED-MACRO',
+                                                                                                                                 3},
+                                                                                                                                {'__info__',
+                                                                                                                                 1},
+                                                                                                                                {handle_call,
+                                                                                                                                 3},
+                                                                                                                                {handle_cast,
+                                                                                                                                 2},
+                                                                                                                                {handle_info,
+                                                                                                                                 2},
+                                                                                                                                {init,
+                                                                                                                                 1},
+                                                                                                                                {start_link,
+                                                                                                                                 2},
+                                                                                                                                {terminate,
+                                                                                                                                 2},
+                                                                                                                                {module_info,
+                                                                                                                                 0},
+                                                                                                                                {module_info,
+                                                                                                                                 1}]
+cayrn_lfe_registry "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_registry.beam" [{'LFE-EXPAND-EXPORTED-MACRO',
+                                                                                                                                 3},
+                                                                                                                                {'__info__',
+                                                                                                                                 1},
+                                                                                                                                {handle_call,
+                                                                                                                                 3},
+                                                                                                                                {handle_cast,
+                                                                                                                                 2},
+                                                                                                                                {handle_info,
+                                                                                                                                 2},
+                                                                                                                                {init,
+                                                                                                                                 1},
+                                                                                                                                {start_link,
+                                                                                                                                 0},
+                                                                                                                                {terminate,
+                                                                                                                                 2},
+                                                                                                                                {module_info,
+                                                                                                                                 0},
+                                                                                                                                {module_info,
+                                                                                                                                 1},
+                                                                                                                                {admit,
+                                                                                                                                 7},
+                                                                                                                                {open,
+                                                                                                                                 1}]
+cayrn_lfe_sup "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_sup.beam" [{'LFE-EXPAND-EXPORTED-MACRO',
+                                                                                                                       3},
+                                                                                                                      {'__info__',
+                                                                                                                       1},
+                                                                                                                      {authority,
+                                                                                                                       1},
+                                                                                                                      {context,
+                                                                                                                       1},
+                                                                                                                      {init,
+                                                                                                                       1},
+                                                                                                                      {module_info,
+                                                                                                                       0},
+                                                                                                                      {connection,
+                                                                                                                       1},
+                                                                                                                      {module_info,
+                                                                                                                       1},
+                                                                                                                      {start_link,
+                                                                                                                       2}]
+cayrn_lfe_application_tests "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_application_tests.beam" [{'LFE-EXPAND-EXPORTED-MACRO',
+                                                                                                                                                   3},
+                                                                                                                                                  {'__info__',
+                                                                                                                                                   1},
+                                                                                                                                                  {application_stop_reaps_endpoint_test_,
+                                                                                                                                                   0},
+                                                                                                                                                  {'await-port-down',
+                                                                                                                                                   1},
+                                                                                                                                                  {'callback-guard',
+                                                                                                                                                   2},
+                                                                                                                                                  {'child-failure',
+                                                                                                                                                   1},
+                                                                                                                                                  {child_kill_keeps_endpoint_test_,
+                                                                                                                                                   0},
+                                                                                                                                                  {'endpoint-info',
+                                                                                                                                                   0},
+                                                                                                                                                  {identity_guard_preserves_replacements_test_,
+                                                                                                                                                   0},
+                                                                                                                                                  {independent_application_start_test_,
+                                                                                                                                                   0},
+                                                                                                                                                  {'queued-parent-call',
+                                                                                                                                                   0},
+                                                                                                                                                  {queued_parent_call_survives_registry_kill_test_,
+                                                                                                                                                   0},
+                                                                                                                                                  {relative_path_survives_evaluated_cwd_test_,
+                                                                                                                                                   0},
+                                                                                                                                                  {'startup-refusal',
+                                                                                                                                                   1},
+                                                                                                                                                  {startup_refusal_cleans_acquisition_test_,
+                                                                                                                                                   0},
+                                                                                                                                                  {test,
+                                                                                                                                                   0},
+                                                                                                                                                  {module_info,
+                                                                                                                                                   0},
+                                                                                                                                                  {module_info,
+                                                                                                                                                   1}]
+cayrn_lfe_authority_tests "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_authority_tests.beam" [{'LFE-EXPAND-EXPORTED-MACRO',
+                                                                                                                                               3},
+                                                                                                                                              {'__info__',
+                                                                                                                                               1},
+                                                                                                                                              {authority_capacity_test_,
+                                                                                                                                               0},
+                                                                                                                                              {authority_churn_test_,
+                                                                                                                                               0},
+                                                                                                                                              {authority_eof_test_,
+                                                                                                                                               0},
+                                                                                                                                              {authority_partial_byte_test_,
+                                                                                                                                               0},
+                                                                                                                                              {context_capacity_test_,
+                                                                                                                                               0},
+                                                                                                                                              {context_churn_test_,
+                                                                                                                                               0},
+                                                                                                                                              {context_only_loss_test_,
+                                                                                                                                               0},
+                                                                                                                                              {first_frame_timeout_test_,
+                                                                                                                                               0},
+                                                                                                                                              {listener_restart_test_,
+                                                                                                                                               0},
+                                                                                                                                              {monitor_and_exhaustion_test_,
+                                                                                                                                               0},
+                                                                                                                                              {'paused-roles',
+                                                                                                                                               0},
+                                                                                                                                              {paused_endpoint_timeout_test_,
+                                                                                                                                               0},
+                                                                                                                                              {pending_output_loss_test_,
+                                                                                                                                               0},
+                                                                                                                                              {preaccept_watermark_test_,
+                                                                                                                                               0},
+                                                                                                                                              {registry_restart_test_,
+                                                                                                                                               0},
+                                                                                                                                              {'router-failure',
+                                                                                                                                               0},
+                                                                                                                                              {router_transfer_failure_test_,
+                                                                                                                                               0},
+                                                                                                                                              {scope_and_numeric_fences_test_,
+                                                                                                                                               0},
+                                                                                                                                              {'set-limit',
+                                                                                                                                               1},
+                                                                                                                                              {suspended_context_loss_test_,
+                                                                                                                                               0},
+                                                                                                                                              {test,
+                                                                                                                                               0},
+                                                                                                                                              {module_info,
+                                                                                                                                               0},
+                                                                                                                                              {'with-peer',
+                                                                                                                                               1},
+                                                                                                                                              {context,
+                                                                                                                                               6},
+                                                                                                                                              {authority,
+                                                                                                                                               2},
+                                                                                                                                              {'await-down',
+                                                                                                                                               1},
+                                                                                                                                              {module_info,
+                                                                                                                                               1}]
+cayrn_lfe_eval_tests "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_eval_tests.beam" [{'LFE-EXPAND-EXPORTED-MACRO',
+                                                                                                                                     3},
+                                                                                                                                    {'__info__',
+                                                                                                                                     1},
+                                                                                                                                    {errors_preserve_committed_environment_test,
+                                                                                                                                     0},
+                                                                                                                                    {functions_and_macro_context_test,
+                                                                                                                                     0},
+                                                                                                                                    {ordinary_error_atom_is_a_value_test,
+                                                                                                                                     0},
+                                                                                                                                    {persistent_bindings_test,
+                                                                                                                                     0},
+                                                                                                                                    {test,
+                                                                                                                                     0},
+                                                                                                                                    {module_info,
+                                                                                                                                     0},
+                                                                                                                                    {module_info,
+                                                                                                                                     1}]
+cayrn_lfe_io_tests "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_io_tests.beam" [{'LFE-EXPAND-EXPORTED-MACRO',
+                                                                                                                                 3},
+                                                                                                                                {'__info__',
+                                                                                                                                 1},
+                                                                                                                                {capture_requires_owner_ack_test,
+                                                                                                                                 0},
+                                                                                                                                {native_agent_companions_test_,
+                                                                                                                                 0},
+                                                                                                                                {seal_orders_prior_capture_and_rejects_late_writes_test,
+                                                                                                                                 0},
+                                                                                                                                {test,
+                                                                                                                                 0},
+                                                                                                                                {module_info,
+                                                                                                                                 0},
+                                                                                                                                {module_info,
+                                                                                                                                 1}]
+cayrn_lfe_preview_tests "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_preview_tests.beam" [{'LFE-EXPAND-EXPORTED-MACRO',
+                                                                                                                                           3},
+                                                                                                                                          {'__info__',
+                                                                                                                                           1},
+                                                                                                                                          {conservative_list_boundaries_test,
+                                                                                                                                           0},
+                                                                                                                                          {delimiter_reservations_test,
+                                                                                                                                           0},
+                                                                                                                                          {depth_boundaries_test,
+                                                                                                                                           0},
+                                                                                                                                          {huge_integer_test,
+                                                                                                                                           0},
+                                                                                                                                          {integer_byte_boundaries_test,
+                                                                                                                                           0},
+                                                                                                                                          {native_cancel_reports_false_test_,
+                                                                                                                                           0},
+                                                                                                                                          {native_error_previews_preserve_environment_test_,
+                                                                                                                                           0},
+                                                                                                                                          {native_large_values_preserve_environment_test_,
+                                                                                                                                           0},
+                                                                                                                                          {scalar_spellings_test,
+                                                                                                                                           0},
+                                                                                                                                          {structural_types_test,
+                                                                                                                                           0},
+                                                                                                                                          {unicode_boundary_test,
+                                                                                                                                           0},
+                                                                                                                                          {wide_collections_test_,
+                                                                                                                                           0},
+                                                                                                                                          {test,
+                                                                                                                                           0},
+                                                                                                                                          {module_info,
+                                                                                                                                           0},
+                                                                                                                                          {module_info,
+                                                                                                                                           1}]
+cayrn_lfe_resource_tests "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_resource_tests.beam" [{'LFE-EXPAND-EXPORTED-MACRO',
+                                                                                                                                             3},
+                                                                                                                                            {'__info__',
+                                                                                                                                             1},
+                                                                                                                                            {async_descendants_wait_for_commit_test_,
+                                                                                                                                             0},
+                                                                                                                                            {callback_order_inversions_test,
+                                                                                                                                             0},
+                                                                                                                                            {capacity_refusal_and_recovery_test_,
+                                                                                                                                             0},
+                                                                                                                                            {closed_socket_retains_acquired_cleanup_state_test,
+                                                                                                                                             0},
+                                                                                                                                            {collector_failure_is_context_local_test_,
+                                                                                                                                             0},
+                                                                                                                                            {full_capacity_close_test_,
+                                                                                                                                             0},
+                                                                                                                                            {ownership_and_monitor_mismatches_test,
+                                                                                                                                             0},
+                                                                                                                                            {quiet_result_waits_for_exact_down_test,
+                                                                                                                                             0},
+                                                                                                                                            {quiet_sparse_evaluations_reclaim_origins_test_,
+                                                                                                                                             0},
+                                                                                                                                            {retirement_close_orderings_test_,
+                                                                                                                                             0},
+                                                                                                                                            {retiring_down_and_close_barriers_test,
+                                                                                                                                             0},
+                                                                                                                                            {stale_cancel_preserves_active_evaluation_test_,
+                                                                                                                                             0},
+                                                                                                                                            {token_replay_and_invalid_tokens_test_,
+                                                                                                                                             0},
+                                                                                                                                            {trace_session_isolation_test,
+                                                                                                                                             0},
+                                                                                                                                            {test,
+                                                                                                                                             0},
+                                                                                                                                            {module_info,
+                                                                                                                                             0},
+                                                                                                                                            {module_info,
+                                                                                                                                             1}]
+EXIT 0
+
+COMPACT RUNTIME EXPORT RECOVERY (initial tool output truncated; raw initial invocation retained)
+ARGV ['erl', '-noshell', '-pa', '/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/lfe/ebin', '/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/ebin', '/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test', '-eval', 'lists:foreach(fun(M) -> io:format("~w ~ts ~w~n", [M,code:which(M),M:module_info(exports)]) end, [\'cayrn-lfe-eval\',\'cayrn-lfe-preview\',\'cayrn_lfe_app\',\'cayrn_lfe_authority\',\'cayrn_lfe_connection\',\'cayrn_lfe_context\',\'cayrn_lfe_io\',\'cayrn_lfe_listener\',\'cayrn_lfe_registry\',\'cayrn_lfe_sup\',\'cayrn_lfe_application_tests\',\'cayrn_lfe_authority_tests\',\'cayrn_lfe_eval_tests\',\'cayrn_lfe_io_tests\',\'cayrn_lfe_preview_tests\',\'cayrn_lfe_resource_tests\']),halt().']
+'cayrn-lfe-eval' /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn-lfe-eval.beam [{'LFE-EXPAND-EXPORTED-MACRO',3},{'__info__',1},{new,0},{run,2},{module_info,0},{module_info,1}]
+'cayrn-lfe-preview' /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn-lfe-preview.beam [{'LFE-EXPAND-EXPORTED-MACRO',3},{'__info__',1},{module_info,0},{render,1},{module_info,1}]
+cayrn_lfe_app /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_app.beam [{'LFE-EXPAND-EXPORTED-MACRO',3},{'__info__',1},{start,2},{stop,1},{module_info,0},{module_info,1}]
+cayrn_lfe_authority /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_authority.beam [{'LFE-EXPAND-EXPORTED-MACRO',3},{'__info__',1},{handle_call,3},{handle_cast,2},{handle_info,2},{init,1},{start_link,1},{terminate,2},{module_info,0},{module_info,1}]
+cayrn_lfe_connection /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_connection.beam [{'LFE-EXPAND-EXPORTED-MACRO',3},{'__info__',1},{handle_call,3},{handle_cast,2},{handle_info,2},{init,1},{start_link,1},{terminate,2},{module_info,0},{module_info,1}]
+cayrn_lfe_context /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_context.beam [{'LFE-EXPAND-EXPORTED-MACRO',3},{'__info__',1},{handle_call,3},{handle_cast,2},{handle_info,2},{init,1},{start_link,1},{terminate,2},{module_info,0},{module_info,1}]
+cayrn_lfe_io /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_io.beam [{'LFE-EXPAND-EXPORTED-MACRO',3},{'__info__',1},{handle_call,3},{handle_cast,2},{handle_info,2},{init,1},{terminate,2},{module_info,0},{seal,2},{retire,2},{finished,2},{start,3},{committed,3},{module_info,1}]
+cayrn_lfe_listener /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_listener.beam [{'LFE-EXPAND-EXPORTED-MACRO',3},{'__info__',1},{handle_call,3},{handle_cast,2},{handle_info,2},{init,1},{start_link,2},{terminate,2},{module_info,0},{module_info,1}]
+cayrn_lfe_registry /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_registry.beam [{'LFE-EXPAND-EXPORTED-MACRO',3},{'__info__',1},{handle_call,3},{handle_cast,2},{handle_info,2},{init,1},{start_link,0},{terminate,2},{module_info,0},{module_info,1},{admit,7},{open,1}]
+cayrn_lfe_sup /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_sup.beam [{'LFE-EXPAND-EXPORTED-MACRO',3},{'__info__',1},{authority,1},{context,1},{init,1},{module_info,0},{connection,1},{module_info,1},{start_link,2}]
+cayrn_lfe_application_tests /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_application_tests.beam [{'LFE-EXPAND-EXPORTED-MACRO',3},{'__info__',1},{application_stop_reaps_endpoint_test_,0},{'await-port-down',1},{'callback-guard',2},{'child-failure',1},{child_kill_keeps_endpoint_test_,0},{'endpoint-info',0},{identity_guard_preserves_replacements_test_,0},{independent_application_start_test_,0},{'queued-parent-call',0},{queued_parent_call_survives_registry_kill_test_,0},{relative_path_survives_evaluated_cwd_test_,0},{'startup-refusal',1},{startup_refusal_cleans_acquisition_test_,0},{test,0},{module_info,0},{module_info,1}]
+cayrn_lfe_authority_tests /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_authority_tests.beam [{'LFE-EXPAND-EXPORTED-MACRO',3},{'__info__',1},{authority_capacity_test_,0},{authority_churn_test_,0},{authority_eof_test_,0},{authority_partial_byte_test_,0},{context_capacity_test_,0},{context_churn_test_,0},{context_only_loss_test_,0},{first_frame_timeout_test_,0},{listener_restart_test_,0},{monitor_and_exhaustion_test_,0},{'paused-roles',0},{paused_endpoint_timeout_test_,0},{pending_output_loss_test_,0},{preaccept_watermark_test_,0},{registry_restart_test_,0},{'router-failure',0},{router_transfer_failure_test_,0},{scope_and_numeric_fences_test_,0},{'set-limit',1},{suspended_context_loss_test_,0},{test,0},{module_info,0},{'with-peer',1},{context,6},{authority,2},{'await-down',1},{module_info,1}]
+cayrn_lfe_eval_tests /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_eval_tests.beam [{'LFE-EXPAND-EXPORTED-MACRO',3},{'__info__',1},{errors_preserve_committed_environment_test,0},{functions_and_macro_context_test,0},{ordinary_error_atom_is_a_value_test,0},{persistent_bindings_test,0},{test,0},{module_info,0},{module_info,1}]
+cayrn_lfe_io_tests /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_io_tests.beam [{'LFE-EXPAND-EXPORTED-MACRO',3},{'__info__',1},{capture_requires_owner_ack_test,0},{native_agent_companions_test_,0},{seal_orders_prior_capture_and_rejects_late_writes_test,0},{test,0},{module_info,0},{module_info,1}]
+cayrn_lfe_preview_tests /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_preview_tests.beam [{'LFE-EXPAND-EXPORTED-MACRO',3},{'__info__',1},{conservative_list_boundaries_test,0},{delimiter_reservations_test,0},{depth_boundaries_test,0},{huge_integer_test,0},{integer_byte_boundaries_test,0},{native_cancel_reports_false_test_,0},{native_error_previews_preserve_environment_test_,0},{native_large_values_preserve_environment_test_,0},{scalar_spellings_test,0},{structural_types_test,0},{unicode_boundary_test,0},{wide_collections_test_,0},{test,0},{module_info,0},{module_info,1}]
+cayrn_lfe_resource_tests /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_resource_tests.beam [{'LFE-EXPAND-EXPORTED-MACRO',3},{'__info__',1},{async_descendants_wait_for_commit_test_,0},{callback_order_inversions_test,0},{capacity_refusal_and_recovery_test_,0},{closed_socket_retains_acquired_cleanup_state_test,0},{collector_failure_is_context_local_test_,0},{full_capacity_close_test_,0},{ownership_and_monitor_mismatches_test,0},{quiet_result_waits_for_exact_down_test,0},{quiet_sparse_evaluations_reclaim_origins_test_,0},{retirement_close_orderings_test_,0},{retiring_down_and_close_barriers_test,0},{stale_cancel_preserves_active_evaluation_test_,0},{token_replay_and_invalid_tokens_test_,0},{trace_session_isolation_test,0},{test,0},{module_info,0},{module_info,1}]
+EXIT 0
+
+## Iteration01 actual in-flight intake
+Planning ad3b712; original source baseline remains7427d1c.
+CURRENT12 {
+  "apps/cayrn_lfe/src/cayrn_lfe_context.lfe": "45d7c1054dc93a793a0486337a8bbf735ce949f3a6872f0f28566ef479524db1",
+  "apps/cayrn_lfe/src/cayrn_lfe_io.lfe": "cbd6fafd10ee497f513f67f3171c883ced84ca3116c5e72f8136fba63166351b",
+  "apps/cayrn_lfe/src/cayrn-lfe-stream.lfe": "14aa1ad0fc54ec8fa6ac72713adf71db204627888957c4670cc20638af796c8c",
+  "apps/cayrn_lfe/src/cayrn_lfe_writer.lfe": "ff2c983b5d4c8ed189cefdd444dc0a114b58cd9d5f92fc4f3b414d1f853fee7f",
+  "apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe": "09d0adb39a072f11a0fad7f93d5981a12f3185208bea7bcb6c75c54285b5da75",
+  "apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe": "3c2c685486900e4caaea9f38ce62787928b89e23333c8dd6e7ac03b44ddd1495",
+  "apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe": "ca0ba320fbf18c4727fd04c9d3883cb519377c9fd4771c1eea162dd158e5dbcf",
+  "apps/cayrn_lfe/test/cayrn_lfe_stream_tests.lfe": null,
+  "apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe": null,
+  "apps/cayrn_lfe/README.md": "91e4d3a92ff6c1e5ae153c0f39cc1bcac88accca6dca3df564a1e9ed2c2125ba",
+  "apps/cayrn_lfe/AGENTS.md": "ed9f0f04a92a2f035d55668b99948ab279452c6c2b30343669a566f6ae91ca91",
+  "README.md": "a7b06be23fc1c2d5befe4b213ab2cd09adbd9df3b609e7781c6c9441e818ea3b"
+}
+STATUS
+ M apps/cayrn_lfe/src/cayrn_lfe_io.lfe
+?? apps/cayrn_lfe/src/cayrn-lfe-stream.lfe
+?? apps/cayrn_lfe/src/cayrn_lfe_writer.lfe
+?? docs/design/
+ARGV ['rg', '-n', "stream_done|job_done|'DOWN|'EXIT", 'apps/cayrn_lfe/src/cayrn-lfe-stream.lfe', 'apps/cayrn_lfe/src/cayrn_lfe_io.lfe', 'apps/cayrn_lfe/src/cayrn_lfe_context.lfe']
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:197:  (((tuple 'stream_done worker job status) state)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:204:  (((tuple 'DOWN ref 'process owner reason)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:207:  (((tuple 'DOWN ref 'process worker reason) state)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:218:  (((tuple 'EXIT owner reason) (= (match-capture owner owner) state))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:220:  (((tuple 'EXIT root _reason) (= (match-capture root root) state))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:223:  (((tuple 'EXIT _worker 'normal) state)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:226:  (((tuple 'EXIT worker reason) state)
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:310:              (tuple 'job_done (self) (capture-origin current) job
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:104:  (((tuple 'DOWN monitor 'process pid _reason)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:113:  (((tuple 'DOWN monitor 'process pid reason)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:116:  (((tuple 'DOWN monitor 'process io reason) state)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:143:  (((tuple 'EXIT _ reason) state)
+apps/cayrn_lfe/src/cayrn-lfe-stream.lfe:15:           (! collector (tuple 'stream_done (self) job status))))))))
+EXIT 0
+
+## Iteration02 actual live reconciliation
+[
+  [
+    "apps/cayrn_lfe/src/cayrn_lfe_context.lfe",
+    "2b6252fcc0dcb12a002993a9dcc0a2e6b75f196067255c9b127b41afd1245a75",
+    "same"
+  ],
+  [
+    "apps/cayrn_lfe/src/cayrn_lfe_io.lfe",
+    "a7630c19f0f40962954c2531565229ac59ed50a600a9709c796ce94884a72fe1",
+    "same"
+  ],
+  [
+    "apps/cayrn_lfe/src/cayrn-lfe-stream.lfe",
+    "ce6b9e13c66395148a6b84eec79216b7462fd2e9f841abfd3739a847a6d37fa3",
+    "same"
+  ],
+  [
+    "apps/cayrn_lfe/src/cayrn_lfe_writer.lfe",
+    "ff2c983b5d4c8ed189cefdd444dc0a114b58cd9d5f92fc4f3b414d1f853fee7f",
+    "same"
+  ],
+  [
+    "apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe",
+    "80dd3ae70a37fd7c7edd7559f53c27d3f8a8494bf1c377ebf7624304ae5f026d",
+    "same"
+  ],
+  [
+    "apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe",
+    "f7fa8a7030a0d33e174f592e9ed3f24f622f90841595c40d8b6e063315e3e6ce",
+    "same"
+  ],
+  [
+    "apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe",
+    "fc35a44c126495cf523f6713c518dd4e4d97ba75dd6f05ed226a47eaefdfe6b8",
+    "same"
+  ],
+  [
+    "apps/cayrn_lfe/test/cayrn_lfe_stream_tests.lfe",
+    "ca1a20e9fa20510652940540f190fe989d2cd576bd21fcdb82607b236b9f1ba8",
+    "same"
+  ],
+  [
+    "apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe",
+    "a1ca9d5b6602e1aec21b9e7d258db85ac533e3f5b6994e8faa7e473db3ddd96d",
+    "changed-since-mutable-snapshot"
+  ],
+  [
+    "apps/cayrn_lfe/README.md",
+    "91e4d3a92ff6c1e5ae153c0f39cc1bcac88accca6dca3df564a1e9ed2c2125ba",
+    "same"
+  ],
+  [
+    "apps/cayrn_lfe/AGENTS.md",
+    "ed9f0f04a92a2f035d55668b99948ab279452c6c2b30343669a566f6ae91ca91",
+    "same"
+  ],
+  [
+    "README.md",
+    "a7b06be23fc1c2d5befe4b213ab2cd09adbd9df3b609e7781c6c9441e818ea3b",
+    "same"
+  ]
+]
+/Users/oubiwann/lab/lfe/xrepl/xrepl
+ M apps/cayrn_lfe/src/cayrn_lfe_context.lfe
+ M apps/cayrn_lfe/src/cayrn_lfe_io.lfe
+ M apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe
+ M apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe
+ M apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe
+?? apps/cayrn_lfe/src/cayrn-lfe-stream.lfe
+?? apps/cayrn_lfe/src/cayrn_lfe_writer.lfe
+?? apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe
+?? apps/cayrn_lfe/test/cayrn_lfe_stream_tests.lfe
+?? docs/design/
+7427d1c8e43183b25012e6870937347c39425606
+STAGED /Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning
+?? project10-shared-repl-architecture/arc02-sustainable-native-evaluation/slice04-owned-captured-streams/artifacts/execution.md
+?? project10-shared-repl-architecture/arc02-sustainable-native-evaluation/slice04-owned-captured-streams/artifacts/intake.log
+?? project10-shared-repl-architecture/arc02-sustainable-native-evaluation/slice04-owned-captured-streams/artifacts/validation.log
+1ac11a017e65dc96b5c12c1e1f20424c5d89fcdc
+STAGED /Users/oubiwann/lab/oxur/cayrn
+34af63eb9f07a0e019495378045852ad69d00284
+STAGED apps/cayrn_lfe/src/cayrn_lfe_io.lfe:94:             (! owner (tuple 'origin_ready (self) ref root trace))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:40:  (((tuple 'origin_ready io ref root trace) state)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:49:     (! (self) (tuple 'activate_origin io ref))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:55:           (put-origin io (map-set (origin io next) 'kill-requested 'true)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:57:  (((tuple 'activate_origin io _ref)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:61:  (((tuple 'activate_origin io ref) state)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:255:  (((map #b("kind") #b("close"))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:257:   (progress (begin-stop 'close state)))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:258:  (((map #b("kind") #b("close")) state) (tuple 'continue state))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:259:  (((map #b("kind") #b("cancel") #b("operation") operation) state)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:264:        (progress (begin-stop 'cancel state)))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:273:     (progress (begin-stop-once 'cancel state)))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:276:     (progress (begin-stop-once 'cancel state)))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:281:              (enqueue (begin-stop 'cancel state)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:309:                      'trace 'undefined 'result-seen 'false 'root-down 'false
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:310:                      'collector-down 'false 'kill-requested 'false)))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:315:           ;; Collector owns its paused root even before origin_ready arrives.
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:339:           ((list (tuple io entry)) (root-down io entry reason state))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:342:(defun root-down (io entry reason state)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:343:  (let* (('false (map-get entry 'root-down))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:344:         (next (put-origin io (map-set entry 'root-down 'true) state)))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:349:                                     (map-get entry 'kill-requested)))))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:361:  (if (andalso (map-get entry 'collector-down) (map-get entry 'root-down))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:433:(defun begin-stop-once (mode state)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:435:    (begin-stop mode state) state))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:437:(defun begin-stop (mode state)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:451:                      (map-set (origin io sealed) 'kill-requested 'true)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:456:              (owned (put-origin io (map-set entry 'kill-requested 'true)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:468:              (map 'kind 'outcome 'operation operation 'phase 'cancelled
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:496:            (enqueue state (map 'kind 'closed) 'terminal 'true)))
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe:397:(defun startup_refusal_cleans_acquisition_test_ ()
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe:413:                (send-frame socket (map 'kind 'close))
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe:421:(defun startup-refusal (path)
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe:520:        (send-frame socket (map 'kind 'close))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:99:        (send-frame socket (map 'kind 'cancel 'operation #b("1000")))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:122:          (send-frame socket (map 'kind 'close))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:169:               (send-frame socket (map 'kind 'close))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:175:                 (map-get (until-kind socket #b("closed")) #b("kind")))))))))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:212:            (send-frame socket (map 'kind 'cancel 'operation #b("2")))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:213:            (send-frame socket (map 'kind 'cancel 'operation #b("99")))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:237:                    (send-frame socket (map 'kind 'close)))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:239:                    (send-frame socket (map 'kind 'close))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:242:                  (map-get (until-kind socket #b("closed")) #b("kind")))))))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:357:          ((= (tuple 'origin_ready io incoming root _trace) ready)
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:459:      (iolist_to_binary (json:encode (map 'kind 'close)))) state))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:482:                                 'root-down 'true 'collector-down 'false)))))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:499:      ((tuple 'origin_ready owner incoming root _trace)
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:183:(defun root_completion_wins_expected_kill_test ()
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:194:                          'root-monitor root-monitor 'root-down 'false
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:199:                 (root-down (tuple 'DOWN root-monitor 'process root 'normal))
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:204:                        (if collector-first io-down root-down) prepared)))
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:209:                         (if collector-first root-down io-down) partial)))
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:221:                      'root-monitor monitor 'root-down 'false
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:222:                      'kill-requested 'true))
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:239:                            'kill-requested 'false))))))
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:242:(defun publishing_deferred_controls_test ()
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:282:                                  (map 'kind 'close)
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:283:                                  (map 'kind 'cancel 'operation #b("5"))))
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:300:(defun startup_single_owner_gaps_test_ ()
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:308:        '(origin_ready activate_origin)))))
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:310:(defun startup-gap (stage target)
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:356:            ((tuple 'in (tuple 'origin_ready io origin root trace))
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:358:               (if (=:= stage 'origin_ready)
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:361:            ((tuple 'in (tuple 'activate_origin io origin))
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:362:             (when (=:= stage 'activate_origin))
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:411:          ((tuple 'origin_ready incoming origin root trace)
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:466:          (send-frame socket (map 'kind 'close))
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:480:          (send-frame socket (map 'kind 'close))
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:717:       'result-seen 'true 'root-down 'true 'collector-down 'false
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:718:       'kill-requested 'false))
+apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe:730:      ((tuple 'origin_ready io origin root _trace)
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:63:          ((tuple 'origin_ready incoming origin _root _trace)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:706:  (send-frame socket (map 'kind 'close))
+apps/cayrn_lfe/test/cayrn_lfe_preview_tests.lfe:216:            (send-frame socket (map 'kind 'cancel 'operation #b("1")))
+RG EXIT 0
