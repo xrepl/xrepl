@@ -1,6 +1,6 @@
 # Arc02 — sustainable native evaluation
 
-Version1.1, 2026-10-18. Active under scoped Autonomous Mode. Project10 source release/0.2.x.
+Version1.5,2026-10-19. Active under scoped Autonomous Mode. Project10 source release/0.2.x.
 Original prepared one-contributor wording is superseded by the activation below.
 Sofie CDC independently reviews the assigned CC implementation. Arc01's import and
 LFE conversion are committed at ea844f5/f261152 with pending independent gates.
@@ -31,7 +31,7 @@ final system size/churn checks are additional composition, not deferred-only QA.
 | --- | --- | --- | --- |
 | [Slice01 — fenced capture lifetimes](slice01-fenced-capture-lifetimes/slice-plan.md) | More-than 256 native evaluations; scalar token fence,64 live capture origins, collector retirement with late-output/ACK/close proof | Actual Cayrn C03 native v2 identity/journal return | Independently accepted7228183/7b27b0f; matching native2 gate passed |
 | [Slice02 — node authority leases](slice02-node-authority-leases/slice-plan.md) | Bounded live native lease/context registry; boot/lease/ticket fencing removes4096 cumulative guard | Actual accepted Cayrn C04 native3 handoff; Operator direction approved | Open set draft; upstream implementation-held |
-| Slice03 — size-safe previews and captured streams | Bounded explicit value previews and complete bounded-chunk captured output, pressure paths preserving environment/capture ACK correctness | LFE conversion; stable wire budgets; align with actual native3 contract after X02 | Roadmap only; may proceed independently of node churn after design |
+| Slice03 — size-safe previews and captured streams | Bounded explicit value previews and complete bounded-chunk captured output, pressure paths preserving environment/capture ACK correctness | Actual Cayrn C05 structured-preview contract after C04/X02; stable size budgets | Roadmap only; complete source-led pressure/ownership/preview design required |
 
 Directory numbering does not invent a dependency from node identities to size
 safety. First-slice operation fencing/collector budgets do not solve node churn,
@@ -43,7 +43,7 @@ fence. No prototype/native source edits are authorized by this planning packet.
 
 Sibling ledger.md covers first-slice long sessions, complete retained attribution,
 node churn beyond 4096, safe result/output handling and actual mixed lifecycle/
-pressure behavior on matching source revisions. Cayrn Arc01/Slice05 consumes the
+pressure behavior on matching source revisions. Cayrn Arc01/Slice06 consumes the
 native results and tests the full cross-repository system; both owner reports
 remain attributable. Children passing alone do not close this arc. Preserve
 original failure/physical durability gaps and Project09's27 finding dispositions;
@@ -240,3 +240,25 @@ increment; authority-only loss still must wake blocked contexts directly and
 preserve other leases. No general teardown-under-pressure claim is made at X02.
 Cayrn C05 consumes this gate in final composition. The exact X02 source allowlist
 is unchanged; no collector workaround is implemented as an unreviewed side task.
+
+## v1.5 — shared preview metadata and composition numbering,2026-10-19
+
+Operator selected **Shared preview metadata (recommended)**. X03 reports
+formatter-specific truncation facts through a shared Rust result-preview
+contract; clients do not infer them from LFE text. Existing XA02-04 explicit
+metadata criterion remains; supported captured output must still be complete.
+Cayrn introduces bounded C05 shared preview metadata before X03; former unissued
+C05 final composition becomes C06. All earlier C05-composition references are
+historical names for the same retained gate, now C06 (including NR-02). Nothing
+is silently dropped or accepted. Current order C04→X02→C05→X03→C06.
+
+Exact preview envelope/validation and protocol/archive compatibility require a
+reviewed design/open set against actual sources; no native/public version bump
+is presumed here. C04's issued native3 contract and current X02 design stay
+unchanged. X02 remains held only for actual C04 acceptance, not this later
+preview work. Broader migration, UX, publication and Operator gates stay open.
+
+This dated decision/roadmap note is bounded One-Contributor recordkeeping by
+CDC: the explicit Operator reply and numbering/dependency update were
+self-checked, ledger identities/criteria preserved, no source or acceptance
+change claimed. Substantive implementation retains independent review.

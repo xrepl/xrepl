@@ -132,3 +132,11 @@ context/collector termination, trace disposition and no false barrier; include
 paused-root startup handoff ownership. Source/OTP evidence and a feasible narrow
 alternative are preserved in artifacts/native-recipe-design-review.md NR-02.
 No Operator gate, arc scope or acceptance criterion is weakened by this placement.
+
+## Composition owner renumbering —2026-10-19
+
+Operator chose shared preview metadata. Cayrn adds C05 for that common contract
+and renumbers the former unissued composition roadmap to C06. Earlier C05
+composition/NR-02 references in this draft mean C06 now; no obligation changes.
+X02 exact15-path/source/native3 scope and its actual C04 dependency remain.
+X03 consumes actual shared preview metadata later; it still owns serious NR-02.

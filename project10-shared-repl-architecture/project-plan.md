@@ -293,3 +293,12 @@ Former unissued Cayrn C04 full-composition roadmap becomes C05, all obligations
 retained; size-safe native X03 precedes it. No new arc, UX or publication scope.
 Canonical shared authority contract is in Cayrn C04 artifacts/. Open-set drafts
 are reviewed before issue; no future source hash is presumed.
+
+## Shared preview metadata — Operator decision2026-10-19
+
+Operator selected machine-readable shared preview metadata. Cayrn C05 will
+supply the bounded Rust contract before native Arc02/X03 consumes it; the
+former unissued shared final composition C05 becomes C06. Current sequence
+C04→X02→C05→X03→C06. All NR-02 pressure/teardown and complete-output gates
+remain. Exact compatibility/version/envelope design precedes implementation;
+C04 native3/X02 ownership scope, authorized arc endpoint and deferred UX remain.
