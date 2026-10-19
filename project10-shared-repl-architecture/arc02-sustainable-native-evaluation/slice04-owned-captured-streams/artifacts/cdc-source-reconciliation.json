@@ -1,0 +1,35 @@
+{
+  "source": "cf1f1a2d94f1e6f4cb6f867ab71c9537348faa31",
+  "base": "7427d1c8e43183b25012e6870937347c39425606",
+  "paths": [
+    "README.md",
+    "apps/cayrn_lfe/AGENTS.md",
+    "apps/cayrn_lfe/README.md",
+    "apps/cayrn_lfe/src/cayrn-lfe-stream.lfe",
+    "apps/cayrn_lfe/src/cayrn_lfe_context.lfe",
+    "apps/cayrn_lfe/src/cayrn_lfe_io.lfe",
+    "apps/cayrn_lfe/src/cayrn_lfe_writer.lfe",
+    "apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe",
+    "apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe",
+    "apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe",
+    "apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe",
+    "apps/cayrn_lfe/test/cayrn_lfe_stream_tests.lfe"
+  ],
+  "before_after_and_commit_match": true,
+  "patch_sha256": "3c1969f14907187be17daf855f02dba19e1e809a9cf53bc89ab8f6cd8b5966ce",
+  "candidate_sha256": "a27076144fd50b6701a9f35458055fec62332741e5a211cd70c79439fcc6209e",
+  "cc_planning_return": "2ed3f2a134f512524df2d720d11e1b51db140d88",
+  "cc_exact_return_paths": [
+    "project10-shared-repl-architecture/arc02-sustainable-native-evaluation/slice04-owned-captured-streams/artifacts/artifact-inventory.md",
+    "project10-shared-repl-architecture/arc02-sustainable-native-evaluation/slice04-owned-captured-streams/artifacts/execution.md",
+    "project10-shared-repl-architecture/arc02-sustainable-native-evaluation/slice04-owned-captured-streams/artifacts/intake.log",
+    "project10-shared-repl-architecture/arc02-sustainable-native-evaluation/slice04-owned-captured-streams/artifacts/source-candidate.json",
+    "project10-shared-repl-architecture/arc02-sustainable-native-evaluation/slice04-owned-captured-streams/artifacts/source-candidate.patch",
+    "project10-shared-repl-architecture/arc02-sustainable-native-evaluation/slice04-owned-captured-streams/artifacts/validation.log",
+    "project10-shared-repl-architecture/arc02-sustainable-native-evaluation/slice04-owned-captured-streams/closing-report.md",
+    "project10-shared-repl-architecture/arc02-sustainable-native-evaluation/slice04-owned-captured-streams/ledger.md"
+  ],
+  "original_contract_hash_preserved": true,
+  "trailers": true,
+  "status_preserved": true
+}

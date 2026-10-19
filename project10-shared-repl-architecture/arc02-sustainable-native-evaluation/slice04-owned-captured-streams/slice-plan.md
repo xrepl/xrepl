@@ -85,3 +85,10 @@ fact and real owned-callback/socket stage oracles. No activation leak or new UX
 scope. Previous issued prompts unchanged; all8 original criteria/exact12 source
 paths unchanged/open. ActualCC/root/xrepl_x21, refinement2/5 on execution. Full
 source/runtime/positive-pressure proof and independent acceptance still required.
+
+## Independent CDC acceptance —2026-10-19
+
+CLOSED8/8 atcf1f1a2d94f1e6f4cb6f867ab71c9537348faa31/shared34af63e, CC planning2ed3f2a134f512524df2d720d11e1b51db140d88,refinement2/5.
+Root reproduced all seven gates, actual positive pressure/physical cleanup,418root/
+93fresh/54+14+3 and exact source/evidence identities. See verification/retro.
+C06 mixed composition precedes both formal arc endpoints; no whole migration/release.

@@ -1,0 +1,29 @@
+CDC /root independently executed
+SOURCE cf1f1a2d94f1e6f4cb6f867ab71c9537348faa31
+CWD /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe
+COMMAND ['make', 'check']
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+===> Performing EUnit tests...
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0mpressure buffers client={ok,[{recbuf,1024}]} native={ok,[{sndbuf,1024}]}
+positive native send_pend=8751
+retirement decision send_pend=8751
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0mpressure buffers client={ok,[{recbuf,1024}]} native={ok,[{sndbuf,1024}]}
+positive native send_pend=8751
+retirement decision send_pend=8751
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0mNR-02 fault=collector positive send_pend=8751
+NR-02 fault=context positive send_pend=8751
+NR-02 fault=cayrn_lfe_listener positive send_pend=8751
+NR-02 fault=cayrn_lfe_registry positive send_pend=8751
+NR-02 fault=application positive send_pend=8751
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m
+Finished in 78.247 seconds
+[0;32m93 tests, 0 failures
+[0m
+EXIT 0

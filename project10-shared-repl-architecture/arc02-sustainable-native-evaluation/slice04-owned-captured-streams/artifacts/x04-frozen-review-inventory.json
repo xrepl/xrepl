@@ -1,0 +1,115 @@
+{
+  "kind": "Frozen source inventory; actual runtime counts must independently reconcile",
+  "freeze_sha256": "05f44631af2dd6f4833f77e2351ae4c1a7e922f47b8ec0abae59c9626cd4de15",
+  "files": {
+    "apps/cayrn_lfe/src/cayrn_lfe_context.lfe": "bda37c689f9075dc9151069764c2708f99e0cac66fb4caa6c644e51880283be7",
+    "apps/cayrn_lfe/src/cayrn_lfe_io.lfe": "a7630c19f0f40962954c2531565229ac59ed50a600a9709c796ce94884a72fe1",
+    "apps/cayrn_lfe/src/cayrn-lfe-stream.lfe": "ce6b9e13c66395148a6b84eec79216b7462fd2e9f841abfd3739a847a6d37fa3",
+    "apps/cayrn_lfe/src/cayrn_lfe_writer.lfe": "ff2c983b5d4c8ed189cefdd444dc0a114b58cd9d5f92fc4f3b414d1f853fee7f",
+    "apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe": "a105d939fd57e4e08e5ce67f57e58681e05db1504f4a3f486cfa09554a161351",
+    "apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe": "f7fa8a7030a0d33e174f592e9ed3f24f622f90841595c40d8b6e063315e3e6ce",
+    "apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe": "fc35a44c126495cf523f6713c518dd4e4d97ba75dd6f05ed226a47eaefdfe6b8",
+    "apps/cayrn_lfe/test/cayrn_lfe_stream_tests.lfe": "d24420dfc7260e22ae3b1fc053545eece3a3e3a90a6e13058ad574344146c0bf",
+    "apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe": "59668ebebf69fb9f7352ad151910e1a5879ac4d18cacc0f8dbf092c1c7336916",
+    "apps/cayrn_lfe/README.md": "d174eb70808ad57a5f87c234347a0881b542633732238d6ecdd8212a5308ec42",
+    "apps/cayrn_lfe/AGENTS.md": "50ddb72e66f76e4f02ad5f90fc0cc36292a42a1af0e20a7768591b89170e1297",
+    "README.md": "7d19de13521832b5f67cddd43006cd86a7392bb9ac477d7bab658cd5529cd425"
+  },
+  "unique_case_definitions": 76,
+  "case_names_by_module": {
+    "cayrn_lfe_application_tests.lfe": [
+      "independent_application_start_test_",
+      "child_kill_keeps_endpoint_test_",
+      "queued_parent_call_survives_registry_kill_test_",
+      "relative_path_survives_evaluated_cwd_test_",
+      "application_stop_reaps_endpoint_test_",
+      "identity_guard_preserves_replacements_test_",
+      "startup_refusal_cleans_acquisition_test_"
+    ],
+    "cayrn_lfe_authority_tests.lfe": [
+      "context_churn_test_",
+      "authority_churn_test_",
+      "scope_and_numeric_fences_test_",
+      "authority_capacity_test_",
+      "context_capacity_test_",
+      "monitor_and_exhaustion_test_",
+      "router_transfer_failure_test_",
+      "first_frame_timeout_test_",
+      "preaccept_watermark_test_",
+      "authority_eof_test_",
+      "authority_partial_byte_test_",
+      "suspended_context_loss_test_",
+      "pending_output_loss_test_",
+      "context_only_loss_test_",
+      "registry_restart_test_",
+      "listener_restart_test_",
+      "paused_endpoint_timeout_test_"
+    ],
+    "cayrn_lfe_eval_tests.lfe": [
+      "persistent_bindings_test",
+      "errors_preserve_committed_environment_test",
+      "functions_and_macro_context_test",
+      "ordinary_error_atom_is_a_value_test"
+    ],
+    "cayrn_lfe_io_tests.lfe": [
+      "capture_requires_owner_ack_test",
+      "seal_orders_prior_capture_and_rejects_late_writes_test"
+    ],
+    "cayrn_lfe_ownership_tests.lfe": [
+      "context_cross_sender_bits_test",
+      "collector_completion_and_postseal_test",
+      "root_completion_wins_expected_kill_test",
+      "publishing_deferred_controls_test",
+      "startup_single_owner_gaps_test_",
+      "unlink_owner_monitor_gap_test_",
+      "owned_pressure_failures_test_",
+      "pressure_close_drains_test_",
+      "pressure_close_timeout_test_",
+      "global_job_capacity_recovery_test_",
+      "paused_start_controls_test",
+      "activated_cancel_preserves_diagnostic_test_",
+      "deferred_capacity_and_computed_cancel_test",
+      "idle_future_cancel_pressure_test_"
+    ],
+    "cayrn_lfe_preview_tests.lfe": [
+      "scalar_spellings_test",
+      "structural_types_test",
+      "conservative_list_boundaries_test",
+      "integer_byte_boundaries_test",
+      "huge_integer_test",
+      "depth_boundaries_test",
+      "unicode_boundary_test",
+      "wide_collections_test_",
+      "delimiter_reservations_test",
+      "native_large_values_preserve_environment_test_",
+      "native_error_previews_preserve_environment_test_",
+      "native_cancel_reports_false_test_"
+    ],
+    "cayrn_lfe_resource_tests.lfe": [
+      "quiet_sparse_evaluations_reclaim_origins_test_",
+      "token_replay_and_invalid_tokens_test_",
+      "capacity_refusal_and_recovery_test_",
+      "full_capacity_close_test_",
+      "async_descendants_wait_for_commit_test_",
+      "collector_failure_is_context_local_test_",
+      "stale_cancel_preserves_active_evaluation_test_",
+      "retirement_close_orderings_test_",
+      "ownership_and_monitor_mismatches_test",
+      "callback_order_inversions_test",
+      "closed_socket_retains_acquired_cleanup_state_test",
+      "trace_session_isolation_test",
+      "quiet_result_waits_for_exact_down_test",
+      "retiring_down_and_close_barriers_test"
+    ],
+    "cayrn_lfe_stream_tests.lfe": [
+      "large_chardata_test",
+      "encoding_carry_test",
+      "invalid_data_preserves_prefix_test",
+      "paused_and_empty_stream_test",
+      "native_complete_output_test_",
+      "native_nested_mfa_and_recovery_test_"
+    ]
+  },
+  "companion_generator_not_a_case": "native_agent_companions_test_",
+  "source_review": "Root read complete frozen ownership1\u2013EOF, recovered controller797\u2013845; stream suite full; IO full plus real sender-trace update; resource1\u2013EOF in contiguous sections; authority complete changed definitions and helper call paths; full componentREADME/AGENTS, rootREADME affected section. All4 production initially read full, final context activation/root-down delta reviewed against full frozen snapshot."
+}

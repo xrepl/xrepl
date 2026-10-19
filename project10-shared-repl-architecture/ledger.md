@@ -23,3 +23,9 @@ independent acceptance is claimed by this planning packet.
 | P10-20 | Operational/package composition works without sibling path assumptions | Owned startup and clean staged installation demonstration | serious | core candidate | open | — | No publication in scope |
 | P10-21 | Child arcs compose into the accepted core migration | Project-scale real consumer/native system demo and independent gate | serious | framework | open | — | Same source/plan revisions |
 | P10-UX-01 | Usability/UX work retained for a later project | X-UX-01 owner/scope/re-entry and future release gate | polish | Operator explicit deferral | deferred | Operator scope decision, attested | Owner Operator; re-enter after core acceptance and UX project selection |
+
+## X04 result —2026-10-19
+
+Native streams/ownership acceptedcf1f1a2/34af63e; see Arc02/X04 verification/retro.
+P10 original rows remain under project acceptance. C06/fresh arc composition and
+27assessment/later delivery owners unchanged; no whole project/UX/release claim.

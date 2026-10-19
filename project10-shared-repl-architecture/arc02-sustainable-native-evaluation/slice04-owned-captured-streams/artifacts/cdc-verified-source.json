@@ -1,0 +1,19 @@
+{
+  "xrepl": "cf1f1a2d94f1e6f4cb6f867ab71c9537348faa31",
+  "cayrn": "34af63eb9f07a0e019495378045852ad69d00284",
+  "files": {
+    "apps/cayrn_lfe/src/cayrn_lfe_context.lfe": "bda37c689f9075dc9151069764c2708f99e0cac66fb4caa6c644e51880283be7",
+    "apps/cayrn_lfe/src/cayrn_lfe_io.lfe": "a7630c19f0f40962954c2531565229ac59ed50a600a9709c796ce94884a72fe1",
+    "apps/cayrn_lfe/src/cayrn-lfe-stream.lfe": "ce6b9e13c66395148a6b84eec79216b7462fd2e9f841abfd3739a847a6d37fa3",
+    "apps/cayrn_lfe/src/cayrn_lfe_writer.lfe": "ff2c983b5d4c8ed189cefdd444dc0a114b58cd9d5f92fc4f3b414d1f853fee7f",
+    "apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe": "a105d939fd57e4e08e5ce67f57e58681e05db1504f4a3f486cfa09554a161351",
+    "apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe": "3759eda477d61a361365917982c63093dd42b4ef51a69103bc1b9585eb193f6a",
+    "apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe": "fc35a44c126495cf523f6713c518dd4e4d97ba75dd6f05ed226a47eaefdfe6b8",
+    "apps/cayrn_lfe/test/cayrn_lfe_stream_tests.lfe": "d24420dfc7260e22ae3b1fc053545eece3a3e3a90a6e13058ad574344146c0bf",
+    "apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe": "59668ebebf69fb9f7352ad151910e1a5879ac4d18cacc0f8dbf092c1c7336916",
+    "apps/cayrn_lfe/README.md": "d174eb70808ad57a5f87c234347a0881b542633732238d6ecdd8212a5308ec42",
+    "apps/cayrn_lfe/AGENTS.md": "50ddb72e66f76e4f02ad5f90fc0cc36292a42a1af0e20a7768591b89170e1297",
+    "README.md": "7d19de13521832b5f67cddd43006cd86a7392bb9ac477d7bab658cd5529cd425"
+  },
+  "source_status": "?? docs/design/"
+}

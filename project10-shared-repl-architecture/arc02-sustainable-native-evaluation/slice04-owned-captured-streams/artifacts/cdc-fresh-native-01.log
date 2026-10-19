@@ -1,0 +1,111 @@
+CDC /root independently executed
+SOURCE cf1f1a2d94f1e6f4cb6f867ab71c9537348faa31
+CWD /private/tmp/cayrn-x04-cdc-fresh-gvvll91w
+COMMAND ['make', 'check']
+rebar3 compile
+===> Fetching rebar3_lfe v0.5.5
+===> Fetching lfe v2.2.0
+===> Analyzing applications...
+===> Compiling lfe
+===> Compiling rebar3_lfe
+src/cl.lfe:472: Warning: redefining core function car/1
+src/cl.lfe:479: Warning: redefining core function cdr/1
+===> Verifying dependencies...
+===> Fetching lfe v2.2.0
+===> Analyzing applications...
+===> Compiling _build/default/lib/lfe/src/clj.lfe
+===> Compiling _build/default/lib/lfe/src/cl.lfe
+===> Compiling lfe
+src/cl.lfe:472: Warning: redefining core function car/1
+src/cl.lfe:479: Warning: redefining core function cdr/1
+===> Analyzing applications...
+===> Compiling src/cayrn-lfe-preview.lfe
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_app.lfe
+===> Compiling src/cayrn_lfe_registry.lfe
+===> Compiling src/cayrn_lfe_authority.lfe
+===> Compiling src/cayrn-lfe-eval.lfe
+===> Compiling src/cayrn_lfe_io.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling src/cayrn_lfe_connection.lfe
+===> Compiling src/cayrn_lfe_writer.lfe
+===> Compiling src/cayrn-lfe-stream.lfe
+=ERROR REPORT==== 19-Oct-2026::04:07:57.110625 ===
+Can't load module 'json' that resides in sticky dir
+
+=ERROR REPORT==== 19-Oct-2026::04:07:57.112422 ===
+Can't load module 'json' that resides in sticky dir
+
+=ERROR REPORT==== 19-Oct-2026::04:07:57.112424 ===
+Can't load module 'json' that resides in sticky dir
+
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn-lfe-preview.lfe
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_app.lfe
+===> Compiling src/cayrn_lfe_registry.lfe
+===> Compiling src/cayrn-lfe-eval.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling src/cayrn_lfe_connection.lfe
+===> Compiling src/cayrn_lfe_writer.lfe
+===> Compiling src/cayrn_lfe_authority.lfe
+===> Compiling src/cayrn_lfe_io.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling src/cayrn-lfe-stream.lfe
+=ERROR REPORT==== 19-Oct-2026::04:07:57.932222 ===
+Can't load module 'gen_tcp' that resides in sticky dir
+
+=ERROR REPORT==== 19-Oct-2026::04:07:57.941050 ===
+Can't load module 'json' that resides in sticky dir
+
+=ERROR REPORT==== 19-Oct-2026::04:07:57.941952 ===
+Can't load module 'gen_tcp' that resides in sticky dir
+
+=ERROR REPORT==== 19-Oct-2026::04:07:57.944477 ===
+Can't load module 'json' that resides in sticky dir
+
+===> Compiling src/cayrn-lfe-preview.lfe
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling test/cayrn_lfe_application_tests.lfe
+===> Compiling src/cayrn_lfe_app.lfe
+===> Compiling test/cayrn_lfe_stream_tests.lfe
+===> Compiling src/cayrn_lfe_registry.lfe
+===> Compiling test/cayrn_lfe_ownership_tests.lfe
+===> Compiling src/cayrn-lfe-eval.lfe
+===> Compiling test/cayrn_lfe_authority_tests.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling test/cayrn_lfe_preview_tests.lfe
+===> Compiling src/cayrn_lfe_connection.lfe
+===> Compiling test/cayrn_lfe_eval_tests.lfe
+===> Compiling src/cayrn_lfe_writer.lfe
+===> Compiling test/cayrn_lfe_resource_tests.lfe
+===> Compiling src/cayrn-lfe-stream.lfe
+===> Compiling test/cayrn_lfe_io_tests.lfe
+===> Compiling src/cayrn_lfe_authority.lfe
+===> Compiling src/cayrn_lfe_io.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+=ERROR REPORT==== 19-Oct-2026::04:07:58.210920 ===
+Can't load module 'sys' that resides in sticky dir
+
+===> Compiling cayrn_lfe
+===> Performing EUnit tests...
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0mpressure buffers client={ok,[{recbuf,1024}]} native={ok,[{sndbuf,1024}]}
+positive native send_pend=2234
+retirement decision send_pend=2234
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0mpressure buffers client={ok,[{recbuf,1024}]} native={ok,[{sndbuf,1024}]}
+positive native send_pend=8751
+retirement decision send_pend=8751
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0mNR-02 fault=collector positive send_pend=8751
+NR-02 fault=context positive send_pend=8751
+NR-02 fault=cayrn_lfe_listener positive send_pend=8751
+NR-02 fault=cayrn_lfe_registry positive send_pend=8751
+NR-02 fault=application positive send_pend=8751
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m
+Finished in 78.162 seconds
+[0;32m93 tests, 0 failures
+[0m
+EXIT 0

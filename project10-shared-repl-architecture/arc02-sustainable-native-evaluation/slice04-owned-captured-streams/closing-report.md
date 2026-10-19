@@ -143,3 +143,10 @@ security and physical durability remain outside this bounded proof. No arbitrary
 descendant kill promise was added. Historical Project01/09/import/conversion gates,
 packaging, later UX and Operator publication/acceptance gates stay pending.
 Root independently reviews/reproduces/accepts and writes the mandatory retrospective.
+
+## Subsequent independent CDC acceptance —2026-10-19
+
+Root independently accepted all8 original criteria atcf1f1a2/34af63e. Original CC
+proposal remains frozen history at2ed3f2a. [Verification](cdc-verification.md) and
+[retrospective](cdc-retrospective.md) identify actual reproduction and all limits.
+X04 native NR02 proof accepted; C06/fresh arc composition still required.

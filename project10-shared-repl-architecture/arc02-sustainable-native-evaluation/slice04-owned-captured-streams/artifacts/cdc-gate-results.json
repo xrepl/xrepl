@@ -1,0 +1,88 @@
+[
+  {
+    "label": "cdc-component-full-01",
+    "args": [
+      "make",
+      "check"
+    ],
+    "cwd": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe",
+    "exit": 0,
+    "source": "cf1f1a2d94f1e6f4cb6f867ab71c9537348faa31",
+    "hashes_agree": true
+  },
+  {
+    "label": "cdc-cayrn-full-01",
+    "args": [
+      "make",
+      "check",
+      "lint-integration",
+      "test-xrepl"
+    ],
+    "cwd": "/Users/oubiwann/lab/oxur/cayrn",
+    "exit": 0,
+    "source": "cf1f1a2d94f1e6f4cb6f867ab71c9537348faa31",
+    "hashes_agree": true
+  },
+  {
+    "label": "cdc-current-test-precompile-01",
+    "args": [
+      "rebar3",
+      "as",
+      "test",
+      "compile"
+    ],
+    "cwd": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe",
+    "exit": 0,
+    "source": "cf1f1a2d94f1e6f4cb6f867ab71c9537348faa31",
+    "hashes_agree": true
+  },
+  {
+    "label": "cdc-root-full-01",
+    "args": [
+      "make",
+      "test-lfe",
+      "build-agent",
+      "check-agent",
+      "build",
+      "lint-rust",
+      "test-rust"
+    ],
+    "cwd": "/Users/oubiwann/lab/lfe/xrepl/xrepl",
+    "exit": 0,
+    "source": "cf1f1a2d94f1e6f4cb6f867ab71c9537348faa31",
+    "hashes_agree": true
+  },
+  {
+    "label": "cdc-fresh-native-01",
+    "args": [
+      "make",
+      "check"
+    ],
+    "cwd": "/private/tmp/cayrn-x04-cdc-fresh-gvvll91w",
+    "exit": 0,
+    "source": "cf1f1a2d94f1e6f4cb6f867ab71c9537348faa31",
+    "hashes_agree": true
+  },
+  {
+    "label": "cdc-root-launcher-wrapper-01",
+    "args": [
+      "python3",
+      "/private/tmp/cdc-x04/cdc-root-launcher.py"
+    ],
+    "cwd": "/private/tmp",
+    "exit": 0,
+    "source": "cf1f1a2d94f1e6f4cb6f867ab71c9537348faa31",
+    "hashes_agree": true
+  },
+  {
+    "label": "cdc-runtime-exports-01",
+    "args": [
+      "python3",
+      "/private/tmp/cdc-x04/cdc-x04-runtime.py"
+    ],
+    "cwd": "/private/tmp",
+    "exit": 0,
+    "source": "cf1f1a2d94f1e6f4cb6f867ab71c9537348faa31",
+    "hashes_agree": true
+  }
+]

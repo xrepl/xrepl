@@ -8,7 +8,7 @@ related: [cayrn-project01-shared-repl-architecture, project05-rust-frontend, pro
 
 # xrepl 0.2.x — migration onto Cayrn
 
-Version 2.6, 2026-10-19. Author: Sofie, current design/planning context. The
+Version 2.7, 2026-10-19. Author: Sofie, current design/planning context. The
 Operator explicitly retained this project name and approved the core migration,
 agent consolidation and LFE conversion; UX follows in a separate future project.
 This turn prepares plans/open sets, not implementation or release acceptance.
@@ -356,3 +356,12 @@ Rust formatting/Cayrn mode additions and app version seed are qualified, not
 called byte-untouched or accepted fixes. Final X04 committed delta still needs
 checking. P10-18 remains open until actual repair/replacement/compatibility and
 regression evidence in owning Arc03–06 changes; no later arc is opened here.
+
+## v2.7 — native stream/ownership result accepted,2026-10-19
+
+Arc02/X04 actualcf1f1a2/shared34af63e independently accepted, all8 original rows.
+Complete supported streams/responsive dual owners and specified NR02 native fault
+controls delivered, full root/fresh/real gates reproduced. Final Arc02 composition
+requires CayrnC06 and fresh independent arc gate. All27 Project09 findings retain
+original later owners; final26changed/41locations/0intersection is no repair claim.
+No broader migration, UX, package, historical/Operator/publication gate closes here.

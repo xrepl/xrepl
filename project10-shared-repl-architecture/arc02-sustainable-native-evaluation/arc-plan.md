@@ -1,6 +1,6 @@
 # Arc02 — sustainable native evaluation
 
-Version1.10,2026-10-19. Active under scoped Autonomous Mode. Project10 source release/0.2.x.
+Version1.11,2026-10-19. Active under scoped Autonomous Mode. Project10 source release/0.2.x.
 Original prepared one-contributor wording is superseded by the activation below.
 Sofie CDC independently reviews the assigned CC implementation. Arc01's import and
 LFE conversion are committed at ea844f5/f261152 with pending independent gates.
@@ -32,7 +32,7 @@ final system size/churn checks are additional composition, not deferred-only QA.
 | [Slice01 — fenced capture lifetimes](slice01-fenced-capture-lifetimes/slice-plan.md) | More-than 256 native evaluations; scalar token fence,64 live capture origins, collector retirement with late-output/ACK/close proof | Actual Cayrn C03 native v2 identity/journal return | Independently accepted7228183/7b27b0f; matching native2 gate passed |
 | [Slice02 — node authority leases](slice02-node-authority-leases/slice-plan.md) | Bounded live native lease/context registry; boot/lease/ticket fencing removes4096 cumulative guard | Actual accepted Cayrn C04 native3 handoff; Operator direction approved | Independently accepted38338d6/3bcbbdb; actual native3 gate passed |
 | [Slice03 — bounded result previews](slice03-bounded-result-previews/slice-plan.md) | Native4 bounded validUTF8 result/error previews, shared metadata and rebuilt consumer; immediate real gate | Actual accepted CayrnC05 source34af63e/planning149ae8c, native38338d6 | Independently accepted7427d1c/34af63e; actual native4 gate passed |
-| [Slice04 — owned captured streams](slice04-owned-captured-streams/slice-plan.md) | Complete bounded output chunks, responsive context/formatter/writer, foreground-root lifetime and NR02 teardown under pending output | Accepted X03; source-led reviewed ownership/ACK/pressure recipe required | Issued at accepted7427d1c/34af63e; all8 open |
+| [Slice04 — owned captured streams](slice04-owned-captured-streams/slice-plan.md) | Complete bounded output chunks, responsive context/formatter/writer, foreground-root lifetime and NR02 teardown under pending output | Accepted X03; source-led reviewed ownership/ACK/pressure recipe required | Independently acceptedcf1f1a2/34af63e; C06 composition remains |
 
 Directory numbering does not invent a dependency from node identities to size
 safety. First-slice operation fencing/collector budgets do not solve node churn,
@@ -349,3 +349,12 @@ Location extraction is41 actual files (one inline shell example caused42-token
 first count), zero overlap in committed f261152→7427d1c; final X04 scope recheck
 still required. This closes no XA02/project finding row, does not extend execution
 beyond Arc02, and supplies explicit retained owners for formal composition review.
+
+## v1.11 — complete streams/native ownership accepted,2026-10-19
+
+X04 independently acceptedcf1f1a2/shared34af63e,8/8,2/5. Actual root418/fresh93/
+current20modules/launcher and54+14+3 matching gates pass, including positive native
+pressure and physical single-owner/listener/registry/app cleanup (NR02). XA02-05
+done; C06 mixed sustained/spool/storage and fresh whole-arc gate stillrequired.
+Final assessment-location check26changed/41assessed/0overlap retains27findings
+and later owners, no repair acceptance. No architecture/scope/criteria reduction.

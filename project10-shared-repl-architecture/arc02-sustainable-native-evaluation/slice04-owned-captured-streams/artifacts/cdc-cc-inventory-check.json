@@ -1,0 +1,134 @@
+{
+  "kind": "CDC independent current CC-return inventory reconciliation before CDC acceptance edits",
+  "planning_return": "2ed3f2a134f512524df2d720d11e1b51db140d88",
+  "checked": [
+    {
+      "path": "design-review.md",
+      "bytes": 2891,
+      "sha256": "76aa9cb9b7e0e46630dee96a4f3eac5581c67ad446b78698a9dcb47c8c1bedf0"
+    },
+    {
+      "path": "execution.md",
+      "bytes": 17455,
+      "sha256": "3483918726557fd95c65c90bc1ee3f56df9eab30174f924b472bb65187c31aac"
+    },
+    {
+      "path": "inflight-source-review01/cayrn-lfe-stream.lfe",
+      "bytes": 4647,
+      "sha256": "ce6b9e13c66395148a6b84eec79216b7462fd2e9f841abfd3739a847a6d37fa3"
+    },
+    {
+      "path": "inflight-source-review01/cayrn_lfe_context.lfe",
+      "bytes": 25411,
+      "sha256": "2b6252fcc0dcb12a002993a9dcc0a2e6b75f196067255c9b127b41afd1245a75"
+    },
+    {
+      "path": "inflight-source-review01/cayrn_lfe_io.lfe",
+      "bytes": 17302,
+      "sha256": "a7630c19f0f40962954c2531565229ac59ed50a600a9709c796ce94884a72fe1"
+    },
+    {
+      "path": "inflight-source-review01/cayrn_lfe_writer.lfe",
+      "bytes": 969,
+      "sha256": "ff2c983b5d4c8ed189cefdd444dc0a114b58cd9d5f92fc4f3b414d1f853fee7f"
+    },
+    {
+      "path": "inflight-source-review01/manifest.json",
+      "bytes": 452,
+      "sha256": "27b85d098594c30ffc0c2a34fed42be0498f4dbd5d96770997353913b1820d69"
+    },
+    {
+      "path": "intake.log",
+      "bytes": 102668,
+      "sha256": "1250d32e009022864f9181cc1418c2cfd9c36047b385d99dad6dce1646a4e426"
+    },
+    {
+      "path": "iteration02-source-baseline.json",
+      "bytes": 1956,
+      "sha256": "02fcc2ade6212ca1d0ed0671abd9b16f75f1fcdb3949f474f6bcd04f94b35a2f"
+    },
+    {
+      "path": "iteration02-source-review.md",
+      "bytes": 2225,
+      "sha256": "ae9cf3ec7722efe759c2ca50fd3dec4e8b2186d2bb5248c52c88dfb2b36cd3cb"
+    },
+    {
+      "path": "source-baseline.json",
+      "bytes": 1455,
+      "sha256": "bd396f7cbdd560dc089038cb9762ed761865352629a6a57e0eb9a46cb6e536e5"
+    },
+    {
+      "path": "source-candidate.json",
+      "bytes": 24145,
+      "sha256": "a27076144fd50b6701a9f35458055fec62332741e5a211cd70c79439fcc6209e"
+    },
+    {
+      "path": "source-candidate.patch",
+      "bytes": 171000,
+      "sha256": "3c1969f14907187be17daf855f02dba19e1e809a9cf53bc89ab8f6cd8b5966ce"
+    },
+    {
+      "path": "stream-ownership-contract.md",
+      "bytes": 28699,
+      "sha256": "976ab5ff3301e1448ba4ae21e973c8636fe83960474f422d00bb962eb46adabc"
+    },
+    {
+      "path": "unissued-stream-draft.md",
+      "bytes": 24596,
+      "sha256": "c5f8a815a598b80514c007a9487c03f51dafd5cf86aacf4f6f82357b19415e00"
+    },
+    {
+      "path": "validation.log",
+      "bytes": 474195,
+      "sha256": "385dbecfce1a287db86b0333cd62f6c96b7d847eca21632eb823aa8e9f909aa2"
+    },
+    {
+      "path": "x04-assessment-followthrough.md",
+      "bytes": 9412,
+      "sha256": "1ef44d8d0af4e80c144b66572a1cdc3e08288b5f54bed8cfb7770e0a47fa69db"
+    },
+    {
+      "path": "x04-assessment-overlap.json",
+      "bytes": 3226,
+      "sha256": "1a2f4a4c10991ef72671397929dd0fea48d6c8a990fe895f219977e1cf8d26fc"
+    },
+    {
+      "path": "x04-assessment-overlap.py",
+      "bytes": 1970,
+      "sha256": "f0e36bc05ec4715de2d56140faec3b4414d76c9b0b1c9550bf12a77e2e86ab64"
+    },
+    {
+      "path": "../cc-prompt.md",
+      "bytes": 13676,
+      "sha256": "e27e7f898ae6af40b072d3354103a075cdc2163d230b7b9f2a2dbcd6f24f9cbf"
+    },
+    {
+      "path": "../cc-prompt-iteration01.md",
+      "bytes": 5392,
+      "sha256": "153d34276a9017ecfa4429eec42141fce19fa3eb1224295c40344e1046869bc7"
+    },
+    {
+      "path": "../cc-prompt-iteration02.md",
+      "bytes": 6549,
+      "sha256": "6816312c80ad4cf7472db4b057eff9aa544dc739f7f1a00cc3b7975d1bece785"
+    },
+    {
+      "path": "../slice-plan.md",
+      "bytes": 5436,
+      "sha256": "b1e83ee5c2232de8a3e610b3ce48868ab2636f14d3923ffc9c21cd07afe21c95"
+    },
+    {
+      "path": "../ledger.md",
+      "bytes": 4238,
+      "sha256": "f4badac787e8f35aa7953a31457d9c5ded0afd665b80971e852c04a891a040dc"
+    },
+    {
+      "path": "../closing-report.md",
+      "bytes": 12318,
+      "sha256": "ffdcd936767c83d6c5daed0b6f17b17e01d222f4152d1df3764526cb37908fde"
+    }
+  ],
+  "count": 25,
+  "self_digest_excluded": true,
+  "source_patch_bytes": 171000
+}

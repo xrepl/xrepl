@@ -1,0 +1,106 @@
+{
+  "kind": "In-flight name inventory only; not behavioral/runtime acceptance",
+  "retained_unique_case_definitions": 56,
+  "retained_companion_generators": 1,
+  "files": [
+    {
+      "file": "apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe",
+      "retained_case_names": [
+        "application_stop_reaps_endpoint_test_",
+        "child_kill_keeps_endpoint_test_",
+        "identity_guard_preserves_replacements_test_",
+        "independent_application_start_test_",
+        "queued_parent_call_survives_registry_kill_test_",
+        "relative_path_survives_evaluated_cwd_test_",
+        "startup_refusal_cleans_acquisition_test_"
+      ],
+      "missing_case_names": [],
+      "companion_generator_retained": false
+    },
+    {
+      "file": "apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe",
+      "retained_case_names": [
+        "authority_capacity_test_",
+        "authority_churn_test_",
+        "authority_eof_test_",
+        "authority_partial_byte_test_",
+        "context_capacity_test_",
+        "context_churn_test_",
+        "context_only_loss_test_",
+        "first_frame_timeout_test_",
+        "listener_restart_test_",
+        "monitor_and_exhaustion_test_",
+        "paused_endpoint_timeout_test_",
+        "pending_output_loss_test_",
+        "preaccept_watermark_test_",
+        "registry_restart_test_",
+        "router_transfer_failure_test_",
+        "scope_and_numeric_fences_test_",
+        "suspended_context_loss_test_"
+      ],
+      "missing_case_names": [],
+      "companion_generator_retained": false
+    },
+    {
+      "file": "apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe",
+      "retained_case_names": [
+        "errors_preserve_committed_environment_test",
+        "functions_and_macro_context_test",
+        "ordinary_error_atom_is_a_value_test",
+        "persistent_bindings_test"
+      ],
+      "missing_case_names": [],
+      "companion_generator_retained": false
+    },
+    {
+      "file": "apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe",
+      "retained_case_names": [
+        "capture_requires_owner_ack_test",
+        "seal_orders_prior_capture_and_rejects_late_writes_test"
+      ],
+      "missing_case_names": [],
+      "companion_generator_retained": true
+    },
+    {
+      "file": "apps/cayrn_lfe/test/cayrn_lfe_preview_tests.lfe",
+      "retained_case_names": [
+        "conservative_list_boundaries_test",
+        "delimiter_reservations_test",
+        "depth_boundaries_test",
+        "huge_integer_test",
+        "integer_byte_boundaries_test",
+        "native_cancel_reports_false_test_",
+        "native_error_previews_preserve_environment_test_",
+        "native_large_values_preserve_environment_test_",
+        "scalar_spellings_test",
+        "structural_types_test",
+        "unicode_boundary_test",
+        "wide_collections_test_"
+      ],
+      "missing_case_names": [],
+      "companion_generator_retained": false
+    },
+    {
+      "file": "apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe",
+      "retained_case_names": [
+        "async_descendants_wait_for_commit_test_",
+        "callback_order_inversions_test",
+        "capacity_refusal_and_recovery_test_",
+        "closed_socket_retains_acquired_cleanup_state_test",
+        "collector_failure_is_context_local_test_",
+        "full_capacity_close_test_",
+        "ownership_and_monitor_mismatches_test",
+        "quiet_result_waits_for_exact_down_test",
+        "quiet_sparse_evaluations_reclaim_origins_test_",
+        "retirement_close_orderings_test_",
+        "retiring_down_and_close_barriers_test",
+        "stale_cancel_preserves_active_evaluation_test_",
+        "token_replay_and_invalid_tokens_test_",
+        "trace_session_isolation_test"
+      ],
+      "missing_case_names": [],
+      "companion_generator_retained": false
+    }
+  ],
+  "counting_note": "First raw regex output labelled57 definitions as unique; corrected here excluding the companion suite generator. Baseline56 actual cases remain."
+}

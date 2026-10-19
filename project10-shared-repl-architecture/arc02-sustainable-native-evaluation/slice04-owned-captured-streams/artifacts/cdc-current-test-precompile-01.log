@@ -1,0 +1,9 @@
+CDC /root independently executed
+SOURCE cf1f1a2d94f1e6f4cb6f867ab71c9537348faa31
+CWD /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe
+COMMAND ['rebar3', 'as', 'test', 'compile']
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+
+EXIT 0
