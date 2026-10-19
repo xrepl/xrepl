@@ -1,0 +1,120 @@
+apps/cayrn_lfe/src/cayrn_lfe_connection.lfe expected=7d507067a2395bd1f0e0eef1e26e9446b90e9344f35f049e90d67b55fc809d24 actual=7d507067a2395bd1f0e0eef1e26e9446b90e9344f35f049e90d67b55fc809d24
+apps/cayrn_lfe/src/cayrn_lfe_authority.lfe expected=4ab5a07df7a3447dd6aed55577478dabcbe2e6d2badd607565bdab7df63e47e2 actual=4ab5a07df7a3447dd6aed55577478dabcbe2e6d2badd607565bdab7df63e47e2
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe expected=e68c43ba51fbe04ec230683e85f7c1c9f73f45e22a32ac13a652ea464ac532e8 actual=e68c43ba51fbe04ec230683e85f7c1c9f73f45e22a32ac13a652ea464ac532e8
+apps/cayrn_lfe/src/cayrn-lfe-eval.lfe expected=16ffae22648e9c82696aee208dbe6dab3913c5aef9816c5973ba6ad2af0b91d2 actual=16ffae22648e9c82696aee208dbe6dab3913c5aef9816c5973ba6ad2af0b91d2
+apps/cayrn_lfe/src/cayrn-lfe-preview.lfe expected=None actual=None
+apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe expected=1b3e2294625b6ab248a81e7e71d1c1085e8f74f9f2162a455599cb8bc59b4255 actual=1b3e2294625b6ab248a81e7e71d1c1085e8f74f9f2162a455599cb8bc59b4255
+apps/cayrn_lfe/test/cayrn_lfe_preview_tests.lfe expected=None actual=None
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe expected=13a6ff3390fd932b5128f41b3fd5188fe075fc5df4c333479343ab2f0caec74b actual=13a6ff3390fd932b5128f41b3fd5188fe075fc5df4c333479343ab2f0caec74b
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe expected=062b02494281054ac58e27d1321e7507b7669d5160aecfab84cbe1dab01e9fba actual=062b02494281054ac58e27d1321e7507b7669d5160aecfab84cbe1dab01e9fba
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe expected=e91229e8eaa10315d3cacc71ce7b5971b56807ce9ce6afaec837d66e19dd0361 actual=e91229e8eaa10315d3cacc71ce7b5971b56807ce9ce6afaec837d66e19dd0361
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe expected=2c0435daa7b80c107b53e46d94c3bad4181f3d39fe113afec596380e9e5b9b54 actual=2c0435daa7b80c107b53e46d94c3bad4181f3d39fe113afec596380e9e5b9b54
+crates/xrepl-core/src/cayrn.rs expected=52dbb420736bd610cf9af3e1154c399281b84d6c7032016d5452735905175a88 actual=52dbb420736bd610cf9af3e1154c399281b84d6c7032016d5452735905175a88
+apps/cayrn_lfe/README.md expected=76bfaad6698e9dbb11afe0396663d3483b8c088f2bfc06c5730dafb210be6ca9 actual=76bfaad6698e9dbb11afe0396663d3483b8c088f2bfc06c5730dafb210be6ca9
+apps/cayrn_lfe/AGENTS.md expected=92c0c907c6f06e614567b26c7193a3d8873e61544b23b755fcc5a3ab860fe013 actual=92c0c907c6f06e614567b26c7193a3d8873e61544b23b755fcc5a3ab860fe013
+README.md expected=8aa8749c45728ebf2867ee53b1f609969da70551d39e544f8742e8f67eda4c05 actual=8aa8749c45728ebf2867ee53b1f609969da70551d39e544f8742e8f67eda4c05
+/Users/oubiwann/lab/lfe/xrepl/xrepl $ ['git', 'rev-parse', 'HEAD']
+38338d6ad38898fd24063b6c89582f0ff486aa30
+EXIT 0
+/Users/oubiwann/lab/lfe/xrepl/xrepl $ ['git', 'branch', '--show-current']
+release/0.2.x
+EXIT 0
+/Users/oubiwann/lab/lfe/xrepl/xrepl $ ['git', 'status', '--short']
+?? docs/design/
+EXIT 0
+/Users/oubiwann/lab/lfe/xrepl/xrepl $ ['git', 'diff', '--cached', '--name-only']
+EXIT 0
+/Users/oubiwann/lab/lfe/xrepl/xrepl $ ['git', 'worktree', 'list']
+/Users/oubiwann/lab/lfe/xrepl/xrepl                     38338d6 [release/0.2.x]
+/Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning 67fc006 [planning]
+EXIT 0
+/Users/oubiwann/lab/oxur/cayrn $ ['git', 'rev-parse', 'HEAD']
+34af63eb9f07a0e019495378045852ad69d00284
+EXIT 0
+/Users/oubiwann/lab/oxur/cayrn $ ['git', 'branch', '--show-current']
+codex/core-session-lifecycle
+EXIT 0
+/Users/oubiwann/lab/oxur/cayrn $ ['git', 'status', '--short']
+EXIT 0
+/Users/oubiwann/lab/oxur/cayrn $ ['git', 'diff', '--cached', '--name-only']
+EXIT 0
+/Users/oubiwann/lab/oxur/cayrn $ ['git', 'worktree', 'list']
+/Users/oubiwann/lab/oxur/cayrn                     34af63e [codex/core-session-lifecycle]
+/Users/oubiwann/lab/oxur/cayrn/.worktrees/planning 9b1a195 [planning]
+EXIT 0
+/Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning $ ['git', 'rev-parse', 'HEAD']
+67fc006a28771311e109dc71a9ac701d5465ca87
+EXIT 0
+/Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning $ ['git', 'branch', '--show-current']
+planning
+EXIT 0
+/Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning $ ['git', 'status', '--short']
+EXIT 0
+/Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning $ ['git', 'diff', '--cached', '--name-only']
+EXIT 0
+/Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning $ ['git', 'worktree', 'list']
+/Users/oubiwann/lab/lfe/xrepl/xrepl                     38338d6 [release/0.2.x]
+/Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning 67fc006 [planning]
+EXIT 0
+$ ['rg', '-n', 'cayrn-lfe-eval:run|evaluated|finishing|version|outcome', 'apps/cayrn_lfe/src', 'apps/cayrn_lfe/test']
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe:14:   (relative_path_survives_evaluated_cwd_test_ 0)
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe:258:(defspec (relative_path_survives_evaluated_cwd_test_ 0) (() (term)))
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe:259:(defun relative_path_survives_evaluated_cwd_test_ ()
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe:260:  "Resolve relative startup once; evaluated cwd cannot relocate restarts."
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe:513:                (map 'kind 'hello 'version 3 'session #b("stale")
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe:532:    (assertEqual #b("outcome") (map-get result #b("kind")))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:171:            (refused path (map 'kind 'authority_hello 'version 3
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:173:            (refused path (map 'kind 'authority_hello 'version 3
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:245:            (refused path (map 'kind 'authority_hello 'version 3
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:309:                    (json:encode (map 'kind 'authority_hello 'version 3
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:336:            (refused path (map 'kind 'hello 'version 2))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:481:              ;; Do not read client bytes or release evaluated code to help.
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:647:    (send-frame socket (map 'kind 'authority_hello 'version 3 'authority id))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:673:  (map 'kind 'hello 'version 3 'session sid 'generation #b("g")
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:816:  (let ((result (until-outcome socket)))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:820:(defun until-outcome (socket)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:823:      (#b("outcome") frame)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:827:       (until-outcome socket)))))
+apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe:14:          (cayrn-lfe-eval:run #b("(set x 41)") env)))
+apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe:16:      (cayrn-lfe-eval:run #b("(+ x 1)") next))))
+apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe:21:          (cayrn-lfe-eval:run #b("(set x 41)") (cayrn-lfe-eval:new)))
+apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe:23:          (cayrn-lfe-eval:run #b("(/ 1 0)") env))
+apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe:24:         ((tuple 'error _ after-parse) (cayrn-lfe-eval:run #b("(") env)))
+apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe:27:    (assertMatch (tuple 'ok #b("41") _) (cayrn-lfe-eval:run #b("x") env))))
+apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe:32:         (cayrn-lfe-eval:run #b("(defun inc (x) (+ x 1))")
+apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe:35:      (cayrn-lfe-eval:run #b("(inc 41)") env))))
+apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe:40:    (cayrn-lfe-eval:run #b("'error") (cayrn-lfe-eval:new))))
+apps/cayrn_lfe/src/cayrn_lfe_connection.lfe:38:                ((map #b("kind") #b("authority_hello") #b("version") 3)
+apps/cayrn_lfe/src/cayrn_lfe_connection.lfe:40:                ((map #b("kind") #b("hello") #b("version") 3) 'context)))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:8:          (callback_order_inversions_test 0)
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:93:               "source not evaluated")
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:155:                           (=:= #b("outcome") (map-get frame #b("kind"))))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:158:                 (until-kind socket #b("outcome")))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:214:          (let ((result (until-kind socket #b("outcome"))))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:266:(defun callback_order_inversions_test ()
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:400:        (assertEqual #b("outcome") (map-get (read-frame client) #b("kind")))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:416:        (assertEqual #b("outcome") (map-get (read-frame client) #b("kind")))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:440:                     (tuple 'finishing #b("2") io 'succeeded #b("42"))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:530:  (until-kind socket #b("outcome")))
+apps/cayrn_lfe/src/cayrn_lfe_authority.lfe:25:      (map #b("kind") #b("authority_hello") #b("version") 3
+apps/cayrn_lfe/src/cayrn_lfe_authority.lfe:35:                     (map 'kind 'authority_ready 'version 3
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:77:  (((tuple 'evaluated pid operation status text env)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:82:                  'active (tuple 'finishing operation io status text))))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:108:                (map 'kind 'outcome 'operation operation 'phase 'cancelled
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:147:  (((map #b("kind") #b("hello") #b("version") 3
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:159:                 (map 'kind 'ready 'version 3 'backend #b("lfe")
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:175:                    (map 'kind 'outcome 'operation operation 'phase 'failed
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:177:                                   "origins; source not evaluated")))))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:220:                         (cayrn-lfe-eval:run source env))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:224:                   (! owner (tuple 'evaluated (self) operation
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:266:  ((io (= (map 'active (tuple 'finishing _ io _ _)) state))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:271:  (((= (map 'active (tuple 'finishing operation _ phase text)) state))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:273:                (map 'kind 'outcome 'operation operation
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:282:      ((tuple 'finishing _ _ _ _) (progress (publish next)))
+EXIT 0
+$ ['rg', '-n', 'EventKind::Outcome|Outcome|serde_json|cayrn-json', 'crates', '--glob', '*.rs']
+crates/xrepl-core/src/cayrn.rs:47:            serde_json::json!({"session":session.id,"generation":session.generation,"after":after})
+crates/xrepl-core/src/cayrn.rs:200:            if let EventKind::Outcome { operation, .. } = &event.event {
+crates/xrepl-core/src/cayrn.rs:207:                    serde_json::to_string(&event).map_err(io::Error::other)?
+crates/xrepl-core/src/cayrn.rs:214:                    EventKind::Outcome {
+EXIT 0

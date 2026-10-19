@@ -1,0 +1,200 @@
+{
+  "status": "CC attested proposed done; independent CDC pending",
+  "base": "38338d6ad38898fd24063b6c89582f0ff486aa30",
+  "branch": "release/0.2.x",
+  "cayrn_source": "34af63eb9f07a0e019495378045852ad69d00284",
+  "cayrn_planning_acceptance": "149ae8c22df5a71997e4674a5efcc160afa64acf",
+  "planning_issue": "67fc006a28771311e109dc71a9ac701d5465ca87",
+  "before": {
+    "apps/cayrn_lfe/src/cayrn_lfe_connection.lfe": "7d507067a2395bd1f0e0eef1e26e9446b90e9344f35f049e90d67b55fc809d24",
+    "apps/cayrn_lfe/src/cayrn_lfe_authority.lfe": "4ab5a07df7a3447dd6aed55577478dabcbe2e6d2badd607565bdab7df63e47e2",
+    "apps/cayrn_lfe/src/cayrn_lfe_context.lfe": "e68c43ba51fbe04ec230683e85f7c1c9f73f45e22a32ac13a652ea464ac532e8",
+    "apps/cayrn_lfe/src/cayrn-lfe-eval.lfe": "16ffae22648e9c82696aee208dbe6dab3913c5aef9816c5973ba6ad2af0b91d2",
+    "apps/cayrn_lfe/src/cayrn-lfe-preview.lfe": null,
+    "apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe": "1b3e2294625b6ab248a81e7e71d1c1085e8f74f9f2162a455599cb8bc59b4255",
+    "apps/cayrn_lfe/test/cayrn_lfe_preview_tests.lfe": null,
+    "apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe": "13a6ff3390fd932b5128f41b3fd5188fe075fc5df4c333479343ab2f0caec74b",
+    "apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe": "062b02494281054ac58e27d1321e7507b7669d5160aecfab84cbe1dab01e9fba",
+    "apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe": "e91229e8eaa10315d3cacc71ce7b5971b56807ce9ce6afaec837d66e19dd0361",
+    "apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe": "2c0435daa7b80c107b53e46d94c3bad4181f3d39fe113afec596380e9e5b9b54",
+    "crates/xrepl-core/src/cayrn.rs": "52dbb420736bd610cf9af3e1154c399281b84d6c7032016d5452735905175a88",
+    "apps/cayrn_lfe/README.md": "76bfaad6698e9dbb11afe0396663d3483b8c088f2bfc06c5730dafb210be6ca9",
+    "apps/cayrn_lfe/AGENTS.md": "92c0c907c6f06e614567b26c7193a3d8873e61544b23b755fcc5a3ab860fe013",
+    "README.md": "8aa8749c45728ebf2867ee53b1f609969da70551d39e544f8742e8f67eda4c05"
+  },
+  "after": {
+    "apps/cayrn_lfe/src/cayrn_lfe_connection.lfe": "cf0d8b62585b119b6a521c7e96c830bfc487e98d57b279205d1f0690911929fc",
+    "apps/cayrn_lfe/src/cayrn_lfe_authority.lfe": "b93f41a9e5e17267f87e6380a8c650fd0baab49c125c98a81c4b527428aa9278",
+    "apps/cayrn_lfe/src/cayrn_lfe_context.lfe": "45d7c1054dc93a793a0486337a8bbf735ce949f3a6872f0f28566ef479524db1",
+    "apps/cayrn_lfe/src/cayrn-lfe-eval.lfe": "f7d9ab25321a916f7b2a789cf0baec51107a6295ddcab6bf055521d631fd53a1",
+    "apps/cayrn_lfe/src/cayrn-lfe-preview.lfe": "d6f5665ea75b7e6d457a38b490904d43eecc3c14399d2ad70ada245457bbe35d",
+    "apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe": "9c07c60fd663d0fa673bf635330df3212fcb65bb8041ad9c50896fe59e3be547",
+    "apps/cayrn_lfe/test/cayrn_lfe_preview_tests.lfe": "cf0912045295e38be78394fdacb561da5f9942855642a2b7d074b00becfd1d9c",
+    "apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe": "ca0ba320fbf18c4727fd04c9d3883cb519377c9fd4771c1eea162dd158e5dbcf",
+    "apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe": "c6bc5e455aabd7218dd0eb8d08117fb24db42bc05675ced1c4ebc92885b095d9",
+    "apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe": "3c2c685486900e4caaea9f38ce62787928b89e23333c8dd6e7ac03b44ddd1495",
+    "apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe": "09d0adb39a072f11a0fad7f93d5981a12f3185208bea7bcb6c75c54285b5da75",
+    "crates/xrepl-core/src/cayrn.rs": "902babb390975f8df4e15f3c36b5ced5ac24bde5e72712b1b53223f428a29b8b",
+    "apps/cayrn_lfe/README.md": "91e4d3a92ff6c1e5ae153c0f39cc1bcac88accca6dca3df564a1e9ed2c2125ba",
+    "apps/cayrn_lfe/AGENTS.md": "ed9f0f04a92a2f035d55668b99948ab279452c6c2b30343669a566f6ae91ca91",
+    "README.md": "a7b06be23fc1c2d5befe4b213ab2cd09adbd9df3b609e7781c6c9441e818ea3b"
+  },
+  "private_native_version": 4,
+  "public_rpc_version": 1,
+  "correction_count": 0,
+  "commit": "7427d1c8e43183b25012e6870937347c39425606",
+  "residual_owners": {
+    "X04": "Complete captured streams, responsive context/IO/formatter ownership and serious NR-02",
+    "C06": "Mixed-system composition after X03/X04",
+    "X-TOOL-01": "Arc06 developer/test cache tooling; freshness checks retained"
+  },
+  "patch_sha256": "ec575ffbecef5c733d93ffd5f86345d95118426e110ea37f1a91c2087194666e",
+  "source_diff_stat": "README.md                                          |  19 +-\n apps/cayrn_lfe/AGENTS.md                           |  20 +-\n apps/cayrn_lfe/README.md                           |  49 +++-\n apps/cayrn_lfe/src/cayrn-lfe-eval.lfe              |  27 +-\n apps/cayrn_lfe/src/cayrn-lfe-preview.lfe           | 191 +++++++++++++++\n apps/cayrn_lfe/src/cayrn_lfe_authority.lfe         |   4 +-\n apps/cayrn_lfe/src/cayrn_lfe_connection.lfe        |   4 +-\n apps/cayrn_lfe/src/cayrn_lfe_context.lfe           |  23 +-\n .../cayrn_lfe/test/cayrn_lfe_application_tests.lfe |   2 +-\n apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe  |  25 +-\n apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe       |  19 +-\n apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe         |   1 +\n apps/cayrn_lfe/test/cayrn_lfe_preview_tests.lfe    | 272 +++++++++++++++++++++\n apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe   |   4 +-\n crates/xrepl-core/src/cayrn.rs                     |   1 +\n 15 files changed, 598 insertions(+), 63 deletions(-)",
+  "source_preservation": "Only pre-existing docs/design/ untracked; empty staging; no push",
+  "documentation_checks": {
+    "changed_shell_fences": 0,
+    "new_local_links": 0
+  },
+  "preview_contract_sha256": "d7b65d4854887cb7f237d31f09520dd8f8075c2d7c40036983998971134cae48",
+  "gates": [
+    {
+      "label": "cayrn-full-final",
+      "exit": 0,
+      "all15_frozen_source_hashes_match": true
+    },
+    {
+      "label": "fresh-source-final",
+      "exit": 0,
+      "all15_frozen_source_hashes_match": true
+    },
+    {
+      "label": "root-testcompile-final",
+      "exit": 0,
+      "all15_frozen_source_hashes_match": true
+    },
+    {
+      "label": "root-full-final",
+      "exit": 0,
+      "all15_frozen_source_hashes_match": true
+    },
+    {
+      "label": "root-launcher-final",
+      "exit": 0,
+      "all15_frozen_source_hashes_match": true
+    },
+    {
+      "label": "runtime-exports-final",
+      "exit": 0,
+      "all15_frozen_source_hashes_match": true
+    },
+    {
+      "label": "actual-json-consumer-final",
+      "exit": 0,
+      "all15_frozen_source_hashes_match": true
+    }
+  ],
+  "populations": {
+    "native_component": {
+      "executions": 73,
+      "unique": 56,
+      "repeats": 17,
+      "retained_unique": 44,
+      "new_unique": 12,
+      "new_pure": 9,
+      "new_native_socket": 3,
+      "failed": 0
+    },
+    "root_eunit": {
+      "total": 358,
+      "legacy": 175,
+      "native": 183,
+      "native_unique": 56,
+      "native_repeats": 127,
+      "native_per_module": {
+        "application": 21,
+        "authority": 68,
+        "eval": 12,
+        "io": 4,
+        "preview": 36,
+        "resource": 42
+      },
+      "failed": 0
+    },
+    "root_common_test": 0,
+    "cayrn": {
+      "ordinary": 54,
+      "ordinary_targets": {
+        "client": 3,
+        "core": 3,
+        "host_private": 19,
+        "host_tests_agent": 14,
+        "host_tests_sessions": 9,
+        "protocol": 6,
+        "cli": 0,
+        "fixture": 0
+      },
+      "native": 14,
+      "consumer_pty": 3,
+      "failed": 0,
+      "ignored": 0,
+      "filtered": 0
+    },
+    "xrepl_rust": {
+      "adventure": 7,
+      "core_ordinary": 0,
+      "cli": 0,
+      "core_doctests": 1,
+      "adventure_doctests": 0,
+      "failed": 0
+    },
+    "fresh_source": {
+      "executions": 73,
+      "unique": 56,
+      "repeats": 17,
+      "failed": 0,
+      "inherited_build_beams": 0
+    },
+    "actual_json_consumer": {
+      "probes": 1,
+      "outcomes": 2,
+      "large_report": true,
+      "small_report": false,
+      "retained_binding_length": 100000,
+      "exit": 0
+    }
+  },
+  "failed_attempts": [
+    {
+      "label": "testcompile-01",
+      "exit": 1,
+      "runtime_cases": 0,
+      "cause": "Unescaped ellipsis atom test fixture; quoted pipe atom fixes parse."
+    },
+    {
+      "label": "preview-focused-01",
+      "exit": 1,
+      "executions": 12,
+      "failed": 2,
+      "cause": "UTF8 source literals were byte chars in pinned LFE compiler; expected fixture double-encoded; explicit codepoint expectations fixed."
+    }
+  ],
+  "final_held_or_unrun_gates": [],
+  "validation_limits": [
+    "Pinned LFE dependency car/cdr warnings and sticky-directory macro-probe ERROR REPORTs retained; not warning-free.",
+    "X-TOOL-01 remains open: only14 inventoried ignored native test/*.beam shadows removed; current test precompile and actual16-module/companion/eval probe plus fresh-source gate pass.",
+    "Common Test executes0; no CT coverage claim.",
+    "X-PKG-01 checkout-path-spaces hook and X-DOC-01 historical README placeholder exceptions unchanged.",
+    "No performance/formal arbitrary-term complexity/heap/powerloss/security/release claim."
+  ],
+  "recordkeeping_failures": [
+    {
+      "helper": "/private/tmp/x03-return.py",
+      "attempt": 1,
+      "error": "Python SyntaxError: unterminated string literal at line22",
+      "execution_or_writes": false,
+      "resolution": "Missing quote corrected; next invocation completed return writes",
+      "evidence": "Narrative receipt copied from tool transcript; not historical raw capture",
+      "source_runtime_impact": "none"
+    }
+  ]
+}
