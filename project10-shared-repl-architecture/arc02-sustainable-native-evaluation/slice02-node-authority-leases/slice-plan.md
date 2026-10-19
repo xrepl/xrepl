@@ -91,3 +91,22 @@ prepared. Native2 hold resolves only with actual C04 accepted handoff; author
 readiness is rechecked then. Current assignment: none; no cc-prompt.md issued.
 No guessed upstream candidate pin. Size-safe previews/output stay Slice03; Cayrn
 full composition is renumbered Slice05, preserving former roadmap obligations.
+
+## Native implementation mechanics — draft refinement
+
+artifacts/native-adapter-recipe.md adds file/symbol/test guidance and source API
+checks. It preserves the issued common contract; the private native registry
+admit call additionally receives a live context port so authority retirement
+can wake a blocked context send without waiting for its mailbox. Required
+suspended-context/EOF/held-credit test distinguishes that shutdown behavior;
+general ordinary output pressure remains Slice03. Actual C04 candidate is still
+required before issuing the native CC assignment.
+
+2026-10-19 native recipe correction before issue: NR-01 found that OTP's
+false-linger backend can synchronously wait on pending output. Authority-loss
+retirement selects abortive linger {true,0} then close, with caught port_close for
+already-closed/error fallback; normal Close keeps its barrier/drain semantics.
+Add a positively observed pending-output queue control alongside mailbox-suspend
+proof. Shared C04 wire/loss policy remains immutable; this is a native shutdown
+mechanic, not general X03 output-pressure completion. Fresh independent recipe
+review required before X02 issuance.

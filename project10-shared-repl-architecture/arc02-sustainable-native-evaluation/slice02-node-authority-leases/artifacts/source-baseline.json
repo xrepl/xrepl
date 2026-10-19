@@ -1,0 +1,25 @@
+{
+  "source": "7228183e2e584e0ab86e03dc6b9454d4b918cc38",
+  "branch": "release/0.2.x",
+  "preserved_untracked": [
+    "docs/design/"
+  ],
+  "files": {
+    "apps/cayrn_lfe/src/cayrn_lfe_registry.lfe": null,
+    "apps/cayrn_lfe/src/cayrn_lfe_connection.lfe": null,
+    "apps/cayrn_lfe/src/cayrn_lfe_authority.lfe": null,
+    "apps/cayrn_lfe/src/cayrn_lfe_context.lfe": "27a9e54e5f7214d93df2b4dcc21da34b6badea479a1e26e3a8ec530f8a0752ec",
+    "apps/cayrn_lfe/src/cayrn_lfe_listener.lfe": "9980e62f9c2ce02779dbc8b4e3891b9f7dda9285cdcfd40e85ec3b1ddf618bf5",
+    "apps/cayrn_lfe/src/cayrn_lfe_sup.lfe": "603ce74dfb191bbd0d55c88a7f6f24e112a31007e75c949344200e38a4364914",
+    "apps/cayrn_lfe/src/cayrn_lfe.app.src": "98273af701ab79e0e59d4d7c91d57f18c4bf6eb48133e9ffffbef9bb54cb7cb7",
+    "apps/cayrn_lfe/include/cayrn_lfe_registry.lfe": null,
+    "apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe": null,
+    "apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe": "28e9f662afac3e767f16e85008bb5611a543335d9e92ed7983cb90eed99e8aeb",
+    "apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe": "f45a39463ae52188b3ffd739218873a483bd5ea6aa09216466d8ed5ecf923451",
+    "apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe": "8b246f2e88b1d40247f9390d426dc501ac93134941ed3aa17f77a3f60b47d2af",
+    "apps/cayrn_lfe/README.md": "cf6dd26662cd1c854a944117e5a0c9393dd1335405e945700c14f06e44d62c4b",
+    "apps/cayrn_lfe/AGENTS.md": "ea74d164a93d9690e866dc36c6541422d4c0499e704a759514a37504c22c5295",
+    "README.md": "c058078f7ee65d2ff605d1c6c150e7cfc108dec6b4cbb0471463a11bb83b7614"
+  },
+  "upstream_cayrn": "Await actual accepted C04 source, not a guessed future hash"
+}
