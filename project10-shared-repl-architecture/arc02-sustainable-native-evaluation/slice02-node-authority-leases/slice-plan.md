@@ -153,3 +153,19 @@ Author readiness: actual source/role/caller/test/OTP close paths inspected,
 canonical contract unchanged and design independently reviewed; full intake,
 negative controls, pressure preconditions, owned cleanup and all real gates
 specified. No unresolved Operator design question for this bounded slice.
+
+## Iteration01 — stable application-owned listen resource,2026-10-19
+
+Version1.2. Current assignment cc-prompt-iteration01.md; original prompt remains
+unchanged. Initial draft passed43ordinary/14native/3consumer and55component
+executions plus fresh/root/launcher at its recorded bytes, but listenerkill still
+broke binding permanent-child restart. Independent LR-01 rejected first cleanup
+fallback; source/API-reviewed apphelper ownership now supplies bounded correction.
+Add apps/cayrn_lfe/src/cayrn_lfe_app.lfe as sole16th source path; no criterion or
+wire/limit change, no new process/role. Actual frozen candidate hashes are in
+source-baseline-iteration01.json. Executed correction1/5 on activation. Final
+full gates/review still required; no initial draft passes relabeled final.
+Design/ownership/acquisition/failure/identity test method and exact scope are
+in listener-lifetime-contract.md; independent review history retained. This is
+a private resource-lifetime implementation correction within approved Arc02,
+not a new REPL architecture/Operator policy or wider project authorization.

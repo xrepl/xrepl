@@ -1,0 +1,28 @@
+{
+  "source_head": "7228183e2e584e0ab86e03dc6b9454d4b918cc38",
+  "branch": "release/0.2.x",
+  "state": "uncommitted frozen initial candidate, not accepted",
+  "files": {
+    "apps/cayrn_lfe/src/cayrn_lfe_registry.lfe": "d63095327af1916c9db7aef73b0a1b359d28507a39a8b619661f531946245627",
+    "apps/cayrn_lfe/src/cayrn_lfe_connection.lfe": "7d507067a2395bd1f0e0eef1e26e9446b90e9344f35f049e90d67b55fc809d24",
+    "apps/cayrn_lfe/src/cayrn_lfe_authority.lfe": "4ab5a07df7a3447dd6aed55577478dabcbe2e6d2badd607565bdab7df63e47e2",
+    "apps/cayrn_lfe/src/cayrn_lfe_context.lfe": "e68c43ba51fbe04ec230683e85f7c1c9f73f45e22a32ac13a652ea464ac532e8",
+    "apps/cayrn_lfe/src/cayrn_lfe_listener.lfe": "55fcbc8b7ecbce47933fe2d90eec7dbfa6642f2e8b1dbb832066eee448844327",
+    "apps/cayrn_lfe/src/cayrn_lfe_sup.lfe": "d2f55deb780378aa2bdfa05b0b9c93acea8bdf24112cbab17ebfa0c4db20250b",
+    "apps/cayrn_lfe/src/cayrn_lfe.app.src": "cc937ea98a8ff85b5850781a28351b09bb630a8c8868bbd306645c4cb81e32ca",
+    "apps/cayrn_lfe/include/cayrn_lfe_registry.lfe": "4b3b978528d37929957635cd557f48ceab3b35f8b5fb1c719e78a8599569b07b",
+    "apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe": "13a6ff3390fd932b5128f41b3fd5188fe075fc5df4c333479343ab2f0caec74b",
+    "apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe": "e91229e8eaa10315d3cacc71ce7b5971b56807ce9ce6afaec837d66e19dd0361",
+    "apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe": "2c0435daa7b80c107b53e46d94c3bad4181f3d39fe113afec596380e9e5b9b54",
+    "apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe": "db1b3e19cb0836e5c7b3e1c7a8ba88a6aeab02f34cd1ac133c7b5aec51e9fc33",
+    "apps/cayrn_lfe/README.md": "02e8bdd9b42ed6c36f195881381705b7ce4d90edc509023536f5a7ab44bb79cc",
+    "apps/cayrn_lfe/AGENTS.md": "efc297ceabf3e0d75321f0e869929fea0781e9422b465a7a6634f88f8068dc6f",
+    "README.md": "249360d92c089864cac7b6ad0bf83a9c4f5f037ca259267f347f144421646034",
+    "apps/cayrn_lfe/src/cayrn_lfe_app.lfe": "c3611e97ca32bc16fc9a39e945fcb1bfdf56ef39bbc760034e97f91d666b1f24"
+  },
+  "original_source_baseline": "source-baseline.json",
+  "added_path": "apps/cayrn_lfe/src/cayrn_lfe_app.lfe",
+  "cayrn_source": "3bcbbdb9ec52667b6c75b7f8a5f2260b93d8be44",
+  "executed_correction_pass": 1,
+  "budget": 5
+}

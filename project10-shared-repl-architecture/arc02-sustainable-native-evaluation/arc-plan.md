@@ -270,3 +270,15 @@ cc-prompt.md against actual7228183 native source with its exact15-path scope.
 Actual CC /root/xrepl_x21, independent CDC /root; bounded authority/lifetime
 implementation and immediate full17-case native3 gate now active. No runtime
 acceptance inferred; NR-02 stays serious/open X03/C06, shared previews C05.
+
+## Slice02 listener-lifetime correction —2026-10-19
+
+Version1.3. Initial native3 implementation's real17-case gate passed as a draft;
+permanent listenerkill still left a stale pathname. LR-01 independent review also
+rejected registryfallback because pending child→supervisor calls can skip listener
+cleanup. Retain all failure evidence. Current Slice02 iteration01 adds existing
+application module as16th path: application helper owns listenport, child listener
+borrows it, absolutepath retained through restart, appstop closes/guarded-unlinks.
+No wire/limits/newprocess change; all8 criteria remain. Source-led reviewed design
+and real kill/queued-call/cwd/acquisition/identity controls precede acceptance.
+NR-02 blocked-output root teardown remains X03/C06; previews C05 precede X03.
