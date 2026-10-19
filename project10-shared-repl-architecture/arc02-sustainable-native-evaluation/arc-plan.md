@@ -1,6 +1,6 @@
 # Arc02 — sustainable native evaluation
 
-Version1.7,2026-10-19. Active under scoped Autonomous Mode. Project10 source release/0.2.x.
+Version1.8,2026-10-19. Active under scoped Autonomous Mode. Project10 source release/0.2.x.
 Original prepared one-contributor wording is superseded by the activation below.
 Sofie CDC independently reviews the assigned CC implementation. Arc01's import and
 LFE conversion are committed at ea844f5/f261152 with pending independent gates.
@@ -31,7 +31,7 @@ final system size/churn checks are additional composition, not deferred-only QA.
 | --- | --- | --- | --- |
 | [Slice01 — fenced capture lifetimes](slice01-fenced-capture-lifetimes/slice-plan.md) | More-than 256 native evaluations; scalar token fence,64 live capture origins, collector retirement with late-output/ACK/close proof | Actual Cayrn C03 native v2 identity/journal return | Independently accepted7228183/7b27b0f; matching native2 gate passed |
 | [Slice02 — node authority leases](slice02-node-authority-leases/slice-plan.md) | Bounded live native lease/context registry; boot/lease/ticket fencing removes4096 cumulative guard | Actual accepted Cayrn C04 native3 handoff; Operator direction approved | Independently accepted38338d6/3bcbbdb; actual native3 gate passed |
-| [Slice03 — bounded result previews](slice03-bounded-result-previews/slice-plan.md) | Native4 bounded validUTF8 result/error previews, shared metadata and rebuilt consumer; immediate real gate | Actual accepted CayrnC05 source34af63e/planning149ae8c, native38338d6 | Issued cc-prompt.md; all8open |
+| [Slice03 — bounded result previews](slice03-bounded-result-previews/slice-plan.md) | Native4 bounded validUTF8 result/error previews, shared metadata and rebuilt consumer; immediate real gate | Actual accepted CayrnC05 source34af63e/planning149ae8c, native38338d6 | Independently accepted7427d1c/34af63e; actual native4 gate passed |
 | Slice04 — owned captured streams | Complete bounded output chunks, responsive context/formatter/writer, foreground-root lifetime and NR02 teardown under pending output | Accepted X03; source-led reviewed ownership/ACK/pressure recipe required | Roadmap only; all original output/NR02 obligations retained |
 
 Directory numbering does not invent a dependency from node identities to size
@@ -321,3 +321,12 @@ implementation decomposition within approved architecture/scope, not a new
 failure/durability policy or separate investigation. X04 needs full exact recipe
 before its prompt. XA02-04 maps X03; XA02-05 maps X04; XA02-06 maps X04+C06;
 all7arc and project rows unchanged. PublicRPC1/native4 and no silent output loss.
+
+## v1.8 — native4 preview slice accepted,2026-10-19
+
+X03 source7427d1c/34af63e independently accepted8/8; root reproduced matching
+54ordinary+14native+3consumer, root358/CT0, fresh73, current exports, native-only
+launcher and actual JSON true/false reports. XA02-04 done at bounded scope. No
+structural/scope change arose; X04 retains all streams/responsive owner/serious
+NR-02 duties, then C06 mixed composition. Native4 runtime hold from shared C05
+is discharged, historical compile-only result unchanged. No arc/release close.

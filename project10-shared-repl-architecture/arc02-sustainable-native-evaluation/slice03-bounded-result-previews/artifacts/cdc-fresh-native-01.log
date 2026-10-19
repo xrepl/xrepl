@@ -1,0 +1,89 @@
+CDC /root independently executed
+SOURCE 7427d1c8e43183b25012e6870937347c39425606
+CWD /private/tmp/cayrn-x03-cdc-fresh-50acqst0
+COMMAND ['make', 'check']
+rebar3 compile
+===> Fetching rebar3_lfe v0.5.5
+===> Fetching lfe v2.2.0
+===> Analyzing applications...
+===> Compiling lfe
+===> Compiling rebar3_lfe
+src/cl.lfe:472: Warning: redefining core function car/1
+src/cl.lfe:479: Warning: redefining core function cdr/1
+===> Verifying dependencies...
+===> Fetching lfe v2.2.0
+===> Analyzing applications...
+===> Compiling _build/default/lib/lfe/src/cl.lfe
+===> Compiling _build/default/lib/lfe/src/clj.lfe
+===> Compiling lfe
+src/cl.lfe:472: Warning: redefining core function car/1
+src/cl.lfe:479: Warning: redefining core function cdr/1
+===> Analyzing applications...
+===> Compiling src/cayrn-lfe-preview.lfe
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_app.lfe
+===> Compiling src/cayrn_lfe_registry.lfe
+===> Compiling src/cayrn-lfe-eval.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling src/cayrn_lfe_connection.lfe
+===> Compiling src/cayrn_lfe_authority.lfe
+===> Compiling src/cayrn_lfe_io.lfe
+=ERROR REPORT==== 19-Oct-2026::02:49:55.930333 ===
+Can't load module 'json' that resides in sticky dir
+
+=ERROR REPORT==== 19-Oct-2026::02:49:55.937194 ===
+Can't load module 'json' that resides in sticky dir
+
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_authority.lfe
+===> Compiling src/cayrn-lfe-preview.lfe
+===> Compiling src/cayrn_lfe_io.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling src/cayrn_lfe_connection.lfe
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_app.lfe
+===> Compiling src/cayrn_lfe_registry.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling src/cayrn-lfe-eval.lfe
+=ERROR REPORT==== 19-Oct-2026::02:49:56.699331 ===
+Can't load module 'json' that resides in sticky dir
+
+=ERROR REPORT==== 19-Oct-2026::02:49:56.707807 ===
+Can't load module 'gen_tcp' that resides in sticky dir
+
+===> Compiling src/cayrn-lfe-preview.lfe
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_app.lfe
+===> Compiling src/cayrn_lfe_registry.lfe
+===> Compiling test/cayrn_lfe_application_tests.lfe
+===> Compiling test/cayrn_lfe_authority_tests.lfe
+===> Compiling src/cayrn-lfe-eval.lfe
+===> Compiling test/cayrn_lfe_preview_tests.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling test/cayrn_lfe_eval_tests.lfe
+===> Compiling src/cayrn_lfe_connection.lfe
+===> Compiling test/cayrn_lfe_resource_tests.lfe
+===> Compiling test/cayrn_lfe_io_tests.lfe
+===> Compiling src/cayrn_lfe_authority.lfe
+===> Compiling src/cayrn_lfe_io.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+=ERROR REPORT==== 19-Oct-2026::02:49:56.944684 ===
+Can't load module 'sys' that resides in sticky dir
+
+===> Compiling cayrn_lfe
+===> Performing EUnit tests...
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0mpressure buffers client={ok,[{recbuf,1024}]} native={ok,[{sndbuf,1024}]}
+positive native send_pend=7038
+retirement decision send_pend=15100
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0mpressure buffers client={ok,[{recbuf,1024}]} native={ok,[{sndbuf,1024}]}
+positive native send_pend=7038
+retirement decision send_pend=15100
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m
+Finished in 62.844 seconds
+[0;32m73 tests, 0 failures
+[0m
+EXIT 0

@@ -200,3 +200,11 @@ physical durability and Operator publication gates remain. No later arc or relea
 is opened or accepted by this return. [Supporting inventory](artifacts/artifact-inventory.md)
 includes all supporting inputs/CC outputs; first-class records remain slice-root.
 Concurrent reviewer-owned artifacts are independently inventoried by CDC.
+
+## Subsequent independent CDC acceptance —2026-10-19
+
+CDC/root independently accepted all8 original rows at7427d1c/34af63e. Earlier
+proposal remains historical. [Verification](cdc-verification.md) records source
+reconciliation, actual54ordinary+14native+3consumer/root358/fresh73/launcher and
+JSON metadata reproduction; [retrospective](cdc-retrospective.md) records follow-
+through. Complete streams, NR-02 and C06 composition remain required.

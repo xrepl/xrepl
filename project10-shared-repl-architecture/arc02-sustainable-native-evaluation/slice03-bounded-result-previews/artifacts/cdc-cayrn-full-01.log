@@ -1,0 +1,241 @@
+CDC /root independently executed
+SOURCE 7427d1c8e43183b25012e6870937347c39425606
+CWD /Users/oubiwann/lab/oxur/cayrn
+COMMAND ['make', 'check', 'lint-integration', 'test-xrepl']
+Building Cayrn in debug mode...
+cargo build --workspace --locked 
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.04s
+  ✓ cayrn → ./bin/cayrn
+  ✓ cayrn-fixture → ./bin/cayrn-fixture
+Checking Rust formatting...
+cargo fmt --all -- --check
+Running Clippy...
+cargo clippy --workspace --all-targets --locked -- -D warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.07s
+Running workspace tests...
+cargo test --workspace --all-targets --locked
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
+     Running unittests src/main.rs (target/debug/deps/cayrn-7ee8aa283e8fc5a9)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/cayrn_client-51941e172de39b23)
+
+running 3 tests
+test spool::tests::wrong_session_and_cursor_cannot_be_accepted ... ok
+test spool::tests::capacity_and_order_errors_preserve_resume_cursor ... ok
+test spool::preview_tests::contiguous_pages_preserve_true_false_and_unknown_outcomes ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running unittests src/lib.rs (target/debug/deps/cayrn_core-e31bee98853b588e)
+
+running 3 tests
+test preview_tests::runtime_or_finish_failure_keeps_loss_policy ... ok
+test tests::admission_classifies_all_session_states ... ok
+test preview_tests::every_outcome_forwards_exact_report_and_order_without_text_inference ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/cayrn_host-3b7a659d4227d70e)
+
+running 19 tests
+test agent::control_tests::stopping_control_wakes_local_reader_while_peer_remains_open ... ok
+test authority::tests::registration_and_authority_loss_share_one_atomic_fence ... ok
+test authority::tests::live_control_budget_prunes_stopped_entries_and_exhaustion_never_wraps ... ok
+test authority::tests::creation_lock_spans_held_ready_and_failed_ticket_is_consumed ... ok
+test journal::preview_tests::reported_preview_survives_recovery_and_terminal_retry_with_prefix_immutable ... ok
+test ownership_tests::aborting_serve_wakes_a_positively_queued_submit_without_finishing_source ... ok
+test journal::native_tests::native_output_and_dispatch_abort_leave_no_partial_commits ... ok
+test journal::preview_tests::evaluated_utf8_byte_boundary_is_checked_before_mutation ... ok
+test journal::native_tests::durable_native_lookup_checks_scope_registry_dispatch_and_terminal_output ... ok
+test ownership_tests::dropping_unserved_host_or_aborting_serve_never_joins_on_async_worker ... ok
+test journal::preview_tests::old_closed_json_and_oversized_diagnostics_are_never_rewritten ... ok
+test ownership_tests::cancelled_bind_and_later_public_bind_failure_release_guarded_authority ... ok
+test agent::control_tests::concurrent_stop_clones_are_idempotent_and_peer_observes_eof ... ok
+test journal::preview_tests::exact_finish_includes_metadata_and_outcome_abort_rolls_back_both_rows ... ok
+test journal::native_tests::native_indexes_rebuild_on_existing_v1_archive_and_reject_duplicate_history ... ok
+test journal::tests::inactive_admission_preserves_identity_precedence_and_transcript ... ok
+test journal::native_tests::native_output_racing_close_is_before_final_barrier_or_rejected ... ok
+test authority::tests::concurrent_authority_stop_and_reader_disposal_deliver_peer_eof ... ok
+test agent::control_tests::peer_eof_predicate_rejects_no_shutdown_and_expired_eof ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.00s
+
+     Running unittests src/bin/cayrn-fixture.rs (target/debug/deps/cayrn_fixture-8ab5faef6a9f82e8)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/agent.rs (target/debug/deps/agent-caaccc62fc521c08)
+
+running 14 tests
+test link_loss_during_close_never_seals_without_native_barrier ... ok
+test generic_connector_captures_acknowledged_non_lfe_peer_output ... ok
+test cooperative_agent_interrupt_preserves_context_without_language_assumptions ... ok
+test wrong_agent_version_fails_eager_bind ... ok
+test context_loss_is_local_and_other_host_lease_survives_authority_loss ... ok
+test lifecycle_errors_cross_rpc_without_losing_retries_or_history ... ok
+test authority_eof_or_partial_byte_loses_held_open_contexts_without_false_seal ... ok
+test context_scope_failures_consume_tickets_without_retiring_authority ... ok
+test reported_previews_agree_across_clients_pages_follow_retry_and_restart ... ok
+test invalid_native4_preview_reports_and_oversize_lose_only_context ... ok
+test invalid_native_capture_and_duplicate_outcomes_never_acknowledge ... ok
+test concurrent_creations_cannot_overtake_first_context_ready ... ok
+test sustained_sparse_tokens_keep_early_output_public_identity_and_dedup ... ok
+test handshake_eof_timeout_and_invalid_boot_are_runtime_loss_not_preconnect_io ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.08s
+
+     Running tests/sessions.rs (target/debug/deps/sessions-422faf8570d7d1b6)
+
+running 9 tests
+test insecure_directory_is_rejected_without_changing_its_permissions ... ok
+test exclusive_owner_and_boundaries_reject_invalid_work ... ok
+test worker_death_is_unknown_and_does_not_affect_peer_session ... ok
+test lost_reply_duplicate_and_conflicting_id_never_repeat_mutation ... ok
+test host_restart_retains_history_but_never_restores_heap_by_reexecution ... ok
+test user_code_error_preserves_context_and_is_not_runtime_failure ... ok
+test last_client_detach_keeps_live_state_and_unicode_output ... ok
+test two_clients_share_ordered_state_and_replay ... ok
+test busy_worker_does_not_block_inspection_or_another_session ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.23s
+
+     Running unittests src/lib.rs (target/debug/deps/cayrn_protocol-2472c52e89386885)
+
+running 6 tests
+test tests::inactive_session_fault_codes_round_trip ... ok
+test tests::cursor_preserves_numbers_beyond_javascript_integer_precision ... ok
+test authority_domain_tests::lease_and_context_ticket_are_distinct_exact_domains ... ok
+test native_token_tests::native_tokens_are_positive_bounded_canonical_strings_not_public_ids ... ok
+test preview_tests::public_metadata_preserves_unknown_and_old_reader_projections ... ok
+test preview_tests::malformed_reports_reject_and_native4_never_guesses_completeness ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+Building workspace API documentation...
+RUSTDOCFLAGS=" -D warnings" cargo doc --workspace --no-deps --locked
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.04s
+   Generated /Users/oubiwann/lab/oxur/cayrn/target/doc/cayrn/index.html and 5 other files
+
+✓ All checks passed (build + lint + test + docs)
+
+cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.06s
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C "/Users/oubiwann/lab/oxur/cayrn/../../lfe/xrepl/xrepl/apps/cayrn_lfe" build
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C "/Users/oubiwann/lab/oxur/cayrn/../../lfe/xrepl/xrepl" CARGO_TARGET_DIR="/Users/oubiwann/lab/oxur/cayrn/../../lfe/xrepl/xrepl/target" build-rust
+[1;34mBuilding xrepl (Rust)...[0m
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.05s
+[1;32m✓ Rust build complete[0m
+CAYRN_LFE_DIR="/Users/oubiwann/lab/oxur/cayrn/../../lfe/xrepl/xrepl/apps/cayrn_lfe" \
+		XREPL_BIN="/Users/oubiwann/lab/oxur/cayrn/../../lfe/xrepl/xrepl/target/debug/xrepl" \
+		cargo test -p cayrn-cli --features xrepl-integration \
+		--test native_agent --test xrepl --locked -- --test-threads=1 
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
+     Running tests/native_agent.rs (target/debug/deps/native_agent-e7613db4ccda7d96)
+
+running 14 tests
+test bindings_shared_clients_lost_reply_dedup_and_reconnect ... ok
+test busy_close_seals_capture_retains_archive_and_preserves_peer ... ok
+test busy_context_does_not_block_peer_or_inspection ... ok
+test cancellation_confirms_death_blocks_side_effect_and_preserves_peer ... ok
+test dispatch_transaction_abort_never_executes_or_retries ... ok
+test evaluator_death_quarantines_only_its_context ... ok
+test host_crash_retains_history_and_unknown_work_without_reexecution ... ok
+test late_output_and_follow_preserve_origin_and_contiguous_cursors ... ok
+test malformed_version_and_stale_native_frames_fail_closed ... ok
+test native_authority_survives_4097_public_contexts_with_archives_and_final_evaluation ... ok
+test node_loss_marks_active_work_unknown_but_keeps_closed_archives ... ok
+test output_transaction_abort_never_false_acks_or_reexecutes ... ok
+test sustained_evaluation_reclaims_quiet_origins_and_keeps_early_writer_identity ... ok
+test terminating_one_host_lease_discards_its_contexts_and_preserves_other_host ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 33.79s
+
+     Running tests/xrepl.rs (target/debug/deps/xrepl-b657526d88e72b96)
+
+running 3 tests
+test draft_survives_peer_output_and_quit_keeps_live_state ... ok
+test json_consumer_replays_contiguous_events_and_eof_only_detaches ... ok
+test keyboard_ctrl_c_interrupts_evaluation_and_preserves_peer ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.21s
+
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C "/Users/oubiwann/lab/oxur/cayrn/../../lfe/xrepl/xrepl/apps/cayrn_lfe" check
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+===> Performing EUnit tests...
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0mpressure buffers client={ok,[{recbuf,1024}]} native={ok,[{sndbuf,1024}]}
+positive native send_pend=15100
+retirement decision send_pend=15100
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0mpressure buffers client={ok,[{recbuf,1024}]} native={ok,[{sndbuf,1024}]}
+positive native send_pend=15100
+retirement decision send_pend=15100
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m
+Finished in 63.002 seconds
+[0;32m73 tests, 0 failures
+[0m/Applications/Xcode.app/Contents/Developer/usr/bin/make -C "/Users/oubiwann/lab/oxur/cayrn/../../lfe/xrepl/xrepl" CARGO_TARGET_DIR="/Users/oubiwann/lab/oxur/cayrn/../../lfe/xrepl/xrepl/target" lint-rust test-rust
+[1;34mRunning Rust linters...[0m
+[1;36m• clippy...[0m
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.09s
+[1;32m✓ clippy passed[0m
+[1;36m• format check...[0m
+[1;32m✓ format check passed[0m
+[1;34mRunning Rust workspace tests...[0m
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
+     Running unittests src/main.rs (/Users/oubiwann/lab/oxur/cayrn/../../lfe/xrepl/xrepl/target/debug/deps/xrepl-24e9083b8ec39764)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (/Users/oubiwann/lab/oxur/cayrn/../../lfe/xrepl/xrepl/target/debug/deps/xrepl_adventure-fea08a1eea4698f6)
+
+running 7 tests
+test tests::banner_opens_on_the_scene ... ok
+test tests::cannot_take_what_isnt_there ... ok
+test tests::a_bare_direction_changes_room ... ok
+test tests::item_taken_is_gone_from_the_room ... ok
+test tests::take_then_inventory_shows_the_item ... ok
+test tests::unknown_verb_is_reported_not_panicked ... ok
+test tests::starts_in_the_cockpit ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (/Users/oubiwann/lab/oxur/cayrn/../../lfe/xrepl/xrepl/target/debug/deps/xrepl_core-cf78c1a807e76d0c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests xrepl_adventure
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests xrepl_core
+
+running 1 test
+test crates/xrepl-core/src/lib.rs - (line 31) - compile ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+all doctests ran in 0.44s; merged doctests compilation took 0.30s
+[1;32m✓ Rust tests passed[0m
+
+EXIT 0

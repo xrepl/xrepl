@@ -1,0 +1,38 @@
+{
+  "source": "7427d1c8e43183b25012e6870937347c39425606",
+  "base": "38338d6ad38898fd24063b6c89582f0ff486aa30",
+  "paths": [
+    "README.md",
+    "apps/cayrn_lfe/AGENTS.md",
+    "apps/cayrn_lfe/README.md",
+    "apps/cayrn_lfe/src/cayrn-lfe-eval.lfe",
+    "apps/cayrn_lfe/src/cayrn-lfe-preview.lfe",
+    "apps/cayrn_lfe/src/cayrn_lfe_authority.lfe",
+    "apps/cayrn_lfe/src/cayrn_lfe_connection.lfe",
+    "apps/cayrn_lfe/src/cayrn_lfe_context.lfe",
+    "apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe",
+    "apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe",
+    "apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe",
+    "apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe",
+    "apps/cayrn_lfe/test/cayrn_lfe_preview_tests.lfe",
+    "apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe",
+    "crates/xrepl-core/src/cayrn.rs"
+  ],
+  "before_after_and_commit_match": true,
+  "patch_sha256": "ec575ffbecef5c733d93ffd5f86345d95118426e110ea37f1a91c2087194666e",
+  "candidate_sha256": "52afaf3833e182fcb57b9eaefb95e8387c0f096e0ac6ecc9e78f698356cfc0a8",
+  "cc_planning_return": "47b4b45986b96cdfa9a6c712a3530ae1ba5765fe",
+  "cc_exact_return_paths": [
+    "project10-shared-repl-architecture/arc02-sustainable-native-evaluation/slice03-bounded-result-previews/artifacts/artifact-inventory.md",
+    "project10-shared-repl-architecture/arc02-sustainable-native-evaluation/slice03-bounded-result-previews/artifacts/execution.md",
+    "project10-shared-repl-architecture/arc02-sustainable-native-evaluation/slice03-bounded-result-previews/artifacts/intake.log",
+    "project10-shared-repl-architecture/arc02-sustainable-native-evaluation/slice03-bounded-result-previews/artifacts/source-candidate.json",
+    "project10-shared-repl-architecture/arc02-sustainable-native-evaluation/slice03-bounded-result-previews/artifacts/source-candidate.patch",
+    "project10-shared-repl-architecture/arc02-sustainable-native-evaluation/slice03-bounded-result-previews/artifacts/validation.log",
+    "project10-shared-repl-architecture/arc02-sustainable-native-evaluation/slice03-bounded-result-previews/closing-report.md",
+    "project10-shared-repl-architecture/arc02-sustainable-native-evaluation/slice03-bounded-result-previews/ledger.md"
+  ],
+  "restricted_positive_version_only": true,
+  "trailers": true,
+  "status_preserved": true
+}

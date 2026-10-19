@@ -61,3 +61,11 @@ Pure renderer bounded traversal + known scalar/probe conversions avoids fullterm
 prettyprint materialization; source review supplements fixedspecimens, no formal
 complexity claim. Local helpernames discretionary; behavior/budgets/holdsbind.
 No critical policy is left for CC to choose; challenge contradiction beforeedits.
+
+## Independent acceptance —2026-10-19
+
+CLOSED,8/8 at7427d1c8e43183b25012e6870937347c39425606 / Cayrn34af63e;
+CC planning47b4b45986b96cdfa9a6c712a3530ae1ba5765fe, correction0/5. Root
+independently reproduced all required current/fresh/real gates and actual JSON
+metadata. See cdc-verification.md and mandatory cdc-retrospective.md. Native4
+runtime hold discharged; streams/NR-02/C06 and whole-arc gates remain.

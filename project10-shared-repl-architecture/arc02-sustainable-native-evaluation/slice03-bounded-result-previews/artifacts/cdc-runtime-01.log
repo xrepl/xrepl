@@ -1,0 +1,91 @@
+Independent CDC execution of preserved CC probe, inspected by root
+COMMAND ['python3', '/private/tmp/cdc-x03/cdc-x03-runtime.py']
+ARGV isolated erl code:which/exports + actual companion/eval4tuple assertions
+[{"exports":[["LFE-EXPAND-EXPORTED-MACRO",3],["__info__",1],["new",0],["run",2],["module_info",0],["module_info",1]],"module":"cayrn-lfe-eval","path":"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn-lfe-eval.beam"},{"exports":[["LFE-EXPAND-EXPORTED-MACRO",3],["__info__",1],["module_info",0],["render",1],["module_info",1]],"module":"cayrn-lfe-preview","path":"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn-lfe-preview.beam"},{"exports":[["LFE-EXPAND-EXPORTED-MACRO",3],["__info__",1],["start",2],["stop",1],["module_info",0],["module_info",1]],"module":"cayrn_lfe_app","path":"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_app.beam"},{"exports":[["LFE-EXPAND-EXPORTED-MACRO",3],["__info__",1],["handle_call",3],["handle_cast",2],["handle_info",2],["init",1],["start_link",1],["terminate",2],["module_info",0],["module_info",1]],"module":"cayrn_lfe_authority","path":"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_authority.beam"},{"exports":[["LFE-EXPAND-EXPORTED-MACRO",3],["__info__",1],["handle_call",3],["handle_cast",2],["handle_info",2],["init",1],["start_link",1],["terminate",2],["module_info",0],["module_info",1]],"module":"cayrn_lfe_connection","path":"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_connection.beam"},{"exports":[["LFE-EXPAND-EXPORTED-MACRO",3],["__info__",1],["handle_call",3],["handle_cast",2],["handle_info",2],["init",1],["start_link",1],["terminate",2],["module_info",0],["module_info",1]],"module":"cayrn_lfe_context","path":"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_context.beam"},{"exports":[["LFE-EXPAND-EXPORTED-MACRO",3],["__info__",1],["handle_call",3],["handle_cast",2],["handle_info",2],["init",1],["terminate",2],["module_info",0],["seal",2],["retire",2],["finished",2],["start",3],["committed",3],["module_info",1]],"module":"cayrn_lfe_io","path":"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_io.beam"},{"exports":[["LFE-EXPAND-EXPORTED-MACRO",3],["__info__",1],["handle_call",3],["handle_cast",2],["handle_info",2],["init",1],["start_link",2],["terminate",2],["module_info",0],["module_info",1]],"module":"cayrn_lfe_listener","path":"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_listener.beam"},{"exports":[["LFE-EXPAND-EXPORTED-MACRO",3],["__info__",1],["handle_call",3],["handle_cast",2],["handle_info",2],["init",1],["start_link",0],["terminate",2],["module_info",0],["module_info",1],["admit",7],["open",1]],"module":"cayrn_lfe_registry","path":"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_registry.beam"},{"exports":[["LFE-EXPAND-EXPORTED-MACRO",3],["__info__",1],["authority",1],["context",1],["init",1],["module_info",0],["connection",1],["module_info",1],["start_link",2]],"module":"cayrn_lfe_sup","path":"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_sup.beam"},{"exports":[["LFE-EXPAND-EXPORTED-MACRO",3],["__info__",1],["application_stop_reaps_endpoint_test_",0],["await-port-down",1],["callback-guard",2],["child-failure",1],["child_kill_keeps_endpoint_test_",0],["endpoint-info",0],["identity_guard_preserves_replacements_test_",0],["independent_application_start_test_",0],["queued-parent-call",0],["queued_parent_call_survives_registry_kill_test_",0],["relative_path_survives_evaluated_cwd_test_",0],["startup-refusal",1],["startup_refusal_cleans_acquisition_test_",0],["test",0],["module_info",0],["module_info",1]],"module":"cayrn_lfe_application_tests","path":"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_application_tests.beam"},{"exports":[["LFE-EXPAND-EXPORTED-MACRO",3],["__info__",1],["authority_capacity_test_",0],["authority_churn_test_",0],["authority_eof_test_",0],["authority_partial_byte_test_",0],["context_capacity_test_",0],["context_churn_test_",0],["context_only_loss_test_",0],["first_frame_timeout_test_",0],["listener_restart_test_",0],["monitor_and_exhaustion_test_",0],["paused-roles",0],["paused_endpoint_timeout_test_",0],["pending_output_loss_test_",0],["preaccept_watermark_test_",0],["registry_restart_test_",0],["router-failure",0],["router_transfer_failure_test_",0],["scope_and_numeric_fences_test_",0],["set-limit",1],["suspended_context_loss_test_",0],["test",0],["module_info",0],["with-peer",1],["context",6],["authority",2],["await-down",1],["module_info",1]],"module":"cayrn_lfe_authority_tests","path":"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_authority_tests.beam"},{"exports":[["LFE-EXPAND-EXPORTED-MACRO",3],["__info__",1],["errors_preserve_committed_environment_test",0],["functions_and_macro_context_test",0],["ordinary_error_atom_is_a_value_test",0],["persistent_bindings_test",0],["test",0],["module_info",0],["module_info",1]],"module":"cayrn_lfe_eval_tests","path":"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_eval_tests.beam"},{"exports":[["LFE-EXPAND-EXPORTED-MACRO",3],["__info__",1],["capture_requires_owner_ack_test",0],["native_agent_companions_test_",0],["seal_orders_prior_capture_and_rejects_late_writes_test",0],["test",0],["module_info",0],["module_info",1]],"module":"cayrn_lfe_io_tests","path":"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_io_tests.beam"},{"exports":[["LFE-EXPAND-EXPORTED-MACRO",3],["__info__",1],["conservative_list_boundaries_test",0],["delimiter_reservations_test",0],["depth_boundaries_test",0],["huge_integer_test",0],["integer_byte_boundaries_test",0],["native_cancel_reports_false_test_",0],["native_error_previews_preserve_environment_test_",0],["native_large_values_preserve_environment_test_",0],["scalar_spellings_test",0],["structural_types_test",0],["unicode_boundary_test",0],["wide_collections_test_",0],["test",0],["module_info",0],["module_info",1]],"module":"cayrn_lfe_preview_tests","path":"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_preview_tests.beam"},{"exports":[["LFE-EXPAND-EXPORTED-MACRO",3],["__info__",1],["async_descendants_wait_for_commit_test_",0],["callback_order_inversions_test",0],["capacity_refusal_and_recovery_test_",0],["closed_socket_retains_acquired_cleanup_state_test",0],["collector_failure_is_context_local_test_",0],["full_capacity_close_test_",0],["ownership_and_monitor_mismatches_test",0],["quiet_result_waits_for_exact_down_test",0],["quiet_sparse_evaluations_reclaim_origins_test_",0],["retirement_close_orderings_test_",0],["retiring_down_and_close_barriers_test",0],["stale_cancel_preserves_active_evaluation_test_",0],["token_replay_and_invalid_tokens_test_",0],["trace_session_isolation_test",0],["test",0],["module_info",0],["module_info",1]],"module":"cayrn_lfe_resource_tests","path":"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_resource_tests.beam"}]
+
+
+DECLARED/ACTUAL EXPORTS cayrn-lfe-eval match; classified generated [('LFE-EXPAND-EXPORTED-MACRO', 3), ('__info__', 1), ('module_info', 0), ('module_info', 1)]
+DECLARED/ACTUAL EXPORTS cayrn-lfe-preview match; classified generated [('LFE-EXPAND-EXPORTED-MACRO', 3), ('__info__', 1), ('module_info', 0), ('module_info', 1)]
+DECLARED/ACTUAL EXPORTS cayrn_lfe_app match; classified generated [('LFE-EXPAND-EXPORTED-MACRO', 3), ('__info__', 1), ('module_info', 0), ('module_info', 1)]
+DECLARED/ACTUAL EXPORTS cayrn_lfe_authority match; classified generated [('LFE-EXPAND-EXPORTED-MACRO', 3), ('__info__', 1), ('module_info', 0), ('module_info', 1)]
+DECLARED/ACTUAL EXPORTS cayrn_lfe_connection match; classified generated [('LFE-EXPAND-EXPORTED-MACRO', 3), ('__info__', 1), ('module_info', 0), ('module_info', 1)]
+DECLARED/ACTUAL EXPORTS cayrn_lfe_context match; classified generated [('LFE-EXPAND-EXPORTED-MACRO', 3), ('__info__', 1), ('module_info', 0), ('module_info', 1)]
+DECLARED/ACTUAL EXPORTS cayrn_lfe_io match; classified generated [('LFE-EXPAND-EXPORTED-MACRO', 3), ('__info__', 1), ('module_info', 0), ('module_info', 1)]
+DECLARED/ACTUAL EXPORTS cayrn_lfe_listener match; classified generated [('LFE-EXPAND-EXPORTED-MACRO', 3), ('__info__', 1), ('module_info', 0), ('module_info', 1)]
+DECLARED/ACTUAL EXPORTS cayrn_lfe_registry match; classified generated [('LFE-EXPAND-EXPORTED-MACRO', 3), ('__info__', 1), ('module_info', 0), ('module_info', 1)]
+DECLARED/ACTUAL EXPORTS cayrn_lfe_sup match; classified generated [('LFE-EXPAND-EXPORTED-MACRO', 3), ('__info__', 1), ('module_info', 0), ('module_info', 1)]
+DECLARED/ACTUAL EXPORTS cayrn_lfe_application_tests match; classified generated [('LFE-EXPAND-EXPORTED-MACRO', 3), ('__info__', 1), ('module_info', 0), ('module_info', 1), ('test', 0)]
+DECLARED/ACTUAL EXPORTS cayrn_lfe_authority_tests match; classified generated [('LFE-EXPAND-EXPORTED-MACRO', 3), ('__info__', 1), ('module_info', 0), ('module_info', 1), ('test', 0)]
+DECLARED/ACTUAL EXPORTS cayrn_lfe_eval_tests match; classified generated [('LFE-EXPAND-EXPORTED-MACRO', 3), ('__info__', 1), ('module_info', 0), ('module_info', 1), ('test', 0)]
+DECLARED/ACTUAL EXPORTS cayrn_lfe_io_tests match; classified generated [('LFE-EXPAND-EXPORTED-MACRO', 3), ('__info__', 1), ('module_info', 0), ('module_info', 1), ('test', 0)]
+DECLARED/ACTUAL EXPORTS cayrn_lfe_preview_tests match; classified generated [('LFE-EXPAND-EXPORTED-MACRO', 3), ('__info__', 1), ('module_info', 0), ('module_info', 1), ('test', 0)]
+DECLARED/ACTUAL EXPORTS cayrn_lfe_resource_tests match; classified generated [('LFE-EXPAND-EXPORTED-MACRO', 3), ('__info__', 1), ('module_info', 0), ('module_info', 1), ('test', 0)]
+FINAL GENERATED SOURCE TEST BEAM IDENTITIES [
+  {
+    "path": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn-lfe-eval.beam",
+    "sha256": "3e3e3d1466b017aa013a1e4e64d0e95a30e17d0c842dee07ae566bc66b4c5d03"
+  },
+  {
+    "path": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn-lfe-preview.beam",
+    "sha256": "2a227cf71d15d758119575c5f586e6e9f1a39bcb2c4dce1c7ff2e2bd48951a89"
+  },
+  {
+    "path": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_app.beam",
+    "sha256": "70c2344ef831a66d02047acbe3d008045192657d0ba000c697a54ddd319fb977"
+  },
+  {
+    "path": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_application_tests.beam",
+    "sha256": "2223c870f6604756c32ba21a6871cbe14521c1e02d97b18dca54034adda89c44"
+  },
+  {
+    "path": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_authority.beam",
+    "sha256": "4bd9a1b3a1a3ab0a1d6172a946acbe9148c192c9878950c79187d78c85e8f73c"
+  },
+  {
+    "path": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_authority_tests.beam",
+    "sha256": "e854062a22a4d8458b116ea39ba7734cc7fb274600b00a73d840942cca1cc308"
+  },
+  {
+    "path": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_connection.beam",
+    "sha256": "4b8bc9587a5d119986fbb993944111a53d3696442070ae15989ab2acfeb70026"
+  },
+  {
+    "path": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_context.beam",
+    "sha256": "287f4f0587b3b6f18d6701a46dc1e9ee2d22dd0ebc9eded9a0f34ad406e92ace"
+  },
+  {
+    "path": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_eval_tests.beam",
+    "sha256": "2aefd676a33951794bdedc6e1238abaab4c0cc39a62a6eb21a72e27d2cee2ed9"
+  },
+  {
+    "path": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_io.beam",
+    "sha256": "5af996d2ad14e59fa98c49cb4aa61434f2861acfe6f1bbeabb5f4d7e7fb692d4"
+  },
+  {
+    "path": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_io_tests.beam",
+    "sha256": "3f6b8f8cbf3f97c250c43c8b7d0dc7355fba848301f24708b9f70638c0d2f960"
+  },
+  {
+    "path": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_listener.beam",
+    "sha256": "b1b5cb45cbeefe9e065224927c8e81f54bbfc0d6e3a08077c4d844c2466cd7ed"
+  },
+  {
+    "path": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_preview_tests.beam",
+    "sha256": "9ce976671a860bfea9cf2bdb0dbf63e2d1086a0aa4abe248d01eddfd86907a74"
+  },
+  {
+    "path": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_registry.beam",
+    "sha256": "351042274033c234fcdbbb2d4f3320c2b258c79863f0203065536ada2b13f5d6"
+  },
+  {
+    "path": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_resource_tests.beam",
+    "sha256": "977ad444c40c8e1c7491382a6021a3c1828c2fdb30723aef613f8e0f27d0795c"
+  },
+  {
+    "path": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_sup.beam",
+    "sha256": "4e719ac86ec3a2e7d6fff82d3c8e021a3abf74a8f2a9c66b3cf4385d1a181d8e"
+  }
+]
+All10 production +6test declared exports and current companion/evaluator seam match.
+
+EXIT 0

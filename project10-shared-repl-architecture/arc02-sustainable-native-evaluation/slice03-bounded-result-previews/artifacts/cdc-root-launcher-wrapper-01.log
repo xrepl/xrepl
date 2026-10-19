@@ -1,0 +1,20 @@
+CDC /root independently executed
+SOURCE 7427d1c8e43183b25012e6870937347c39425606
+CWD /private/tmp
+COMMAND ['python3', '/private/tmp/cdc-x03/cdc-root-launcher.py']
+$ /Users/oubiwann/lab/lfe/xrepl/xrepl/bin/cayrn-lfe '/private/tmp/cayrn-x03-root launch vui4sxif/agent socket.sock'
+CWD /private/tmp
+SEND {"kind": "authority_hello", "version": 4, "authority": "80b66401-1376-448a-a327-d39565a0a913"}
+RECV {"version": 4, "boot": "B2360C6F71158E019FE0005890ECF124", "lease": "1", "kind": "authority_ready"}
+SEND {"kind": "hello", "version": 4, "session": "root-smoke", "generation": "g", "authority": "80b66401-1376-448a-a327-d39565a0a913", "boot": "B2360C6F71158E019FE0005890ECF124", "lease": "1", "ticket": "1"}
+RECV {"version": 4, "boot": "B2360C6F71158E019FE0005890ECF124", "interrupt": "session_destructive", "lease": "1", "kind": "ready", "backend": "lfe", "close_barrier": true, "ticket": "1"}
+SEND {"kind": "dispatch", "operation": "1", "source": "(+ 20 22)", "generation": "g", "authority": "80b66401-1376-448a-a327-d39565a0a913"}
+RECV {"value": "42", "kind": "outcome", "operation": "1", "phase": "succeeded", "preview": {"truncated": false}}
+SEND {"kind": "dispatch", "operation": "2", "source": "(lists:sort (lists:map (lambda (entry) (element 1 entry)) (application:which_applications)))", "generation": "g", "authority": "80b66401-1376-448a-a327-d39565a0a913"}
+RECV {"value": "(cayrn_lfe compiler crypto kernel lfe stdlib)", "kind": "outcome", "operation": "2", "phase": "succeeded", "preview": {"truncated": false}}
+SEND {"kind": "close"}
+RECV {"kind": "closed"}
+EXIT 0
+launcher process return 0
+
+EXIT 0

@@ -8,7 +8,7 @@ related: [cayrn-project01-shared-repl-architecture, project05-rust-frontend, pro
 
 # xrepl 0.2.x — migration onto Cayrn
 
-Version 2.3, 2026-10-19. Author: Sofie, current design/planning context. The
+Version 2.4, 2026-10-19. Author: Sofie, current design/planning context. The
 Operator explicitly retained this project name and approved the core migration,
 agent consolidation and LFE conversion; UX follows in a separate future project.
 This turn prepares plans/open sets, not implementation or release acceptance.
@@ -326,3 +326,12 @@ pausedroot/listener/registry/appteardown X04; CayrnC06 fullsystem composition.
 C05 actualaccepted34af63e/planning149ae8c releases X03, immediate17case realgate.
 No laterarc/UX/package/release/history acceptance; X-TOOL-01 retained with fresh
 currentbyte checks until its owning toolingarc. Native Arc02 remains open.
+
+## v2.4 — accepted bounded native4 previews,2026-10-19
+
+Arc02/X03 independently accepted8/8 at7427d1c/Cayrn34af63e with immediate actual
+Rust/BEAM/terminal gate and retained binding/JSON true/false checks. XA02-04 done;
+P10-12 remains open for X04 complete captured output/responsive root/formatter/
+writer ownership and serious NR-02, followed by C06 mixed composition. No later
+arc, UX, package, legacy finding or historical acceptance inferred. Source
+release/0.2.x and orphan planning remain separate; docs/design untouched.
