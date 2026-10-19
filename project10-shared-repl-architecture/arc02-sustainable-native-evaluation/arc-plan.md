@@ -227,3 +227,16 @@ accepted source exists. Earlier awaiting-decision text is historical. The Rust
 connector slice is in Cayrn Arc01 before this native slice; former C04 whole
 composition becomes C05 without dropping any obligation. X03 size work and final
 composition remain open; approved direction does not imply implementation proof.
+
+## v1.4 — native teardown pressure residual,2026-10-19
+
+X02 preimplementation review NR-02 identified a pre-existing native2 orphan-root
+window: a context blocked in send can reach supervisor's kill deadline before
+terminate. Native3 adds registry-failure exposure. Preserve this serious open
+finding with Slice03's existing output-pressure ownership; XA02-05/06 cannot close
+without listener/registry/application teardown under real pending output and
+paused-root startup ownership proof. X02 remains the bounded node-authority
+increment; authority-only loss still must wake blocked contexts directly and
+preserve other leases. No general teardown-under-pressure claim is made at X02.
+Cayrn C05 consumes this gate in final composition. The exact X02 source allowlist
+is unchanged; no collector workaround is implemented as an unreviewed side task.

@@ -110,3 +110,25 @@ Add a positively observed pending-output queue control alongside mailbox-suspend
 proof. Shared C04 wire/loss policy remains immutable; this is a native shutdown
 mechanic, not general X03 output-pressure completion. Fresh independent recipe
 review required before X02 issuance.
+
+## NR-02 placement —2026-10-19
+
+Independent recipe review found a serious pre-existing native2 teardown gap:
+while context is blocked in socket send, supervisor shutdown may kill it before
+terminate and strand its unlinked foreground root. Native3 registry failure adds
+a trigger, not a different underlying ownership defect. X02's abortive authority-
+loss path remains required and independently tested; this finding does not waive
+that path. CDC retains NR-02 under X03 ordinary-output-pressure/root-teardown work,
+with XA02-05/06 and Cayrn C05 as blocking composition owners. X02 is not broad
+teardown readiness under blocked sends; no collector/evaluator fix is smuggled
+into its exact15-path scope. NR-02 remains serious/open, not done or no-op.
+
+Rationale: X03 already owns the blocking pressure path. A temporary collector
+cleanup workaround would also need to account for supported MFA formatting that
+can block that collector; a complete ownership/flow design belongs with that
+slice. Before composition acceptance, require listener failure, registry failure
+and application stop under positively observed pending output, exact owned root/
+context/collector termination, trace disposition and no false barrier; include
+paused-root startup handoff ownership. Source/OTP evidence and a feasible narrow
+alternative are preserved in artifacts/native-recipe-design-review.md NR-02.
+No Operator gate, arc scope or acceptance criterion is weakened by this placement.

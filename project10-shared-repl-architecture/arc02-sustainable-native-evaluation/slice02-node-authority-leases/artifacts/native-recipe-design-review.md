@@ -148,3 +148,87 @@ The corrected unissued recipe is ready for the already-defined prerequisite and
 implementation handoff. Exact actual C04 candidate/review consumption, independent
 native implementation review, full paired runtime gates and existing acceptance
 boundaries remain required. This disposition is design readiness only.
+
+## Separate supervisor-teardown ownership finding — 2026-10-19
+
+Actual independent source-only follow-up by `/root/native_design_review`, at CDC's
+request. No experiments, runtime reproduction, source edits or implementation
+acceptance. The corrected recipe/plan remain the exact SHA256 inputs recorded
+above (`91d91ebe...fc78a` / `249fdefa...e42a5`); common C04v1.3 is unchanged.
+The previous NR-01 resolution and its bounded authority-loss design verdict are
+preserved. This finding concerns a different shutdown entry point.
+
+### NR-02 — P2: forced supervisor teardown can orphan the foreground root
+
+Concrete pre-existing source gap at xrepl
+`7228183e2e584e0ab86e03dc6b9454d4b918cc38`: context traps exits
+(context.lfe:18), invokes synchronous gen_tcp:send in its capture callback
+(51–63,318–320), and starts its foreground evaluator with spawn_monitor rather
+than a link (199–223). Its terminate callback is the ordinary owner which kills
+that active root (338–342). A root may send bounded asynchronous io_request
+messages and then wait indefinitely for an explicit release; that root does not
+need to be blocked on a synchronous I/O reply to expose the ownership gap.
+
+Installed OTP stdlib7.3 supervisor.erl restart(one_for_all),1477–1484, calls
+terminate_children sequentially (1510–1521); normal supervisor terminate also
+uses that function (1247–1250). do_save_child prepends new dynamic child IDs
+(1758–1760), and children_map traverses them in that order (1887–1899).
+Consequently a context created after its authority is stopped before that older
+authority and the permanent registry/listener. shutdown1563–1585 sends shutdown,
+waits the child's timeout, then sends untrappable kill. Current context child
+shutdown is2000 (sup.lfe:8–13).
+
+A pending-send context cannot dispatch the parent EXIT to gen_server terminate:
+installed erts16.4 prim_inet.erl:590–625 waits on port replies/DOWN and does not
+consume that parent EXIT; stdlib7.3 gen_server.erl:2373–2380 handles parent EXIT
+only from its normal decode loop. After two seconds the supervisor kills it,
+skipping context terminate. Its unlinked foreground root survives. Later registry
+authority-DOWN handling and external port closure cannot repair a context which
+already died without releasing that root. If the registry itself crashed, its
+callback is unavailable from the outset. This applies to listener-triggered
+one_for_all restart and application/supervisor shutdown while the node remains
+running, not to OS/node death where the VM necessarily destroys its processes.
+
+Do not overstate the leak population: the live collector is linked through
+io.lfe:19–29 and does not currently trap exits, so context death normally kills
+that collector through its link. This review does not establish that every
+collector or trace session persists. The unlinked foreground-root counterexample
+is sufficient. Root survival and exact cleanup must be observed in any runtime
+control; socket EOF or fresh registry boot alone is not that proof.
+
+### Scope and recommendation for CDC decision
+
+The defect already exists in native2's listener failure/application-stop path;
+native3 adds a registry-failure trigger, not the original ownership bug. Common
+C04v1.3:97–99 retains registry/listener one_for_all as the shared native failure
+domain. Its ownership recipe115–116 says not to skip terminate and leave an
+unlinked evaluator alive, although that sentence appears within the authority-
+loss paragraph and its test list does not explicitly enumerate every pending-
+output supervisor-teardown combination. Therefore this finding does not undo
+the reviewed authority-DOWN abortive-close mechanism or certify a new wire policy.
+It does limit a general claim of teardown readiness. CDC must explicitly place
+this ownership repair or retain the known limitation/dependency before claiming
+that broader lifecycle guarantee; general ordinary output pressure can stay X03.
+
+A narrow repair needs cleanup ownership independent of the context's blocked
+mailbox/terminate and of registry survival, established before root execution.
+CDC suggested assessing the existing collector as that owner. Source feasibility:
+it already knows Owner and paused Root (io.lfe:57–69), is context-linked, and can
+trap its parent exit so gen_server invokes terminate; that callback would also
+need to kill the exact root. Normal context termination already explicitly kills
+root/destroys trace before unlinking/killing collectors. A paused-root owner
+monitor must bridge spawn through collector readiness and the evaluate handoff:
+collector-only cleanup cannot cover context death before collector startup.
+Natural collector retirement must preserve its current drained/root-dead proof.
+This is a feasible direction to be chosen/refined by CDC, not reviewer-selected
+architecture; collector edits require expansion of X02's present explicit
+no-collector-change allowlist or a separately recorded later-slice dependency.
+
+A discriminating owned-peer control should hold a known foreground root and
+context, trigger real registry/listener failure or application shutdown, and
+require exact context/root death without releasing the root or draining peer
+output to enable cleanup. A suspended-context control can deterministically
+expose the terminate-skipping path; a separately positively observed pending-send
+control connects it to the actual socket case. Record the supervisor's timeout
+and cleanup observations, guarantee owned-peer teardown, and distinguish loss
+from a successful Close barrier. No such test was run during this review.
