@@ -486,48 +486,15 @@
     (after 0 'ok)))
 
 (defun with-peer (function)
-  (let* ((dir (++ "/private/tmp/cayrn-resource-" (os:getpid) "-"
-                 (integer_to_list
-                   (erlang:unique_integer '(positive monotonic)))))
-         ('ok (file:make_dir dir))
-         ('ok (file:change_mode dir #o700))
-         (path (filename:join dir "agent socket.sock")))
-    (try
-      (let (((tuple 'ok peer _)
-             (peer:start_link
-               (map 'connection 'standard_io
-                    'args (cons "-pa" (code:get_path))))))
-        (try
-          (let* (('ok (peer:call peer 'application 'load '(cayrn_lfe)))
-                 ('ok (peer:call peer 'application 'set_env
-                        (list 'cayrn_lfe 'socket path)))
-                 ((tuple 'ok _)
-                  (peer:call peer 'application 'ensure_all_started
-                    '(cayrn_lfe)))
-                 ((tuple 'ok socket)
-                  (gen_tcp:connect (tuple 'local path) 0
-                    '(binary #(active false) #(packet 4)) 1000)))
-            (try
-              (progn
-                (send-frame socket
-                  (map 'kind 'hello 'version 2 'session #b("resource-test")
-                       'generation #b("g") 'authority #b("a")))
-                (assertEqual #b("ready")
-                  (map-get (read-frame socket) #b("kind")))
-                (let* ((children (peer:call peer 'supervisor 'which_children
-                                   '(cayrn_lfe_sup)))
-                       ((list context)
-                        (lists:filtermap
-                          (match-lambda
-                            (((tuple 'cayrn_lfe_listener _ _ _)) 'false)
-                            (((tuple _ pid _ _)) (tuple 'true pid)))
-                          children)))
-                  (funcall function peer socket context)))
-              (after (gen_tcp:close socket))))
-          (after (peer:stop peer))))
-      (after
-        (file:delete path)
-        (file:del_dir dir)))))
+  (cayrn_lfe_authority_tests:with-peer
+    (lambda (peer path)
+      (let* (((tuple authority grant)
+              (cayrn_lfe_authority_tests:authority path #b("a")))
+             ((tuple socket context)
+              (cayrn_lfe_authority_tests:context peer path grant #b("1")
+                #b("resource-test") #b("a"))))
+        (try (funcall function peer socket context)
+          (after (gen_tcp:close socket) (gen_tcp:close authority)))))))
 
 (defun origins (peer context)
   (map-get (peer:call peer 'sys 'get_state (list context)) 'origins))

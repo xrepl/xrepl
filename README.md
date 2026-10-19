@@ -23,17 +23,27 @@ mkdir -m 700 /tmp/xrepl-agent-demo
 
 `make build` builds the agent, retained legacy LFE application and Rust client.
 The root launcher delegates to the component-local build, starts only the native
-application and LFE, and accepts a single socket argument. Starting legacy
+application, LFE, crypto and compiler, and accepts a single socket argument. Starting legacy
 `xrepl` does not automatically start the agent. See the component README for
 Cayrn host startup and current limits: 64 live capture origins per context,
-8KiB source/output/value previews, 4096 node-lifetime context identities, no
-program input or live-state restoration. Native2 uses sparse admission tokens
+8KiB source/output/value previews, no program input or live-state restoration.
+Native3 adds host authority leases and increasing context tickets with bounded
+live state (16 authorities/64 physical live or retiring contexts), removing the
+cumulative context-identity limit. Authority loss retires all its contexts;
+context-only loss preserves its siblings and other host leases remain usable.
+The existing application helper retains the listening endpoint across permanent
+child kills/restarts; native state gets a fresh boot, with no source replay.
+The host must complete its native authority handshake at bind. Native3 retains
+sparse admission tokens
 and retires drained capture origins; quiet sessions have no total-operation
 count limit. Background writers preserve their original attribution. A full
 origin budget refuses evaluation explicitly while preserving the environment.
 See the component README for its trusted local-descendant capture boundary.
-The native OTP implementation/tests are written in LFE; remaining node-identity
-and size hardening follows separately. Native2 requires the matching rebuilt
+The native OTP implementation/tests are written in LFE. Size and ordinary output
+pressure hardening follow separately. Forced supervisor teardown during a blocked
+send can still orphan an evaluator root (NR-02; X03/C06); authority-loss shutdown
+has its own abortive-port cleanup and does not certify general teardown safety.
+Native3 requires the matching rebuilt
 Cayrn host, while public client RPC remains version 1. The native app remains
 0.1.0 within xrepl's 0.2.0 development branch. Nothing new is published.
 

@@ -14,10 +14,11 @@
 (defspec (init 1) (((port)) (tuple 'ok (map) (timeout))))
 
 (defun init (socket)
-  "Create an opaque environment, scalar fence and bounded live origins."
+  "Pause without an environment until registry admission succeeds."
   (process_flag 'trap_exit 'true)
   (tuple 'ok
-    (map 'socket socket 'identity 'undefined 'env (cayrn-lfe-eval:new)
+    (map 'socket socket 'identity 'undefined 'env 'undefined
+         'registry 'undefined 'native-scope 'undefined
          'active 'undefined 'last-token 0 'origins (map) 'pending (map)
          'seq 0 'closing 'undefined)
     5000))
@@ -29,9 +30,18 @@
 
 (defun handle_info
   "Process native control, evaluator, collector and capture events."
-  (('activate (= (map 'socket socket) state))
-   (let (('ok (inet:setopts socket '(#(active once)))))
-     (tuple 'noreply state 5000)))
+  (((tuple 'activate hello) (= (map 'socket socket) state))
+   (try
+     (let (((tuple 'continue next) (command hello state)))
+       (case (inet:setopts socket '(#(active once)))
+         ('ok (tuple 'noreply next))
+         ((tuple 'error reason) (tuple 'stop reason next))))
+     (catch ((tuple _ reason _) (tuple 'stop reason state)))))
+  (((tuple 'authority_lost registry lease)
+    (= (map 'registry stored-registry
+            'native-scope (tuple _ stored-lease _)) state))
+   (when (=:= registry stored-registry) (=:= lease stored-lease))
+   (tuple 'stop 'normal state))
   (((tuple 'tcp socket bytes) (= (map 'socket socket) state))
    (let ((result
            (try (command (json:decode bytes) state)
@@ -134,21 +144,23 @@
   ((_ state) (tuple 'noreply state)))
 
 (defun command
-  (((map #b("kind") #b("hello") #b("version") 2
+  (((map #b("kind") #b("hello") #b("version") 3
          #b("session") sid #b("generation") generation
-         #b("authority") authority)
-    (= (map 'identity 'undefined) state))
-   (let* (('true (andalso (valid-id? sid) (valid-id? generation)
-                         (valid-id? authority)))
-          ('true (< (ets:info 'cayrn_lfe_contexts 'size) 4096))
-          ('true (ets:insert_new 'cayrn_lfe_contexts
-                   (tuple sid generation authority)))
-          ('ok (send-event state
-                 (map 'kind 'ready 'version 2 'backend #b("lfe")
+         #b("authority") authority #b("boot") boot
+         #b("lease") lease #b("ticket") ticket)
+    (= (map 'identity 'undefined 'socket socket) state))
+   (let* (((tuple 'ok registry)
+           (cayrn_lfe_registry:admit boot lease ticket sid generation
+                                     authority socket))
+          (next (map-set state 'identity (tuple sid generation authority)
+                  'registry registry 'native-scope (tuple boot lease ticket)
+                  'env (cayrn-lfe-eval:new)))
+          ('ok (send-event next
+                 (map 'kind 'ready 'version 3 'backend #b("lfe")
                       'interrupt #b("session_destructive")
-                      'close_barrier 'true))))
-     (tuple 'continue
-       (map-set state 'identity (tuple sid generation authority)))))
+                      'close_barrier 'true 'boot boot
+                      'lease lease 'ticket ticket))))
+     (tuple 'continue next)))
   (((map #b("kind") #b("dispatch") #b("operation") operation
          #b("source") source #b("generation") generation
          #b("authority") authority)
@@ -308,12 +320,6 @@
 (defun transition
   (((tuple 'continue state)) (tuple 'noreply state))
   (((tuple 'stop state)) (tuple 'stop 'normal state)))
-
-(defun valid-id?
-  ((id) (when (is_binary id) (> (byte_size id) 0)
-              (=< (byte_size id) 128))
-   (=:= (re:run id #b("^[A-Za-z0-9_-]+$") '(#(capture none))) 'match))
-  ((_) 'false))
 
 (defun send-event
   (((map 'socket socket) data)

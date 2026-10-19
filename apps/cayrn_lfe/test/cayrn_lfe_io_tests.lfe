@@ -12,7 +12,8 @@
   "Discover all native cases without depending on Erlang source files."
   (list '#(module cayrn_lfe_eval_tests)
         '#(module cayrn_lfe_application_tests)
-        '#(module cayrn_lfe_resource_tests)))
+        '#(module cayrn_lfe_resource_tests)
+        '#(module cayrn_lfe_authority_tests)))
 
 (defun capture_requires_owner_ack_test ()
   "Never acknowledge a native write before its owner commits capture."
