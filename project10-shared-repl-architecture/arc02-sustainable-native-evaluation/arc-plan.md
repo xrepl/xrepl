@@ -1,6 +1,6 @@
 # Arc02 — sustainable native evaluation
 
-Version1.9,2026-10-19. Active under scoped Autonomous Mode. Project10 source release/0.2.x.
+Version1.10,2026-10-19. Active under scoped Autonomous Mode. Project10 source release/0.2.x.
 Original prepared one-contributor wording is superseded by the activation below.
 Sofie CDC independently reviews the assigned CC implementation. Arc01's import and
 LFE conversion are committed at ea844f5/f261152 with pending independent gates.
@@ -340,3 +340,12 @@ under blocked sends meets NR-02. Explicit physical credits, publishing/deferred,
 owner-monitor unlink and post-seal accounting resolve preissue review defects.
 No scope/criterion reduction, wire/version change or extra arc; C06 still follows
 actual accepted stream/ownership result before formal native arc composition.
+
+## v1.10 — retained assessment owners made explicit,2026-10-19
+
+The27-ID residual map in X04 artifacts names later roadmap delivery owners and
+original required proof without declaring any legacy finding repaired. Corrected
+Location extraction is41 actual files (one inline shell example caused42-token
+first count), zero overlap in committed f261152→7427d1c; final X04 scope recheck
+still required. This closes no XA02/project finding row, does not extend execution
+beyond Arc02, and supplies explicit retained owners for formal composition review.
