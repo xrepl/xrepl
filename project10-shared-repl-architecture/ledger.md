@@ -12,7 +12,7 @@ independent acceptance is claimed by this planning packet.
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | P10-10 | Native agent is co-located but independently startable | Arc01 component startup plus real Cayrn test path | serious | Operator consolidation decision | open | [Slice01 candidate](arc01-integrated-native-agent/slice01-import-agent-application/closing-report.md), attested; acceptance pending | Only native runtime app starts |
 | P10-11 | Native implementation/tests are idiomatic LFE with preserved contracts | Conversion map and real native/PTY regression suite | correctness-grade | Operator language decision | open | [Slice02 return](arc01-integrated-native-agent/slice02-lfe-agent-implementation/closing-report.md), attested; acceptance pending | Metadata remains OTP terms |
-| P10-12 | Native contexts support sustained use without unsafe budget/size loss | Beyond-256 and value/output boundary tests | serious | prototype findings | open | — | Native3 node/capture progress accepted38338d6/3bcbbdb; size/output/NR-02 and mixed composition remain open |
+| P10-12 | Native contexts support sustained use without unsafe budget/size loss | Beyond-256 and value/output boundary tests | serious | prototype findings | open | — | All4native slices/C06 acceptedcf1f1a2/4aea43a; formal fresh arc gate pending; broader migration gate remains |
 | P10-13 | Cayrn owns live session/admin/history authority | Real catalog/name/metadata/attach/lifecycle tests | serious | architecture | open | — | No parallel active session authority |
 | P10-14 | LFE developer services/history semantics have supported equivalents | Feature matrix and real compile/load/introspection/history checks | correctness-grade | legacy preservation | open | — | Raw evaluator alone is not parity |
 | P10-15 | Input and multiline payload semantics are reliable | Two-client input, EOF/cancel/close and multiline/multiform tests | serious | core requirements | open | — | Presentation deferred |
@@ -29,3 +29,8 @@ independent acceptance is claimed by this planning packet.
 Native streams/ownership acceptedcf1f1a2/34af63e; see Arc02/X04 verification/retro.
 P10 original rows remain under project acceptance. C06/fresh arc composition and
 27assessment/later delivery owners unchanged; no whole project/UX/release claim.
+
+## Native arc review readiness —2026-10-19
+
+All4native slices and actual C06 composition accepted; formal fresh independent
+arc gate pending. Project criteria remain open at their whole migration scope.

@@ -1,6 +1,6 @@
 ---
 project: project10-shared-repl-architecture
-status: autonomous-resource-work
+status: arc02-composition-review
 depends-on: [cayrn-project02-bounded-contracts]
 blocks: [xrepl-0.2.x-core-migration-candidate]
 related: [cayrn-project01-shared-repl-architecture, project05-rust-frontend, project06-pluggable-shells, project07-story-runtime, project09-quality-assessment, xrepl_protocol, xrepl_term]
@@ -8,7 +8,7 @@ related: [cayrn-project01-shared-repl-architecture, project05-rust-frontend, pro
 
 # xrepl 0.2.x — migration onto Cayrn
 
-Version 2.7, 2026-10-19. Author: Sofie, current design/planning context. The
+Version 2.8, 2026-10-19. Author: Sofie, current design/planning context. The
 Operator explicitly retained this project name and approved the core migration,
 agent consolidation and LFE conversion; UX follows in a separate future project.
 This turn prepares plans/open sets, not implementation or release acceptance.
@@ -111,7 +111,7 @@ actual upstream results. A held contract is resolved before dependent work.
 | Arc | Useful outcome and delivery home | Actual prerequisites | State |
 | --- | --- | --- | --- |
 | [Arc01 — integrated native agent](arc01-integrated-native-agent/arc-plan.md) | Existing agent runs from apps/cayrn_lfe, independently startable; then an LFE implementation preserves behavior | Pinned standalone source and current xrepl/Cayrn interfaces; no whole Cayrn hardening prerequisite | Import and LFE conversion committed; independent gates pending |
-| [Arc02 — sustainable native evaluation](arc02-sustainable-native-evaluation/arc-plan.md) | Native resource retirement/fencing and safe size-limited previews/output support long sessions | Arc01; Cayrn C-RESOURCE for native resource contract; existing bounded wire for size-safe native fixes | Arc/first slice prepared; actual Cayrn C03 return required |
+| [Arc02 — sustainable native evaluation](arc02-sustainable-native-evaluation/arc-plan.md) | Native resource retirement/fencing and safe size-limited previews/output support long sessions | Arc01; Cayrn C-RESOURCE for native resource contract; existing bounded wire for size-safe native fixes | All4native slices and actual CayrnC06 accepted; fresh formal arc gate pending |
 | Arc03 — Cayrn-backed session and LFE services | Cayrn authority for catalog/names/metadata/lifecycle plus supported LFE developer helpers and history semantics | Bounded Cayrn administration APIs and Arc02 runtime; Project09/source contracts | Roadmap only |
 | Arc04 — input and shell services | Correlated program input, multiline/multiform payloads and shell switching preserve session identity/state ownership | Shared input contract; Arc03 semantic services; native hooks | Roadmap only |
 | Arc05 — application and legacy compatibility | Story/save/resume/graphics path plus explicit old transport/client and snapshot compatibility, with obsolete infrastructure retired after proof | Earlier core paths and supported-feature map; bounded compatibility/security decisions | Roadmap only |
@@ -365,3 +365,7 @@ controls delivered, full root/fresh/real gates reproduced. Final Arc02 compositi
 requires CayrnC06 and fresh independent arc gate. All27 Project09 findings retain
 original later owners; final26changed/41locations/0intersection is no repair claim.
 No broader migration, UX, package, historical/Operator/publication gate closes here.
+
+## v2.8 — assembled native arc ready for fresh review,2026-10-19
+
+All4Arc02 slices atcf1f1a2 and actual sharedC06 at4aea43a independently accepted; source/return/full-gate proof in both current closing packets. Fresh independent arc composition/mandatory retrospective/project follow-through next. Original preparation-only language above is historical; current roadmap state and this dated entry govern. P10project/legacy/importconversion/assessment/UX/package/Operator gates remain, no automatic next arc.

@@ -1,6 +1,6 @@
 # Arc02 — sustainable native evaluation
 
-Version1.11,2026-10-19. Active under scoped Autonomous Mode. Project10 source release/0.2.x.
+Version1.12,2026-10-19. All4slices independently accepted; formal fresh-context composition review pending. Project10 source release/0.2.x.
 Original prepared one-contributor wording is superseded by the activation below.
 Sofie CDC independently reviews the assigned CC implementation. Arc01's import and
 LFE conversion are committed at ea844f5/f261152 with pending independent gates.
@@ -358,3 +358,7 @@ pressure and physical single-owner/listener/registry/app cleanup (NR02). XA02-05
 done; C06 mixed sustained/spool/storage and fresh whole-arc gate stillrequired.
 Final assessment-location check26changed/41assessed/0overlap retains27findings
 and later owners, no repair acceptance. No architecture/scope/criteria reduction.
+
+## v1.12 — actual final composition consumed,2026-10-19
+
+CayrnC06 source4aea43a/nativecf1f1a2 independently accepted at planninge764764; full54ordinary+16native+3consumer+93component+7Rust+1doctest actually reproduced. All4native slices/32criteria accepted; original7arc rows and current closing packet still require fresh independent composition gate. No new architecture/scope change, later arc or release authority.
