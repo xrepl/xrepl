@@ -16,3 +16,11 @@ All eight original criteria open; no implementation or acceptance.
 Current preserved assignment cc-prompt-iteration01.md clarifies the two completion/
 DOWN pairs; criteria/statuses unchanged, all8open. Author precision, no accepted
 implementation or independent product-failure verdict.
+
+## Iteration02 issue —2026-10-19
+
+All8 statuses remain open. Actual early reviewer/root/native_design_review found
+existing§4 paused-start diagnostic mismatch; CDC independently agrees. Preserved
+iteration02 corrects exact no-activation fact after physical root DOWN. No new
+criterion, source scope, UX work or acceptance; initial and iteration01 preserved.
+Mutable source intake and complete early review snapshot retained in artifacts.

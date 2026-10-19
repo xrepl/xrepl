@@ -1,0 +1,19 @@
+{
+  "kind": "mutable in-flight intake; not accepted source",
+  "source": "7427d1c8e43183b25012e6870937347c39425606",
+  "files": {
+    "apps/cayrn_lfe/src/cayrn_lfe_context.lfe": "2b6252fcc0dcb12a002993a9dcc0a2e6b75f196067255c9b127b41afd1245a75",
+    "apps/cayrn_lfe/src/cayrn_lfe_io.lfe": "a7630c19f0f40962954c2531565229ac59ed50a600a9709c796ce94884a72fe1",
+    "apps/cayrn_lfe/src/cayrn-lfe-stream.lfe": "ce6b9e13c66395148a6b84eec79216b7462fd2e9f841abfd3739a847a6d37fa3",
+    "apps/cayrn_lfe/src/cayrn_lfe_writer.lfe": "ff2c983b5d4c8ed189cefdd444dc0a114b58cd9d5f92fc4f3b414d1f853fee7f",
+    "apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe": "80dd3ae70a37fd7c7edd7559f53c27d3f8a8494bf1c377ebf7624304ae5f026d",
+    "apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe": "f7fa8a7030a0d33e174f592e9ed3f24f622f90841595c40d8b6e063315e3e6ce",
+    "apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe": "fc35a44c126495cf523f6713c518dd4e4d97ba75dd6f05ed226a47eaefdfe6b8",
+    "apps/cayrn_lfe/test/cayrn_lfe_stream_tests.lfe": "ca1a20e9fa20510652940540f190fe989d2cd576bd21fcdb82607b236b9f1ba8",
+    "apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe": "269b52fe299f8a436df6a6918a6e3cd69aca5be1c8a40774ceedae55611c9986",
+    "apps/cayrn_lfe/README.md": "91e4d3a92ff6c1e5ae153c0f39cc1bcac88accca6dca3df564a1e9ed2c2125ba",
+    "apps/cayrn_lfe/AGENTS.md": "ed9f0f04a92a2f035d55668b99948ab279452c6c2b30343669a566f6ae91ca91",
+    "README.md": "a7b06be23fc1c2d5befe4b213ab2cd09adbd9df3b609e7781c6c9441e818ea3b"
+  },
+  "status": " M apps/cayrn_lfe/src/cayrn_lfe_context.lfe\n M apps/cayrn_lfe/src/cayrn_lfe_io.lfe\n M apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe\n M apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe\n M apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe\n?? apps/cayrn_lfe/src/cayrn-lfe-stream.lfe\n?? apps/cayrn_lfe/src/cayrn_lfe_writer.lfe\n?? apps/cayrn_lfe/test/cayrn_lfe_ownership_tests.lfe\n?? apps/cayrn_lfe/test/cayrn_lfe_stream_tests.lfe\n?? docs/design/\n"
+}

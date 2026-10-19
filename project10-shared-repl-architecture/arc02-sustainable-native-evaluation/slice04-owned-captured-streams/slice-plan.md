@@ -1,6 +1,6 @@
 # Slice04 — owned complete captured streams
 
-2026-10-19, version1.0. Current assignment cc-prompt-iteration01.md (initial assignment preserved), actual CC/root/xrepl_x21;
+2026-10-19, version1.0. Current assignment cc-prompt-iteration02.md (predecessors preserved), actual CC/root/xrepl_x21;
 CDC/root owns design, independent code review/runtime reproduction and retrospective.
 CF2.8.0 Autonomous/Expedited through native Arc02 only. Source release/0.2.x7427d1c,
 accepted X03 planninga683721; exact pins/hashes in artifacts/source-baseline.json.
@@ -76,3 +76,12 @@ finishing that branch; CDC corrected author wording, no product defect asserted.
 Current assignment iteration01, issued to CC/root/xrepl_x21; refinement1/5 on
 execution. All8 original criteria and exact12 scope unchanged/open. No new timer,
 weaker physical credit or synthetic collector reverse-order success required.
+
+## Assignment history update —2026-10-19 iteration02
+
+Independent early frozen-source review found P3 paused-start Cancelled diagnostic
+mismatch with existing§4; CDC agrees and issues iteration02 with retained activation
+fact and real owned-callback/socket stage oracles. No activation leak or new UX
+scope. Previous issued prompts unchanged; all8 original criteria/exact12 source
+paths unchanged/open. ActualCC/root/xrepl_x21, refinement2/5 on execution. Full
+source/runtime/positive-pressure proof and independent acceptance still required.
