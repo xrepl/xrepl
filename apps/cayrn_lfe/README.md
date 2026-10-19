@@ -2,15 +2,16 @@
 
 Imported into xrepl on 2026-10-18 from standalone cayrn-lfe
 `1b04c15ac325731aab68a7491d23e4a9fecaa47a` under its included Apache-2.0 license.
-This README adapts the component home; implementation/tests remain unchanged.
+The import preserved the prototype. Its five OTP runtime modules and three native
+test modules are now written in LFE, preserving the native contract.
 
 Reusable thin LFE/OTP runtime agent for Cayrn. The Rust host owns session policy,
 durable admission, journals and replay; this application owns native evaluator
 contexts and I/O. It depends on LFE, not xrepl. No Rust crate is required here.
 
 Requires OTP 27+ (built-in JSON), rebar3, and LFE 2.2.0 (resolved by rebar3).
-Initially exercised on OTP 28. Native LFE semantics are in `cayrn-lfe-eval.lfe`;
-small Erlang/OTP modules provide supervision, socket control and native I/O.
+Initially exercised on OTP 28. The existing `cayrn-lfe-eval.lfe` supplies evaluator
+semantics; the LFE OTP modules provide supervision, socket control and native I/O.
 
 ```sh
 cd apps/cayrn_lfe # from the xrepl checkout
@@ -106,3 +107,9 @@ For Cayrn's real native/terminal tests, explicitly set `CAYRN_LFE_DIR` to this
 `apps/cayrn_lfe` directory and `XREPL_BIN` to the built xrepl Rust binary.
 The independent app startup test complements the six preserved evaluator/I/O
 tests; it does not claim that resource limits or oversized previews are fixed.
+
+The LFE EUnit companion module explicitly includes the evaluator and application
+test modules, so component-only `make check` executes all seven native cases.
+Callback/module names retain underscores for OTP and wire compatibility; new
+private helpers use LFE conventions. Resource budgets and oversized-value
+behavior remain unchanged pending deliberate hardening.
