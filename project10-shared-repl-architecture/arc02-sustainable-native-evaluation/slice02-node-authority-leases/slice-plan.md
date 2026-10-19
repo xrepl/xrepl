@@ -140,3 +140,16 @@ and renumbers the former unissued composition roadmap to C06. Earlier C05
 composition/NR-02 references in this draft mean C06 now; no obligation changes.
 X02 exact15-path/source/native3 scope and its actual C04 dependency remain.
 X03 consumes actual shared preview metadata later; it still owns serious NR-02.
+
+## Issued activation —2026-10-19
+
+Version1.1. Native prerequisite is now independently accepted Cayrn source
+3bcbbdb9ec52667b6c75b7f8a5f2260b93d8be44, planning806a8a35638332f0bb912483f1d45fed3f359a56.
+Current assignment cc-prompt.md to actual CC /root/xrepl_x21; CDC /root reviews
+independently. All8 criteria and exact15 paths unchanged. Source-baseline.json
+records actual prerequisite; no native runtime pass is inferred before this work.
+Reviewed native recipe NR-01 resolved; NR-02 remains X03/C06, shared metadata C05.
+Author readiness: actual source/role/caller/test/OTP close paths inspected,
+canonical contract unchanged and design independently reviewed; full intake,
+negative controls, pressure preconditions, owned cleanup and all real gates
+specified. No unresolved Operator design question for this bounded slice.

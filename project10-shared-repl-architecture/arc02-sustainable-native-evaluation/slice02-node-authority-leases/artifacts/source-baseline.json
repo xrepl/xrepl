@@ -21,5 +21,11 @@
     "apps/cayrn_lfe/AGENTS.md": "ea74d164a93d9690e866dc36c6541422d4c0499e704a759514a37504c22c5295",
     "README.md": "c058078f7ee65d2ff605d1c6c150e7cfc108dec6b4cbb0471463a11bb83b7614"
   },
-  "upstream_cayrn": "Await actual accepted C04 source, not a guessed future hash"
+  "upstream_cayrn": {
+    "source": "3bcbbdb9ec52667b6c75b7f8a5f2260b93d8be44",
+    "branch": "codex/core-session-lifecycle",
+    "acceptance_planning": "806a8a35638332f0bb912483f1d45fed3f359a56",
+    "contract_sha256": "ceabf500efd6d1b365c0b61e440247508905d373912e80682c64f0215d7ff8ec",
+    "verdict": "C04 eight rows independently accepted; real native3 runtime gate held for this slice"
+  }
 }
