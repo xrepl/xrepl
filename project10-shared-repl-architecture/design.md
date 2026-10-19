@@ -62,8 +62,8 @@ when commits are requested. Later hardening changes must not be hidden in either
 
 ## Conversion and later hardening
 
-Arc01's second slice converts five Erlang implementation modules and both native
-test modules to idiomatic LFE, preserving the existing LFE evaluator. OTP .app.src
+Arc01's second slice converts five Erlang implementation modules and all three native
+test modules (including the startup-boundary test added by the import) to idiomatic LFE, preserving the existing LFE evaluator. OTP .app.src
 and rebar files remain ordinary Erlang term metadata. Follow the Operator's LFE
 style guide and OTP semantics; resolved module-name/callback mappings belong in
 that slice's design before assignment. It must preserve evaluator monitoring,

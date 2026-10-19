@@ -20,7 +20,7 @@ untracked docs/design content. No changes to sibling term/protocol repositories.
 | Slice | Useful delivered result | Dependencies | State |
 | --- | --- | --- | --- |
 | [Slice01 — import agent application](slice01-import-agent-application/slice-plan.md) | Existing Erlang/LFE agent runs from apps/cayrn_lfe through xrepl entrypoints and passes real host/terminal tests | Pinned native source; current public/agent interfaces | Candidate returned; attested, acceptance pending |
-| Slice02 — LFE implementation | Five Erlang modules and native tests (including the new startup boundary test) become LFE; independent application, capture/control, identity and isolation contracts still hold | Slice01 accepted import; fully resolved translation/callback map and style guidance | Scope only; next prompt after import evidence |
+| [Slice02 — LFE implementation](slice02-lfe-agent-implementation/slice-plan.md) | Five Erlang modules and native tests (including the new startup boundary test) become LFE; independent application, capture/control, identity and isolation contracts still hold | Slice01 committed input; preserved acceptance gates; resolved conversion map/style | Prepared; Operator activation pending |
 
 No standalone investigation arc, untranslated halfway runtime or source-only port
 counts as the completed arc. Build, startup and real tests accompany each slice.
@@ -42,6 +42,8 @@ available until later explicitly agreed retirement.
 
 ## Version history
 
+- v1.2 —2026-10-18: Slice02 LFE conversion deep-planned with eight-module map, generated-export exceptions and clean-code proof.
+
 - v1.0 — 2026-10-18: preserve/import first, then translate, with real composition
   and separate application ownership at both steps.
 
@@ -53,3 +55,12 @@ available until later explicitly agreed retirement.
 
 [Implementation return](slice01-import-agent-application/closing-report.md): usable candidate implemented
 and self-checked; acceptance remains pending. No sequencing/architecture change.
+
+## Slice02 preparation —2026-10-18
+
+X-IMPORT is committed at `ea844f5`. The next open set resolves the five runtime and
+three test-module translation, including lexical rebinding, EUnit discovery and
+stale-beam controls. It preserves current resource/size defects for Arc02. The
+actual converted source/contract return supplies Cayrn C-AGENT; no future pin or
+new protocol is invented. Operator approved first commits and next planning;
+independent evidence remains at its recorded attested strength.

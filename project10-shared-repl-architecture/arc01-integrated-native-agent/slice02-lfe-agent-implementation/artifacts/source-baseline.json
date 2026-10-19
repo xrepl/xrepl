@@ -1,0 +1,290 @@
+{
+  "date": "2026-10-18",
+  "purpose": "Next-slice authoring baseline; future approved conversion is an explicit new input, not already delivered",
+  "cayrn": {
+    "path": "/Users/oubiwann/lab/oxur/cayrn",
+    "commit": "9111136fff4aad0241c7acada4f0b664bb87d2de",
+    "branch": "codex/core-session-lifecycle",
+    "status": "",
+    "files": {
+      "Makefile": "4c066a60fa75bb171e6dfef044a95764d66c12825493c541059739310faf7fe1",
+      "crates/cli/tests/support/mod.rs": "ffe4b95c50b3ff429ef424806a012245d403fd533b40de018c6451d207d8888d",
+      "crates/cli/tests/xrepl.rs": "a18c5ecb9cfa21aa90bd5c9178be413fb53e7116275eb715dfde50c9cd12e35a",
+      "crates/cli/Cargo.toml": "fc2fcbbf2dc5a9525abfcf6309b9aa080a48a3fafb3fa75cffeb36851a5e6964",
+      "Cargo.lock": "e08bc15593b71169895443ba8319be1b12ccc447e3c7621d02fa604b4a950065",
+      "README.md": "7ab1713320d9470ee85da6d1c647e3559c18d4f3ad5f93686166f713cd2ef9c4",
+      "docs/native-agent.md": "af4b907b3d0314d84b6a022081ab619073cc71b40a0889917d9a318edd1e5736",
+      "docs/integration-tests.md": "d7a4fd2cede3a96e2c36e35f2a3dee0dde22fb9a96d440a6bffa92aeaca300dd",
+      "docs/testing-runbook.md": "97a28ff07412df1f9e327a7673d87f263c08801de112f9f04f9eba95c88c5a05",
+      ".github/workflows/ci.yml": "b43674441171c04edea4c8aa31834cb033ca08e0cd643a75758bc804922bcaf2"
+    }
+  },
+  "xrepl": {
+    "path": "/Users/oubiwann/lab/lfe/xrepl/xrepl",
+    "commit": "ea844f5e634dc1ffb2503b7d69c4726164395d82",
+    "branch": "release/0.2.x",
+    "status": "?? docs/design/",
+    "files": {
+      "Cargo.lock": "f02cdd815d01a61e50b5460afce346737369edae20ba3e147bc357e7d6e63a0e",
+      "Makefile": "b23fc21bcf636b5ac49fe76d4001591d1c7e6ce31a9cdd495fcd7dd788a3dcf9",
+      "apps/cayrn_lfe/.gitignore": "da409d38dcfe4285271c31e0659846543f9c4495a222ff32f299372b8f808774",
+      "apps/cayrn_lfe/AGENTS.md": "646d1ca5f040a0d12b1f3a95432ffd94ba24a9a230980b87e47b685eac5f24a7",
+      "apps/cayrn_lfe/LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "apps/cayrn_lfe/Makefile": "bc0993c07194a64bc0ae9455345f09507252c938a02e502aa64daac4c95f0270",
+      "apps/cayrn_lfe/README.md": "a078909b1220b5400acb25e4214d4ecfb04acfa6164018d232700530fa7f513e",
+      "apps/cayrn_lfe/bin/cayrn-lfe": "daaf7cfbca9d57e272b526d3391ad677315d50d909dedae8b4741a5835884fad",
+      "apps/cayrn_lfe/rebar.config": "1b8ecd6cfeb1bad08dc9ef00bc10a0406a76d3522b50d9ac70857eb178cb3da3",
+      "apps/cayrn_lfe/rebar.lock": "e19bc76be33c1751218cd32f62c5719d30926454b2a2a83acc72a693c4d3b8e4",
+      "apps/cayrn_lfe/src/cayrn-lfe-eval.lfe": "16ffae22648e9c82696aee208dbe6dab3913c5aef9816c5973ba6ad2af0b91d2",
+      "apps/cayrn_lfe/src/cayrn_lfe.app.src": "98273af701ab79e0e59d4d7c91d57f18c4bf6eb48133e9ffffbef9bb54cb7cb7",
+      "apps/cayrn_lfe/src/cayrn_lfe_app.erl": "de924f0036122912519714993d74aa56b53dda6112403db7de703cfddbdb0824",
+      "apps/cayrn_lfe/src/cayrn_lfe_context.erl": "98aa576a4c18ea59070e7da53258db11842a0e17fbd4017fc3c54d2b049c74d4",
+      "apps/cayrn_lfe/src/cayrn_lfe_io.erl": "ea187d998631676ae38ebc89073607c017fe147a7947b1ad7fd094c3042991ef",
+      "apps/cayrn_lfe/src/cayrn_lfe_listener.erl": "e0596abe2911ad3b7afc42dcb769098f0b16ddfb52d03c18784af7ec27d4faaf",
+      "apps/cayrn_lfe/src/cayrn_lfe_sup.erl": "8b40d7f0413403cac1cacd974f6b6c520053c65380624ec9f2a65583bc160497",
+      "apps/cayrn_lfe/test/cayrn_lfe_application_tests.erl": "9fd305da344ecbd8cf0b76702e1140a02ba986f06300ec343ac73400a7574972",
+      "apps/cayrn_lfe/test/cayrn_lfe_eval_tests.erl": "cd233e7993572fcc5f79bed2a7ec3ee2f499328f72bed13b16fe3e5d2c16c009",
+      "apps/cayrn_lfe/test/cayrn_lfe_io_tests.erl": "32cd890875cb8cd76d77d19d4b56fea58e810c77c800d25b416e8a1f0eceafe3",
+      "bin/cayrn-lfe": "2d20e530fb7450e7c4ad8e76ffd8f45bc2855e5b7712b353941cf0ff197c5486",
+      "mk/lfe.mk": "3c9497bd5a80dfc1665f1ae1eaf12689371a112a352c1c00a04753555cfa9bbd",
+      "rebar.config": "8dbe1406124cc923ee844f681eeb4c736c6e5e76cfad1e16c69de7c9e587fb7e",
+      "rebar.lock": "09c5799aba5f6794f471f063ae1b7c45f1960068e304a5bb346c18f6e69fba29",
+      "src/xrepl.app.src": "68c4b86151171c5b6ac31d5aec7e9e0ec153141f4c91ae46b3e4cc87dc78262e"
+    }
+  },
+  "style_guide": {
+    "path": "/Users/oubiwann/lab/lfe/lfe-manual/src/part7/ai-resources/style-guide.md",
+    "sha256": "d4e094a3dbaf16e1688b871b359aaafaf6f05ddc29cbb9b4803395768816c70f"
+  },
+  "prior_evidence": {
+    "cayrn_return_commit": "d0bba52",
+    "xrepl_return_commit": "3ed4a62",
+    "evidence_strength": "author-attested; Operator approved committing candidates and next-slice planning; no independent runtime reproduction reported"
+  },
+  "readiness": {
+    "xrepl": "Design prepared for Operator activation; historical independent gates remain visible",
+    "cayrn": "Dependency-held for xrepl Arc01/Slice02 converted-agent return and its actual source pin"
+  },
+  "native_export_inventory": [
+    {
+      "exports": [
+        {
+          "arity": 2,
+          "name": "start"
+        },
+        {
+          "arity": 1,
+          "name": "stop"
+        },
+        {
+          "arity": 0,
+          "name": "module_info"
+        },
+        {
+          "arity": 1,
+          "name": "module_info"
+        }
+      ],
+      "module": "cayrn_lfe_app"
+    },
+    {
+      "exports": [
+        {
+          "arity": 1,
+          "name": "context"
+        },
+        {
+          "arity": 1,
+          "name": "init"
+        },
+        {
+          "arity": 0,
+          "name": "module_info"
+        },
+        {
+          "arity": 0,
+          "name": "start_link"
+        },
+        {
+          "arity": 1,
+          "name": "module_info"
+        }
+      ],
+      "module": "cayrn_lfe_sup"
+    },
+    {
+      "exports": [
+        {
+          "arity": 0,
+          "name": "start_link"
+        },
+        {
+          "arity": 1,
+          "name": "init"
+        },
+        {
+          "arity": 2,
+          "name": "handle_info"
+        },
+        {
+          "arity": 3,
+          "name": "handle_call"
+        },
+        {
+          "arity": 2,
+          "name": "handle_cast"
+        },
+        {
+          "arity": 2,
+          "name": "terminate"
+        },
+        {
+          "arity": 0,
+          "name": "module_info"
+        },
+        {
+          "arity": 1,
+          "name": "module_info"
+        }
+      ],
+      "module": "cayrn_lfe_listener"
+    },
+    {
+      "exports": [
+        {
+          "arity": 2,
+          "name": "start"
+        },
+        {
+          "arity": 2,
+          "name": "loop"
+        },
+        {
+          "arity": 0,
+          "name": "module_info"
+        },
+        {
+          "arity": 1,
+          "name": "module_info"
+        }
+      ],
+      "module": "cayrn_lfe_io"
+    },
+    {
+      "exports": [
+        {
+          "arity": 1,
+          "name": "start_link"
+        },
+        {
+          "arity": 1,
+          "name": "init"
+        },
+        {
+          "arity": 2,
+          "name": "handle_info"
+        },
+        {
+          "arity": 3,
+          "name": "handle_call"
+        },
+        {
+          "arity": 2,
+          "name": "handle_cast"
+        },
+        {
+          "arity": 2,
+          "name": "terminate"
+        },
+        {
+          "arity": 0,
+          "name": "module_info"
+        },
+        {
+          "arity": 1,
+          "name": "module_info"
+        }
+      ],
+      "module": "cayrn_lfe_context"
+    },
+    {
+      "exports": [
+        {
+          "arity": 0,
+          "name": "persistent_bindings_test"
+        },
+        {
+          "arity": 0,
+          "name": "errors_preserve_committed_environment_test"
+        },
+        {
+          "arity": 0,
+          "name": "functions_and_macro_context_test"
+        },
+        {
+          "arity": 0,
+          "name": "ordinary_error_atom_is_a_value_test"
+        },
+        {
+          "arity": 0,
+          "name": "test"
+        },
+        {
+          "arity": 0,
+          "name": "module_info"
+        },
+        {
+          "arity": 1,
+          "name": "module_info"
+        }
+      ],
+      "module": "cayrn_lfe_eval_tests"
+    },
+    {
+      "exports": [
+        {
+          "arity": 0,
+          "name": "capture_requires_owner_ack_test"
+        },
+        {
+          "arity": 0,
+          "name": "seal_orders_prior_capture_and_rejects_late_writes_test"
+        },
+        {
+          "arity": 0,
+          "name": "test"
+        },
+        {
+          "arity": 0,
+          "name": "module_info"
+        },
+        {
+          "arity": 1,
+          "name": "module_info"
+        }
+      ],
+      "module": "cayrn_lfe_io_tests"
+    },
+    {
+      "exports": [
+        {
+          "arity": 0,
+          "name": "independent_application_start_test_"
+        },
+        {
+          "arity": 0,
+          "name": "test"
+        },
+        {
+          "arity": 0,
+          "name": "module_info"
+        },
+        {
+          "arity": 1,
+          "name": "module_info"
+        }
+      ],
+      "module": "cayrn_lfe_application_tests"
+    }
+  ]
+}

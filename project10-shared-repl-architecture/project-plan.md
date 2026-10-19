@@ -1,6 +1,6 @@
 ---
 project: project10-shared-repl-architecture
-status: first-slice-candidate-acceptance-pending
+status: first-slice-committed-next-slice-prepared
 depends-on: [cayrn-project02-bounded-contracts]
 blocks: [xrepl-0.2.x-core-migration-candidate]
 related: [cayrn-project01-shared-repl-architecture, project05-rust-frontend, project06-pluggable-shells, project07-story-runtime, project09-quality-assessment, xrepl_protocol, xrepl_term]
@@ -100,13 +100,13 @@ silently merge unrelated history or retire the predecessor checkout.
 
 ## Arc roadmap
 
-Only Arc01 and its first slice are deep-planned now. Each later arc lands a
+Arc01 and its first two slices are deep-planned now. Each later arc lands a
 usable vertical capability with tests/docs; detailed designs/prompts follow
 actual upstream results. A held contract is resolved before dependent work.
 
 | Arc | Useful outcome and delivery home | Actual prerequisites | State |
 | --- | --- | --- | --- |
-| [Arc01 — integrated native agent](arc01-integrated-native-agent/arc-plan.md) | Existing agent runs from apps/cayrn_lfe, independently startable; then an LFE implementation preserves behavior | Pinned standalone source and current xrepl/Cayrn interfaces; no whole Cayrn hardening prerequisite | First import slice prepared |
+| [Arc01 — integrated native agent](arc01-integrated-native-agent/arc-plan.md) | Existing agent runs from apps/cayrn_lfe, independently startable; then an LFE implementation preserves behavior | Pinned standalone source and current xrepl/Cayrn interfaces; no whole Cayrn hardening prerequisite | Import committed; LFE conversion prepared |
 | Arc02 — sustainable native evaluation | Native resource retirement/fencing and safe size-limited previews/output support long sessions | Arc01; Cayrn C-RESOURCE for native resource contract; existing bounded wire for size-safe native fixes | Roadmap only |
 | Arc03 — Cayrn-backed session and LFE services | Cayrn authority for catalog/names/metadata/lifecycle plus supported LFE developer helpers and history semantics | Bounded Cayrn administration APIs and Arc02 runtime; Project09/source contracts | Roadmap only |
 | Arc04 — input and shell services | Correlated program input, multiline/multiform payloads and shell switching preserve session identity/state ownership | Shared input contract; Arc03 semantic services; native hooks | Roadmap only |
@@ -147,6 +147,10 @@ Operator re-scope, plus package validation and publication approval.
 
 ## Version history
 
+- v2.1 —2026-10-18: Operator-approved first implementation commits recorded;
+  next Slice02 open set prepared under the same one-contributor workflow.
+  Cross-repository order and pending independent gates are preserved.
+
 - v1.0 — 2026-10-18: original shared four-runtime formulation; preserved unchanged
   in artifacts/formulation-v1. Shared working architecture later moved to Cayrn.
 - v2.0 — 2026-10-18: Operator retains Project10's name and sharpens it to the
@@ -173,3 +177,24 @@ the existing ledger convention; their names do not imply a separate CC actor.
 [Slice01 return](arc01-integrated-native-agent/slice01-import-agent-application/closing-report.md) records the delivered candidate,
 checks and residual owners. All8 slice rows are proposed done with attested
 evidence; acceptance gates remain open. No second slice or publication occurred.
+
+## Committed inputs and next planning —2026-10-18
+
+X-IMPORT source `ea844f5` is committed on release/0.2.x (including 0.2.0 version
+seed); C-ERR source `9111136` is committed on codex/core-session-lifecycle. Current
+next open set is [X-LFE](arc01-integrated-native-agent/slice02-lfe-agent-implementation/slice-plan.md),
+prepared for Operator activation, all five native runtime and three native test
+modules. It supplies the exact converted input to Cayrn C-AGENT; no presumed
+future hash is recorded. No later hardening/UX scope or independent acceptance
+is inferred from commit approval.
+
+## Execution activation —2026-10-18
+
+The Operator now authorizes committing these plans, then implementing xrepl's
+LFE conversion followed by Cayrn's integrated-agent profile with one collaborator.
+Earlier prepared/planning-only wording is historical, superseded here. Sofie
+executes and separately self-reviews; all evidence stays author-attested. The
+validated, byte-identified converted-agent candidate/return is the bounded input
+for Cayrn, even if its implementation commit has not yet been requested. No
+independent acceptance, whole-arc close, push/publication or later slice is implied.
+The staged sequence is authorized without intermediate routine approval.

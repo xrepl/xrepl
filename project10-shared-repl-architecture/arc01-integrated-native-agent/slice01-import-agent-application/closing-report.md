@@ -135,3 +135,13 @@ legacy test node already runs xrepl services.
 - `project10-shared-repl-architecture/arc01-integrated-native-agent/slice01-import-agent-application/artifacts/source-candidate.patch`
 - `project10-shared-repl-architecture/arc01-integrated-native-agent/slice01-import-agent-application/artifacts/wrapper-smoke.py`
 - `project10-shared-repl-architecture/arc01-integrated-native-agent/slice01-import-agent-application/artifacts/.gitattributes`
+
+## Operator-approved source commit —2026-10-18
+
+The Operator approved committing this reviewed candidate and planning the next
+slices. Source commit: `ea844f5e634dc1ffb2503b7d69c4726164395d82`. Every candidate file SHA256 matched the
+previously tested/saved bytes before commit; no implementation edits or new test
+run were needed to commit them. Both required trailers are present. Earlier
+uncommitted-candidate statements and source-candidate.json/.patch are preserved
+as the historical return. This is commit/next-planning approval, not a claim the
+Operator independently reran the runtime checks. Independent gates remain pending.

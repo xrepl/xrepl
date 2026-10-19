@@ -36,3 +36,22 @@ will be manufactured. The Operator authorized planning commits and starting the
 first slices. Push/publication and later-slice execution are not authorized here.
 Prepared cc-prompt.md files remain the canonical implementation contracts under
 the existing ledger convention; their names do not imply a separate CC actor.
+
+## Next-slice planning authorization —2026-10-18
+
+The Operator approved the first implementation commits and explicitly requested
+the next slices using the same one-collaborator workflow. Slice02 plans/prompts
+are prepared; this request does not execute them or close independent gates.
+Issued first-slice prompts and candidate snapshots remain historical. No push,
+publication, new contributor or resource/UX work is authorized by this transition.
+
+## Execution activation —2026-10-18
+
+The Operator now authorizes committing these plans, then implementing xrepl's
+LFE conversion followed by Cayrn's integrated-agent profile with one collaborator.
+Earlier prepared/planning-only wording is historical, superseded here. Sofie
+executes and separately self-reviews; all evidence stays author-attested. The
+validated, byte-identified converted-agent candidate/return is the bounded input
+for Cayrn, even if its implementation commit has not yet been requested. No
+independent acceptance, whole-arc close, push/publication or later slice is implied.
+The staged sequence is authorized without intermediate routine approval.
