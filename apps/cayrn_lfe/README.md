@@ -38,11 +38,14 @@ It refuses an existing socket path; choose a fresh private directory after an
 unclean node exit, rather than deleting an endpoint another process may own.
 
 The internal agent wire is bounded, four-byte big-endian length-prefixed JSON,
-version 1 independently of public client RPC. Hello carries session, generation
-and authority; dispatch carries operation/source and expected generation/authority.
-Output has a canonical decimal-string capture position and immutable operation
-attribution. Rust must commit output before sending its ACK. Ordinary results
-and errors remain separate. Agent IDs are binaries, never dynamically made atoms.
+version 2 independently of public client RPC version 1. Hello carries session,
+generation and authority. Dispatch/cancel/output/outcome use canonical positive
+decimal admission tokens (1..i64::MAX); tokens may be sparse. Rust maps them to
+public operation IDs using its durable journal. A scalar high-water fence rejects
+stale/replayed native dispatches without retaining all past operation identities.
+Output has an independent canonical decimal-string capture position and immutable
+origin attribution. Rust must commit output before sending its ACK. Ordinary
+results and errors remain separate. Agent IDs are binaries, never dynamically made atoms.
 
 The prototype supports persistent bindings, top-level functions/macros, value
 previews, foreground and late output through inherited group leaders, and ordinary
@@ -52,14 +55,37 @@ trusted code in the node; it is not a sandbox or rollback system. Definitions
 made earlier in a failed multi-form request are not committed to the saved
 environment; external effects and process-dictionary changes are not rolled back.
 
-Limits: 64 live contexts, 256 operations per context, 64 pending I/O writes,
-8192-byte source/output/value previews, 256KiB frames, and 4096 context identities
-per application lifetime. Operation I/O servers are retained to attribute late
-writers, with the context budget bounding them. Identity tombstones and the
-volatile duplicate guard are not evicted to make a stale dispatch executable.
-Create a fresh session when the operation budget is exhausted. Restarting the
-application loses contexts and its volatile identity guard; Rust must report
-state loss, never recreate an old environment from transcript history.
+Limits: 64 live contexts, 64 live capture origins per context, 64 pending I/O
+writes, 8192-byte source/output/value previews, 256KiB frames, and 4096 context
+identities per application lifetime. There is no total-operation count limit.
+A quiet evaluation returns its origin credit only after the collector has
+physically stopped. Late descendants retain their original collector/token.
+At 64 live origins a new valid token receives the ordinary Failed preview
+`native resource limit: 64 live capture origins; source not evaluated`.
+Its source does not run or change the saved environment, and its token remains
+consumed. Capacity recovers when producers finish; retry requires a new public
+operation ID. If every producer needs another evaluation to release it, external
+runtime work or close is needed. Control remains available at full capacity.
+
+Each origin owns an isolated OTP trace session on its paused evaluator and local
+spawn descendants. Producer birth/exit/delivery witnesses, traced I/O sends,
+actual I/O requests and durable-write ACKs jointly establish quiescence. Quiet
+foreground results wait for collector DOWN; results with live background
+producers can publish while retaining that origin. Capture tracing is destroyed
+explicitly without changing independently configured trace sessions.
+This covers inherited-group-leader local `spawn`, `spawn_link`, `spawn_monitor`
+and `spawn_opt`, including asynchronous I/O senders that exit before an ACK.
+Assigning an old group leader to unrelated existing processes, remote processes,
+explicit devices and user tampering with tracing are outside this trusted
+profile. User process/heap/message fanout is not sandboxed by origin credits.
+
+The 4096 cumulative context-identity guard remains a known node-lifetime limit;
+large-value assertions/output chunking and capture-pressure behavior also remain
+for later hardening. These limits are not silently evicted or called resolved.
+Restarting the application loses contexts and its volatile identity guard; Rust
+must report state loss, never recreate an environment from transcript history.
+Native2 requires a matching rebuilt Cayrn host; there is no native1 fallback.
+The standalone native1 predecessor remains usable with its prior pinned host.
 
 Host-agent link loss terminates that context and marks its state uncertain/lost;
 it never kills the shared BEAM or peer contexts. Host restart retains the Rust
@@ -80,8 +106,9 @@ uncertainty. Peers in the node remain alive. A completed evaluation can win a
 cancel race. Cooperative interruption is a separate capability supported by the
 shared Rust contract, not currently by this LFE implementation.
 
-Close stops the owned foreground evaluator, seals all operation I/O servers,
-waits for their seal messages and Rust's outstanding capture ACKs, then emits a
+Close stops a running foreground evaluator or publishes an already computed
+result, seals Live capture origins and waits for their seal messages, all
+Retiring collector DOWNs and Rust's outstanding capture ACKs before emitting a
 close barrier. Sealed I/O cannot append later output. Unmanaged external processes
 are not rolled back or silently claimed stopped. A five-second barrier timeout
 reports incomplete close; socket EOF is never a close acknowledgement. Rust
@@ -103,13 +130,13 @@ It starts `cayrn_lfe` and `lfe`, without starting legacy `xrepl`, Ranch,
 `xrepl_protocol` or `xrepl_term`. Root and component Rebar caches are separate.
 The component version stays 0.1.0 while the enclosing xrepl release is 0.2.0.
 
-For Cayrn's real native/terminal tests, explicitly set `CAYRN_LFE_DIR` to this
-`apps/cayrn_lfe` directory and `XREPL_BIN` to the built xrepl Rust binary.
-The independent app startup test complements the six preserved evaluator/I/O
-tests; it does not claim that resource limits or oversized previews are fixed.
-
-The LFE EUnit companion module explicitly includes the evaluator and application
-test modules, so component-only `make check` executes all seven native cases.
-Callback/module names retain underscores for OTP and wire compatibility; new
-private helpers use LFE conventions. Resource budgets and oversized-value
-behavior remain unchanged pending deliberate hardening.
+Cayrn's native/terminal targets default to this integrated component and the
+sibling xrepl Rust binary; explicit `CAYRN_LFE_DIR` and `XREPL_BIN` overrides are
+available. Component-only `make check` explicitly discovers evaluator, application
+and resource tests through the I/O companion generator. Resource cases cover
+512 quiet sparse dispatches, 64/65 origin pressure, replay non-execution, producer
+and request/trace order inversions, ACK/close races, physical retirement and
+independent tracing. The matching Cayrn integration fixture performs 1024 further
+evaluations while retaining an early late writer's attribution. Callback/module
+names retain underscores for OTP/wire compatibility; private helpers use LFE
+conventions. Remaining node-identity/size limits are recorded above.

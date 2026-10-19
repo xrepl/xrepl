@@ -14,11 +14,11 @@
 (defspec (init 1) (((port)) (tuple 'ok (map) (timeout))))
 
 (defun init (socket)
-  "Create an opaque evaluator environment and bounded capture/control state."
+  "Create an opaque environment, scalar fence and bounded live origins."
   (process_flag 'trap_exit 'true)
   (tuple 'ok
     (map 'socket socket 'identity 'undefined 'env (cayrn-lfe-eval:new)
-         'active 'undefined 'seen (map) 'ios '() 'pending (map)
+         'active 'undefined 'last-token 0 'origins (map) 'pending (map)
          'seq 0 'closing 'undefined)
     5000))
 
@@ -28,43 +28,71 @@
            (tuple 'stop (term) (map)))))
 
 (defun handle_info
-  "Process native control, evaluator and capture events in mailbox order."
+  "Process native control, evaluator, collector and capture events."
   (('activate (= (map 'socket socket) state))
    (let (('ok (inet:setopts socket '(#(active once)))))
      (tuple 'noreply state 5000)))
   (((tuple 'tcp socket bytes) (= (map 'socket socket) state))
-   (try
-     (case (command (json:decode bytes) state)
+   (let ((result
+           (try (command (json:decode bytes) state)
+             (catch
+               ((tuple _ _ _) (tuple 'invalid state))))))
+     (case result
        ((tuple 'continue next)
-        (let (('ok (inet:setopts socket '(#(active once)))))
-          (tuple 'noreply next)))
-       ((tuple 'stop next) (tuple 'stop 'normal next)))
-     (catch ((tuple _ _ _) (tuple 'stop 'invalid_agent_command state)))))
-  (((tuple 'capture from ref operation text) state)
-   (let ((pending (map-get state 'pending)))
+        ;; A successful dispatch has transferred acquired resources to next.
+        ;; Rearm failure must terminate that state, never its predecessor.
+        (case (inet:setopts socket '(#(active once)))
+          ('ok (tuple 'noreply next))
+          ((tuple 'error reason) (tuple 'stop reason next))))
+       ((tuple 'stop next) (tuple 'stop 'normal next))
+       ((tuple 'invalid previous)
+        (tuple 'stop 'invalid_agent_command previous)))))
+
+  (((tuple 'capture io from ref operation text) state)
+   (let* (((tuple stored-operation _ _ 'live) (origin io state))
+          ('true (=:= operation stored-operation))
+          (pending (map-get state 'pending)))
      (if (< (map_size pending) 64)
        (let* ((n (+ (map-get state 'seq) 1))
-              (position (integer_to_binary n)))
-         (let (('ok (send-event state
-                      (map 'kind 'output 'operation operation
-                           'position position 'text text))))
-           (tuple 'noreply
-             (map-set state 'seq n
-               'pending (map-set pending position (tuple from ref))))))
+              (position (integer_to_binary n))
+              ('ok (send-event state
+                     (map 'kind 'output 'operation operation
+                          'position position 'text text))))
+         (tuple 'noreply
+           (map-set state 'seq n
+             'pending (map-set pending position (tuple io from ref)))))
        (progn
          (! from (tuple 'io_reply ref '#(error enobufs)))
          (tuple 'stop 'capture_overflow state)))))
   (((tuple 'evaluated pid operation status text env)
-    (= (map 'active (tuple pid monitor operation)) state))
+    (= (map 'active (tuple pid monitor operation io)) state))
    (erlang:demonitor monitor '(flush))
    (let* (('true (=< (byte_size text) 8192))
-         ('ok (send-event state
-                (map 'kind 'outcome 'operation operation
-                     'phase status 'value text))))
-     (transition
-       (progress (map-set state 'active 'undefined 'env env)))))
+          (next (map-set state 'env env
+                  'active (tuple 'finishing operation io status text))))
+     (cayrn_lfe_io:finished io (self))
+     (if (=:= (map-get state 'closing) 'undefined)
+       (tuple 'noreply next)
+       (transition (progress (publish next))))))
+  (((tuple 'foreground_ready io operation) state)
+   (let* (((tuple stored-operation _ _ 'live) (origin io state))
+          ('true (=:= operation stored-operation)))
+     (transition (progress (publish-origin io state)))))
+  (((tuple 'retire_ready io operation) state)
+   (let* (((tuple stored-operation trace monitor 'live) (origin io state))
+          ('true (=:= operation stored-operation)))
+     (if (=:= (map-get state 'closing) 'undefined)
+       (let* (('false (pending-origin? io state))
+              ('true (unlink io))
+              (origins (map-get state 'origins))
+              (next (map-set state 'origins
+                      (map-set origins io
+                        (tuple operation trace monitor 'retiring)))))
+         (cayrn_lfe_io:retire io (self))
+         (tuple 'noreply next))
+       (tuple 'noreply state))))
   (((tuple 'DOWN monitor 'process pid _reason)
-    (= (map 'active (tuple pid monitor operation) 'closing mode) state))
+    (= (map 'active (tuple pid monitor operation _io) 'closing mode) state))
    (when (orelse (=:= mode 'close) (=:= mode 'cancel)))
    (let (('ok (send-event state
                 (map 'kind 'outcome 'operation operation 'phase 'cancelled
@@ -72,11 +100,24 @@
                                "environment discarded")))))
      (transition (progress (map-set state 'active 'undefined)))))
   (((tuple 'DOWN monitor 'process pid reason)
-    (= (map 'active (tuple pid monitor _)) state))
+    (= (map 'active (tuple pid monitor _ _) ) state))
    (tuple 'stop (tuple 'evaluator_lost reason) state))
-  (((tuple 'sealed io) (= (map 'waiting waiting) state))
-   (transition
-     (progress (map-set state 'waiting (lists:delete io waiting)))))
+  (((tuple 'DOWN monitor 'process io reason) state)
+   (case (maps:find io (map-get state 'origins))
+     ((tuple 'ok (tuple _ trace stored-monitor 'retiring))
+      (when (=:= reason 'normal) (=:= monitor stored-monitor))
+      (trace:session_destroy trace)
+      (let* ((next (map-set state 'origins
+                     (maps:remove io (map-get state 'origins))))
+             (published (publish-origin io next)))
+        (transition (progress published))))
+     (_ (tuple 'stop (tuple 'collector_lost reason) state))))
+  (((tuple 'sealed io operation) (= (map 'waiting waiting) state))
+   (let* (((tuple stored-operation _ _ 'live) (origin io state))
+          ('true (=:= operation stored-operation))
+          ('true (lists:member io waiting)))
+     (transition
+       (progress (map-set state 'waiting (lists:delete io waiting))))))
   (('close_timeout (= (map 'closing mode) state))
    (when (=/= mode 'undefined))
    (let (('ok (send-event state
@@ -93,82 +134,142 @@
   ((_ state) (tuple 'noreply state)))
 
 (defun command
-  (((map #b("kind") #b("hello") #b("version") 1
+  (((map #b("kind") #b("hello") #b("version") 2
          #b("session") sid #b("generation") generation
          #b("authority") authority)
     (= (map 'identity 'undefined) state))
    (let* (('true (andalso (valid-id? sid) (valid-id? generation)
                          (valid-id? authority)))
-         ('true (< (ets:info 'cayrn_lfe_contexts 'size) 4096))
-         ('true (ets:insert_new 'cayrn_lfe_contexts
-                  (tuple sid generation authority)))
-         ('ok (send-event state
-                (map 'kind 'ready 'version 1 'backend #b("lfe")
-                     'interrupt #b("session_destructive")
-                     'close_barrier 'true))))
+          ('true (< (ets:info 'cayrn_lfe_contexts 'size) 4096))
+          ('true (ets:insert_new 'cayrn_lfe_contexts
+                   (tuple sid generation authority)))
+          ('ok (send-event state
+                 (map 'kind 'ready 'version 2 'backend #b("lfe")
+                      'interrupt #b("session_destructive")
+                      'close_barrier 'true))))
      (tuple 'continue
        (map-set state 'identity (tuple sid generation authority)))))
   (((map #b("kind") #b("dispatch") #b("operation") operation
          #b("source") source #b("generation") generation
          #b("authority") authority)
     (= (map 'identity (tuple _ generation authority)
-            'active 'undefined 'seen seen 'closing 'undefined) state))
-   (when (is_binary source) (=< (byte_size source) 8192)
-         (< (map_size seen) 256))
-   (let* (('true (valid-id? operation))
-         ('false (maps:is_key operation seen)))
-     (let* ((owner (self))
-            (io (cayrn_lfe_io:start owner operation))
-            (env (map-get state 'env))
-            ((tuple pid monitor)
-             (spawn_monitor
-               (lambda ()
-                 (receive
-                   ('evaluate
-                    (let* (((tuple status value next)
-                            (cayrn-lfe-eval:run source env))
-                           (phase (case status
-                                    ('ok 'succeeded)
-                                    ('error 'failed))))
-                      (! owner (tuple 'evaluated (self) operation
-                                      phase value next)))))))))
-       (let* (('true (group_leader io pid)))
-         (! pid 'evaluate)
-         (tuple 'continue
-           (map-set state 'active (tuple pid monitor operation)
-                    'seen (map-set seen operation 'true)
-                    'ios (cons io (map-get state 'ios))))))))
+            'active 'undefined 'closing 'undefined) state))
+   (when (is_binary source) (=< (byte_size source) 8192))
+   (let* ((n (token operation))
+          ('true (> n (map-get state 'last-token)))
+          (next (map-set state 'last-token n)))
+     (if (=:= 64 (map_size (map-get state 'origins)))
+       (let (('ok (send-event next
+                    (map 'kind 'outcome 'operation operation 'phase 'failed
+                         'value #b("native resource limit: 64 live capture "
+                                   "origins; source not evaluated")))))
+         (tuple 'continue next))
+       (evaluate operation source next))))
   (((map #b("kind") #b("ack") #b("position") position) state)
-   (let* (((tuple (tuple from ref) pending)
+   (let* (((tuple (tuple io from ref) pending)
            (maps:take position (map-get state 'pending))))
-     (! from (tuple 'io_reply ref 'ok))
+     (origin io state)
+     (cayrn_lfe_io:committed io from ref)
      (progress (map-set state 'pending pending))))
   (((map #b("kind") #b("close"))
     (= (map 'closing 'undefined) state))
    (begin-stop 'close state))
   (((map #b("kind") #b("close")) state) (tuple 'continue state))
-  (((map #b("kind") #b("cancel") #b("operation") operation)
-    (= (map 'active (tuple _ _ operation) 'closing 'undefined) state))
-   (begin-stop 'cancel state))
-  (((map #b("kind") #b("cancel") #b("operation") operation)
-    (= (map 'active 'undefined 'seen seen 'closing 'undefined) state))
-   (if (maps:is_key operation seen)
-     (tuple 'continue state)
-     (let (('ok (send-event state
-                  (map 'kind 'lost
-                       'reason #b("interrupt won before native dispatch; "
-                                  "context retired")))))
-       (tuple 'stop state))))
-  (((map #b("kind") #b("cancel")) state) (tuple 'continue state))
+  (((map #b("kind") #b("cancel") #b("operation") operation) state)
+   (let ((n (token operation)))
+     (case (map-get state 'active)
+       ((tuple _ _ active-operation _)
+        (when (=:= active-operation operation))
+        (if (=:= (map-get state 'closing) 'undefined)
+          (begin-stop 'cancel state)
+          (tuple 'continue state)))
+       ('undefined
+        (if (andalso (=:= (map-get state 'closing) 'undefined)
+                     (> n (map-get state 'last-token)))
+          (let (('ok (send-event state
+                       (map 'kind 'lost
+                            'reason #b("interrupt won before native dispatch; "
+                                       "context retired")))))
+            (tuple 'stop state))
+          (tuple 'continue state)))
+       (_ (tuple 'continue state)))))
   (((map #b("kind") #b("stop")) state) (tuple 'stop state))
   ((_ _) (error 'invalid_agent_command)))
 
+(defun evaluate (operation source state)
+  (let* ((owner (self))
+         (env (map-get state 'env))
+         ((tuple pid monitor)
+          (spawn_monitor
+            (lambda ()
+              (receive
+                ('evaluate
+                 (let* (((tuple status value next)
+                         (cayrn-lfe-eval:run source env))
+                        (phase (case status
+                                 ('ok 'succeeded)
+                                 ('error 'failed))))
+                   (! owner (tuple 'evaluated (self) operation
+                                   phase value next)))))))))
+    (try
+      (let (((tuple 'ok io trace) (cayrn_lfe_io:start owner operation pid)))
+        (try
+          (let* ((io-monitor (monitor 'process io))
+                 ('true (group_leader io pid)))
+            (! pid 'evaluate)
+            (tuple 'continue
+              (map-set state 'active (tuple pid monitor operation io)
+                'origins (map-set (map-get state 'origins) io
+                           (tuple operation trace io-monitor 'live)))))
+          (catch
+            ((tuple class reason stack)
+             (trace:session_destroy trace)
+             (unlink io)
+             (exit io 'kill)
+             (erlang:raise class reason stack)))))
+      (catch
+        ((tuple class reason stack)
+         (exit pid 'kill)
+         (erlang:demonitor monitor '(flush))
+         (erlang:raise class reason stack))))))
+
+(defun token
+  ((value) (when (is_binary value) (> (byte_size value) 0)
+                 (=< (byte_size value) 19))
+   (let* ((n (binary_to_integer value))
+          ('true (andalso (> n 0) (=< n 9223372036854775807)
+                          (=:= value (integer_to_binary n)))))
+     n))
+  ((_) (error 'invalid_native_token)))
+
+(defun origin (io state)
+  (map-get (map-get state 'origins) io))
+
+(defun pending-origin? (io state)
+  (lists:any (match-lambda
+               (((tuple incoming _ _)) (=:= incoming io)))
+    (maps:values (map-get state 'pending))))
+
+(defun publish-origin
+  ((io (= (map 'active (tuple 'finishing _ io _ _)) state))
+   (publish state))
+  ((_io state) state))
+
+(defun publish
+  (((= (map 'active (tuple 'finishing operation _ phase text)) state))
+   (let (('ok (send-event state
+                (map 'kind 'outcome 'operation operation
+                     'phase phase 'value text))))
+     (map-set state 'active 'undefined)))
+  ((state) state))
+
 (defun begin-stop (mode state)
   (erlang:send_after 5000 (self) 'close_timeout)
-  (case (map-get state 'active)
-    ((tuple pid _ _) (exit pid 'kill))
-    ('undefined 'ok))
-  (progress (map-set state 'closing mode)))
+  (let ((next (map-set state 'closing mode)))
+    (case (map-get next 'active)
+      ((tuple 'finishing _ _ _ _) (progress (publish next)))
+      ((tuple pid _ _ _) (exit pid 'kill) (progress next))
+      ('undefined (progress next)))))
 
 (defun progress
   (((= (map 'closing 'cancel 'active 'undefined) state))
@@ -181,16 +282,28 @@
   (((= (map 'closing 'close 'active 'undefined) state))
    (case (maps:find 'waiting state)
      ('error
-      (let ((ios (map-get state 'ios)))
-        (lists:foreach (lambda (pid) (! pid (tuple 'seal (self)))) ios)
-        (progress (map-set state 'waiting ios))))
+      (let ((live (lists:filtermap
+                    (match-lambda
+                      (((tuple io (tuple _ _ _ 'live))) (tuple 'true io))
+                      ((_entry) 'false))
+                    (maps:to_list (map-get state 'origins)))))
+        (lists:foreach (lambda (io) (cayrn_lfe_io:seal io (self))) live)
+        (progress (map-set state 'waiting live))))
      ((tuple 'ok '())
-      (if (=:= (map_size (map-get state 'pending)) 0)
+      (if (andalso (=:= (map_size (map-get state 'pending)) 0)
+                   (not (retiring? state)))
         (let (('ok (send-event state (map 'kind 'closed))))
           (tuple 'stop state))
         (tuple 'continue state)))
      (_ (tuple 'continue state))))
   ((state) (tuple 'continue state)))
+
+(defun retiring? (state)
+  (lists:any
+    (match-lambda
+      (((tuple _ _ _ 'retiring)) 'true)
+      ((_entry) 'false))
+    (maps:values (map-get state 'origins))))
 
 (defun transition
   (((tuple 'continue state)) (tuple 'noreply state))
@@ -223,10 +336,15 @@
 (defspec (terminate 2) (((term) (map)) 'ok))
 
 (defun terminate (_reason state)
-  "Stop only this context's evaluator, capture servers and socket."
+  "Stop only this context's evaluator, tracing, capture and socket."
   (case (map-get state 'active)
-    ((tuple pid _ _) (exit pid 'kill))
-    ('undefined 'ok))
-  (lists:foreach (lambda (pid) (exit pid 'kill)) (map-get state 'ios))
+    ((tuple pid _ _ _) (exit pid 'kill))
+    (_ 'ok))
+  (maps:foreach
+    (lambda (io entry)
+      (trace:session_destroy (element 2 entry))
+      (unlink io)
+      (exit io 'kill))
+    (map-get state 'origins))
   (gen_tcp:close (map-get state 'socket))
   'ok)

@@ -25,11 +25,17 @@ mkdir -m 700 /tmp/xrepl-agent-demo
 The root launcher delegates to the component-local build, starts only the native
 application and LFE, and accepts a single socket argument. Starting legacy
 `xrepl` does not automatically start the agent. See the component README for
-Cayrn host startup and current limits: 256 operations per context, 8KiB
-source/output/value previews, no program input or live-state restoration.
-The native OTP implementation and its tests are now written in LFE, preserving
-the prototype contract. Resource/size hardening follows separately. The native app remains 0.1.0 within
-xrepl's 0.2.0 development branch. Nothing new is published.
+Cayrn host startup and current limits: 64 live capture origins per context,
+8KiB source/output/value previews, 4096 node-lifetime context identities, no
+program input or live-state restoration. Native2 uses sparse admission tokens
+and retires drained capture origins; quiet sessions have no total-operation
+count limit. Background writers preserve their original attribution. A full
+origin budget refuses evaluation explicitly while preserving the environment.
+See the component README for its trusted local-descendant capture boundary.
+The native OTP implementation/tests are written in LFE; remaining node-identity
+and size hardening follows separately. Native2 requires the matching rebuilt
+Cayrn host, while public client RPC remains version 1. The native app remains
+0.1.0 within xrepl's 0.2.0 development branch. Nothing new is published.
 
 ##### Table of Contents
 

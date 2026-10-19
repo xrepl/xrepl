@@ -11,19 +11,22 @@
 (defun native_agent_companions_test_ ()
   "Discover all native cases without depending on Erlang source files."
   (list '#(module cayrn_lfe_eval_tests)
-        '#(module cayrn_lfe_application_tests)))
+        '#(module cayrn_lfe_application_tests)
+        '#(module cayrn_lfe_resource_tests)))
 
 (defun capture_requires_owner_ack_test ()
   "Never acknowledge a native write before its owner commits capture."
-  (let ((io (cayrn_lfe_io:start (self) #b("operation")))
+  (let* ((root (spawn (lambda () (receive ('stop 'ok)))))
+         ((tuple 'ok io _trace)
+          (cayrn_lfe_io:start (self) #b("2") root))
         (ref (make_ref)))
     (try
       (progn
         (! io (tuple 'io_request (self) ref
                      (tuple 'put_chars 'unicode #b("hello"))))
         (receive
-          ((tuple 'capture from incoming-ref #b("operation") #b("hello"))
-           (when (=:= incoming-ref ref))
+          ((tuple 'capture incoming-io from incoming-ref #b("2") #b("hello"))
+           (when (=:= incoming-ref ref) (=:= incoming-io io))
            (assertEqual (self) from))
           (after 1000 (error 'missing_capture)))
         (receive
@@ -33,24 +36,32 @@
           (after 20 'ok)))
       (after
         (unlink io)
-        (exit io 'kill)))))
+        (exit io 'kill)
+        (exit root 'kill)))))
 
 (defun seal_orders_prior_capture_and_rejects_late_writes_test ()
   "Seal after earlier capture and reject subsequent writes explicitly."
-  (let ((io (cayrn_lfe_io:start (self) #b("origin")))
+  (let* ((root (spawn (lambda () (receive ('stop 'ok)))))
+         ((tuple 'ok io _trace)
+          (cayrn_lfe_io:start (self) #b("5") root))
         (ref (make_ref)))
     (try
       (progn
         (! io (tuple 'io_request (self) ref
                      (tuple 'put_chars 'unicode #b("before"))))
-        (! io (tuple 'seal (self)))
+        (cayrn_lfe_io:seal io (self))
         (receive
-          (first
-           (assertEqual (tuple 'capture (self) ref #b("origin") #b("before"))
+          ((= (tuple 'capture incoming-io _ _ _ _) first)
+           (when (=:= incoming-io io))
+           (assertEqual (tuple 'capture io (self) ref #b("5") #b("before"))
              first))
+          ((tuple 'sealed incoming-io _) (when (=:= incoming-io io))
+           (error 'seal_preceded_capture))
           (after 1000 (error 'missing_capture)))
         (receive
-          (second (assertEqual (tuple 'sealed io) second))
+          ((= (tuple 'sealed incoming-io _) second)
+           (when (=:= incoming-io io))
+           (assertEqual (tuple 'sealed io #b("5")) second))
           (after 1000 (error 'missing_seal)))
         (let ((later (make_ref)))
           (! io (tuple 'io_request (self) later
@@ -62,4 +73,5 @@
             (after 1000 (error 'missing_late_rejection)))))
       (after
         (unlink io)
-        (exit io 'kill)))))
+        (exit io 'kill)
+        (exit root 'kill)))))
