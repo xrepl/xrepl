@@ -12,3 +12,7 @@ All eight original criteria open; no implementation or acceptance.
 | XS04-06 | Close/cancel/publication preserve no-false-completion and no-source-effect rules | Deferred token/state permutations, strong seal, physical terminal and honest timeout | serious | Arc02 complete output / NR-02 | open | — | Initial cc-prompt.md; accepted X03 source7427d1c |
 | XS04-07 | Existing behavior and actual Rust/native/terminal integration remain valid | 56retained native methods, full matching17, root/fresh/launcher/exports/current bytes | serious | Arc02 complete output / NR-02 | open | — | Initial cc-prompt.md; accepted X03 source7427d1c |
 | XS04-08 | Complete documentation/evidence and composition ownership are retained | Exact12 hashes/patch, all8 return rows/failures/intake, C06 and broader gates explicit | serious | Arc02 complete output / NR-02 | open | — | Initial cc-prompt.md; accepted X03 source7427d1c |
+
+Current preserved assignment cc-prompt-iteration01.md clarifies the two completion/
+DOWN pairs; criteria/statuses unchanged, all8open. Author precision, no accepted
+implementation or independent product-failure verdict.

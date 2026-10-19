@@ -1,6 +1,6 @@
 # Slice04 — owned complete captured streams
 
-2026-10-19, version1.0. Current assignment cc-prompt.md, actual CC/root/xrepl_x21;
+2026-10-19, version1.0. Current assignment cc-prompt-iteration01.md (initial assignment preserved), actual CC/root/xrepl_x21;
 CDC/root owns design, independent code review/runtime reproduction and retrospective.
 CF2.8.0 Autonomous/Expedited through native Arc02 only. Source release/0.2.x7427d1c,
 accepted X03 planninga683721; exact pins/hashes in artifacts/source-baseline.json.
@@ -66,3 +66,13 @@ policy remains for CC to guess; alternative private names do not change behavior
 Combined responsiveness mechanisms are necessary to meet single-owner proof;
 separate ownership-only sketch failed and remains preserved. Packet full/section/
 data manifest bounds inputs and preserves recovery headroom, no skim instruction.
+
+## Assignment history update —2026-10-19
+
+Initial cc-prompt.md is preserved and governs remaining scope, with this narrow
+precedence: cc-prompt-iteration01.md clarifies collector same-worker done→DOWN
+versus context cross-sender job_done/DOWN. Actual CC raised the ambiguity before
+finishing that branch; CDC corrected author wording, no product defect asserted.
+Current assignment iteration01, issued to CC/root/xrepl_x21; refinement1/5 on
+execution. All8 original criteria and exact12 scope unchanged/open. No new timer,
+weaker physical credit or synthetic collector reverse-order success required.
