@@ -8,7 +8,7 @@ related: [cayrn-project01-shared-repl-architecture, project05-rust-frontend, pro
 
 # xrepl 0.2.x — migration onto Cayrn
 
-Version 2.4, 2026-10-19. Author: Sofie, current design/planning context. The
+Version 2.5, 2026-10-19. Author: Sofie, current design/planning context. The
 Operator explicitly retained this project name and approved the core migration,
 agent consolidation and LFE conversion; UX follows in a separate future project.
 This turn prepares plans/open sets, not implementation or release acceptance.
@@ -335,3 +335,12 @@ P10-12 remains open for X04 complete captured output/responsive root/formatter/
 writer ownership and serious NR-02, followed by C06 mixed composition. No later
 arc, UX, package, legacy finding or historical acceptance inferred. Source
 release/0.2.x and orphan planning remain separate; docs/design untouched.
+
+## v2.5 — complete output/ownership implementation active,2026-10-19
+
+Arc02/X04 exact12-path implementation issued after accepted X03 source7427d1c/
+planninga683721. It owns all complete stream, responsive native callback, physical
+root/formatter/writer/collector and serious NR-02 pressure/startup/unlink duties.
+Reviewed mechanisms preserve native4/public1 and existing resource policy. C06
+composition remains next after actual X04 acceptance, then formal arc gate and
+retrospective; no new arc/UX/package/release or historical acceptance authority.
