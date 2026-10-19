@@ -1,0 +1,37 @@
+[
+  {
+    "module": "cayrn_lfe_app",
+    "normalized_compiled_specs_equal": true,
+    "specs_sha256": "7bd60605e9e8aa4c34b6fdbf804d7f455f86d041edb04840a89ff007feaaf131",
+    "old_beam": "/Users/oubiwann/lab/lfe/cayrn-lfe/_build/default/lib/cayrn_lfe/ebin/cayrn_lfe_app.beam",
+    "new_beam": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/ebin/cayrn_lfe_app.beam"
+  },
+  {
+    "module": "cayrn_lfe_sup",
+    "normalized_compiled_specs_equal": true,
+    "specs_sha256": "46ae2f5a27d7b95d3525508d67a2535a42a99c5bc216092c5422af776a039e79",
+    "old_beam": "/Users/oubiwann/lab/lfe/cayrn-lfe/_build/default/lib/cayrn_lfe/ebin/cayrn_lfe_sup.beam",
+    "new_beam": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/ebin/cayrn_lfe_sup.beam"
+  },
+  {
+    "module": "cayrn_lfe_listener",
+    "normalized_compiled_specs_equal": true,
+    "specs_sha256": "c4910f63f2df08f5857ec0f75580ee486c506e857bf3de93d3cff8b377c8fc77",
+    "old_beam": "/Users/oubiwann/lab/lfe/cayrn-lfe/_build/default/lib/cayrn_lfe/ebin/cayrn_lfe_listener.beam",
+    "new_beam": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/ebin/cayrn_lfe_listener.beam"
+  },
+  {
+    "module": "cayrn_lfe_io",
+    "normalized_compiled_specs_equal": true,
+    "specs_sha256": "fe583b49f6adecbca3db90bad368defa1fe65e4f58a5baa8fc5e53b02015ed9b",
+    "old_beam": "/Users/oubiwann/lab/lfe/cayrn-lfe/_build/default/lib/cayrn_lfe/ebin/cayrn_lfe_io.beam",
+    "new_beam": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/ebin/cayrn_lfe_io.beam"
+  },
+  {
+    "module": "cayrn_lfe_context",
+    "normalized_compiled_specs_equal": true,
+    "specs_sha256": "c354ebcd9443f21ab0f7475d6c19ce1304a2f1460f9b8d091d256cdb0d68d5f8",
+    "old_beam": "/Users/oubiwann/lab/lfe/cayrn-lfe/_build/default/lib/cayrn_lfe/ebin/cayrn_lfe_context.beam",
+    "new_beam": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/ebin/cayrn_lfe_context.beam"
+  }
+]

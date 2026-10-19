@@ -1,0 +1,83 @@
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C apps/cayrn_lfe build REBAR="rebar3"
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_app.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling src/cayrn_lfe_io.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Failed to compile /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_app.lfe
+===> Failed to compile /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_sup.lfe
+===> Nested Errors: [{error,
+                         [{"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_app.lfe",
+                           [{6,lfe_lint,
+                             {bad_type_def,
+                                 [[quote,'UNION'],
+                                  [tuple,[quote,ok],[pid]],
+                                  [tuple,[quote,error],[term]]]}}]}],
+                         []}]
+===> Nested Errors: [{error,
+                         [{"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_sup.lfe",
+                           [{27,lfe_lint,
+                             {bad_type_def,
+                                 [[quote,'UNION'],
+                                  [tuple,[quote,ok],[pid]],
+                                  [tuple,[quote,error],[term]]]}}]}],
+                         []}]
+===> Failed to compile /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_listener.lfe
+===> Nested Errors: [{error,
+                         [{"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_listener.lfe",
+                           [{7,lfe_lint,
+                             {bad_type_def,
+                                 [[quote,'UNION'],
+                                  [tuple,[quote,ok],[pid]],
+                                  [tuple,[quote,error],[term]]]}},
+                            {14,lfe_lint,
+                             {bad_type_def,
+                                 [[quote,'UNION'],
+                                  [tuple,[quote,ok],[map]],
+                                  [tuple,[quote,stop],[term]]]}},
+                            {70,lfe_lint,{bad_form,'match-lambda'}},
+                            {2,lfe_lint,{undefined_function,{terminate,2}}}]}],
+                         []}]
+===> Failed to compile /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_context.lfe
+===> Nested Errors: [{error,
+                         [{"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_context.lfe",
+                           [{7,lfe_lint,
+                             {bad_type_def,
+                                 [[quote,'UNION'],
+                                  [tuple,[quote,ok],[pid]],
+                                  [tuple,[quote,error],[term]]]}},
+                            {25,lfe_lint,
+                             {bad_type_def,
+                                 [[quote,'UNION'],
+                                  [tuple,[quote,noreply],[map]],
+                                  [tuple,[quote,noreply],[map],[timeout]],
+                                  [tuple,[quote,stop],[term],[map]]]}},
+                            {30,lfe_lint,
+                             {undefined_function,{'send-event',2}}},
+                            {30,lfe_lint,
+                             {undefined_function,{'send-event',2}}},
+                            {30,lfe_lint,
+                             {undefined_function,{'send-event',2}}},
+                            {30,lfe_lint,
+                             {undefined_function,{'send-event',2}}},
+                            {95,lfe_lint,
+                             {undefined_function,{'send-event',2}}},
+                            {95,lfe_lint,
+                             {undefined_function,{'send-event',2}}},
+                            {173,lfe_lint,
+                             {undefined_function,{'send-event',2}}},
+                            {173,lfe_lint,
+                             {undefined_function,{'send-event',2}}},
+                            {205,lfe_lint,{unbound_symbol,data}},
+                            {205,lfe_lint,bad_head_arity},
+                            {205,lfe_lint,{illegal_pattern,'gen_tcp:send'}},
+                            {205,lfe_lint,{unbound_symbol,socket}},
+                            {205,lfe_lint,{unbound_symbol,data}}]}],
+                         []}]
+===> Compiling src/cayrn_lfe_app.lfe failed
+/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_app.lfe:6: bad ((quote UNION) (tuple (quote ok) (pid)) (tuple (quote error) (term))) type definition
+make[1]: *** [build] Error 1
+make: *** [build-agent] Error 2

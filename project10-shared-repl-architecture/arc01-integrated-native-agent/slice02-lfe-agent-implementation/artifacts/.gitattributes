@@ -1,0 +1,3 @@
+# Preserve literal command output and unified diff context.
+logs/*.log -whitespace
+source-candidate.patch -whitespace

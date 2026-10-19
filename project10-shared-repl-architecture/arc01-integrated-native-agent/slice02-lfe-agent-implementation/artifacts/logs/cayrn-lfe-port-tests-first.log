@@ -1,0 +1,31 @@
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C apps/cayrn_lfe check REBAR="rebar3"
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling src/cayrn_lfe_app.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling src/cayrn_lfe_io.lfe
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_app.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling src/cayrn_lfe_io.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling test/cayrn_lfe_application_tests.lfe
+===> Compiling test/cayrn_lfe_eval_tests.lfe
+===> Compiling test/cayrn_lfe_io_tests.lfe
+===> Failed to compile /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe
+===> Nested Errors: [{error,[{"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe",
+                              [{8,lfe_lint,{bad_form,'try'}},
+                               {29,lfe_lint,{bad_form,'try'}}]}],
+                            []}]
+===> Compiling test/cayrn_lfe_io_tests.lfe failed
+/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:8: bad try form
+/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe:29: bad try form
+make[1]: *** [check] Error 1
+make: *** [check-agent] Error 2

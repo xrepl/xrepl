@@ -1,0 +1,10 @@
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C apps/cayrn_lfe build REBAR="rebar3"
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_app.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling src/cayrn_lfe_io.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling cayrn_lfe

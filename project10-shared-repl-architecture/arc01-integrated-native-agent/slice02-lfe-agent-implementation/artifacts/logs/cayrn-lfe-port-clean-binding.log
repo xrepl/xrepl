@@ -1,0 +1,9 @@
+   Compiling cayrn-cli v0.1.0 (/Users/oubiwann/lab/oxur/cayrn/crates/cli)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.87s
+     Running tests/native_agent.rs (target/debug/deps/native_agent-fa57ce786945b884)
+
+running 1 test
+test bindings_shared_clients_lost_reply_dedup_and_reconnect ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.62s
+

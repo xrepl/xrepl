@@ -1,0 +1,123 @@
+{
+  "base": "ea844f5e634dc1ffb2503b7d69c4726164395d82",
+  "branch": "release/0.2.x",
+  "state": "validated uncommitted candidate; source commit not requested",
+  "files": [
+    {
+      "path": "README.md",
+      "state": "present",
+      "sha256": "a0071a21266a0f3537e310f165990946175f9b5dc9176e15e4b5389e92bd68b8",
+      "mode": "100644"
+    },
+    {
+      "path": "apps/cayrn_lfe/README.md",
+      "state": "present",
+      "sha256": "f6312d304a54ef4734fe82cdd9db95c49db253d696c1e137bb23b92b51d03659",
+      "mode": "100644"
+    },
+    {
+      "path": "apps/cayrn_lfe/AGENTS.md",
+      "state": "present",
+      "sha256": "f84f6dc186e7535bff9417f2cd9441488ff233b0ab5c149383ddbd38310b4e92",
+      "mode": "100644"
+    },
+    {
+      "path": "apps/cayrn_lfe/src/cayrn_lfe_app.erl",
+      "state": "deleted",
+      "sha256": null,
+      "mode": null
+    },
+    {
+      "path": "apps/cayrn_lfe/src/cayrn_lfe_app.lfe",
+      "state": "present",
+      "sha256": "c3611e97ca32bc16fc9a39e945fcb1bfdf56ef39bbc760034e97f91d666b1f24",
+      "mode": "100644"
+    },
+    {
+      "path": "apps/cayrn_lfe/src/cayrn_lfe_sup.erl",
+      "state": "deleted",
+      "sha256": null,
+      "mode": null
+    },
+    {
+      "path": "apps/cayrn_lfe/src/cayrn_lfe_sup.lfe",
+      "state": "present",
+      "sha256": "603ce74dfb191bbd0d55c88a7f6f24e112a31007e75c949344200e38a4364914",
+      "mode": "100644"
+    },
+    {
+      "path": "apps/cayrn_lfe/src/cayrn_lfe_listener.erl",
+      "state": "deleted",
+      "sha256": null,
+      "mode": null
+    },
+    {
+      "path": "apps/cayrn_lfe/src/cayrn_lfe_listener.lfe",
+      "state": "present",
+      "sha256": "9980e62f9c2ce02779dbc8b4e3891b9f7dda9285cdcfd40e85ec3b1ddf618bf5",
+      "mode": "100644"
+    },
+    {
+      "path": "apps/cayrn_lfe/src/cayrn_lfe_io.erl",
+      "state": "deleted",
+      "sha256": null,
+      "mode": null
+    },
+    {
+      "path": "apps/cayrn_lfe/src/cayrn_lfe_io.lfe",
+      "state": "present",
+      "sha256": "00d8a452e10d1b2e7ddf13d56720ee2dd376f405a244ca9fb94669e52bcd82f5",
+      "mode": "100644"
+    },
+    {
+      "path": "apps/cayrn_lfe/src/cayrn_lfe_context.erl",
+      "state": "deleted",
+      "sha256": null,
+      "mode": null
+    },
+    {
+      "path": "apps/cayrn_lfe/src/cayrn_lfe_context.lfe",
+      "state": "present",
+      "sha256": "76daa8d3022596eccaed1a90cd7f9e917fe0449dd66ba0164c22bbb04ead8b61",
+      "mode": "100644"
+    },
+    {
+      "path": "apps/cayrn_lfe/test/cayrn_lfe_eval_tests.erl",
+      "state": "deleted",
+      "sha256": null,
+      "mode": null
+    },
+    {
+      "path": "apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe",
+      "state": "present",
+      "sha256": "1b3e2294625b6ab248a81e7e71d1c1085e8f74f9f2162a455599cb8bc59b4255",
+      "mode": "100644"
+    },
+    {
+      "path": "apps/cayrn_lfe/test/cayrn_lfe_io_tests.erl",
+      "state": "deleted",
+      "sha256": null,
+      "mode": null
+    },
+    {
+      "path": "apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe",
+      "state": "present",
+      "sha256": "5c1dbdae698f3f8cc629e83857893e06e06f494fd14cb3093cd5fbbfac131e0d",
+      "mode": "100644"
+    },
+    {
+      "path": "apps/cayrn_lfe/test/cayrn_lfe_application_tests.erl",
+      "state": "deleted",
+      "sha256": null,
+      "mode": null
+    },
+    {
+      "path": "apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe",
+      "state": "present",
+      "sha256": "8b246f2e88b1d40247f9390d426dc501ac93134941ed3aa17f77a3f60b47d2af",
+      "mode": "100644"
+    }
+  ],
+  "patch_sha256": "7c5f6e7a48a35ef228fd94071133f19a084a36926ad7c0020f8b93714fb4982f",
+  "excluded": "Pre-existing untracked docs/design/; all build products"
+}

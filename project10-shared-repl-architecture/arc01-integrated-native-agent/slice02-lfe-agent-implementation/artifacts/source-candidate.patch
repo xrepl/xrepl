@@ -1,0 +1,1064 @@
+diff --git a/README.md b/README.md
+index 7d5703c..2f03974 100644
+--- a/README.md
++++ b/README.md
+@@ -27,8 +27,8 @@ application and LFE, and accepts a single socket argument. Starting legacy
+ `xrepl` does not automatically start the agent. See the component README for
+ Cayrn host startup and current limits: 256 operations per context, 8KiB
+ source/output/value previews, no program input or live-state restoration.
+-This first import preserves the Erlang/LFE prototype; conversion to LFE and
+-resource/size hardening follow separately. The native app remains 0.1.0 within
++The native OTP implementation and its tests are now written in LFE, preserving
++the prototype contract. Resource/size hardening follows separately. The native app remains 0.1.0 within
+ xrepl's 0.2.0 development branch. Nothing new is published.
+ 
+ ##### Table of Contents
+diff --git a/apps/cayrn_lfe/AGENTS.md b/apps/cayrn_lfe/AGENTS.md
+index d70bf44..b6c2ed8 100644
+--- a/apps/cayrn_lfe/AGENTS.md
++++ b/apps/cayrn_lfe/AGENTS.md
+@@ -6,11 +6,17 @@ independently startable OTP application. Rust Cayrn owns durable session policy;
+ this component owns live LFE contexts, capture and native control only.
+ 
+ Imported from cayrn-lfe 1b04c15ac325731aab68a7491d23e4a9fecaa47a with its license.
+-The first slice preserves source/test/config/launcher semantics and bytes; the
+-LFE conversion and resource/size fixes are later work. Do not add legacy xrepl
++The first slice preserved pinned source/test bytes. Slice02 converts all five
++OTP runtime modules and three native test modules to LFE while preserving
++semantics and metadata/launcher identities. Resource/size fixes are later work. Do not add legacy xrepl
+ services to the startup dependency graph. No automatic replay after runtime loss.
+ Use make build/check here or root make build-agent/check-agent. Keep planning
+ records in the planning worktree and preserve the standalone predecessor.
+ Follow root AGENTS.md, OTP guidance and the Operator-selected LFE style guide
+ when editing language implementation. Self-review is attested, not independent.
+ Assistant-authored commits require the root planning Codex/Billo AI trailers.
++
++All seven native cases must be discovered by make check. The I/O companion
++suite includes evaluator/application tests explicitly because Rebar's default
++EUnit discovery does not enumerate all LFE test source files. Preserve declared
++callback/test names and classify LFE compiler-generated exports separately.
+diff --git a/apps/cayrn_lfe/README.md b/apps/cayrn_lfe/README.md
+index e070a4b..b2c0baf 100644
+--- a/apps/cayrn_lfe/README.md
++++ b/apps/cayrn_lfe/README.md
+@@ -2,15 +2,16 @@
+ 
+ Imported into xrepl on 2026-10-18 from standalone cayrn-lfe
+ `1b04c15ac325731aab68a7491d23e4a9fecaa47a` under its included Apache-2.0 license.
+-This README adapts the component home; implementation/tests remain unchanged.
++The import preserved the prototype. Its five OTP runtime modules and three native
++test modules are now written in LFE, preserving the native contract.
+ 
+ Reusable thin LFE/OTP runtime agent for Cayrn. The Rust host owns session policy,
+ durable admission, journals and replay; this application owns native evaluator
+ contexts and I/O. It depends on LFE, not xrepl. No Rust crate is required here.
+ 
+ Requires OTP 27+ (built-in JSON), rebar3, and LFE 2.2.0 (resolved by rebar3).
+-Initially exercised on OTP 28. Native LFE semantics are in `cayrn-lfe-eval.lfe`;
+-small Erlang/OTP modules provide supervision, socket control and native I/O.
++Initially exercised on OTP 28. The existing `cayrn-lfe-eval.lfe` supplies evaluator
++semantics; the LFE OTP modules provide supervision, socket control and native I/O.
+ 
+ ```sh
+ cd apps/cayrn_lfe # from the xrepl checkout
+@@ -106,3 +107,9 @@ For Cayrn's real native/terminal tests, explicitly set `CAYRN_LFE_DIR` to this
+ `apps/cayrn_lfe` directory and `XREPL_BIN` to the built xrepl Rust binary.
+ The independent app startup test complements the six preserved evaluator/I/O
+ tests; it does not claim that resource limits or oversized previews are fixed.
++
++The LFE EUnit companion module explicitly includes the evaluator and application
++test modules, so component-only `make check` executes all seven native cases.
++Callback/module names retain underscores for OTP and wire compatibility; new
++private helpers use LFE conventions. Resource budgets and oversized-value
++behavior remain unchanged pending deliberate hardening.
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_app.erl b/apps/cayrn_lfe/src/cayrn_lfe_app.erl
+deleted file mode 100644
+index cfbad09..0000000
+--- a/apps/cayrn_lfe/src/cayrn_lfe_app.erl
++++ /dev/null
+@@ -1,7 +0,0 @@
+--module(cayrn_lfe_app).
+--behaviour(application).
+--export([start/2, stop/1]).
+--spec start(application:start_type(), term()) -> {ok, pid()} | {error, term()}.
+-start(_, _) -> cayrn_lfe_sup:start_link().
+--spec stop(term()) -> ok.
+-stop(_) -> ok.
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_context.erl b/apps/cayrn_lfe/src/cayrn_lfe_context.erl
+deleted file mode 100644
+index 9839d63..0000000
+--- a/apps/cayrn_lfe/src/cayrn_lfe_context.erl
++++ /dev/null
+@@ -1,146 +0,0 @@
+-%% A connection owns one live execution context; client attachments end at Rust.
+--module(cayrn_lfe_context).
+--behaviour(gen_server).
+--export([start_link/1, init/1, handle_info/2, handle_call/3, handle_cast/2, terminate/2]).
+--spec start_link(port()) -> {ok, pid()} | {error, term()}.
+-start_link(Socket) -> gen_server:start_link(?MODULE, Socket, []).
+--spec init(port()) -> {ok, map(), timeout()}.
+-init(Socket) ->
+-    process_flag(trap_exit, true),
+-    {ok, #{socket => Socket, identity => undefined, env => 'cayrn-lfe-eval':new(),
+-        active => undefined, seen => #{}, ios => [], pending => #{}, seq => 0, closing => undefined}, 5000}.
+--spec handle_info(term(), map()) -> {noreply, map()} | {noreply, map(), timeout()} | {stop, term(), map()}.
+-handle_info(activate, #{socket := Socket} = State) ->
+-    ok = inet:setopts(Socket, [{active, once}]),
+-    {noreply, State, 5000};
+-handle_info({tcp, Socket, Binary}, #{socket := Socket} = State) ->
+-    try command(json:decode(Binary), State) of
+-        {continue, Next} ->
+-            ok = inet:setopts(Socket, [{active, once}]), {noreply, Next};
+-        {stop, Next} -> {stop, normal, Next}
+-    catch _:_ -> {stop, invalid_agent_command, State} end;
+-handle_info({capture, From, Ref, Op, Text}, State) ->
+-    Pending = maps:get(pending, State),
+-    case map_size(Pending) < 64 of
+-        true ->
+-            N = maps:get(seq, State) + 1,
+-            Position = integer_to_binary(N),
+-            ok = send(State, #{kind => output, operation => Op, position => Position, text => Text}),
+-            {noreply, State#{seq => N, pending => Pending#{Position => {From, Ref}}}};
+-        false ->
+-            From ! {io_reply, Ref, {error, enobufs}},
+-            {stop, capture_overflow, State}
+-    end;
+-handle_info({evaluated, Pid, Op, Status, Text, Env}, #{active := {Pid, Mon, Op}} = State) ->
+-    erlang:demonitor(Mon, [flush]),
+-    true = byte_size(Text) =< 8192,
+-    ok = send(State, #{kind => outcome, operation => Op, phase => Status, value => Text}),
+-    transition(progress(State#{active => undefined, env => Env}));
+-handle_info({'DOWN', Mon, process, Pid, _Reason}, #{active := {Pid, Mon, Op}, closing := Mode} = State)
+-        when Mode =:= close; Mode =:= cancel ->
+-    ok = send(State, #{kind => outcome, operation => Op, phase => cancelled,
+-        value => <<"native evaluator terminated; environment discarded">>}),
+-    transition(progress(State#{active => undefined}));
+-handle_info({'DOWN', Mon, process, Pid, Reason}, #{active := {Pid, Mon, _}} = State) ->
+-    {stop, {evaluator_lost, Reason}, State};
+-handle_info({sealed, Io}, #{waiting := Waiting} = State) ->
+-    transition(progress(State#{waiting => lists:delete(Io, Waiting)}));
+-handle_info(close_timeout, #{closing := Mode} = State) when Mode =/= undefined ->
+-    ok = send(State, #{kind => lost, reason => <<"native close/interrupt incomplete: producer or capture barrier timed out">>}),
+-    {stop, normal, State};
+-handle_info({tcp_closed, _}, State) -> {stop, normal, State};
+-handle_info({tcp_error, _, Reason}, State) -> {stop, Reason, State};
+-handle_info(timeout, #{identity := undefined} = State) -> {stop, handshake_timeout, State};
+-handle_info({'EXIT', _, Reason}, State) -> {stop, {io_lost, Reason}, State};
+-handle_info(_, State) -> {noreply, State}.
+-command(#{<<"kind">> := <<"hello">>, <<"version">> := 1,
+-          <<"session">> := Sid, <<"generation">> := Gen, <<"authority">> := Authority},
+-        #{identity := undefined} = State) ->
+-    true = valid_id(Sid) andalso valid_id(Gen) andalso valid_id(Authority),
+-    true = ets:info(cayrn_lfe_contexts, size) < 4096,
+-    true = ets:insert_new(cayrn_lfe_contexts, {Sid, Gen, Authority}),
+-    ok = send(State, #{kind => ready, version => 1, backend => <<"lfe">>, interrupt => <<"session_destructive">>, close_barrier => true}),
+-    {continue, State#{identity => {Sid, Gen, Authority}}};
+-command(#{<<"kind">> := <<"dispatch">>, <<"operation">> := Op,
+-          <<"source">> := Source, <<"generation">> := Gen, <<"authority">> := Authority},
+-        #{identity := {_, Gen, Authority}, active := undefined, seen := Seen, closing := undefined} = State)
+-        when is_binary(Source), byte_size(Source) =< 8192, map_size(Seen) < 256 ->
+-    true = valid_id(Op),
+-    false = maps:is_key(Op, Seen),
+-    Owner = self(),
+-    Io = cayrn_lfe_io:start(Owner, Op),
+-    Env = maps:get(env, State),
+-    {Pid, Mon} = spawn_monitor(fun() ->
+-        receive evaluate ->
+-            {Status, Value, Next} = 'cayrn-lfe-eval':run(Source, Env),
+-            Phase = case Status of ok -> succeeded; error -> failed end,
+-            Owner ! {evaluated, self(), Op, Phase, Value, Next}
+-        end
+-    end),
+-    true = group_leader(Io, Pid),
+-    Pid ! evaluate,
+-    {continue, State#{active => {Pid, Mon, Op}, seen => Seen#{Op => true},
+-        ios => [Io | maps:get(ios, State)]}};
+-command(#{<<"kind">> := <<"ack">>, <<"position">> := Position}, State) ->
+-    {{From, Ref}, Pending} = maps:take(Position, maps:get(pending, State)),
+-    From ! {io_reply, Ref, ok},
+-    progress(State#{pending => Pending});
+-command(#{<<"kind">> := <<"close">>}, #{closing := undefined} = State) ->
+-    begin_stop(close, State);
+-command(#{<<"kind">> := <<"close">>}, State) -> {continue, State};
+-command(#{<<"kind">> := <<"cancel">>, <<"operation">> := Op},
+-        #{active := {_, _, Op}, closing := undefined} = State) -> begin_stop(cancel, State);
+-command(#{<<"kind">> := <<"cancel">>, <<"operation">> := Op},
+-        #{active := undefined, seen := Seen, closing := undefined} = State) ->
+-    case maps:is_key(Op, Seen) of
+-        true -> {continue, State};
+-        false ->
+-            ok = send(State, #{kind => lost, reason => <<"interrupt won before native dispatch; context retired">>}),
+-            {stop, State}
+-    end;
+-command(#{<<"kind">> := <<"cancel">>}, State) -> {continue, State};
+-command(#{<<"kind">> := <<"stop">>}, State) -> {stop, State};
+-command(_, _) -> error(invalid_agent_command).
+-begin_stop(Mode, State) ->
+-    _ = erlang:send_after(5000, self(), close_timeout),
+-    case maps:get(active, State) of
+-        {Pid, _, _} -> exit(Pid, kill);
+-        undefined -> ok
+-    end,
+-    progress(State#{closing => Mode}).
+-progress(#{closing := cancel, active := undefined} = State) ->
+-    ok = send(State, #{kind => lost, reason => <<"session-destructive interruption ended native context; capture tail may be uncertain">>}),
+-    {stop, State};
+-progress(#{closing := close, active := undefined} = State) ->
+-    case maps:find(waiting, State) of
+-        error ->
+-            Io = maps:get(ios, State),
+-            lists:foreach(fun(Pid) -> Pid ! {seal, self()} end, Io),
+-            progress(State#{waiting => Io});
+-        {ok, []} ->
+-            case map_size(maps:get(pending, State)) of
+-                0 -> ok = send(State, #{kind => closed}), {stop, State};
+-                _ -> {continue, State}
+-            end;
+-        _ -> {continue, State}
+-    end;
+-progress(State) -> {continue, State}.
+-transition({continue, State}) -> {noreply, State};
+-transition({stop, State}) -> {stop, normal, State}.
+-valid_id(Id) when is_binary(Id), byte_size(Id) > 0, byte_size(Id) =< 128 ->
+-    re:run(Id, <<"^[A-Za-z0-9_-]+$">>, [{capture, none}]) =:= match;
+-valid_id(_) -> false.
+-send(#{socket := Socket}, Data) -> gen_tcp:send(Socket, json:encode(Data)).
+--spec handle_call(term(), gen_server:from(), map()) -> {reply, term(), map()}.
+-handle_call(_, _, State) -> {reply, {error, unsupported}, State}.
+--spec handle_cast(term(), map()) -> {noreply, map()}.
+-handle_cast(_, State) -> {noreply, State}.
+--spec terminate(term(), map()) -> ok.
+-terminate(_, State) ->
+-    case maps:get(active, State) of
+-        {Pid, _, _} -> exit(Pid, kill);
+-        undefined -> ok
+-    end,
+-    lists:foreach(fun(Pid) -> exit(Pid, kill) end, maps:get(ios, State)),
+-    gen_tcp:close(maps:get(socket, State)),
+-    ok.
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_io.erl b/apps/cayrn_lfe/src/cayrn_lfe_io.erl
+deleted file mode 100644
+index 8c7cc04..0000000
+--- a/apps/cayrn_lfe/src/cayrn_lfe_io.erl
++++ /dev/null
+@@ -1,38 +0,0 @@
+-%% One immutable operation attribution per I/O server, including late writers.
+--module(cayrn_lfe_io).
+--export([start/2, loop/2]).
+--spec start(pid(), binary()) -> pid().
+-start(Owner, Operation) -> spawn_link(?MODULE, loop, [Owner, Operation]).
+--spec loop(pid(), binary()) -> no_return().
+-loop(Owner, Operation) -> loop(Owner, Operation, false).
+-loop(Owner, Operation, Closed) ->
+-    receive
+-        {seal, Owner} ->
+-            Owner ! {sealed, self()},
+-            loop(Owner, Operation, true);
+-        {io_request, From, Ref, _} when Closed ->
+-            From ! {io_reply, Ref, {error, terminated}},
+-            loop(Owner, Operation, Closed);
+-        {io_request, From, Ref, Request} ->
+-            case output(Request) of
+-                {ok, Text} when byte_size(Text) =< 8192 ->
+-                    Owner ! {capture, From, Ref, Operation, Text};
+-                {ok, _} -> From ! {io_reply, Ref, {error, emsgsize}};
+-                {error, Reason} -> From ! {io_reply, Ref, {error, Reason}}
+-            end,
+-            loop(Owner, Operation, Closed);
+-        _ -> loop(Owner, Operation, Closed)
+-    end.
+-output({put_chars, Encoding, Text}) -> text(Text, Encoding);
+-output({put_chars, Text}) -> text(Text, unicode);
+-output({put_chars, Encoding, Module, Function, Args}) ->
+-    try text(apply(Module, Function, Args), Encoding)
+-    catch _:_ -> {error, badarg} end;
+-output({put_chars, Module, Function, Args}) ->
+-    output({put_chars, unicode, Module, Function, Args});
+-output(_) -> {error, enotsup}.
+-text(Text, Encoding) ->
+-    try unicode:characters_to_binary(Text, Encoding, utf8) of
+-        Binary when is_binary(Binary) -> {ok, Binary};
+-        _ -> {error, badarg}
+-    catch _:_ -> {error, badarg} end.
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_listener.erl b/apps/cayrn_lfe/src/cayrn_lfe_listener.erl
+deleted file mode 100644
+index 8137eae..0000000
+--- a/apps/cayrn_lfe/src/cayrn_lfe_listener.erl
++++ /dev/null
+@@ -1,50 +0,0 @@
+--module(cayrn_lfe_listener).
+--behaviour(gen_server).
+--export([start_link/0, init/1, handle_info/2, handle_call/3, handle_cast/2, terminate/2]).
+--spec start_link() -> {ok, pid()} | {error, term()}.
+-start_link() -> gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
+--spec init([]) -> {ok, map()} | {stop, term()}.
+-init([]) ->
+-    _ = ets:new(cayrn_lfe_contexts, [named_table, public, set, {write_concurrency, true}]),
+-    {ok, Path} = application:get_env(cayrn_lfe, socket),
+-    case gen_tcp:listen(0, [binary, {active, false}, {packet, 4},
+-            {packet_size, 262144}, {ifaddr, {local, Path}}, {backlog, 64}]) of
+-        {ok, Socket} ->
+-            ok = file:change_mode(Path, 8#600),
+-            self() ! accept,
+-            {ok, #{socket => Socket, path => Path}};
+-        Error -> {stop, Error}
+-    end.
+--spec handle_info(term(), map()) -> {noreply, map()}.
+-handle_info(accept, #{socket := Listener} = State) ->
+-    case gen_tcp:accept(Listener, 100) of
+-        {ok, Socket} ->
+-            case supervisor:count_children(cayrn_lfe_sup) of
+-                Counts ->
+-                    case proplists:get_value(active, Counts) =< 64 of
+-                        true ->
+-                            case cayrn_lfe_sup:context(Socket) of
+-                                {ok, Pid} ->
+-                                    ok = gen_tcp:controlling_process(Socket, Pid),
+-                                    Pid ! activate;
+-                                _ -> gen_tcp:close(Socket)
+-                            end;
+-                        false -> gen_tcp:close(Socket)
+-                    end
+-            end;
+-        {error, timeout} -> ok;
+-        {error, closed} -> exit(listener_closed);
+-        {error, Reason} -> exit(Reason)
+-    end,
+-    self() ! accept,
+-    {noreply, State};
+-handle_info(_, State) -> {noreply, State}.
+--spec handle_call(term(), gen_server:from(), map()) -> {reply, term(), map()}.
+-handle_call(_, _, State) -> {reply, {error, unsupported}, State}.
+--spec handle_cast(term(), map()) -> {noreply, map()}.
+-handle_cast(_, State) -> {noreply, State}.
+--spec terminate(term(), map()) -> ok.
+-terminate(_, #{socket := Socket, path := Path}) ->
+-    gen_tcp:close(Socket),
+-    _ = file:delete(Path),
+-    ok.
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_sup.erl b/apps/cayrn_lfe/src/cayrn_lfe_sup.erl
+deleted file mode 100644
+index f79d7c1..0000000
+--- a/apps/cayrn_lfe/src/cayrn_lfe_sup.erl
++++ /dev/null
+@@ -1,15 +0,0 @@
+--module(cayrn_lfe_sup).
+--behaviour(supervisor).
+--export([start_link/0, init/1, context/1]).
+--spec start_link() -> {ok, pid()} | {error, term()}.
+-start_link() -> supervisor:start_link({local, ?MODULE}, ?MODULE, []).
+--spec context(port()) -> supervisor:startchild_ret().
+-context(Socket) ->
+-    supervisor:start_child(?MODULE, #{id => make_ref(),
+-        start => {cayrn_lfe_context, start_link, [Socket]},
+-        restart => temporary, shutdown => 2000}).
+--spec init([]) -> {ok, {supervisor:sup_flags(), [supervisor:child_spec()]}}.
+-init([]) ->
+-    {ok, {#{strategy => one_for_all, intensity => 3, period => 10},
+-        [#{id => cayrn_lfe_listener, start => {cayrn_lfe_listener, start_link, []},
+-           restart => permanent, shutdown => 2000}]}}.
+diff --git a/apps/cayrn_lfe/test/cayrn_lfe_application_tests.erl b/apps/cayrn_lfe/test/cayrn_lfe_application_tests.erl
+deleted file mode 100644
+index 4028f19..0000000
+--- a/apps/cayrn_lfe/test/cayrn_lfe_application_tests.erl
++++ /dev/null
+@@ -1,38 +0,0 @@
+-%% Isolate the startup oracle from services started by the legacy test suite.
+--module(cayrn_lfe_application_tests).
+--include_lib("eunit/include/eunit.hrl").
+--include_lib("kernel/include/file.hrl").
+-
+-independent_application_start_test_() ->
+-    {timeout, 30, fun independent_application_start/0}.
+-
+-independent_application_start() ->
+-    Dir = filename:join("/private/tmp", "cayrn-app-" ++ os:getpid() ++ "-" ++
+-        integer_to_list(erlang:unique_integer([positive, monotonic]))),
+-    ok = file:make_dir(Dir),
+-    ok = file:change_mode(Dir, 8#700),
+-    Socket = filename:join(Dir, "agent socket.sock"),
+-    try
+-        %% Standard I/O control requires neither distribution nor a live user node.
+-        {ok, Peer, _Node} = peer:start_link(#{connection => standard_io,
+-            args => ["-pa" | code:get_path()]}),
+-        try
+-            ok = peer:call(Peer, application, load, [cayrn_lfe]),
+-            ok = peer:call(Peer, application, set_env, [cayrn_lfe, socket, Socket]),
+-            {ok, _} = peer:call(Peer, application, ensure_all_started, [cayrn_lfe]),
+-            Running = [App || {App, _, _} <-
+-                peer:call(Peer, application, which_applications, [])],
+-            ?assert(lists:member(cayrn_lfe, Running)),
+-            ?assert(lists:member(lfe, Running)),
+-            lists:foreach(fun(App) -> ?assertNot(lists:member(App, Running)) end,
+-                [xrepl, ranch, xrepl_protocol, xrepl_term]),
+-            {ok, Info} = file:read_file_info(Socket),
+-            ?assertEqual(other, Info#file_info.type),
+-            ?assertEqual(8#600, Info#file_info.mode band 8#777)
+-        after
+-            peer:stop(Peer)
+-        end
+-    after
+-        file:delete(Socket),
+-        file:del_dir(Dir)
+-    end.
+diff --git a/apps/cayrn_lfe/test/cayrn_lfe_eval_tests.erl b/apps/cayrn_lfe/test/cayrn_lfe_eval_tests.erl
+deleted file mode 100644
+index 8424a56..0000000
+--- a/apps/cayrn_lfe/test/cayrn_lfe_eval_tests.erl
++++ /dev/null
+@@ -1,20 +0,0 @@
+--module(cayrn_lfe_eval_tests).
+--include_lib("eunit/include/eunit.hrl").
+-
+-persistent_bindings_test() ->
+-    Env='cayrn-lfe-eval':new(),
+-    {ok, <<"41">>, Next}='cayrn-lfe-eval':run(<<"(set x 41)">>, Env),
+-    {ok, <<"42">>, _}='cayrn-lfe-eval':run(<<"(+ x 1)">>, Next).
+-
+-errors_preserve_committed_environment_test() ->
+-    {ok, _, Env}='cayrn-lfe-eval':run(<<"(set x 41)">>, 'cayrn-lfe-eval':new()),
+-    {error, _, Env}='cayrn-lfe-eval':run(<<"(/ 1 0)">>, Env),
+-    {error, _, Env}='cayrn-lfe-eval':run(<<"(">>, Env),
+-    {ok, <<"41">>, _}='cayrn-lfe-eval':run(<<"x">>, Env).
+-
+-functions_and_macro_context_test() ->
+-    {ok, _, Env}='cayrn-lfe-eval':run(<<"(defun inc (x) (+ x 1))">>, 'cayrn-lfe-eval':new()),
+-    {ok, <<"42">>, _}='cayrn-lfe-eval':run(<<"(inc 41)">>, Env).
+-
+-ordinary_error_atom_is_a_value_test() ->
+-    {ok, <<"error">>, _}='cayrn-lfe-eval':run(<<"'error">>, 'cayrn-lfe-eval':new()).
+diff --git a/apps/cayrn_lfe/test/cayrn_lfe_io_tests.erl b/apps/cayrn_lfe/test/cayrn_lfe_io_tests.erl
+deleted file mode 100644
+index 269ef75..0000000
+--- a/apps/cayrn_lfe/test/cayrn_lfe_io_tests.erl
++++ /dev/null
+@@ -1,29 +0,0 @@
+--module(cayrn_lfe_io_tests).
+--include_lib("eunit/include/eunit.hrl").
+-
+-capture_requires_owner_ack_test() ->
+-    Io=cayrn_lfe_io:start(self(), <<"operation">>),
+-    Ref=make_ref(),
+-    try
+-        Io ! {io_request, self(), Ref, {put_chars, unicode, <<"hello">>}},
+-        receive {capture, From, Ref, <<"operation">>, <<"hello">>} -> ?assertEqual(self(), From)
+-        after 1000 -> error(missing_capture) end,
+-        receive {io_reply, Ref, _} -> error(false_native_ack)
+-        after 20 -> ok end
+-    after unlink(Io), exit(Io, kill) end.
+-
+-seal_orders_prior_capture_and_rejects_late_writes_test() ->
+-    Io=cayrn_lfe_io:start(self(), <<"origin">>),
+-    Ref=make_ref(),
+-    try
+-        Io ! {io_request, self(), Ref, {put_chars, unicode, <<"before">>}},
+-        Io ! {seal, self()},
+-        receive First -> ?assertMatch({capture, _, Ref, <<"origin">>, <<"before">>}, First)
+-        after 1000 -> error(missing_capture) end,
+-        receive Second -> ?assertEqual({sealed, Io}, Second)
+-        after 1000 -> error(missing_seal) end,
+-        Later=make_ref(),
+-        Io ! {io_request, self(), Later, {put_chars, unicode, <<"after">>}},
+-        receive {io_reply, Later, Reply} -> ?assertEqual({error, terminated}, Reply)
+-        after 1000 -> error(missing_late_rejection) end
+-    after unlink(Io), exit(Io, kill) end.
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_app.lfe b/apps/cayrn_lfe/src/cayrn_lfe_app.lfe
+new file mode 100644
+--- /dev/null
++++ b/apps/cayrn_lfe/src/cayrn_lfe_app.lfe
+@@ -0,0 +1,18 @@
++;;;; Native Cayrn application boundary.
++(defmodule cayrn_lfe_app
++  (behaviour application)
++  (export (start 2) (stop 1)))
++
++(defspec (start 2)
++  (((call 'application 'start_type) (term))
++   (UNION (tuple 'ok (pid)) (tuple 'error (term)))))
++
++(defun start (_type _args)
++  "Start the native supervision tree without legacy xrepl services."
++  (cayrn_lfe_sup:start_link))
++
++(defspec (stop 1) (((term)) 'ok))
++
++(defun stop (_state)
++  "Finish application shutdown after the supervision tree stops."
++  'ok)
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_sup.lfe b/apps/cayrn_lfe/src/cayrn_lfe_sup.lfe
+new file mode 100644
+--- /dev/null
++++ b/apps/cayrn_lfe/src/cayrn_lfe_sup.lfe
+@@ -0,0 +1,32 @@
++;;;; Supervision for the listener and disposable native contexts.
++(defmodule cayrn_lfe_sup
++  (behaviour supervisor)
++  (export (context 1) (init 1) (start_link 0)))
++
++(defspec (context 1) (((port)) (call 'supervisor 'startchild_ret)))
++
++(defun context (socket)
++  "Start a temporary context; a failed environment is never restarted."
++  (supervisor:start_child (MODULE)
++    (map 'id (make_ref)
++         'start (tuple 'cayrn_lfe_context 'start_link (list socket))
++         'restart 'temporary 'shutdown 2000)))
++
++(defspec (init 1)
++  (((nil)) (tuple 'ok (tuple (call 'supervisor 'sup_flags)
++                             (list (call 'supervisor 'child_spec))))))
++
++(defun init (_args)
++  "Keep the listener and its contexts in the same failure domain."
++  (tuple 'ok
++    (tuple (map 'strategy 'one_for_all 'intensity 3 'period 10)
++      (list (map 'id 'cayrn_lfe_listener
++                 'start (tuple 'cayrn_lfe_listener 'start_link '())
++                 'restart 'permanent 'shutdown 2000)))))
++
++(defspec (start_link 0)
++  (() (UNION (tuple 'ok (pid)) (tuple 'error (term)))))
++
++(defun start_link ()
++  "Start the registered native supervisor."
++  (supervisor:start_link (tuple 'local (MODULE)) (MODULE) '()))
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_listener.lfe b/apps/cayrn_lfe/src/cayrn_lfe_listener.lfe
+new file mode 100644
+--- /dev/null
++++ b/apps/cayrn_lfe/src/cayrn_lfe_listener.lfe
+@@ -0,0 +1,75 @@
++;;;; Private socket listener; Rust remains the durable session authority.
++(defmodule cayrn_lfe_listener
++  (behaviour gen_server)
++  (export (handle_call 3) (handle_cast 2) (handle_info 2)
++          (init 1) (start_link 0) (terminate 2)))
++
++(defspec (start_link 0)
++  (() (UNION (tuple 'ok (pid)) (tuple 'error (term)))))
++
++(defun start_link ()
++  "Start the registered native socket listener."
++  (gen_server:start_link (tuple 'local (MODULE)) (MODULE) '() '()))
++
++(defspec (init 1)
++  (((nil)) (UNION (tuple 'ok (map)) (tuple 'stop (term)))))
++
++(defun init (_args)
++  "Create the native identity guard and private framed Unix listener."
++  (ets:new 'cayrn_lfe_contexts
++    '(named_table public set #(write_concurrency true)))
++  (let (((tuple 'ok path) (application:get_env 'cayrn_lfe 'socket)))
++    (case (gen_tcp:listen 0
++            (list 'binary '#(active false) '#(packet 4)
++                  '#(packet_size 262144) (tuple 'ifaddr (tuple 'local path))
++                  '#(backlog 64)))
++      ((tuple 'ok socket)
++       (let (('ok (file:change_mode path #o600)))
++         (! (self) 'accept)
++         (tuple 'ok (map 'socket socket 'path path))))
++      (error (tuple 'stop error)))))
++
++(defspec (handle_info 2) (((term) (map)) (tuple 'noreply (map))))
++
++(defun handle_info
++  "Accept bounded contexts and transfer socket ownership before activation."
++  (('accept (= (map 'socket listener) state))
++   (case (gen_tcp:accept listener 100)
++     ((tuple 'ok socket)
++      (let ((counts (supervisor:count_children 'cayrn_lfe_sup)))
++        (if (=< (proplists:get_value 'active counts) 64)
++          (case (cayrn_lfe_sup:context socket)
++            ((tuple 'ok pid)
++             (let (('ok (gen_tcp:controlling_process socket pid)))
++               (! pid 'activate)))
++            (_ (gen_tcp:close socket)))
++          (gen_tcp:close socket))))
++     ((tuple 'error 'timeout) 'ok)
++     ((tuple 'error 'closed) (exit 'listener_closed))
++     ((tuple 'error reason) (exit reason)))
++   (! (self) 'accept)
++   (tuple 'noreply state))
++  ((_ state) (tuple 'noreply state)))
++
++(defspec (handle_call 3)
++  (((term) (call 'gen_server 'from) (map))
++   (tuple 'reply (term) (map))))
++
++(defun handle_call (_request _from state)
++  "Reject unsupported synchronous requests."
++  (tuple 'reply '#(error unsupported) state))
++
++(defspec (handle_cast 2) (((term) (map)) (tuple 'noreply (map))))
++
++(defun handle_cast (_request state)
++  "Ignore unsupported asynchronous requests."
++  (tuple 'noreply state))
++
++(defspec (terminate 2) (((term) (map)) 'ok))
++
++(defun terminate
++  "Release only the listener's owned endpoint."
++  ((_reason (map 'socket socket 'path path))
++   (gen_tcp:close socket)
++   (file:delete path)
++   'ok))
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_io.lfe b/apps/cayrn_lfe/src/cayrn_lfe_io.lfe
+new file mode 100644
+--- /dev/null
++++ b/apps/cayrn_lfe/src/cayrn_lfe_io.lfe
+@@ -0,0 +1,51 @@
++;;;; Immutable operation attribution, including output from late writers.
++(defmodule cayrn_lfe_io
++  (export (loop 2) (start 2)))
++
++(defspec (start 2) (((pid) (binary)) (pid)))
++
++(defun start (owner operation)
++  "Start linked capture with one immutable operation identity."
++  (spawn_link (MODULE) 'loop (list owner operation)))
++
++(defspec (loop 2) (((pid) (binary)) (no_return)))
++
++(defun loop (owner operation)
++  "Run the native I/O protocol until its owner terminates it."
++  (loop owner operation 'false))
++
++(defun loop (owner operation closed)
++  (receive
++    ((tuple 'seal incoming-owner) (when (=:= incoming-owner owner))
++     (! owner (tuple 'sealed (self)))
++     (loop owner operation 'true))
++    ((tuple 'io_request from ref _) (when (=:= closed 'true))
++     (! from (tuple 'io_reply ref (tuple 'error 'terminated)))
++     (loop owner operation closed))
++    ((tuple 'io_request from ref request)
++     (case (output request)
++       ((tuple 'ok text) (when (=< (byte_size text) 8192))
++        (! owner (tuple 'capture from ref operation text)))
++       ((tuple 'ok _)
++        (! from (tuple 'io_reply ref (tuple 'error 'emsgsize))))
++       ((tuple 'error reason)
++        (! from (tuple 'io_reply ref (tuple 'error reason)))))
++     (loop owner operation closed))
++    (_ (loop owner operation closed))))
++
++(defun output
++  (((tuple 'put_chars encoding chars)) (text chars encoding))
++  (((tuple 'put_chars chars)) (text chars 'unicode))
++  (((tuple 'put_chars encoding module function args))
++   (try (text (apply module function args) encoding)
++     (catch ((tuple _ _ _) (tuple 'error 'badarg)))))
++  (((tuple 'put_chars module function args))
++   (output (tuple 'put_chars 'unicode module function args)))
++  ((_) (tuple 'error 'enotsup)))
++
++(defun text (chars encoding)
++  (try
++    (case (unicode:characters_to_binary chars encoding 'utf8)
++      (bytes (when (is_binary bytes)) (tuple 'ok bytes))
++      (_ (tuple 'error 'badarg)))
++    (catch ((tuple _ _ _) (tuple 'error 'badarg)))))
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_context.lfe b/apps/cayrn_lfe/src/cayrn_lfe_context.lfe
+new file mode 100644
+--- /dev/null
++++ b/apps/cayrn_lfe/src/cayrn_lfe_context.lfe
+@@ -0,0 +1,232 @@
++;;;; One live native environment per Rust-owned agent connection.
++(defmodule cayrn_lfe_context
++  (behaviour gen_server)
++  (export (handle_call 3) (handle_cast 2) (handle_info 2)
++          (init 1) (start_link 1) (terminate 2)))
++
++(defspec (start_link 1)
++  (((port)) (UNION (tuple 'ok (pid)) (tuple 'error (term)))))
++
++(defun start_link (socket)
++  "Start a context on its socket; no native reconnection or replay."
++  (gen_server:start_link (MODULE) socket '()))
++
++(defspec (init 1) (((port)) (tuple 'ok (map) (timeout))))
++
++(defun init (socket)
++  "Create an opaque evaluator environment and bounded capture/control state."
++  (process_flag 'trap_exit 'true)
++  (tuple 'ok
++    (map 'socket socket 'identity 'undefined 'env (cayrn-lfe-eval:new)
++         'active 'undefined 'seen (map) 'ios '() 'pending (map)
++         'seq 0 'closing 'undefined)
++    5000))
++
++(defspec (handle_info 2)
++  (((term) (map))
++   (UNION (tuple 'noreply (map)) (tuple 'noreply (map) (timeout))
++           (tuple 'stop (term) (map)))))
++
++(defun handle_info
++  "Process native control, evaluator and capture events in mailbox order."
++  (('activate (= (map 'socket socket) state))
++   (let (('ok (inet:setopts socket '(#(active once)))))
++     (tuple 'noreply state 5000)))
++  (((tuple 'tcp socket bytes) (= (map 'socket socket) state))
++   (try
++     (case (command (json:decode bytes) state)
++       ((tuple 'continue next)
++        (let (('ok (inet:setopts socket '(#(active once)))))
++          (tuple 'noreply next)))
++       ((tuple 'stop next) (tuple 'stop 'normal next)))
++     (catch ((tuple _ _ _) (tuple 'stop 'invalid_agent_command state)))))
++  (((tuple 'capture from ref operation text) state)
++   (let ((pending (map-get state 'pending)))
++     (if (< (map_size pending) 64)
++       (let* ((n (+ (map-get state 'seq) 1))
++              (position (integer_to_binary n)))
++         (let (('ok (send-event state
++                      (map 'kind 'output 'operation operation
++                           'position position 'text text))))
++           (tuple 'noreply
++             (map-set state 'seq n
++               'pending (map-set pending position (tuple from ref))))))
++       (progn
++         (! from (tuple 'io_reply ref '#(error enobufs)))
++         (tuple 'stop 'capture_overflow state)))))
++  (((tuple 'evaluated pid operation status text env)
++    (= (map 'active (tuple pid monitor operation)) state))
++   (erlang:demonitor monitor '(flush))
++   (let* (('true (=< (byte_size text) 8192))
++         ('ok (send-event state
++                (map 'kind 'outcome 'operation operation
++                     'phase status 'value text))))
++     (transition
++       (progress (map-set state 'active 'undefined 'env env)))))
++  (((tuple 'DOWN monitor 'process pid _reason)
++    (= (map 'active (tuple pid monitor operation) 'closing mode) state))
++   (when (orelse (=:= mode 'close) (=:= mode 'cancel)))
++   (let (('ok (send-event state
++                (map 'kind 'outcome 'operation operation 'phase 'cancelled
++                     'value #b("native evaluator terminated; "
++                               "environment discarded")))))
++     (transition (progress (map-set state 'active 'undefined)))))
++  (((tuple 'DOWN monitor 'process pid reason)
++    (= (map 'active (tuple pid monitor _)) state))
++   (tuple 'stop (tuple 'evaluator_lost reason) state))
++  (((tuple 'sealed io) (= (map 'waiting waiting) state))
++   (transition
++     (progress (map-set state 'waiting (lists:delete io waiting)))))
++  (('close_timeout (= (map 'closing mode) state))
++   (when (=/= mode 'undefined))
++   (let (('ok (send-event state
++                (map 'kind 'lost
++                     'reason #b("native close/interrupt incomplete: producer "
++                                "or capture barrier timed out")))))
++     (tuple 'stop 'normal state)))
++  (((tuple 'tcp_closed _) state) (tuple 'stop 'normal state))
++  (((tuple 'tcp_error _ reason) state) (tuple 'stop reason state))
++  (('timeout (= (map 'identity 'undefined) state))
++   (tuple 'stop 'handshake_timeout state))
++  (((tuple 'EXIT _ reason) state)
++   (tuple 'stop (tuple 'io_lost reason) state))
++  ((_ state) (tuple 'noreply state)))
++
++(defun command
++  (((map #b("kind") #b("hello") #b("version") 1
++         #b("session") sid #b("generation") generation
++         #b("authority") authority)
++    (= (map 'identity 'undefined) state))
++   (let* (('true (andalso (valid-id? sid) (valid-id? generation)
++                         (valid-id? authority)))
++         ('true (< (ets:info 'cayrn_lfe_contexts 'size) 4096))
++         ('true (ets:insert_new 'cayrn_lfe_contexts
++                  (tuple sid generation authority)))
++         ('ok (send-event state
++                (map 'kind 'ready 'version 1 'backend #b("lfe")
++                     'interrupt #b("session_destructive")
++                     'close_barrier 'true))))
++     (tuple 'continue
++       (map-set state 'identity (tuple sid generation authority)))))
++  (((map #b("kind") #b("dispatch") #b("operation") operation
++         #b("source") source #b("generation") generation
++         #b("authority") authority)
++    (= (map 'identity (tuple _ generation authority)
++            'active 'undefined 'seen seen 'closing 'undefined) state))
++   (when (is_binary source) (=< (byte_size source) 8192)
++         (< (map_size seen) 256))
++   (let* (('true (valid-id? operation))
++         ('false (maps:is_key operation seen)))
++     (let* ((owner (self))
++            (io (cayrn_lfe_io:start owner operation))
++            (env (map-get state 'env))
++            ((tuple pid monitor)
++             (spawn_monitor
++               (lambda ()
++                 (receive
++                   ('evaluate
++                    (let* (((tuple status value next)
++                            (cayrn-lfe-eval:run source env))
++                           (phase (case status
++                                    ('ok 'succeeded)
++                                    ('error 'failed))))
++                      (! owner (tuple 'evaluated (self) operation
++                                      phase value next)))))))))
++       (let* (('true (group_leader io pid)))
++         (! pid 'evaluate)
++         (tuple 'continue
++           (map-set state 'active (tuple pid monitor operation)
++                    'seen (map-set seen operation 'true)
++                    'ios (cons io (map-get state 'ios))))))))
++  (((map #b("kind") #b("ack") #b("position") position) state)
++   (let* (((tuple (tuple from ref) pending)
++           (maps:take position (map-get state 'pending))))
++     (! from (tuple 'io_reply ref 'ok))
++     (progress (map-set state 'pending pending))))
++  (((map #b("kind") #b("close"))
++    (= (map 'closing 'undefined) state))
++   (begin-stop 'close state))
++  (((map #b("kind") #b("close")) state) (tuple 'continue state))
++  (((map #b("kind") #b("cancel") #b("operation") operation)
++    (= (map 'active (tuple _ _ operation) 'closing 'undefined) state))
++   (begin-stop 'cancel state))
++  (((map #b("kind") #b("cancel") #b("operation") operation)
++    (= (map 'active 'undefined 'seen seen 'closing 'undefined) state))
++   (if (maps:is_key operation seen)
++     (tuple 'continue state)
++     (let (('ok (send-event state
++                  (map 'kind 'lost
++                       'reason #b("interrupt won before native dispatch; "
++                                  "context retired")))))
++       (tuple 'stop state))))
++  (((map #b("kind") #b("cancel")) state) (tuple 'continue state))
++  (((map #b("kind") #b("stop")) state) (tuple 'stop state))
++  ((_ _) (error 'invalid_agent_command)))
++
++(defun begin-stop (mode state)
++  (erlang:send_after 5000 (self) 'close_timeout)
++  (case (map-get state 'active)
++    ((tuple pid _ _) (exit pid 'kill))
++    ('undefined 'ok))
++  (progress (map-set state 'closing mode)))
++
++(defun progress
++  (((= (map 'closing 'cancel 'active 'undefined) state))
++   (let (('ok (send-event state
++                (map 'kind 'lost
++                     'reason #b("session-destructive interruption ended "
++                                "native context; capture tail may be "
++                                "uncertain")))))
++     (tuple 'stop state)))
++  (((= (map 'closing 'close 'active 'undefined) state))
++   (case (maps:find 'waiting state)
++     ('error
++      (let ((ios (map-get state 'ios)))
++        (lists:foreach (lambda (pid) (! pid (tuple 'seal (self)))) ios)
++        (progress (map-set state 'waiting ios))))
++     ((tuple 'ok '())
++      (if (=:= (map_size (map-get state 'pending)) 0)
++        (let (('ok (send-event state (map 'kind 'closed))))
++          (tuple 'stop state))
++        (tuple 'continue state)))
++     (_ (tuple 'continue state))))
++  ((state) (tuple 'continue state)))
++
++(defun transition
++  (((tuple 'continue state)) (tuple 'noreply state))
++  (((tuple 'stop state)) (tuple 'stop 'normal state)))
++
++(defun valid-id?
++  ((id) (when (is_binary id) (> (byte_size id) 0)
++              (=< (byte_size id) 128))
++   (=:= (re:run id #b("^[A-Za-z0-9_-]+$") '(#(capture none))) 'match))
++  ((_) 'false))
++
++(defun send-event
++  (((map 'socket socket) data)
++   (gen_tcp:send socket (json:encode data))))
++
++(defspec (handle_call 3)
++  (((term) (call 'gen_server 'from) (map))
++   (tuple 'reply (term) (map))))
++
++(defun handle_call (_request _from state)
++  "Reject unsupported synchronous requests."
++  (tuple 'reply '#(error unsupported) state))
++
++(defspec (handle_cast 2) (((term) (map)) (tuple 'noreply (map))))
++
++(defun handle_cast (_request state)
++  "Ignore unsupported asynchronous requests."
++  (tuple 'noreply state))
++
++(defspec (terminate 2) (((term) (map)) 'ok))
++
++(defun terminate (_reason state)
++  "Stop only this context's evaluator, capture servers and socket."
++  (case (map-get state 'active)
++    ((tuple pid _ _) (exit pid 'kill))
++    ('undefined 'ok))
++  (lists:foreach (lambda (pid) (exit pid 'kill)) (map-get state 'ios))
++  (gen_tcp:close (map-get state 'socket))
++  'ok)
+diff --git a/apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe b/apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe
+new file mode 100644
+--- /dev/null
++++ b/apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe
+@@ -0,0 +1,40 @@
++;;;; Native evaluator persistence and error semantics.
++(defmodule cayrn_lfe_eval_tests
++  (export (errors_preserve_committed_environment_test 0)
++          (functions_and_macro_context_test 0)
++          (ordinary_error_atom_is_a_value_test 0)
++          (persistent_bindings_test 0)))
++
++(include-lib "eunit/include/eunit.hrl")
++
++(defun persistent_bindings_test ()
++  "Keep bindings across separate evaluations."
++  (let* ((env (cayrn-lfe-eval:new))
++         ((tuple 'ok #b("41") next)
++          (cayrn-lfe-eval:run #b("(set x 41)") env)))
++    (assertMatch (tuple 'ok #b("42") _)
++      (cayrn-lfe-eval:run #b("(+ x 1)") next))))
++
++(defun errors_preserve_committed_environment_test ()
++  "Preserve the committed environment across parse and evaluation errors."
++  (let* (((tuple 'ok _ env)
++          (cayrn-lfe-eval:run #b("(set x 41)") (cayrn-lfe-eval:new)))
++         ((tuple 'error _ after-eval)
++          (cayrn-lfe-eval:run #b("(/ 1 0)") env))
++         ((tuple 'error _ after-parse) (cayrn-lfe-eval:run #b("(") env)))
++    (assertEqual env after-eval)
++    (assertEqual env after-parse)
++    (assertMatch (tuple 'ok #b("41") _) (cayrn-lfe-eval:run #b("x") env))))
++
++(defun functions_and_macro_context_test ()
++  "Retain a top-level function in the native environment."
++  (let (((tuple 'ok _ env)
++         (cayrn-lfe-eval:run #b("(defun inc (x) (+ x 1))")
++           (cayrn-lfe-eval:new))))
++    (assertMatch (tuple 'ok #b("42") _)
++      (cayrn-lfe-eval:run #b("(inc 41)") env))))
++
++(defun ordinary_error_atom_is_a_value_test ()
++  "Return the ordinary error atom as a value, not an evaluation failure."
++  (assertMatch (tuple 'ok #b("error") _)
++    (cayrn-lfe-eval:run #b("'error") (cayrn-lfe-eval:new))))
+diff --git a/apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe b/apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe
+new file mode 100644
+--- /dev/null
++++ b/apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe
+@@ -0,0 +1,65 @@
++;;;; Capture ACK and sealing negative controls.
++(defmodule cayrn_lfe_io_tests
++  (export (capture_requires_owner_ack_test 0)
++          (native_agent_companions_test_ 0)
++          (seal_orders_prior_capture_and_rejects_late_writes_test 0)))
++
++(include-lib "eunit/include/eunit.hrl")
++
++;; Rebar discovers Erlang test files, while LFE companion discovery starts here.
++;; Include the evaluator and isolated-startup modules explicitly in the suite.
++(defun native_agent_companions_test_ ()
++  "Discover all native cases without depending on Erlang source files."
++  (list '#(module cayrn_lfe_eval_tests)
++        '#(module cayrn_lfe_application_tests)))
++
++(defun capture_requires_owner_ack_test ()
++  "Never acknowledge a native write before its owner commits capture."
++  (let ((io (cayrn_lfe_io:start (self) #b("operation")))
++        (ref (make_ref)))
++    (try
++      (progn
++        (! io (tuple 'io_request (self) ref
++                     (tuple 'put_chars 'unicode #b("hello"))))
++        (receive
++          ((tuple 'capture from incoming-ref #b("operation") #b("hello"))
++           (when (=:= incoming-ref ref))
++           (assertEqual (self) from))
++          (after 1000 (error 'missing_capture)))
++        (receive
++          ((tuple 'io_reply incoming-ref _)
++           (when (=:= incoming-ref ref))
++           (error 'false_native_ack))
++          (after 20 'ok)))
++      (after
++        (unlink io)
++        (exit io 'kill)))))
++
++(defun seal_orders_prior_capture_and_rejects_late_writes_test ()
++  "Seal after earlier capture and reject subsequent writes explicitly."
++  (let ((io (cayrn_lfe_io:start (self) #b("origin")))
++        (ref (make_ref)))
++    (try
++      (progn
++        (! io (tuple 'io_request (self) ref
++                     (tuple 'put_chars 'unicode #b("before"))))
++        (! io (tuple 'seal (self)))
++        (receive
++          (first
++           (assertEqual (tuple 'capture (self) ref #b("origin") #b("before"))
++             first))
++          (after 1000 (error 'missing_capture)))
++        (receive
++          (second (assertEqual (tuple 'sealed io) second))
++          (after 1000 (error 'missing_seal)))
++        (let ((later (make_ref)))
++          (! io (tuple 'io_request (self) later
++                       (tuple 'put_chars 'unicode #b("after"))))
++          (receive
++            ((tuple 'io_reply incoming-ref reply)
++             (when (=:= incoming-ref later))
++             (assertEqual '#(error terminated) reply))
++            (after 1000 (error 'missing_late_rejection)))))
++      (after
++        (unlink io)
++        (exit io 'kill)))))
+diff --git a/apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe b/apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe
+new file mode 100644
+--- /dev/null
++++ b/apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe
+@@ -0,0 +1,47 @@
++;;;; Startup isolation from the legacy parent EUnit node.
++(defmodule cayrn_lfe_application_tests
++  (export (independent_application_start_test_ 0)))
++
++(include-lib "eunit/include/eunit.hrl")
++(include-lib "kernel/include/file.hrl")
++
++(defun independent_application_start_test_ ()
++  "Check native startup in a fresh, test-owned OTP node."
++  (tuple 'timeout 30 #'independent-application-start/0))
++
++(defun independent-application-start ()
++  (let* ((dir (filename:join "/private/tmp"
++                (++ "cayrn-app-" (os:getpid) "-"
++                    (integer_to_list
++                      (erlang:unique_integer '(positive monotonic))))))
++         ('ok (file:make_dir dir))
++         ('ok (file:change_mode dir #o700))
++         (socket (filename:join dir "agent socket.sock")))
++    (try
++      ;; Standard I/O control requires no distributed or live user node.
++      (let (((tuple 'ok peer _node)
++             (peer:start_link
++               (map 'connection 'standard_io
++                    'args (cons "-pa" (code:get_path))))))
++        (try
++          (let* (('ok (peer:call peer 'application 'load '(cayrn_lfe)))
++                 ('ok (peer:call peer 'application 'set_env
++                        (list 'cayrn_lfe 'socket socket)))
++                 ((tuple 'ok _)
++                  (peer:call peer 'application 'ensure_all_started
++                    '(cayrn_lfe)))
++                 (running (lists:map (lambda (app) (element 1 app))
++                            (peer:call peer 'application
++                              'which_applications '())))
++                 ((tuple 'ok info) (file:read_file_info socket)))
++            (assert (lists:member 'cayrn_lfe running))
++            (assert (lists:member 'lfe running))
++            (lists:foreach
++              (lambda (app) (assertNot (lists:member app running)))
++              '(xrepl ranch xrepl_protocol xrepl_term))
++            (assertEqual 'other (file_info-type info))
++            (assertEqual #o600 (band (file_info-mode info) #o777)))
++          (after (peer:stop peer))))
++      (after
++        (file:delete socket)
++        (file:del_dir dir)))))

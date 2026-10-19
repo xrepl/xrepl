@@ -1,0 +1,25 @@
+{
+  "path": "/private/tmp/cayrn-lfe-source-only-ohqoe_4d",
+  "files": [
+    ".gitignore",
+    "AGENTS.md",
+    "LICENSE",
+    "Makefile",
+    "README.md",
+    "bin/cayrn-lfe",
+    "rebar.config",
+    "rebar.lock",
+    "src/cayrn-lfe-eval.lfe",
+    "src/cayrn_lfe.app.src",
+    "src/cayrn_lfe_app.lfe",
+    "src/cayrn_lfe_context.lfe",
+    "src/cayrn_lfe_io.lfe",
+    "src/cayrn_lfe_listener.lfe",
+    "src/cayrn_lfe_sup.lfe",
+    "test/cayrn_lfe_application_tests.lfe",
+    "test/cayrn_lfe_eval_tests.lfe",
+    "test/cayrn_lfe_io_tests.lfe"
+  ],
+  "prebuild_beams": 0,
+  "prebuild_build_directories": 0
+}

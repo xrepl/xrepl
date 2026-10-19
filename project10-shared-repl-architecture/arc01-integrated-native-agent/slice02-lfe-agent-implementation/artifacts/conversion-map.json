@@ -1,0 +1,504 @@
+{
+  "source_base": "ea844f5e634dc1ffb2503b7d69c4726164395d82",
+  "state": "uncommitted LFE candidate",
+  "entries": [
+    {
+      "module": "cayrn_lfe_app",
+      "old_path": "apps/cayrn_lfe/src/cayrn_lfe_app.erl",
+      "new_path": "apps/cayrn_lfe/src/cayrn_lfe_app.lfe",
+      "old_sha256": "de924f0036122912519714993d74aa56b53dda6112403db7de703cfddbdb0824",
+      "new_sha256": "c3611e97ca32bc16fc9a39e945fcb1bfdf56ef39bbc760034e97f91d666b1f24",
+      "mode": "100644",
+      "old_declared_exports": [
+        [
+          "start",
+          2
+        ],
+        [
+          "stop",
+          1
+        ]
+      ],
+      "actual_exports": [
+        {
+          "arity": 3,
+          "name": "LFE-EXPAND-EXPORTED-MACRO"
+        },
+        {
+          "arity": 1,
+          "name": "__info__"
+        },
+        {
+          "arity": 2,
+          "name": "start"
+        },
+        {
+          "arity": 1,
+          "name": "stop"
+        },
+        {
+          "arity": 0,
+          "name": "module_info"
+        },
+        {
+          "arity": 1,
+          "name": "module_info"
+        }
+      ],
+      "actual_compile_source": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_app.lfe",
+      "spec_count": 2,
+      "extra_export_classification": "LFE compiler/EUnit generated; I/O native_agent_companions_test_/0 is authored test discovery only"
+    },
+    {
+      "module": "cayrn_lfe_sup",
+      "old_path": "apps/cayrn_lfe/src/cayrn_lfe_sup.erl",
+      "new_path": "apps/cayrn_lfe/src/cayrn_lfe_sup.lfe",
+      "old_sha256": "8b40d7f0413403cac1cacd974f6b6c520053c65380624ec9f2a65583bc160497",
+      "new_sha256": "603ce74dfb191bbd0d55c88a7f6f24e112a31007e75c949344200e38a4364914",
+      "mode": "100644",
+      "old_declared_exports": [
+        [
+          "context",
+          1
+        ],
+        [
+          "init",
+          1
+        ],
+        [
+          "start_link",
+          0
+        ]
+      ],
+      "actual_exports": [
+        {
+          "arity": 3,
+          "name": "LFE-EXPAND-EXPORTED-MACRO"
+        },
+        {
+          "arity": 1,
+          "name": "__info__"
+        },
+        {
+          "arity": 1,
+          "name": "context"
+        },
+        {
+          "arity": 1,
+          "name": "init"
+        },
+        {
+          "arity": 0,
+          "name": "start_link"
+        },
+        {
+          "arity": 0,
+          "name": "module_info"
+        },
+        {
+          "arity": 1,
+          "name": "module_info"
+        }
+      ],
+      "actual_compile_source": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_sup.lfe",
+      "spec_count": 3,
+      "extra_export_classification": "LFE compiler/EUnit generated; I/O native_agent_companions_test_/0 is authored test discovery only"
+    },
+    {
+      "module": "cayrn_lfe_listener",
+      "old_path": "apps/cayrn_lfe/src/cayrn_lfe_listener.erl",
+      "new_path": "apps/cayrn_lfe/src/cayrn_lfe_listener.lfe",
+      "old_sha256": "e0596abe2911ad3b7afc42dcb769098f0b16ddfb52d03c18784af7ec27d4faaf",
+      "new_sha256": "9980e62f9c2ce02779dbc8b4e3891b9f7dda9285cdcfd40e85ec3b1ddf618bf5",
+      "mode": "100644",
+      "old_declared_exports": [
+        [
+          "handle_call",
+          3
+        ],
+        [
+          "handle_cast",
+          2
+        ],
+        [
+          "handle_info",
+          2
+        ],
+        [
+          "init",
+          1
+        ],
+        [
+          "start_link",
+          0
+        ],
+        [
+          "terminate",
+          2
+        ]
+      ],
+      "actual_exports": [
+        {
+          "arity": 3,
+          "name": "LFE-EXPAND-EXPORTED-MACRO"
+        },
+        {
+          "arity": 1,
+          "name": "__info__"
+        },
+        {
+          "arity": 3,
+          "name": "handle_call"
+        },
+        {
+          "arity": 2,
+          "name": "handle_cast"
+        },
+        {
+          "arity": 2,
+          "name": "handle_info"
+        },
+        {
+          "arity": 1,
+          "name": "init"
+        },
+        {
+          "arity": 0,
+          "name": "start_link"
+        },
+        {
+          "arity": 2,
+          "name": "terminate"
+        },
+        {
+          "arity": 0,
+          "name": "module_info"
+        },
+        {
+          "arity": 1,
+          "name": "module_info"
+        }
+      ],
+      "actual_compile_source": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_listener.lfe",
+      "spec_count": 6,
+      "extra_export_classification": "LFE compiler/EUnit generated; I/O native_agent_companions_test_/0 is authored test discovery only"
+    },
+    {
+      "module": "cayrn_lfe_io",
+      "old_path": "apps/cayrn_lfe/src/cayrn_lfe_io.erl",
+      "new_path": "apps/cayrn_lfe/src/cayrn_lfe_io.lfe",
+      "old_sha256": "ea187d998631676ae38ebc89073607c017fe147a7947b1ad7fd094c3042991ef",
+      "new_sha256": "00d8a452e10d1b2e7ddf13d56720ee2dd376f405a244ca9fb94669e52bcd82f5",
+      "mode": "100644",
+      "old_declared_exports": [
+        [
+          "loop",
+          2
+        ],
+        [
+          "start",
+          2
+        ]
+      ],
+      "actual_exports": [
+        {
+          "arity": 3,
+          "name": "LFE-EXPAND-EXPORTED-MACRO"
+        },
+        {
+          "arity": 1,
+          "name": "__info__"
+        },
+        {
+          "arity": 2,
+          "name": "loop"
+        },
+        {
+          "arity": 2,
+          "name": "start"
+        },
+        {
+          "arity": 0,
+          "name": "module_info"
+        },
+        {
+          "arity": 1,
+          "name": "module_info"
+        }
+      ],
+      "actual_compile_source": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_io.lfe",
+      "spec_count": 2,
+      "extra_export_classification": "LFE compiler/EUnit generated; I/O native_agent_companions_test_/0 is authored test discovery only"
+    },
+    {
+      "module": "cayrn_lfe_context",
+      "old_path": "apps/cayrn_lfe/src/cayrn_lfe_context.erl",
+      "new_path": "apps/cayrn_lfe/src/cayrn_lfe_context.lfe",
+      "old_sha256": "98aa576a4c18ea59070e7da53258db11842a0e17fbd4017fc3c54d2b049c74d4",
+      "new_sha256": "76daa8d3022596eccaed1a90cd7f9e917fe0449dd66ba0164c22bbb04ead8b61",
+      "mode": "100644",
+      "old_declared_exports": [
+        [
+          "handle_call",
+          3
+        ],
+        [
+          "handle_cast",
+          2
+        ],
+        [
+          "handle_info",
+          2
+        ],
+        [
+          "init",
+          1
+        ],
+        [
+          "start_link",
+          1
+        ],
+        [
+          "terminate",
+          2
+        ]
+      ],
+      "actual_exports": [
+        {
+          "arity": 3,
+          "name": "LFE-EXPAND-EXPORTED-MACRO"
+        },
+        {
+          "arity": 1,
+          "name": "__info__"
+        },
+        {
+          "arity": 3,
+          "name": "handle_call"
+        },
+        {
+          "arity": 2,
+          "name": "handle_cast"
+        },
+        {
+          "arity": 2,
+          "name": "handle_info"
+        },
+        {
+          "arity": 1,
+          "name": "init"
+        },
+        {
+          "arity": 1,
+          "name": "start_link"
+        },
+        {
+          "arity": 2,
+          "name": "terminate"
+        },
+        {
+          "arity": 0,
+          "name": "module_info"
+        },
+        {
+          "arity": 1,
+          "name": "module_info"
+        }
+      ],
+      "actual_compile_source": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_context.lfe",
+      "spec_count": 6,
+      "extra_export_classification": "LFE compiler/EUnit generated; I/O native_agent_companions_test_/0 is authored test discovery only"
+    },
+    {
+      "module": "cayrn_lfe_eval_tests",
+      "old_path": "apps/cayrn_lfe/test/cayrn_lfe_eval_tests.erl",
+      "new_path": "apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe",
+      "old_sha256": "cd233e7993572fcc5f79bed2a7ec3ee2f499328f72bed13b16fe3e5d2c16c009",
+      "new_sha256": "1b3e2294625b6ab248a81e7e71d1c1085e8f74f9f2162a455599cb8bc59b4255",
+      "mode": "100644",
+      "old_declared_exports": [
+        [
+          "errors_preserve_committed_environment_test",
+          0
+        ],
+        [
+          "functions_and_macro_context_test",
+          0
+        ],
+        [
+          "ordinary_error_atom_is_a_value_test",
+          0
+        ],
+        [
+          "persistent_bindings_test",
+          0
+        ]
+      ],
+      "actual_exports": [
+        {
+          "arity": 3,
+          "name": "LFE-EXPAND-EXPORTED-MACRO"
+        },
+        {
+          "arity": 1,
+          "name": "__info__"
+        },
+        {
+          "arity": 0,
+          "name": "errors_preserve_committed_environment_test"
+        },
+        {
+          "arity": 0,
+          "name": "functions_and_macro_context_test"
+        },
+        {
+          "arity": 0,
+          "name": "ordinary_error_atom_is_a_value_test"
+        },
+        {
+          "arity": 0,
+          "name": "persistent_bindings_test"
+        },
+        {
+          "arity": 0,
+          "name": "test"
+        },
+        {
+          "arity": 0,
+          "name": "module_info"
+        },
+        {
+          "arity": 1,
+          "name": "module_info"
+        }
+      ],
+      "actual_compile_source": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe",
+      "spec_count": 0,
+      "extra_export_classification": "LFE compiler/EUnit generated; I/O native_agent_companions_test_/0 is authored test discovery only"
+    },
+    {
+      "module": "cayrn_lfe_io_tests",
+      "old_path": "apps/cayrn_lfe/test/cayrn_lfe_io_tests.erl",
+      "new_path": "apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe",
+      "old_sha256": "32cd890875cb8cd76d77d19d4b56fea58e810c77c800d25b416e8a1f0eceafe3",
+      "new_sha256": "5c1dbdae698f3f8cc629e83857893e06e06f494fd14cb3093cd5fbbfac131e0d",
+      "mode": "100644",
+      "old_declared_exports": [
+        [
+          "capture_requires_owner_ack_test",
+          0
+        ],
+        [
+          "seal_orders_prior_capture_and_rejects_late_writes_test",
+          0
+        ]
+      ],
+      "actual_exports": [
+        {
+          "arity": 3,
+          "name": "LFE-EXPAND-EXPORTED-MACRO"
+        },
+        {
+          "arity": 1,
+          "name": "__info__"
+        },
+        {
+          "arity": 0,
+          "name": "capture_requires_owner_ack_test"
+        },
+        {
+          "arity": 0,
+          "name": "native_agent_companions_test_"
+        },
+        {
+          "arity": 0,
+          "name": "seal_orders_prior_capture_and_rejects_late_writes_test"
+        },
+        {
+          "arity": 0,
+          "name": "test"
+        },
+        {
+          "arity": 0,
+          "name": "module_info"
+        },
+        {
+          "arity": 1,
+          "name": "module_info"
+        }
+      ],
+      "actual_compile_source": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe",
+      "spec_count": 0,
+      "extra_export_classification": "LFE compiler/EUnit generated; I/O native_agent_companions_test_/0 is authored test discovery only"
+    },
+    {
+      "module": "cayrn_lfe_application_tests",
+      "old_path": "apps/cayrn_lfe/test/cayrn_lfe_application_tests.erl",
+      "new_path": "apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe",
+      "old_sha256": "9fd305da344ecbd8cf0b76702e1140a02ba986f06300ec343ac73400a7574972",
+      "new_sha256": "8b246f2e88b1d40247f9390d426dc501ac93134941ed3aa17f77a3f60b47d2af",
+      "mode": "100644",
+      "old_declared_exports": [
+        [
+          "independent_application_start_test_",
+          0
+        ]
+      ],
+      "actual_exports": [
+        {
+          "arity": 3,
+          "name": "LFE-EXPAND-EXPORTED-MACRO"
+        },
+        {
+          "arity": 1,
+          "name": "__info__"
+        },
+        {
+          "arity": 0,
+          "name": "independent_application_start_test_"
+        },
+        {
+          "arity": 0,
+          "name": "test"
+        },
+        {
+          "arity": 0,
+          "name": "module_info"
+        },
+        {
+          "arity": 1,
+          "name": "module_info"
+        }
+      ],
+      "actual_compile_source": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe",
+      "spec_count": 0,
+      "extra_export_classification": "LFE compiler/EUnit generated; I/O native_agent_companions_test_/0 is authored test discovery only"
+    }
+  ],
+  "preserved_inputs": [
+    "Cargo.lock",
+    "Makefile",
+    "apps/cayrn_lfe/LICENSE",
+    "apps/cayrn_lfe/Makefile",
+    "apps/cayrn_lfe/bin/cayrn-lfe",
+    "apps/cayrn_lfe/rebar.config",
+    "apps/cayrn_lfe/rebar.lock",
+    "apps/cayrn_lfe/src/cayrn-lfe-eval.lfe",
+    "apps/cayrn_lfe/src/cayrn_lfe.app.src",
+    "bin/cayrn-lfe",
+    "mk/lfe.mk",
+    "rebar.config",
+    "rebar.lock",
+    "src/xrepl.app.src"
+  ],
+  "test_cases": [
+    "persistent_bindings_test",
+    "errors_preserve_committed_environment_test",
+    "functions_and_macro_context_test",
+    "ordinary_error_atom_is_a_value_test",
+    "capture_requires_owner_ack_test",
+    "seal_orders_prior_capture_and_rejects_late_writes_test",
+    "independent_application_start_test_"
+  ],
+  "discovery_refinement": "I/O companion native_agent_companions_test_/0 includes evaluator/application modules so component Rebar discovery runs all seven cases; no Make/config/dependency change"
+}

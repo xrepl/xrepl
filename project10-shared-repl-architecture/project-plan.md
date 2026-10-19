@@ -1,6 +1,6 @@
 ---
 project: project10-shared-repl-architecture
-status: first-slice-committed-next-slice-prepared
+status: slice02-candidate-returned
 depends-on: [cayrn-project02-bounded-contracts]
 blocks: [xrepl-0.2.x-core-migration-candidate]
 related: [cayrn-project01-shared-repl-architecture, project05-rust-frontend, project06-pluggable-shells, project07-story-runtime, project09-quality-assessment, xrepl_protocol, xrepl_term]
@@ -198,3 +198,15 @@ validated, byte-identified converted-agent candidate/return is the bounded input
 for Cayrn, even if its implementation commit has not yet been requested. No
 independent acceptance, whole-arc close, push/publication or later slice is implied.
 The staged sequence is authorized without intermediate routine approval.
+
+## Slice02 candidate return —2026-10-18
+
+The LFE conversion is implemented and author-self-checked; see [Arc01 Slice02 return](arc01-integrated-native-agent/slice02-lfe-agent-implementation/closing-report.md). All8 rows proposed done; acceptance remains pending. Exact uncommitted
+candidate bytes are the activated bounded input for Cayrn Slice02. No resource,
+UX or historical acceptance scope was closed.
+
+## Committed Slice02 input —2026-10-18
+
+Source `f261152fc150a1addf3286a97b6a1a0324a42869` records the validated candidate unchanged.
+The Operator approved implementation/return commits and next resource planning;
+prior independent/Operator gates remain distinct from this commit approval.
