@@ -46,3 +46,22 @@ Force positively queued listener→supervisor race and retained absolute path/cw
 controls; assert actual listen AND accepted socket connected owners. Final binding
 listener-lifetime-contract.md includes these. No code/build/experiment/runtime
 acceptance from this review. Root owns final design/implementation acceptance.
+
+## Early iteration01 production snapshot review —2026-10-19
+
+The same independent reviewer read the actual three production modules and
+binding contract after implementation: no blocking production gap found. Identity
+capture precedes chmod; ordinary startup failures unwind; disposal monitors the
+exact port before close and requires matching DOWN before identity-guarded unlink.
+Listener borrows the port; supervisor restarts retain its original socket/path.
+
+Reviewed SHA256s:
+- App8999a457817de1bfd81726bf874accdb49bb81a8ab1c11bd1f065b2139de6833
+- Listener5f7201969d9d7fe7d4537948669b9e08b2751628f4ff77e6c395bfc12863cc4d
+- Supervisordb1fb6c3f4bfb14e05c209a337abee40f3f6b9478c9ef185e08e973be0581316
+- Contract11c62368b0ca6ec7f47eadbda169ed023910d77d61e9ab8e632ce262c59471d3
+
+No edits or builds by that reviewer. This is an early source snapshot, not final
+committed-source acceptance or reproduced runtime evidence. CDC separately read
+the current production and full555-line application test module; final candidate
+reconciliation and independent runtime controls remain required.
