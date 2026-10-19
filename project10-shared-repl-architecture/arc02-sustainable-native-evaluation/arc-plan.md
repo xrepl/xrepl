@@ -29,9 +29,9 @@ final system size/churn checks are additional composition, not deferred-only QA.
 
 | Slice | Usable result / delivery | Actual dependency | State |
 | --- | --- | --- | --- |
-| [Slice01 — fenced capture lifetimes](slice01-fenced-capture-lifetimes/slice-plan.md) | More-than 256 native evaluations; scalar token fence,64 live capture origins, collector retirement with late-output/ACK/close proof | Actual Cayrn C03 native v2 identity/journal return | Active; actual C03 return7b27b0f reconciled before native edits |
-| Slice02 — bounded node identity lifecycle | Remove4096 cumulative context-tombstone lifetime guard while retaining stale generation/authority and concurrent-context protection | X01 actual ownership/retirement behavior; resolved authority/tombstone design | Roadmap only; do not issue implementation until design/Operator decision |
-| Slice03 — size-safe previews and captured streams | Bounded explicit value previews and complete bounded-chunk captured output, pressure paths preserving environment/capture ACK correctness | LFE conversion; stable wire budgets; align with current native v2 if after X01 | Roadmap only; may proceed independently of node churn after design |
+| [Slice01 — fenced capture lifetimes](slice01-fenced-capture-lifetimes/slice-plan.md) | More-than 256 native evaluations; scalar token fence,64 live capture origins, collector retirement with late-output/ACK/close proof | Actual Cayrn C03 native v2 identity/journal return | Independently accepted7228183/7b27b0f; matching native2 gate passed |
+| [Slice02 — node authority leases](slice02-node-authority-leases/slice-plan.md) | Bounded live native lease/context registry; boot/lease/ticket fencing removes4096 cumulative guard | Actual accepted Cayrn C04 native3 handoff; Operator direction approved | Open set draft; upstream implementation-held |
+| Slice03 — size-safe previews and captured streams | Bounded explicit value previews and complete bounded-chunk captured output, pressure paths preserving environment/capture ACK correctness | LFE conversion; stable wire budgets; align with actual native3 contract after X02 | Roadmap only; may proceed independently of node churn after design |
 
 Directory numbering does not invent a dependency from node identities to size
 safety. First-slice operation fencing/collector budgets do not solve node churn,
@@ -43,7 +43,7 @@ fence. No prototype/native source edits are authorized by this planning packet.
 
 Sibling ledger.md covers first-slice long sessions, complete retained attribution,
 node churn beyond 4096, safe result/output handling and actual mixed lifecycle/
-pressure behavior on matching source revisions. Cayrn Arc01/Slice04 consumes the
+pressure behavior on matching source revisions. Cayrn Arc01/Slice05 consumes the
 native results and tests the full cross-repository system; both owner reports
 remain attributable. Children passing alone do not close this arc. Preserve
 original failure/physical durability gaps and Project09's27 finding dispositions;
@@ -208,3 +208,22 @@ fresh source and root launcher evidence. This discharges the matching-native2
 runtime hold; XA02-01/02 are done at their bounded scope, not whole-arc acceptance.
 Node4096/size8192/slow-pressure/full composition and historical gates remain.
 The proposed Slice02 architecture below remains unapproved pending Operator reply.
+
+## Operator node-authority decision — 2026-10-18
+
+Operator selected **Host authority and context tickets (recommended)** in the
+architectural question reply. The earlier awaiting-decision proposal is now
+resolved in that direction. Common Rust policy and native transient ownership
+are being specified in the canonical native3 contract under Cayrn
+Project02/Arc01/Slice04 artifacts/native-authority-contract.md. No clocks, expiry,
+heartbeat, replay or native durable registry. Actual dependent implementation
+requires complete reviewed open sets, not this status note alone.
+
+## v1.3 — node-authority direction resolved,2026-10-18
+
+Operator approved host authority/context tickets. Prepared Slice02 now consumes
+the bounded shared Rust native3 C04 handoff; no native code begins until actual
+accepted source exists. Earlier awaiting-decision text is historical. The Rust
+connector slice is in Cayrn Arc01 before this native slice; former C04 whole
+composition becomes C05 without dropping any obligation. X03 size work and final
+composition remain open; approved direction does not imply implementation proof.

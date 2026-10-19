@@ -104,3 +104,13 @@ per-context challenge alternative. This is a decision proposal, not a change
 to the implemented ownership model or an issued CC assignment. Rust retains
 durable public-session authority in either option. Operator discussion precedes
 a complete Slice02 open set and any affected protocol/source work.
+
+## Operator node-authority decision — 2026-10-18
+
+Operator selected **Host authority and context tickets (recommended)** in the
+architectural question reply. The earlier awaiting-decision proposal is now
+resolved in that direction. Common Rust policy and native transient ownership
+are being specified in the canonical native3 contract under Cayrn
+Project02/Arc01/Slice04 artifacts/native-authority-contract.md. No clocks, expiry,
+heartbeat, replay or native durable registry. Actual dependent implementation
+requires complete reviewed open sets, not this status note alone.

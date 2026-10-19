@@ -283,3 +283,13 @@ Additional concrete backlog owners (not UX):
 | --- | --- | --- | --- |
 | X-PKG-01 | Fresh source checkout path containing spaces fails pinned Rebar/LFE hook; ordinary fresh source and spaced sockets pass | Arc06 packaging/install owner | Resolve or explicitly document/test supported checkout paths before packaging/release; evidence Arc02/Slice01 development log. No dependency/build change authorized in current slice. |
 | X-DOC-01 | Historical README shell example contains literal angle-bracket token placeholder and fails broad bash syntax checking | Later client/compatibility documentation owner | Repair when editing that example; rerun scoped/full example checks. Current changed docs pass; do not claim all historical examples executable. |
+
+## Node-authority implementation sequence —2026-10-18
+
+Operator selected host authority/context tickets. Within the two authorized
+arcs, shared Rust owner/native3 protocol lands as Cayrn Arc01/Slice04, followed
+by xrepl Arc02/Slice02 transient leases/tickets and immediate real integration.
+Former unissued Cayrn C04 full-composition roadmap becomes C05, all obligations
+retained; size-safe native X03 precedes it. No new arc, UX or publication scope.
+Canonical shared authority contract is in Cayrn C04 artifacts/. Open-set drafts
+are reviewed before issue; no future source hash is presumed.
