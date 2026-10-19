@@ -26,7 +26,7 @@ The root launcher delegates to the component-local build, starts only the native
 application, LFE, crypto and compiler, and accepts a single socket argument. Starting legacy
 `xrepl` does not automatically start the agent. See the component README for
 Cayrn host startup and current limits: 64 live capture origins per context,
-8KiB source/output/value previews, no program input or live-state restoration.
+8KiB source/value previews and complete bounded-chunk captured output, no program input or live-state restoration.
 Native3 adds host authority leases and increasing context tickets with bounded
 live state (16 authorities/64 physical live or retiring contexts), removing the
 cumulative context-identity limit. Authority loss retires all its contexts;
@@ -45,10 +45,15 @@ metadata, preserving full saved bindings. Short strings keep string syntax;
 large collections use structural previews with conservative omission reservations.
 False reports no budget omission under this policy, not lossless serialization;
 old public missing/null metadata is UNKNOWN. Captured Output is separate and is
-never silently clipped by the result policy. Complete output/ordinary pressure
-and responsive ownership remain X04. Forced supervisor teardown during a blocked
-send can still orphan an evaluator root (NR-02; X04/C06); authority-loss shutdown
-has its own abortive-port cleanup and does not certify general teardown safety.
+never silently clipped by the result policy. Supported output now streams complete UTF8 chunks, each at most8KiB, with original
+I/O success after every durable ACK and physical formatting completion. Native
+context/collector owners remain responsive while separate network/formatter
+workers block. Bounded64 jobs permit nested formatting and ordinary overload
+recovery. Startup and retirement gaps retain dual lifetime ownership; focused
+positive-pressure NR-02 tests cover either owner and listener/registry/app faults.
+Close drains pre-seal work or ends honestly Lost/EOF within its timeout. Cayrn C06
+sustained mixed-system composition remains required, with arbitrary user heap,
+user-process fanout and simultaneous owner destruction outside the trusted runtime boundary.
 Native4 requires the matching rebuilt
 Cayrn host (current shared contract34af63e), with old native1/2/3 rejected.
 Public client RPC remains version1. The native app remains

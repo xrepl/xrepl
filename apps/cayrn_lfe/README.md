@@ -63,8 +63,8 @@ made earlier in a failed multi-form request are not committed to the saved
 environment; external effects and process-dictionary changes are not rolled back.
 
 Limits: 16 live authority owners, 64 globally live/retiring contexts, 64 live
-capture origins per context, 64 pending I/O writes, 8192-byte source/output/value
-previews and 256KiB frames. Listener admission checks temporary children before
+capture origins per context, 64 admitted formatting jobs across all origins, 8192-byte source/value
+previews, complete output in UTF8 chunks of at most8192 bytes and 256KiB frames. Listener admission checks temporary children before
 accepting at a watermark of128, with conservative hard bounds of128 accepted
 sockets and256 temporary processes during router handoff. There is no cumulative
 context-identity or operation-count limit. Registry maps retain only live state;
@@ -111,11 +111,26 @@ files/symlinks/socket inodes are preserved. Bind/Supstart failures unwind newly
 acquired resources. Whole application/helper/VM kill can still leave a stale path;
 there is no automatic BEAM relaunch or adversarial filesystem guarantee.
 
-Complete captured output chunking and ordinary capture-pressure hardening
-remain X04 work. A serious known limit (NR-02, X04/C06) is forced supervisor
-teardown during a blocked context send: it can orphan an unlinked evaluator root.
-The authority-loss path has separate suspended/positively pending-send
-controls; they do not establish broad forced-teardown readiness. The standalone
+Captured writes now stream complete supported chardata through disposable paused
+formatters. Each bounded chunk waits for actual network send and Rust's durable
+ACK. An original write receives `ok` only after all chunks and physical formatter
+completion; invalid suffixes preserve committed prefixes but return `badarg`.
+Supported encodings are latin1, unicode/utf8, utf16 and utf32 (both byte orders).
+Empty valid writes emit one empty acknowledged chunk. Unsupported input/batches
+remain `enotsup`. Nested supported I/O from formatting MFAs uses independent jobs;
+at64 admitted jobs further requests return ordinary `enobufs` and can recover.
+
+The context and immutable origin collector remain responsive owners while separate
+network and formatter workers block. Both register paused roots/formatters before
+execution; persistent owner monitors cover retirement unlink gaps. Either owner
+can kill known user roots/formatters even when user code traps exits. Positive
+pending-send tests cover collector/context/listener/registry/application failures
+(NR-02), with exact physical deaths and trace destruction. Normal Close drains
+pre-seal admitted work; newly received requests return `terminated`. A five-second
+incomplete barrier forces Lost/EOF, never false Closed. Failure cleanup can abandon
+uncertain buffered bytes abortively; successfully completed Close preserves its
+ordinary terminal delivery. Cayrn C06 still owns mixed-system sustained composition;
+these focused controls do not certify arbitrary simultaneous-owner destruction. The standalone
 native1 predecessor remains pinned separately.
 
 Host-agent link loss terminates that context and marks its state uncertain/lost;
@@ -151,8 +166,8 @@ Integers are fenced before decimal conversion, with no smaller arbitrary cap.
 This bounds rendering work/output policy, not evaluation, user heap or processes.
 
 Captured Output is separate from result previews. It is never silently clipped
-under this value policy. Complete supported streams/chunking/responsive ownership
-and NR-02 teardown are X04, followed by Cayrn C06 mixed-system composition.
+under this value policy. Supported streams are complete and use responsive dual ownership;
+Cayrn C06 mixed-system composition remains required.
 The matching experimental host is Cayrn34af63e or its compatible native4 successor;
 public RPC remains1. Rebuild the xrepl Rust consumer for the additive Outcome field;
 its JSON mode retains metadata while the human display remains unchanged.
@@ -195,6 +210,9 @@ Cayrn's native/terminal targets default to this integrated component and the
 sibling xrepl Rust binary; explicit `CAYRN_LFE_DIR` and `XREPL_BIN` overrides are
 available. Component-only `make check` explicitly discovers evaluator, preview,
 application, resource and authority tests through the I/O companion generator.
+Stream and ownership cases cover incremental encoding boundaries, invalid prefixes,
+nested formatting, global job recovery, publishing/deferred cancellation, both
+startup stages, retirement unlink, exact cross-sender credits and pressured failure.
 Resource cases cover
 512 quiet sparse dispatches, 64/65 origin pressure, replay non-execution, producer
 and request/trace order inversions, ACK/close races, physical retirement and
@@ -206,4 +224,15 @@ conventions. Authority cases exercise4097 reclaimed contexts,33 lease cycles,
 controls, router/handshake failures, fresh boot and authority-only loss with raw
 client sockets retained, including suspended and positively pending native sends.
 Preview byte/depth boundaries and actual native4 retained-binding/error/cancel
-cases are included. Ordinary-pressure limits remain recorded above.
+cases are included. Budgets and trusted-runtime limits remain recorded above.
+
+The writer retains at most68 current frame references (64 Output, two Outcome,
+one Ready and one terminal). Only one chunk per job is outstanding. A publishing
+Outcome permits one validated deferred Dispatch; its token is consumed once and
+its source cannot run before actual Outcome send, or after Close/exact Cancel.
+Capacity is rechecked at activation. Paused-start cancellation reports that source
+was not evaluated only after physical root DOWN; activated destructive cancellation
+retains environment-discarded diagnostics. Allocation-failure injection, physical
+OS durability, arbitrary user fanout/heap and full composed pressure remain outside
+these focused tests. Existing checkout-space packaging and Rebar test-cache
+limitations remain tracked separately; no release readiness is implied.

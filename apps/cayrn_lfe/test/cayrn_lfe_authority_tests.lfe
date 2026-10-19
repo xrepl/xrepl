@@ -478,7 +478,7 @@
                    ('true (=:= #b("START") (map-get start #b("text"))))
                    (active (await-active peer context 500))
                    ((tuple root _ _ io) (map-get active 'active))
-                   ((tuple _ trace _ _) (map-get (map-get active 'origins) io)))
+                   (trace (map-get (map-get (map-get active 'origins) io) 'trace)))
               (assert-trace peer trace)
               (send-frame socket
                 (map 'kind 'ack 'position (map-get start #b("position"))))
@@ -766,7 +766,7 @@
          ('true (=:= #b("START") (map-get output #b("text"))))
          (state (await-active peer context 500))
          ((tuple root _ _ io) (map-get state 'active))
-         ((tuple _ trace _ _) (map-get (map-get state 'origins) io)))
+         (trace (map-get (map-get (map-get state 'origins) io) 'trace)))
     (assert-trace peer trace)
     (send-frame socket
       (map 'kind 'ack 'position (map-get output #b("position"))))

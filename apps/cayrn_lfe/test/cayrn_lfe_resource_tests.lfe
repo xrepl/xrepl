@@ -243,59 +243,47 @@
         '(false true)))))
 
 (defun ownership_and_monitor_mismatches_test ()
-  "Reject forged collector tokens and wrong monitor identity via real handlers."
-  (let* ((io (self)) (monitor (make_ref)) (wrong (make_ref))
-         (state (map 'origins (map io (tuple #b("2") 'unused monitor 'live))
-                     'pending (map) 'closing 'undefined)))
-    (assertException 'error _
-      (cayrn_lfe_context:handle_info
-        (tuple 'capture io (self) (make_ref) #b("5") #b("wrong")) state))
-    (assertException 'error _
-      (cayrn_lfe_context:handle_info
-        (tuple 'foreground_ready io #b("5")) state))
-    (assertException 'error _
-      (cayrn_lfe_context:handle_info
-        (tuple 'retire_ready io #b("5")) state))
-    (assertException 'error _
-      (cayrn_lfe_context:handle_info
-        (tuple 'sealed io #b("5")) (map-set state 'waiting (list io))))
-    (assertMatch (tuple 'stop (tuple 'collector_lost 'normal) _)
-      (cayrn_lfe_context:handle_info
-        (tuple 'DOWN wrong 'process io 'normal)
-        (map-set state 'origins
-          (map io (tuple #b("2") 'unused monitor 'retiring)))))))
+  "Forged operation/ref/monitor cannot authorize capture or collector credit."
+  (with-control-state
+    (lambda (_client state io monitor)
+      (let ((wrong (make_ref)))
+        (assertException 'error _
+          (cayrn_lfe_context:handle_info
+            (tuple 'capture io wrong #b("5") (make_ref) (self) 1 #b("bad"))
+            state))
+        (lists:foreach
+          (lambda (kind)
+            (assertException 'error _
+              (cayrn_lfe_context:handle_info (tuple kind io #b("5")) state)))
+          '(foreground_ready retire_ready sealed))
+        (assertException 'error _
+          (cayrn_lfe_context:handle_info
+            (tuple 'DOWN wrong 'process io 'normal) state))
+        (assertEqual monitor (map-get (map-get (map-get state 'origins) io)
+                                     'monitor))))))
 
 (defun callback_order_inversions_test ()
-  "Drive actual lifecycle handlers with reversed delivery and I/O witnesses."
+  "Keep birth/exit/delivery and traced-send/request/ACK witnesses independent."
   (with-callback-state
     (lambda (_root state)
-      (let ((ref (make_ref)))
-        (assertException 'error _
-          (cayrn_lfe_io:handle_cast
-            (tuple 'committed (self) (self) ref) state))
-        (receive
-          ((tuple 'io_reply incoming _) (when (=:= incoming ref))
-           (error 'false_unknown_commit_ack))
-          (after 0 'ok)))))
+      (assertException 'error _
+        (cayrn_lfe_io:handle_cast
+          (tuple 'committed (self) (make_ref) (self) 1) state))))
   (lists:foreach
     (lambda (finish-first)
       (with-callback-state
         (lambda (root state)
           (let* ((before (if finish-first (finish-state state) state))
                  (accounted (exit-delivered root before))
-                 (complete (if finish-first accounted
-                             (finish-state accounted))))
-            (assert-ready)
-            (assertMatch (tuple 'noreply _) (tuple 'noreply complete))))))
-    '(false true))
-  ;; An orphan exit/delivery cannot disappear before the parent's birth trace.
+                 (_complete (if finish-first accounted
+                              (finish-state accounted))))
+            (assert-ready))))) '(false true))
   (with-callback-state
     (lambda (root state)
       (let* ((child (spawn (lambda () 'ok)))
              (orphan (exit-delivered child state))
              (born (info-state (tuple 'trace root 'spawn child 'entry) orphan)))
-        (exit-delivered root (finish-state born))
-        (assert-ready))))
+        (exit-delivered root (finish-state born)) (assert-ready))))
   (lists:foreach
     (lambda (send-first)
       (with-callback-state
@@ -304,35 +292,55 @@
                  (request (tuple 'io_request (self) ref
                             (tuple 'put_chars 'unicode #b("ordered"))))
                  (witness (tuple 'trace root 'send request (self)))
-                 (first (if send-first witness request))
-                 (second (if send-first request witness))
-                 (partial (info-state first state))
-                 (accounted (exit-delivered root (finish-state partial))))
+                 (partial (info-state (if send-first witness request) state))
+                 (accounted (exit-delivered root (finish-state partial)))
+                 (both (info-state (if send-first request witness) accounted)))
             (assert-no-ready)
-            (let ((both (info-state second accounted)))
-              (receive
-                ((tuple 'capture _ _ incoming _ _) (when (=:= incoming ref))
-                 'ok)
-                (after 1000 (error 'missing_ordered_capture)))
+            (let* (((tuple captured job worker index text)
+                    (callback-capture both)))
+              (assertEqual #b("ordered") text)
               (assert-no-ready)
-              (cayrn_lfe_io:handle_cast
-                (tuple 'committed (self) (self) ref) both)
-              (receive
-                ((tuple 'io_reply incoming 'ok) (when (=:= incoming ref)) 'ok)
-                (after 1000 (error 'missing_committed_reply)))
-              (assert-ready))))))
-    '(false true)))
+              (let (((tuple 'noreply committed)
+                     (cayrn_lfe_io:handle_cast
+                       (tuple 'committed (self) job worker index) captured)))
+                (callback-reply ref committed)
+                (assert-ready))))))) '(false true)))
+
+(defun callback-capture (state)
+  (receive
+    ((tuple 'admit_io _ _ job)
+     (let (((tuple 'noreply next)
+            (cayrn_lfe_io:handle_cast (tuple 'admit (self) job 'grant) state)))
+       (callback-capture next)))
+    ((tuple 'formatter_ready _ _ job worker)
+     (let (((tuple 'noreply next)
+            (cayrn_lfe_io:handle_cast
+              (tuple 'activate_formatter (self) job worker) state)))
+       (callback-capture next)))
+    ((= (tuple 'stream_chunk _ _ _ _) message)
+     (callback-capture (info-state message state)))
+    ((tuple 'capture _ _ _ job worker index text)
+     (tuple state job worker index text))
+    (after 1000 (error 'missing_callback_capture))))
+
+(defun callback-reply (ref state)
+  (receive
+    ((tuple 'io_reply incoming reply) (when (=:= incoming ref))
+     (assertEqual 'ok reply))
+    ((tuple 'job_done _ _ _ _) (callback-reply ref state))
+    (message
+     (callback-reply ref (info-state message state)))
+    (after 1000 (error 'missing_callback_reply))))
 
 (defun closed_socket_retains_acquired_cleanup_state_test ()
-  "A socket rearm failure returns the newly acquired root/origin for teardown."
+  "Rearm failure retains provisional collector and its paused owned root."
   (with-control-state
     (lambda (_client state _io _monitor)
       (let* ((socket (map-get state 'socket))
              ('ok (gen_tcp:close socket))
-             (before
-               (map-set state 'active 'undefined 'origins (map)
-                 'last-token 0 'seq 0 'env (cayrn-lfe-eval:new)
-                 'identity (tuple #b("s") #b("g") #b("a"))))
+             (before (map-set state 'active 'undefined 'origins (map)
+                       'last-token 0 'seq 0 'env (cayrn-lfe-eval:new)
+                       'identity (tuple #b("s") #b("g") #b("a"))))
              ((tuple 'stop _reason acquired)
               (cayrn_lfe_context:handle_info
                 (tuple 'tcp socket
@@ -341,85 +349,109 @@
                       (map 'kind 'dispatch 'operation #b("2")
                            'generation #b("g") 'authority #b("a")
                            'source #b("(timer:sleep 10000)"))))) before))
-             ((tuple root monitor _ origin) (map-get acquired 'active))
-             ((tuple _ _ origin-monitor _)
-              (map-get (map-get acquired 'origins) origin)))
-        (assertEqual 1 (map_size (map-get acquired 'origins)))
-        (assert (is_process_alive root))
-        (cayrn_lfe_context:terminate 'normal acquired)
+             ((tuple 'starting _ origin ref) (map-get acquired 'active))
+             (origin-monitor
+               (map-get (map-get (map-get acquired 'origins) origin)
+                        'monitor)))
         (receive
-          ((tuple 'DOWN incoming 'process pid 'killed)
-           (when (=:= incoming monitor) (=:= pid root)) 'ok)
-          (after 1000 (error 'acquired_root_leaked)))
-        (receive
-          ((tuple 'DOWN incoming 'process pid 'killed)
-           (when (=:= incoming origin-monitor) (=:= pid origin)) 'ok)
-          (after 1000 (error 'acquired_collector_leaked)))
-        (assertNot (is_process_alive origin))))))
+          ((= (tuple 'origin_ready io incoming root _trace) ready)
+           (when (=:= io origin) (=:= incoming ref))
+           (let* (((tuple 'noreply registered)
+                   (cayrn_lfe_context:handle_info ready acquired))
+                  (monitor
+                    (map-get (map-get (map-get registered 'origins) origin)
+                             'root-monitor)))
+             (assert (is_process_alive root))
+             (cayrn_lfe_context:terminate 'normal registered)
+             (receive
+               ((tuple 'DOWN incoming 'process pid _)
+                (when (=:= incoming monitor) (=:= pid root)) 'ok)
+               (after 1000 (error 'acquired_root_leaked)))
+             (receive
+               ((tuple 'DOWN incoming 'process pid _)
+                (when (=:= incoming origin-monitor) (=:= pid origin)) 'ok)
+               (after 1000 (error 'acquired_collector_leaked)))))
+          (after 1000 (error 'missing_provisional_origin)))))))
 
 (defun trace_session_isolation_test ()
-  "Destroying capture leaves an independently configured session intact."
-  (let* ((root (spawn (lambda () (receive ('stop 'ok)))))
-         (independent (trace:session_create 'x21_independent (self) '()))
-         (1 (trace:process independent root 'true '(procs)))
-         ((tuple 'ok state)
-          (cayrn_lfe_io:init (tuple (self) #b("2") root))))
-    (try
-      (progn
-        (cayrn_lfe_io:terminate 'normal state)
-        (assertEqual '#(flags (procs)) (trace:info independent root 'flags)))
-      (after
-        (trace:session_destroy independent)
-        (exit root 'kill)))))
+  "Destroying capture leaves an independently configured trace unchanged."
+  (with-callback-state
+    (lambda (root state)
+      (let* ((probe (spawn (lambda () (receive ('stop 'ok)))))
+             (independent (trace:session_create 'x21_independent (self) '()))
+             (1 (trace:process independent root 'true '(procs)))
+             (1 (trace:process independent probe 'true '(procs))))
+        (try
+          (progn
+            (cayrn_lfe_io:terminate 'normal state)
+            (assertEqual '#(flags (procs))
+                         (trace:info independent probe 'flags)))
+          (after (trace:session_destroy independent) (exit probe 'kill)))))))
 
 (defun quiet_result_waits_for_exact_down_test ()
-  "Retire-ready cannot publish a quiet result or return a physical credit."
+  "Retire-ready alone cannot publish or return a physical origin credit."
   (with-control-state
     (lambda (client state io monitor)
-      (let* (((tuple 'noreply retiring)
-              (cayrn_lfe_context:handle_info
-                (tuple 'retire_ready io #b("2")) state)))
+      (let (((tuple 'noreply retiring)
+             (cayrn_lfe_context:handle_info
+               (tuple 'retire_ready io #b("2")) state)))
         (assertEqual 1 (map_size (map-get retiring 'origins)))
         (assertEqual '#(error timeout) (gen_tcp:recv client 0 20))
         (! io 'exit)
-        (receive
-          ((= (tuple 'DOWN incoming 'process pid 'normal) down)
-           (when (=:= incoming monitor) (=:= pid io))
-           (let (((tuple 'noreply next)
-                  (cayrn_lfe_context:handle_info down retiring)))
-             (assertEqual 0 (map_size (map-get next 'origins)))
-             (assertEqual #b("42") (map-get (read-frame client) #b("value")))))
-          (after 1000 (error 'missing_exact_collector_down)))))))
+        (let ((next (collector-down io monitor retiring)))
+          (assertEqual 0 (map_size (map-get next 'origins)))
+          (assertEqual #b("42") (map-get (read-frame client) #b("value"))))))))
 
 (defun retiring_down_and_close_barriers_test ()
-  "Close waits for a granted retirement and never grants after forced seal."
-  (with-control-state
-    (lambda (client state io monitor)
-      (let* (((tuple 'noreply retiring)
-              (cayrn_lfe_context:handle_info
-                (tuple 'retire_ready io #b("2")) state))
-             ((tuple 'noreply closing) (close-state retiring)))
-        (assertEqual #b("outcome") (map-get (read-frame client) #b("kind")))
-        (assertEqual '#(error timeout) (gen_tcp:recv client 0 20))
-        (! io 'exit)
-        (receive
-          ((= (tuple 'DOWN incoming 'process pid 'normal) down)
-           (when (=:= incoming monitor) (=:= pid io))
-           (assertMatch (tuple 'stop 'normal _)
-             (cayrn_lfe_context:handle_info down closing))
-           (assertEqual #b("closed") (map-get (read-frame client) #b("kind"))))
-          (after 1000 (error 'missing_retiring_close_down))))))
-  (with-control-state
-    (lambda (client state io _monitor)
-      (let* (((tuple 'noreply closing) (close-state state))
-             ((tuple 'noreply held)
-              (cayrn_lfe_context:handle_info
-                (tuple 'retire_ready io #b("2")) closing)))
-        (assertEqual #b("outcome") (map-get (read-frame client) #b("kind")))
-        (assertEqual '#(error timeout) (gen_tcp:recv client 0 20))
-        (assertMatch (tuple 'stop 'normal _)
-          (cayrn_lfe_context:handle_info (tuple 'sealed io #b("2")) held))
-        (assertEqual #b("closed") (map-get (read-frame client) #b("kind")))))))
+  "Close waits exact collector death after natural grant or strong seal."
+  (lists:foreach
+    (lambda (retire-first)
+      (with-control-state
+        (lambda (client state io monitor)
+          (let* ((before
+                   (if retire-first
+                     (element 2
+                       (cayrn_lfe_context:handle_info
+                         (tuple 'retire_ready io #b("2")) state)) state))
+                 ((tuple 'noreply closing) (close-state before))
+                 (retiring
+                   (if retire-first closing
+                     (element 2
+                       (cayrn_lfe_context:handle_info
+                         (tuple 'sealed io #b("2")) closing)))))
+            (assertEqual '#(error timeout) (gen_tcp:recv client 0 20))
+            (! io 'exit)
+            (let ((published (collector-down io monitor retiring)))
+              (assertEqual #b("outcome")
+                           (map-get (read-frame client) #b("kind")))
+              (assertMatch (tuple 'stop 'normal _)
+                (settle-writer published))
+              (assertEqual #b("closed")
+                           (map-get (read-frame client) #b("kind"))))))))
+    '(false true)))
+
+(defun collector-down (io monitor state)
+  (receive
+    ((= (tuple 'DOWN incoming 'process pid 'normal) down)
+     (when (=:= incoming monitor) (=:= pid io))
+     (let (((tuple 'noreply next)
+            (cayrn_lfe_context:handle_info down state))) next))
+    (after 1000 (error 'missing_exact_collector_down))))
+
+(defun settle-writer (state)
+  (receive
+    ((= (tuple 'writer_sent _ _) message)
+     (case (cayrn_lfe_context:handle_info message state)
+       ((tuple 'noreply next) (settle-writer next))
+       (stop stop)))
+    ((= (tuple 'DOWN monitor 'process writer _) message)
+     (when (=:= writer (map-get state 'writer))
+           (=:= monitor (map-get state 'writer-monitor)))
+     (case (cayrn_lfe_context:handle_info message state)
+       ((tuple 'noreply next) (settle-writer next))
+       (stop stop)))
+    ((tuple 'EXIT _ 'normal) (settle-writer state))
+    (after 1000 (error 'missing_terminal_writer_disposition))))
 
 (defun close-state (state)
   (cayrn_lfe_context:handle_info
@@ -438,34 +470,64 @@
          ((tuple io monitor)
           (spawn_monitor (lambda () (receive ('exit 'ok)))))
          (trace (trace:session_create 'x21_control (self) '()))
-         (state (map 'socket server 'active
-                     (tuple 'finishing #b("2") io 'succeeded #b("42") 'false)
-                     'origins (map io (tuple #b("2") trace monitor 'live))
-                     'pending (map) 'closing 'undefined)))
+         ((tuple 'ok initial _) (cayrn_lfe_context:init server))
+         (state (map-set initial
+                  'active (tuple 'finishing #b("2") io
+                                 'succeeded #b("42") 'false)
+                  'origins
+                    (map io (map 'operation #b("2") 'trace trace
+                                 'monitor monitor 'phase 'live
+                                 'ref (make_ref) 'root 'undefined
+                                 'root-monitor 'undefined 'result-seen 'true
+                                 'root-down 'true 'collector-down 'false)))))
     (link io)
     (try (funcall function client state io monitor)
       (after
-        (unlink io)
-        (exit io 'kill)
+        (unlink io) (exit io 'kill)
         (erlang:demonitor monitor '(flush))
         (trace:session_destroy trace)
-        (gen_tcp:close server)
-        (gen_tcp:close client)
+        (exit (map-get state 'writer) 'kill)
+        (erlang:demonitor (map-get state 'writer-monitor) '(flush))
+        (gen_tcp:close server) (gen_tcp:close client)
         (gen_tcp:close listener)))))
 
 (defun with-callback-state (function)
-  (let* ((root (spawn (lambda () (receive ('stop 'ok)))))
+  ;; A collector callback fixture owns its whole mailbox. Repeated umbrella
+  ;; discovery must not feed unrelated prior context/writer EXITs into it.
+  (let (((tuple pid monitor)
+         (spawn_monitor
+           (lambda ()
+             (process_flag 'trap_exit 'true)
+             (callback-fixture function)))))
+    (receive
+      ((tuple 'DOWN incoming 'process owned reason)
+       (when (=:= incoming monitor) (=:= owned pid))
+       (assertEqual 'normal reason))
+      (after 4000 (exit pid 'kill) (error 'callback_fixture_timeout)))))
+
+(defun callback-fixture (function)
+  (let* ((ref (make_ref))
          ((tuple 'ok state)
-          (cayrn_lfe_io:init (tuple (self) #b("2") root))))
-    (try (funcall function root state)
-      (after
-        (cayrn_lfe_io:terminate 'normal state)
-        (exit root 'kill)))))
+          (cayrn_lfe_io:init (tuple (self) #b("2") ref (lambda () 'ok)))))
+    (receive
+      ((tuple 'origin_ready owner incoming root _trace)
+       (when (=:= owner (self)) (=:= incoming ref))
+       (let ((monitor (monitor 'process root)))
+         (try (funcall function root state)
+           (after
+             (cayrn_lfe_io:terminate 'normal state)
+             (receive
+               ((tuple 'DOWN incoming 'process pid _)
+                (when (=:= incoming monitor) (=:= pid root)) 'ok)
+               (after 1000 (error 'callback_root_cleanup_failed)))
+             (receive
+               ((tuple 'EXIT pid _) (when (=:= pid root)) 'ok)
+               (after 0 'ok))))))
+      (after 1000 (error 'missing_callback_origin)))))
 
 (defun finish-state (state)
   (let (((tuple 'noreply next)
-         (cayrn_lfe_io:handle_cast (tuple 'finished (self)) state)))
-    next))
+         (cayrn_lfe_io:handle_cast (tuple 'finished (self)) state))) next))
 
 (defun info-state (message state)
   (let (((tuple 'noreply next) (cayrn_lfe_io:handle_info message state))) next))
@@ -478,13 +540,11 @@
       (after 1000 (error 'missing_trace_delivery)))))
 
 (defun assert-ready ()
-  (receive
-    ((tuple 'retire_ready _ #b("2")) 'ok)
+  (receive ((tuple 'retire_ready _ #b("2")) 'ok)
     (after 1000 (error 'missing_retire_ready))))
 
 (defun assert-no-ready ()
-  (receive
-    ((tuple 'retire_ready _ _) (error 'premature_retirement))
+  (receive ((tuple 'retire_ready _ _) (error 'premature_retirement))
     (after 0 'ok)))
 
 (defun with-peer (function)
