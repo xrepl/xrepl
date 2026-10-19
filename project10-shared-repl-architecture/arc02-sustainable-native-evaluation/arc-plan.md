@@ -1,6 +1,6 @@
 # Arc02 — sustainable native evaluation
 
-Version1.6,2026-10-19. Active under scoped Autonomous Mode. Project10 source release/0.2.x.
+Version1.7,2026-10-19. Active under scoped Autonomous Mode. Project10 source release/0.2.x.
 Original prepared one-contributor wording is superseded by the activation below.
 Sofie CDC independently reviews the assigned CC implementation. Arc01's import and
 LFE conversion are committed at ea844f5/f261152 with pending independent gates.
@@ -31,7 +31,8 @@ final system size/churn checks are additional composition, not deferred-only QA.
 | --- | --- | --- | --- |
 | [Slice01 — fenced capture lifetimes](slice01-fenced-capture-lifetimes/slice-plan.md) | More-than 256 native evaluations; scalar token fence,64 live capture origins, collector retirement with late-output/ACK/close proof | Actual Cayrn C03 native v2 identity/journal return | Independently accepted7228183/7b27b0f; matching native2 gate passed |
 | [Slice02 — node authority leases](slice02-node-authority-leases/slice-plan.md) | Bounded live native lease/context registry; boot/lease/ticket fencing removes4096 cumulative guard | Actual accepted Cayrn C04 native3 handoff; Operator direction approved | Independently accepted38338d6/3bcbbdb; actual native3 gate passed |
-| Slice03 — size-safe previews and captured streams | Bounded explicit value previews and complete bounded-chunk captured output, pressure paths preserving environment/capture ACK correctness | Actual Cayrn C05 structured-preview contract after C04/X02; stable size budgets | Roadmap only; complete source-led pressure/ownership/preview design required |
+| [Slice03 — bounded result previews](slice03-bounded-result-previews/slice-plan.md) | Native4 bounded validUTF8 result/error previews, shared metadata and rebuilt consumer; immediate real gate | Actual accepted CayrnC05 source34af63e/planning149ae8c, native38338d6 | Issued cc-prompt.md; all8open |
+| Slice04 — owned captured streams | Complete bounded output chunks, responsive context/formatter/writer, foreground-root lifetime and NR02 teardown under pending output | Accepted X03; source-led reviewed ownership/ACK/pressure recipe required | Roadmap only; all original output/NR02 obligations retained |
 
 Directory numbering does not invent a dependency from node identities to size
 safety. First-slice operation fencing/collector budgets do not solve node churn,
@@ -299,3 +300,24 @@ teardown under general pending output. X-TOOL-01 freshness limitation bubbles to
 project tooling/package owner; require actual current-byte/fresh checks meanwhile.
 This is status/evidence feedback within authorized arc, no new arc, UX, release,
 acceptance weakening or automatic acceptance of Project01/09 history.
+
+## v1.7 — source-led native size decomposition,2026-10-19
+
+CDC within Operator-authorized Arc02 splits the formerly UNISSUED combined
+X03(size-safepreviews+capturedstreams) into X03boundedresultpreviews and X04owned
+capturedstreams. No issued prompt/directory renamed; no criterion softened.
+C05 actualaccepted34af63e/planning149ae8c precedes X03 native4 and consumer match;
+all17realcases run at X03 landing. X04 retains every complete-output/chunk/pressure/
+ACK/slowconsumer/control and seriousNR02/root-startup/supervisor teardown obligation.
+C06 remains full crossrepo composition after BOTH, before native arc close.
+Current order C04→X02→C05→X03→X04→C06; supersedes earlier combined-X03 references.
+
+Why: bounded renderer is an independently usable ordinary-result fix; ownership
+review P2 proved root ownership cannot be accepted before responsive collector
+AND context handling under blocked send. Combine those mechanisms in X04 rather
+than claiming a standalone ownership fix. Evidence in Slice03 artifacts/
+ownership-review.md; earlier NR02 evidence in X02 remains unchanged. This is
+implementation decomposition within approved architecture/scope, not a new
+failure/durability policy or separate investigation. X04 needs full exact recipe
+before its prompt. XA02-04 maps X03; XA02-05 maps X04; XA02-06 maps X04+C06;
+all7arc and project rows unchanged. PublicRPC1/native4 and no silent output loss.
