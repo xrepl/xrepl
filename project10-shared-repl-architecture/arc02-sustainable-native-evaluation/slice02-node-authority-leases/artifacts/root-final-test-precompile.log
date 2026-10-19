@@ -1,0 +1,31 @@
+$ rebar3 as test compile
+CWD /Users/oubiwann/lab/lfe/xrepl/xrepl
+Overrides unset: CAYRN_LFE_DIR XREPL_DIR XREPL_BIN CARGO_TARGET_DIR
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling apps/cayrn_lfe/src/cayrn_lfe_listener.lfe
+===> Compiling apps/cayrn_lfe/src/cayrn_lfe_app.lfe
+===> Compiling apps/cayrn_lfe/src/cayrn_lfe_sup.lfe
+===> Compiling apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe
+===> Compiling apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe
+=ERROR REPORT==== 19-Oct-2026::01:32:16.103637 ===
+Can't load module 'sys' that resides in sticky dir
+
+===> Compiling apps/cayrn_lfe/src/cayrn_lfe_listener.lfe
+===> Compiling apps/cayrn_lfe/src/cayrn_lfe_app.lfe
+===> Compiling apps/cayrn_lfe/src/cayrn_lfe_registry.lfe
+===> Compiling apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe
+===> Compiling apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe
+===> Compiling apps/cayrn_lfe/src/cayrn-lfe-eval.lfe
+===> Compiling apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe
+===> Compiling apps/cayrn_lfe/src/cayrn_lfe_sup.lfe
+===> Compiling apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe
+===> Compiling apps/cayrn_lfe/src/cayrn_lfe_connection.lfe
+===> Compiling apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe
+===> Compiling apps/cayrn_lfe/src/cayrn_lfe_authority.lfe
+===> Compiling apps/cayrn_lfe/src/cayrn_lfe_io.lfe
+===> Compiling apps/cayrn_lfe/src/cayrn_lfe_context.lfe
+===> Compiling cayrn_lfe
+===> Compiling xrepl
+
+EXIT 0

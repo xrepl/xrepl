@@ -1,0 +1,60 @@
+$ ['git', 'rev-parse', 'HEAD']
+7228183e2e584e0ab86e03dc6b9454d4b918cc38
+EXIT 0
+$ ['git', 'branch', '--show-current']
+release/0.2.x
+EXIT 0
+$ ['git', 'diff', '--cached', '--name-only']
+EXIT 0
+$ ['git', 'diff', '--check']
+EXIT 0
+$ ['git', 'add', '--', 'apps/cayrn_lfe/src/cayrn_lfe_registry.lfe', 'apps/cayrn_lfe/src/cayrn_lfe_connection.lfe', 'apps/cayrn_lfe/src/cayrn_lfe_authority.lfe', 'apps/cayrn_lfe/src/cayrn_lfe_context.lfe', 'apps/cayrn_lfe/src/cayrn_lfe_listener.lfe', 'apps/cayrn_lfe/src/cayrn_lfe_sup.lfe', 'apps/cayrn_lfe/src/cayrn_lfe.app.src', 'apps/cayrn_lfe/include/cayrn_lfe_registry.lfe', 'apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe', 'apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe', 'apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe', 'apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe', 'apps/cayrn_lfe/README.md', 'apps/cayrn_lfe/AGENTS.md', 'README.md', 'apps/cayrn_lfe/src/cayrn_lfe_app.lfe']
+EXIT 0
+$ ['git', 'commit', '--only', '--file', '/private/tmp/x02-commit-message.txt', '--', 'apps/cayrn_lfe/src/cayrn_lfe_registry.lfe', 'apps/cayrn_lfe/src/cayrn_lfe_connection.lfe', 'apps/cayrn_lfe/src/cayrn_lfe_authority.lfe', 'apps/cayrn_lfe/src/cayrn_lfe_context.lfe', 'apps/cayrn_lfe/src/cayrn_lfe_listener.lfe', 'apps/cayrn_lfe/src/cayrn_lfe_sup.lfe', 'apps/cayrn_lfe/src/cayrn_lfe.app.src', 'apps/cayrn_lfe/include/cayrn_lfe_registry.lfe', 'apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe', 'apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe', 'apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe', 'apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe', 'apps/cayrn_lfe/README.md', 'apps/cayrn_lfe/AGENTS.md', 'README.md', 'apps/cayrn_lfe/src/cayrn_lfe_app.lfe']
+[release/0.2.x 38338d6] feat(agent): add bounded native3 authority lifetimes
+ 16 files changed, 1969 insertions(+), 163 deletions(-)
+ create mode 100644 apps/cayrn_lfe/include/cayrn_lfe_registry.lfe
+ create mode 100644 apps/cayrn_lfe/src/cayrn_lfe_authority.lfe
+ create mode 100644 apps/cayrn_lfe/src/cayrn_lfe_connection.lfe
+ create mode 100644 apps/cayrn_lfe/src/cayrn_lfe_registry.lfe
+ create mode 100644 apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe
+EXIT 0
+$ ['git', 'rev-parse', 'HEAD']
+38338d6ad38898fd24063b6c89582f0ff486aa30
+EXIT 0
+$ ['git', 'diff-tree', '--no-commit-id', '--name-only', '-r', '38338d6ad38898fd24063b6c89582f0ff486aa30']
+README.md
+apps/cayrn_lfe/AGENTS.md
+apps/cayrn_lfe/README.md
+apps/cayrn_lfe/include/cayrn_lfe_registry.lfe
+apps/cayrn_lfe/src/cayrn_lfe.app.src
+apps/cayrn_lfe/src/cayrn_lfe_app.lfe
+apps/cayrn_lfe/src/cayrn_lfe_authority.lfe
+apps/cayrn_lfe/src/cayrn_lfe_connection.lfe
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe
+apps/cayrn_lfe/src/cayrn_lfe_listener.lfe
+apps/cayrn_lfe/src/cayrn_lfe_registry.lfe
+apps/cayrn_lfe/src/cayrn_lfe_sup.lfe
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe
+EXIT 0
+$ ['git', 'log', '-1', '--format=%B']
+feat(agent): add bounded native3 authority lifetimes
+
+Replace lifetime context identity history with monitored authority leases and
+fenced context tickets. Preserve physical credits through authority loss, and
+keep the application-owned listening endpoint alive across native child failures.
+
+Co-authored-by: Codex <noreply@openai.com>
+Co-authored-by: Billo AI <ai-engineering@billo.systems>
+
+EXIT 0
+$ ['git', 'diff', '--cached', '--name-only']
+EXIT 0
+$ ['git', 'status', '--short']
+?? docs/design/
+EXIT 0
+All16 committed blob SHA256s agree with frozen pre-gate source.
+Patch SHA256 81730df7b3fe390685602912dfdeb982bc270fee81393f8a654a9246a411411e

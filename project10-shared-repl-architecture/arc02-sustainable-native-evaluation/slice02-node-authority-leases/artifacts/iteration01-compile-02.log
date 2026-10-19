@@ -1,0 +1,10 @@
+$ make build
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_app.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling cayrn_lfe
+
+EXIT 0

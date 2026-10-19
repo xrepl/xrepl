@@ -1,0 +1,344 @@
+[
+  {
+    "module": "cayrn-lfe-eval",
+    "declared_exports": 2,
+    "generated_exports": [
+      [
+        "LFE-EXPAND-EXPORTED-MACRO",
+        3
+      ],
+      [
+        "__info__",
+        1
+      ],
+      [
+        "module_info",
+        0
+      ],
+      [
+        "module_info",
+        1
+      ]
+    ],
+    "beam": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn-lfe-eval.beam"
+  },
+  {
+    "module": "cayrn_lfe_app",
+    "declared_exports": 2,
+    "generated_exports": [
+      [
+        "LFE-EXPAND-EXPORTED-MACRO",
+        3
+      ],
+      [
+        "__info__",
+        1
+      ],
+      [
+        "module_info",
+        0
+      ],
+      [
+        "module_info",
+        1
+      ]
+    ],
+    "beam": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_app.beam"
+  },
+  {
+    "module": "cayrn_lfe_authority",
+    "declared_exports": 6,
+    "generated_exports": [
+      [
+        "LFE-EXPAND-EXPORTED-MACRO",
+        3
+      ],
+      [
+        "__info__",
+        1
+      ],
+      [
+        "module_info",
+        0
+      ],
+      [
+        "module_info",
+        1
+      ]
+    ],
+    "beam": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_authority.beam"
+  },
+  {
+    "module": "cayrn_lfe_connection",
+    "declared_exports": 6,
+    "generated_exports": [
+      [
+        "LFE-EXPAND-EXPORTED-MACRO",
+        3
+      ],
+      [
+        "__info__",
+        1
+      ],
+      [
+        "module_info",
+        0
+      ],
+      [
+        "module_info",
+        1
+      ]
+    ],
+    "beam": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_connection.beam"
+  },
+  {
+    "module": "cayrn_lfe_context",
+    "declared_exports": 6,
+    "generated_exports": [
+      [
+        "LFE-EXPAND-EXPORTED-MACRO",
+        3
+      ],
+      [
+        "__info__",
+        1
+      ],
+      [
+        "module_info",
+        0
+      ],
+      [
+        "module_info",
+        1
+      ]
+    ],
+    "beam": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_context.beam"
+  },
+  {
+    "module": "cayrn_lfe_io",
+    "declared_exports": 10,
+    "generated_exports": [
+      [
+        "LFE-EXPAND-EXPORTED-MACRO",
+        3
+      ],
+      [
+        "__info__",
+        1
+      ],
+      [
+        "module_info",
+        0
+      ],
+      [
+        "module_info",
+        1
+      ]
+    ],
+    "beam": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_io.beam"
+  },
+  {
+    "module": "cayrn_lfe_listener",
+    "declared_exports": 6,
+    "generated_exports": [
+      [
+        "LFE-EXPAND-EXPORTED-MACRO",
+        3
+      ],
+      [
+        "__info__",
+        1
+      ],
+      [
+        "module_info",
+        0
+      ],
+      [
+        "module_info",
+        1
+      ]
+    ],
+    "beam": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_listener.beam"
+  },
+  {
+    "module": "cayrn_lfe_registry",
+    "declared_exports": 8,
+    "generated_exports": [
+      [
+        "LFE-EXPAND-EXPORTED-MACRO",
+        3
+      ],
+      [
+        "__info__",
+        1
+      ],
+      [
+        "module_info",
+        0
+      ],
+      [
+        "module_info",
+        1
+      ]
+    ],
+    "beam": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_registry.beam"
+  },
+  {
+    "module": "cayrn_lfe_sup",
+    "declared_exports": 5,
+    "generated_exports": [
+      [
+        "LFE-EXPAND-EXPORTED-MACRO",
+        3
+      ],
+      [
+        "__info__",
+        1
+      ],
+      [
+        "module_info",
+        0
+      ],
+      [
+        "module_info",
+        1
+      ]
+    ],
+    "beam": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_sup.beam"
+  },
+  {
+    "module": "cayrn_lfe_application_tests",
+    "declared_exports": 13,
+    "generated_exports": [
+      [
+        "LFE-EXPAND-EXPORTED-MACRO",
+        3
+      ],
+      [
+        "__info__",
+        1
+      ],
+      [
+        "module_info",
+        0
+      ],
+      [
+        "module_info",
+        1
+      ],
+      [
+        "test",
+        0
+      ]
+    ],
+    "beam": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_application_tests.beam"
+  },
+  {
+    "module": "cayrn_lfe_authority_tests",
+    "declared_exports": 24,
+    "generated_exports": [
+      [
+        "LFE-EXPAND-EXPORTED-MACRO",
+        3
+      ],
+      [
+        "__info__",
+        1
+      ],
+      [
+        "module_info",
+        0
+      ],
+      [
+        "module_info",
+        1
+      ],
+      [
+        "test",
+        0
+      ]
+    ],
+    "beam": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_authority_tests.beam"
+  },
+  {
+    "module": "cayrn_lfe_eval_tests",
+    "declared_exports": 4,
+    "generated_exports": [
+      [
+        "LFE-EXPAND-EXPORTED-MACRO",
+        3
+      ],
+      [
+        "__info__",
+        1
+      ],
+      [
+        "module_info",
+        0
+      ],
+      [
+        "module_info",
+        1
+      ],
+      [
+        "test",
+        0
+      ]
+    ],
+    "beam": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_eval_tests.beam"
+  },
+  {
+    "module": "cayrn_lfe_io_tests",
+    "declared_exports": 3,
+    "generated_exports": [
+      [
+        "LFE-EXPAND-EXPORTED-MACRO",
+        3
+      ],
+      [
+        "__info__",
+        1
+      ],
+      [
+        "module_info",
+        0
+      ],
+      [
+        "module_info",
+        1
+      ],
+      [
+        "test",
+        0
+      ]
+    ],
+    "beam": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_io_tests.beam"
+  },
+  {
+    "module": "cayrn_lfe_resource_tests",
+    "declared_exports": 14,
+    "generated_exports": [
+      [
+        "LFE-EXPAND-EXPORTED-MACRO",
+        3
+      ],
+      [
+        "__info__",
+        1
+      ],
+      [
+        "module_info",
+        0
+      ],
+      [
+        "module_info",
+        1
+      ],
+      [
+        "test",
+        0
+      ]
+    ],
+    "beam": "/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_resource_tests.beam"
+  }
+]

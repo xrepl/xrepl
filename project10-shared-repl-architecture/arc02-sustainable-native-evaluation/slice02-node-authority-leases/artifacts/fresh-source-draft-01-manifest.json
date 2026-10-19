@@ -1,0 +1,30 @@
+{
+  "directory": "/private/tmp/cayrn-x02-fresh-lio6s_td",
+  "files": {
+    "apps/cayrn_lfe/.gitignore": "da409d38dcfe4285271c31e0659846543f9c4495a222ff32f299372b8f808774",
+    "apps/cayrn_lfe/AGENTS.md": "efc297ceabf3e0d75321f0e869929fea0781e9422b465a7a6634f88f8068dc6f",
+    "apps/cayrn_lfe/LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "apps/cayrn_lfe/Makefile": "bc0993c07194a64bc0ae9455345f09507252c938a02e502aa64daac4c95f0270",
+    "apps/cayrn_lfe/README.md": "02e8bdd9b42ed6c36f195881381705b7ce4d90edc509023536f5a7ab44bb79cc",
+    "apps/cayrn_lfe/bin/cayrn-lfe": "daaf7cfbca9d57e272b526d3391ad677315d50d909dedae8b4741a5835884fad",
+    "apps/cayrn_lfe/include/cayrn_lfe_registry.lfe": "4b3b978528d37929957635cd557f48ceab3b35f8b5fb1c719e78a8599569b07b",
+    "apps/cayrn_lfe/rebar.config": "1b8ecd6cfeb1bad08dc9ef00bc10a0406a76d3522b50d9ac70857eb178cb3da3",
+    "apps/cayrn_lfe/rebar.lock": "e19bc76be33c1751218cd32f62c5719d30926454b2a2a83acc72a693c4d3b8e4",
+    "apps/cayrn_lfe/src/cayrn-lfe-eval.lfe": "16ffae22648e9c82696aee208dbe6dab3913c5aef9816c5973ba6ad2af0b91d2",
+    "apps/cayrn_lfe/src/cayrn_lfe.app.src": "cc937ea98a8ff85b5850781a28351b09bb630a8c8868bbd306645c4cb81e32ca",
+    "apps/cayrn_lfe/src/cayrn_lfe_app.lfe": "c3611e97ca32bc16fc9a39e945fcb1bfdf56ef39bbc760034e97f91d666b1f24",
+    "apps/cayrn_lfe/src/cayrn_lfe_authority.lfe": "4ab5a07df7a3447dd6aed55577478dabcbe2e6d2badd607565bdab7df63e47e2",
+    "apps/cayrn_lfe/src/cayrn_lfe_connection.lfe": "7d507067a2395bd1f0e0eef1e26e9446b90e9344f35f049e90d67b55fc809d24",
+    "apps/cayrn_lfe/src/cayrn_lfe_context.lfe": "e68c43ba51fbe04ec230683e85f7c1c9f73f45e22a32ac13a652ea464ac532e8",
+    "apps/cayrn_lfe/src/cayrn_lfe_io.lfe": "380419f727eaed9c0dac379b489c9ad4e0baf7a3e09ceabe58cc286706fc50d3",
+    "apps/cayrn_lfe/src/cayrn_lfe_listener.lfe": "55fcbc8b7ecbce47933fe2d90eec7dbfa6642f2e8b1dbb832066eee448844327",
+    "apps/cayrn_lfe/src/cayrn_lfe_registry.lfe": "d63095327af1916c9db7aef73b0a1b359d28507a39a8b619661f531946245627",
+    "apps/cayrn_lfe/src/cayrn_lfe_sup.lfe": "d2f55deb780378aa2bdfa05b0b9c93acea8bdf24112cbab17ebfa0c4db20250b",
+    "apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe": "db1b3e19cb0836e5c7b3e1c7a8ba88a6aeab02f34cd1ac133c7b5aec51e9fc33",
+    "apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe": "e528dde809dc488df5562b1e95f22a8c19f394fa4af2fbabdfca7cf729066a8c",
+    "apps/cayrn_lfe/test/cayrn_lfe_eval_tests.lfe": "1b3e2294625b6ab248a81e7e71d1c1085e8f74f9f2162a455599cb8bc59b4255",
+    "apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe": "2c0435daa7b80c107b53e46d94c3bad4181f3d39fe113afec596380e9e5b9b54",
+    "apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe": "e91229e8eaa10315d3cacc71ce7b5971b56807ce9ce6afaec837d66e19dd0361"
+  },
+  "inherited_build_files": 0
+}

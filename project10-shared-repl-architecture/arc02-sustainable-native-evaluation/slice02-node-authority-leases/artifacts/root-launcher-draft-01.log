@@ -1,0 +1,14 @@
+$ /Users/oubiwann/lab/lfe/xrepl/xrepl/bin/cayrn-lfe '/private/tmp/cayrn-x02-root launch l5kuth0c/agent socket.sock'
+CWD /private/tmp
+SEND {"kind": "authority_hello", "version": 3, "authority": "0506434c-1c4b-49b6-b23b-d2881e4e6386"}
+RECV {"version": 3, "boot": "834C54D1C84490672520FBE5F73C76CA", "lease": "1", "kind": "authority_ready"}
+SEND {"kind": "hello", "version": 3, "session": "root-smoke", "generation": "g", "authority": "0506434c-1c4b-49b6-b23b-d2881e4e6386", "boot": "834C54D1C84490672520FBE5F73C76CA", "lease": "1", "ticket": "1"}
+RECV {"version": 3, "boot": "834C54D1C84490672520FBE5F73C76CA", "interrupt": "session_destructive", "lease": "1", "kind": "ready", "backend": "lfe", "close_barrier": true, "ticket": "1"}
+SEND {"kind": "dispatch", "operation": "1", "source": "(+ 20 22)", "generation": "g", "authority": "0506434c-1c4b-49b6-b23b-d2881e4e6386"}
+RECV {"value": "42", "kind": "outcome", "operation": "1", "phase": "succeeded"}
+SEND {"kind": "dispatch", "operation": "2", "source": "(lists:sort (lists:map (lambda (entry) (element 1 entry)) (application:which_applications)))", "generation": "g", "authority": "0506434c-1c4b-49b6-b23b-d2881e4e6386"}
+RECV {"value": "(cayrn_lfe compiler crypto kernel lfe stdlib)", "kind": "outcome", "operation": "2", "phase": "succeeded"}
+SEND {"kind": "close"}
+RECV {"kind": "closed"}
+EXIT 0
+launcher process return 0

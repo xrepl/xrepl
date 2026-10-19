@@ -1,0 +1,6 @@
+$ rebar3 as test compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+
+EXIT 0

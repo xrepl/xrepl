@@ -1,0 +1,6 @@
+$ erl isolated beam_lib exports assertions
+/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_authority_tests.beam current paused-roles/0 present, removed await-startup-down/1 absent
+/Users/oubiwann/lab/lfe/xrepl/xrepl/_build/test/lib/cayrn_lfe/ebin/cayrn_lfe_authority_tests.beam current paused-roles/0 present, removed await-startup-down/1 absent
+/Users/oubiwann/lab/lfe/xrepl/xrepl/_build/test/lib/cayrn_lfe/test/cayrn_lfe_authority_tests.beam current paused-roles/0 present, removed await-startup-down/1 absent
+/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/_build/test/lib/cayrn_lfe/test/cayrn_lfe_authority_tests.beam current paused-roles/0 present, removed await-startup-down/1 absent
+EXIT 0

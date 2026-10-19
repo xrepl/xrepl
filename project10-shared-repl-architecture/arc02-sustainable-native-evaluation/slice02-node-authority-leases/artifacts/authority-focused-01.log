@@ -1,0 +1,14 @@
+$ rebar3 eunit --module=cayrn_lfe_authority_tests
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling test/cayrn_lfe_authority_tests.lfe
+===> Compiling cayrn_lfe
+===> Performing EUnit tests...
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0mpressure buffers client={ok,[{recbuf,1024}]} native={ok,[{sndbuf,1024}]}
+positive native send_pend=15100
+retirement decision send_pend=15100
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m
+Finished in 21.904 seconds
+[0;32m17 tests, 0 failures
+[0m
+EXIT 0

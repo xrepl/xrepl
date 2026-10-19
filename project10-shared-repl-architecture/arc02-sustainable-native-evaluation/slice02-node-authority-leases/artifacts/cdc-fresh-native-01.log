@@ -1,0 +1,85 @@
+CDC /root independently executed
+SOURCE 38338d6ad38898fd24063b6c89582f0ff486aa30
+CWD /private/tmp/cayrn-x02-cdc-fresh-n0904uov
+COMMAND ['make', 'check']
+rebar3 compile
+===> Fetching rebar3_lfe v0.5.5
+===> Fetching lfe v2.2.0
+===> Analyzing applications...
+===> Compiling lfe
+===> Compiling rebar3_lfe
+src/cl.lfe:472: Warning: redefining core function car/1
+src/cl.lfe:479: Warning: redefining core function cdr/1
+===> Verifying dependencies...
+===> Fetching lfe v2.2.0
+===> Analyzing applications...
+===> Compiling _build/default/lib/lfe/src/cl.lfe
+===> Compiling _build/default/lib/lfe/src/clj.lfe
+===> Compiling lfe
+src/cl.lfe:472: Warning: redefining core function car/1
+src/cl.lfe:479: Warning: redefining core function cdr/1
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_app.lfe
+===> Compiling src/cayrn_lfe_registry.lfe
+===> Compiling src/cayrn-lfe-eval.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling src/cayrn_lfe_connection.lfe
+===> Compiling src/cayrn_lfe_authority.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling src/cayrn_lfe_io.lfe
+=ERROR REPORT==== 19-Oct-2026::01:46:05.531371 ===
+Can't load module 'json' that resides in sticky dir
+
+=ERROR REPORT==== 19-Oct-2026::01:46:05.540393 ===
+Can't load module 'json' that resides in sticky dir
+
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_app.lfe
+===> Compiling src/cayrn_lfe_registry.lfe
+===> Compiling src/cayrn-lfe-eval.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling src/cayrn_lfe_connection.lfe
+===> Compiling src/cayrn_lfe_authority.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling src/cayrn_lfe_io.lfe
+=ERROR REPORT==== 19-Oct-2026::01:46:06.338638 ===
+Can't load module 'json' that resides in sticky dir
+
+=ERROR REPORT==== 19-Oct-2026::01:46:06.345156 ===
+Can't load module 'gen_tcp' that resides in sticky dir
+
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_app.lfe
+===> Compiling src/cayrn_lfe_registry.lfe
+===> Compiling test/cayrn_lfe_application_tests.lfe
+===> Compiling src/cayrn-lfe-eval.lfe
+===> Compiling test/cayrn_lfe_authority_tests.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling test/cayrn_lfe_eval_tests.lfe
+===> Compiling src/cayrn_lfe_connection.lfe
+===> Compiling test/cayrn_lfe_resource_tests.lfe
+===> Compiling src/cayrn_lfe_authority.lfe
+===> Compiling test/cayrn_lfe_io_tests.lfe
+===> Compiling src/cayrn_lfe_io.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+=ERROR REPORT==== 19-Oct-2026::01:46:06.569803 ===
+Can't load module 'sys' that resides in sticky dir
+
+===> Compiling cayrn_lfe
+===> Performing EUnit tests...
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0mpressure buffers client={ok,[{recbuf,1024}]} native={ok,[{sndbuf,1024}]}
+positive native send_pend=15100
+retirement decision send_pend=15100
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0mpressure buffers client={ok,[{recbuf,1024}]} native={ok,[{sndbuf,1024}]}
+positive native send_pend=15100
+retirement decision send_pend=15100
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m
+Finished in 61.373 seconds
+[0;32m61 tests, 0 failures
+[0m
+EXIT 0

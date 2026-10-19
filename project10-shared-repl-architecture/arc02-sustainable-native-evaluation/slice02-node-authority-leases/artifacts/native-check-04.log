@@ -1,0 +1,48 @@
+$ make check
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling test/cayrn_lfe_application_tests.lfe
+===> Compiling test/cayrn_lfe_resource_tests.lfe
+===> Compiling test/cayrn_lfe_io_tests.lfe
+===> Compiling cayrn_lfe
+===> Performing EUnit tests...
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;31mF[0m[0;32m.[0m[0;32m.[0mpressure buffers client={ok,[{recbuf,1024}]} native={ok,[{sndbuf,1024}]}
+positive native send_pend=7038
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;31mF[0m[0;32m.[0m[0;32m.[0mpressure buffers client={ok,[{recbuf,1024}]} native={ok,[{sndbuf,1024}]}
+positive native send_pend=15100
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m
+Failures:
+
+  1) cayrn_lfe_authority_tests:-listener_restart_test_/0-fun-0-/0
+[0;31m     Failure/Error: {error,owned_process_leaked,
+                        [{cayrn_lfe_authority_tests,'await-down',1,
+                             [{file,
+                                  "/opt/homebrew/Cellar/erlang/28.5/lib/erlang/lib/eunit-2.10.3/include/eunit.hrl"},
+                              {line,637}]},
+                         {peer,'-do_call/4-fun-0-',5,
+                             [{file,"peer.erl"},{line,1557}]}]}
+[0m
+  2) cayrn_lfe_authority_tests:-listener_restart_test_/0-fun-0-/0
+[0;31m     Failure/Error: {error,owned_process_leaked,
+                        [{cayrn_lfe_authority_tests,'await-down',1,
+                             [{file,
+                                  "/opt/homebrew/Cellar/erlang/28.5/lib/erlang/lib/eunit-2.10.3/include/eunit.hrl"},
+                              {line,637}]},
+                         {peer,'-do_call/4-fun-0-',5,
+                             [{file,"peer.erl"},{line,1557}]}]}
+[0m
+
+Finished in 59.652 seconds
+[0;31m55 tests, 2 failures
+[0m===> Error running tests
+make: *** [check] Error 1
+
+EXIT 2

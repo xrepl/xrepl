@@ -1,0 +1,147 @@
+apps/cayrn_lfe/src/cayrn_lfe_registry.lfe d63095327af1916c9db7aef73b0a1b359d28507a39a8b619661f531946245627
+apps/cayrn_lfe/src/cayrn_lfe_connection.lfe 7d507067a2395bd1f0e0eef1e26e9446b90e9344f35f049e90d67b55fc809d24
+apps/cayrn_lfe/src/cayrn_lfe_authority.lfe 4ab5a07df7a3447dd6aed55577478dabcbe2e6d2badd607565bdab7df63e47e2
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe e68c43ba51fbe04ec230683e85f7c1c9f73f45e22a32ac13a652ea464ac532e8
+apps/cayrn_lfe/src/cayrn_lfe_listener.lfe 55fcbc8b7ecbce47933fe2d90eec7dbfa6642f2e8b1dbb832066eee448844327
+apps/cayrn_lfe/src/cayrn_lfe_sup.lfe d2f55deb780378aa2bdfa05b0b9c93acea8bdf24112cbab17ebfa0c4db20250b
+apps/cayrn_lfe/src/cayrn_lfe.app.src cc937ea98a8ff85b5850781a28351b09bb630a8c8868bbd306645c4cb81e32ca
+apps/cayrn_lfe/include/cayrn_lfe_registry.lfe 4b3b978528d37929957635cd557f48ceab3b35f8b5fb1c719e78a8599569b07b
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe 13a6ff3390fd932b5128f41b3fd5188fe075fc5df4c333479343ab2f0caec74b
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe e91229e8eaa10315d3cacc71ce7b5971b56807ce9ce6afaec837d66e19dd0361
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe 2c0435daa7b80c107b53e46d94c3bad4181f3d39fe113afec596380e9e5b9b54
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe db1b3e19cb0836e5c7b3e1c7a8ba88a6aeab02f34cd1ac133c7b5aec51e9fc33
+apps/cayrn_lfe/README.md 02e8bdd9b42ed6c36f195881381705b7ce4d90edc509023536f5a7ab44bb79cc
+apps/cayrn_lfe/AGENTS.md efc297ceabf3e0d75321f0e869929fea0781e9422b465a7a6634f88f8068dc6f
+README.md 249360d92c089864cac7b6ad0bf83a9c4f5f037ca259267f347f144421646034
+apps/cayrn_lfe/src/cayrn_lfe_app.lfe c3611e97ca32bc16fc9a39e945fcb1bfdf56ef39bbc760034e97f91d666b1f24
+$ git rev-parse HEAD
+7228183e2e584e0ab86e03dc6b9454d4b918cc38
+
+EXIT 0
+$ git status --short
+ M README.md
+ M apps/cayrn_lfe/AGENTS.md
+ M apps/cayrn_lfe/README.md
+ M apps/cayrn_lfe/src/cayrn_lfe.app.src
+ M apps/cayrn_lfe/src/cayrn_lfe_context.lfe
+ M apps/cayrn_lfe/src/cayrn_lfe_listener.lfe
+ M apps/cayrn_lfe/src/cayrn_lfe_sup.lfe
+ M apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe
+ M apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe
+ M apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe
+?? apps/cayrn_lfe/include/
+?? apps/cayrn_lfe/src/cayrn_lfe_authority.lfe
+?? apps/cayrn_lfe/src/cayrn_lfe_connection.lfe
+?? apps/cayrn_lfe/src/cayrn_lfe_registry.lfe
+?? apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe
+?? docs/design/
+
+EXIT 0
+$ git diff --cached --name-only
+
+EXIT 0
+$ git worktree list
+/Users/oubiwann/lab/lfe/xrepl/xrepl                     7228183 [release/0.2.x]
+/Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning 2b433a9 [planning]
+
+EXIT 0
+$ git rev-parse HEAD
+3bcbbdb9ec52667b6c75b7f8a5f2260b93d8be44
+
+EXIT 0
+$ git status --short
+
+EXIT 0
+$ rg -n start_link|gen_tcp:close|file:delete|cayrn_lfe_listener apps/cayrn_lfe/src apps/cayrn_lfe/test
+apps/cayrn_lfe/src/cayrn_lfe_listener.lfe:2:(defmodule cayrn_lfe_listener
+apps/cayrn_lfe/src/cayrn_lfe_listener.lfe:5:          (init 1) (start_link 0) (terminate 2)))
+apps/cayrn_lfe/src/cayrn_lfe_listener.lfe:7:(defspec (start_link 0)
+apps/cayrn_lfe/src/cayrn_lfe_listener.lfe:10:(defun start_link ()
+apps/cayrn_lfe/src/cayrn_lfe_listener.lfe:12:  (gen_server:start_link (tuple 'local (MODULE)) (MODULE) '() '()))
+apps/cayrn_lfe/src/cayrn_lfe_listener.lfe:54:       (_ (exit pid 'shutdown) (gen_tcp:close socket))))
+apps/cayrn_lfe/src/cayrn_lfe_listener.lfe:55:    (_ (gen_tcp:close socket))))
+apps/cayrn_lfe/src/cayrn_lfe_listener.lfe:76:   (gen_tcp:close socket)
+apps/cayrn_lfe/src/cayrn_lfe_listener.lfe:77:   (file:delete path)
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe:23:             (peer:start_link
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe:48:        (file:delete socket)
+apps/cayrn_lfe/src/cayrn_lfe.app.src:3:  {vsn, "0.1.0"}, {modules, []}, {registered, [cayrn_lfe_sup, cayrn_lfe_registry, cayrn_lfe_listener]},
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:66:        (gen_tcp:close owner)))))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:81:                (gen_tcp:close owner)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:92:            (gen_tcp:close owner)))))))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:158:            (gen_tcp:close owner) (gen_tcp:close other)))))))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:178:              (gen_tcp:close socket) (down peer (lease-owner lease)))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:182:              (gen_tcp:close fresh))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:183:            (lists:foreach (lambda (entry) (gen_tcp:close (element 1 entry)))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:215:            (gen_tcp:close owner)))))))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:257:                (gen_tcp:close owner)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:262:            (gen_tcp:close socket)))))))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:290:            (gen_tcp:close owner)))))))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:317:        (gen_tcp:close server) (gen_tcp:close client)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:318:        (gen_tcp:close listener)))))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:330:            (gen_tcp:close unhandshaken)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:335:              (gen_tcp:close partial))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:339:              (gen_tcp:close bad))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:344:            (gen_tcp:close owner)))))))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:355:                             '(cayrn_lfe_listener)))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:379:                (gen_tcp:close waiting) (gen_tcp:close owner)))))))))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:431:            (gen_tcp:close socket) (gen_tcp:close sibling)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:432:            (gen_tcp:close survivor) (gen_tcp:close owner)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:433:            (gen_tcp:close other)))))))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:486:              (gen_tcp:close owner)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:495:            (gen_tcp:close socket) (gen_tcp:close survivor)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:496:            (gen_tcp:close owner) (gen_tcp:close other)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:516:            (gen_tcp:close first) (down peer first-pid)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:520:            (gen_tcp:close owner)))))))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:530:  (tuple 'timeout 30 (lambda () (restart-role 'cayrn_lfe_listener))))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:540:            (if (=:= role 'cayrn_lfe_listener)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:555:              (gen_tcp:close fresh))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:556:            (gen_tcp:close socket) (gen_tcp:close owner)))))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:616:        (gen_tcp:close server) (gen_tcp:close client)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:617:        (gen_tcp:close listener)))))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:631:             (peer:start_link (map 'connection 'standard_io
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:641:      (after (file:delete path) (file:del_dir dir)))))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:696:      (after (gen_tcp:close socket)))))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:702:  (gen_tcp:close socket)
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:751:                            '(cayrn_lfe_listener))))
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:799:    ('eof (gen_tcp:close socket))
+apps/cayrn_lfe/src/cayrn_lfe_app.lfe:12:  (cayrn_lfe_sup:start_link))
+apps/cayrn_lfe/src/cayrn_lfe_registry.lfe:5:          (init 1) (open 1) (start_link 0) (terminate 2)))
+apps/cayrn_lfe/src/cayrn_lfe_registry.lfe:26:(defspec (start_link 0) (() (term)))
+apps/cayrn_lfe/src/cayrn_lfe_registry.lfe:27:(defun start_link ()
+apps/cayrn_lfe/src/cayrn_lfe_registry.lfe:29:  (gen_server:start_link (tuple 'local (MODULE)) (MODULE) '() '()))
+apps/cayrn_lfe/src/cayrn_lfe_registry.lfe:128:    ('ok (gen_tcp:close socket))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:63:                              '(cayrn_lfe_listener)))))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:64:          (after (file:delete path))))))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:195:                              '(cayrn_lfe_listener))))))))))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:329:             ('ok (gen_tcp:close socket))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:450:        (gen_tcp:close server)
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:451:        (gen_tcp:close client)
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:452:        (gen_tcp:close listener)))))
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:497:          (after (gen_tcp:close socket) (gen_tcp:close authority)))))))
+apps/cayrn_lfe/src/cayrn_lfe_sup.lfe:4:  (export (authority 1) (connection 1) (context 1) (init 1) (start_link 0)))
+apps/cayrn_lfe/src/cayrn_lfe_sup.lfe:24:         'start (tuple module 'start_link (list socket))
+apps/cayrn_lfe/src/cayrn_lfe_sup.lfe:36:                 'start (tuple 'cayrn_lfe_registry 'start_link '())
+apps/cayrn_lfe/src/cayrn_lfe_sup.lfe:39:            (map 'id 'cayrn_lfe_listener
+apps/cayrn_lfe/src/cayrn_lfe_sup.lfe:40:                 'start (tuple 'cayrn_lfe_listener 'start_link '())
+apps/cayrn_lfe/src/cayrn_lfe_sup.lfe:42:                 'modules '(cayrn_lfe_listener))))))
+apps/cayrn_lfe/src/cayrn_lfe_sup.lfe:44:(defspec (start_link 0)
+apps/cayrn_lfe/src/cayrn_lfe_sup.lfe:47:(defun start_link ()
+apps/cayrn_lfe/src/cayrn_lfe_sup.lfe:49:  (supervisor:start_link (tuple 'local (MODULE)) (MODULE) '()))
+apps/cayrn_lfe/src/cayrn_lfe_io.lfe:22:          (gen_server:start_link (MODULE) (tuple owner operation root) '()))
+apps/cayrn_lfe/src/cayrn_lfe_connection.lfe:5:          (init 1) (start_link 1) (terminate 2)))
+apps/cayrn_lfe/src/cayrn_lfe_connection.lfe:9:(defspec (start_link 1) (((port)) (term)))
+apps/cayrn_lfe/src/cayrn_lfe_connection.lfe:10:(defun start_link (socket)
+apps/cayrn_lfe/src/cayrn_lfe_connection.lfe:12:  (gen_server:start_link (MODULE) socket '()))
+apps/cayrn_lfe/src/cayrn_lfe_connection.lfe:67:    (socket (gen_tcp:close socket)))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:5:          (init 1) (start_link 1) (terminate 2)))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:7:(defspec (start_link 1)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:10:(defun start_link (socket)
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:12:  (gen_server:start_link (MODULE) socket '()))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:355:  (gen_tcp:close (map-get state 'socket))
+apps/cayrn_lfe/src/cayrn_lfe_authority.lfe:5:          (init 1) (start_link 1) (terminate 2)))
+apps/cayrn_lfe/src/cayrn_lfe_authority.lfe:11:(defspec (start_link 1) (((port)) (term)))
+apps/cayrn_lfe/src/cayrn_lfe_authority.lfe:12:(defun start_link (socket)
+apps/cayrn_lfe/src/cayrn_lfe_authority.lfe:14:  (gen_server:start_link (MODULE) socket '()))
+apps/cayrn_lfe/src/cayrn_lfe_authority.lfe:60:  (gen_tcp:close (authority-socket state))
+
+EXIT 0

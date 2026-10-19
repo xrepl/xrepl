@@ -1,0 +1,63 @@
+{
+  "native_component": {
+    "executions": 61,
+    "unique": 44,
+    "repeated": 17,
+    "failed": 0,
+    "retained_unique": 21,
+    "new_authority_unique": 17,
+    "new_application_unique": 6
+  },
+  "root_eunit": {
+    "total": 322,
+    "legacy": 175,
+    "native": 147,
+    "native_unique": 44,
+    "native_repeated": 103,
+    "native_per_module": {
+      "cayrn_lfe_application_tests": 21,
+      "cayrn_lfe_authority_tests": 68,
+      "cayrn_lfe_eval_tests": 12,
+      "cayrn_lfe_io_tests": 4,
+      "cayrn_lfe_resource_tests": 42
+    },
+    "failed": 0
+  },
+  "root_common_test": 0,
+  "cayrn": {
+    "ordinary": 43,
+    "native": 14,
+    "consumer_pty": 3,
+    "ignored": 0,
+    "filtered": 0,
+    "failed": 0,
+    "ordinary_by_actual_target": {
+      "cayrn_cli": 0,
+      "cayrn_client": 2,
+      "cayrn_core": 1,
+      "cayrn_host_private": 15,
+      "cayrn_host_tests_agent": 12,
+      "cayrn_host_tests_sessions": 9,
+      "cayrn_protocol": 4,
+      "cayrn_fixture": 0
+    }
+  },
+  "xrepl_rust": {
+    "tests": 7,
+    "doctests": 1,
+    "failed": 0,
+    "by_actual_target": {
+      "xrepl_cli_tests": 0,
+      "xrepl_adventure_tests": 7,
+      "xrepl_core_tests": 0,
+      "xrepl_adventure_doctests": 0,
+      "xrepl_core_doctests": 1
+    }
+  },
+  "fresh_source": {
+    "executions": 61,
+    "unique": 44,
+    "repeated": 17,
+    "failed": 0
+  }
+}

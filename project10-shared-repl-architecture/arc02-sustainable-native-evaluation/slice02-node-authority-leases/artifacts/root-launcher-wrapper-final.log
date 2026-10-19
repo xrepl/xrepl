@@ -1,0 +1,19 @@
+$ python3 /private/tmp/x02-root-launcher.py
+CWD /private/tmp
+Overrides unset: CAYRN_LFE_DIR XREPL_DIR XREPL_BIN CARGO_TARGET_DIR
+$ /Users/oubiwann/lab/lfe/xrepl/xrepl/bin/cayrn-lfe '/private/tmp/cayrn-x02-root launch 0q8j9bww/agent socket.sock'
+CWD /private/tmp
+SEND {"kind": "authority_hello", "version": 3, "authority": "5a2c03d1-c0d2-4b52-aaa9-3c6e26acc2a3"}
+RECV {"version": 3, "boot": "8E521ADBA2DDACE96D34BE2C3EEAFBCD", "lease": "1", "kind": "authority_ready"}
+SEND {"kind": "hello", "version": 3, "session": "root-smoke", "generation": "g", "authority": "5a2c03d1-c0d2-4b52-aaa9-3c6e26acc2a3", "boot": "8E521ADBA2DDACE96D34BE2C3EEAFBCD", "lease": "1", "ticket": "1"}
+RECV {"version": 3, "boot": "8E521ADBA2DDACE96D34BE2C3EEAFBCD", "interrupt": "session_destructive", "lease": "1", "kind": "ready", "backend": "lfe", "close_barrier": true, "ticket": "1"}
+SEND {"kind": "dispatch", "operation": "1", "source": "(+ 20 22)", "generation": "g", "authority": "5a2c03d1-c0d2-4b52-aaa9-3c6e26acc2a3"}
+RECV {"value": "42", "kind": "outcome", "operation": "1", "phase": "succeeded"}
+SEND {"kind": "dispatch", "operation": "2", "source": "(lists:sort (lists:map (lambda (entry) (element 1 entry)) (application:which_applications)))", "generation": "g", "authority": "5a2c03d1-c0d2-4b52-aaa9-3c6e26acc2a3"}
+RECV {"value": "(cayrn_lfe compiler crypto kernel lfe stdlib)", "kind": "outcome", "operation": "2", "phase": "succeeded"}
+SEND {"kind": "close"}
+RECV {"kind": "closed"}
+EXIT 0
+launcher process return 0
+
+EXIT 0

@@ -1,0 +1,36 @@
+$ ['git', 'rev-parse', 'HEAD']
+38338d6ad38898fd24063b6c89582f0ff486aa30
+EXIT 0
+$ ['git', 'status', '--short']
+?? docs/design/
+EXIT 0
+$ ['git', 'diff', '--cached', '--name-only']
+EXIT 0
+$ ['git', 'diff', '--check', '7228183e2e584e0ab86e03dc6b9454d4b918cc38', '38338d6ad38898fd24063b6c89582f0ff486aa30']
+EXIT 0
+$ ['git', 'show', '--format=full', '--stat', '--oneline', '38338d6ad38898fd24063b6c89582f0ff486aa30']
+38338d6 feat(agent): add bounded native3 authority lifetimes
+ README.md                                          |  20 +-
+ apps/cayrn_lfe/AGENTS.md                           |  20 +-
+ apps/cayrn_lfe/README.md                           |  66 +-
+ apps/cayrn_lfe/include/cayrn_lfe_registry.lfe      |  22 +
+ apps/cayrn_lfe/src/cayrn_lfe.app.src               |   4 +-
+ apps/cayrn_lfe/src/cayrn_lfe_app.lfe               | 119 ++-
+ apps/cayrn_lfe/src/cayrn_lfe_authority.lfe         |  61 ++
+ apps/cayrn_lfe/src/cayrn_lfe_connection.lfe        |  68 ++
+ apps/cayrn_lfe/src/cayrn_lfe_context.lfe           |  54 +-
+ apps/cayrn_lfe/src/cayrn_lfe_listener.lfe          |  79 +-
+ apps/cayrn_lfe/src/cayrn_lfe_registry.lfe          | 153 ++++
+ apps/cayrn_lfe/src/cayrn_lfe_sup.lfe               |  57 +-
+ .../cayrn_lfe/test/cayrn_lfe_application_tests.lfe | 522 ++++++++++++-
+ apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe  | 833 +++++++++++++++++++++
+ apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe         |   3 +-
+ apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe   |  51 +-
+ 16 files changed, 1969 insertions(+), 163 deletions(-)
+EXIT 0
+CAYRN $ ['git', 'rev-parse', 'HEAD']
+3bcbbdb9ec52667b6c75b7f8a5f2260b93d8be44
+EXIT 0
+CAYRN $ ['git', 'status', '--short']
+EXIT 0
+All16 frozen source hashes unchanged after source commit and return preparation.

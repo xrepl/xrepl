@@ -1,6 +1,6 @@
 # Arc02 — sustainable native evaluation
 
-Version1.5,2026-10-19. Active under scoped Autonomous Mode. Project10 source release/0.2.x.
+Version1.6,2026-10-19. Active under scoped Autonomous Mode. Project10 source release/0.2.x.
 Original prepared one-contributor wording is superseded by the activation below.
 Sofie CDC independently reviews the assigned CC implementation. Arc01's import and
 LFE conversion are committed at ea844f5/f261152 with pending independent gates.
@@ -30,7 +30,7 @@ final system size/churn checks are additional composition, not deferred-only QA.
 | Slice | Usable result / delivery | Actual dependency | State |
 | --- | --- | --- | --- |
 | [Slice01 — fenced capture lifetimes](slice01-fenced-capture-lifetimes/slice-plan.md) | More-than 256 native evaluations; scalar token fence,64 live capture origins, collector retirement with late-output/ACK/close proof | Actual Cayrn C03 native v2 identity/journal return | Independently accepted7228183/7b27b0f; matching native2 gate passed |
-| [Slice02 — node authority leases](slice02-node-authority-leases/slice-plan.md) | Bounded live native lease/context registry; boot/lease/ticket fencing removes4096 cumulative guard | Actual accepted Cayrn C04 native3 handoff; Operator direction approved | Open set draft; upstream implementation-held |
+| [Slice02 — node authority leases](slice02-node-authority-leases/slice-plan.md) | Bounded live native lease/context registry; boot/lease/ticket fencing removes4096 cumulative guard | Actual accepted Cayrn C04 native3 handoff; Operator direction approved | Independently accepted38338d6/3bcbbdb; actual native3 gate passed |
 | Slice03 — size-safe previews and captured streams | Bounded explicit value previews and complete bounded-chunk captured output, pressure paths preserving environment/capture ACK correctness | Actual Cayrn C05 structured-preview contract after C04/X02; stable size budgets | Roadmap only; complete source-led pressure/ownership/preview design required |
 
 Directory numbering does not invent a dependency from node identities to size
@@ -282,3 +282,20 @@ borrows it, absolutepath retained through restart, appstop closes/guarded-unlink
 No wire/limits/newprocess change; all8 criteria remain. Source-led reviewed design
 and real kill/queued-call/cwd/acquisition/identity controls precede acceptance.
 NR-02 blocked-output root teardown remains X03/C06; previews C05 precede X03.
+
+## v1.6 — Slice02 accepted native3 handoff,2026-10-19
+
+Slice02 delivers its assigned bounded node capability at xrepl38338d6ad38898fd24063b6c89582f0ff486aa30
+and Cayrn3bcbbdb9ec52667b6c75b7f8a5f2260b93d8be44. CDC independently accepted8/8,
+including4097 native/public contexts, exact lease loss/credit ownership and app-owned
+socket survival through real queued-parent listenerkill. Matching43ordinary+
+14native+3consumer, root322/CT0, fresh61 and launcher gates reproduced. Original
+15→16 path refinement/correction1/5 and failed designs/caches retained in slice.
+
+XA02-03 now done; other size/output/mixed-composition rows remain open. C05 shared
+preview contract is next, then actual native size/output work and C06 full system
+composition. NR-02 remains serious/open; no listener ownership fix claims root
+teardown under general pending output. X-TOOL-01 freshness limitation bubbles to
+project tooling/package owner; require actual current-byte/fresh checks meanwhile.
+This is status/evidence feedback within authorized arc, no new arc, UX, release,
+acceptance weakening or automatic acceptance of Project01/09 history.

@@ -1,0 +1,1 @@
+EXIT0: all9 production +5 test modules match explicit declarations; generated __info__/1, LFE-EXPAND-EXPORTED-MACRO/3, module_info/0,1 and test-only EUnit test/0 classified from pinned compiler/header sources. Reuses complete frozen-byte isolated probe in runtime-exports.log.

@@ -1,0 +1,53 @@
+[
+  {
+    "label": "cdc-cayrn-full-01",
+    "args": [
+      "make",
+      "check",
+      "lint-integration",
+      "test-xrepl"
+    ],
+    "cwd": "/Users/oubiwann/lab/oxur/cayrn",
+    "exit": 0,
+    "source": "38338d6ad38898fd24063b6c89582f0ff486aa30",
+    "hashes_agree": true
+  },
+  {
+    "label": "cdc-root-full-01",
+    "args": [
+      "make",
+      "test-lfe",
+      "build-agent",
+      "check-agent",
+      "build",
+      "lint-rust",
+      "test-rust"
+    ],
+    "cwd": "/Users/oubiwann/lab/lfe/xrepl/xrepl",
+    "exit": 0,
+    "source": "38338d6ad38898fd24063b6c89582f0ff486aa30",
+    "hashes_agree": true
+  },
+  {
+    "label": "cdc-fresh-native-01",
+    "args": [
+      "make",
+      "check"
+    ],
+    "cwd": "/private/tmp/cayrn-x02-cdc-fresh-n0904uov",
+    "exit": 0,
+    "source": "38338d6ad38898fd24063b6c89582f0ff486aa30",
+    "hashes_agree": true
+  },
+  {
+    "label": "cdc-root-launcher-wrapper-01",
+    "args": [
+      "python3",
+      "/private/tmp/cdc-x02-root-launcher.py"
+    ],
+    "cwd": "/private/tmp",
+    "exit": 0,
+    "source": "38338d6ad38898fd24063b6c89582f0ff486aa30",
+    "hashes_agree": true
+  }
+]

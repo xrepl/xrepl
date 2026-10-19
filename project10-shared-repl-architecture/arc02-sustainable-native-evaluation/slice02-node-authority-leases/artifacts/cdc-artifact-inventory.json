@@ -1,0 +1,54 @@
+{
+  "scope": "Reviewer supporting artifacts only; CC71+self retained in artifact-inventory.md; slice-root close records excluded; this inventory self excluded",
+  "source": "38338d6ad38898fd24063b6c89582f0ff486aa30",
+  "files": {
+    "cdc-cayrn-full-01.log": {
+      "bytes": 12395,
+      "sha256": "fc5df5a50bb87ed31be57b04f7f1d6522aeb085e8498fe1d24eda852a29e0838"
+    },
+    "cdc-draft-observations.md": {
+      "bytes": 3957,
+      "sha256": "7658d0754d89e4a4ca4e3dc9228a5f6445a76c3dbfb877b457b676ccedc0a336"
+    },
+    "cdc-fresh-manifest.json": {
+      "bytes": 2854,
+      "sha256": "5d57f768faf36a5213c45b8cbb8d6c09680ade70319dbd3b43c6073ac88b1e01"
+    },
+    "cdc-fresh-native-01.log": {
+      "bytes": 3840,
+      "sha256": "02b1ff07c76a50a9a19c89c853f602b3ca32d7641b18f6b1f4f7024a8b70de34"
+    },
+    "cdc-gate-results.json": {
+      "bytes": 1132,
+      "sha256": "737d2b3407ff59ef18632c8263a9676b96b7b276a5739fe28a3a147a0539a051"
+    },
+    "cdc-launcher-smoke.py": {
+      "bytes": 2806,
+      "sha256": "757a3af85d3bfc348b5008c9b192e239cbd71644fc64488485ea428b209dd3a3"
+    },
+    "cdc-root-full-01.log": {
+      "bytes": 32638,
+      "sha256": "0d57c877154e4b94bcfee752a470b94d3fa26b8eff7bd714028682140d4d077a"
+    },
+    "cdc-root-launcher-process.log": {
+      "bytes": 84,
+      "sha256": "50f2fb7b4600a60484a860378397c882b74cde029e000bd2da7fecf2fce69902"
+    },
+    "cdc-root-launcher-wrapper-01.log": {
+      "bytes": 1543,
+      "sha256": "4adb597ce298d154a4def726fa4fcf25e4c8d06dca77884b76f7ad930ea37c61"
+    },
+    "cdc-root-launcher.log": {
+      "bytes": 1376,
+      "sha256": "9563f6162c629936ad8044b9c4e934e1abd2c4705ff10e709048f4fdb813cafb"
+    },
+    "cdc-runtime-runner.py": {
+      "bytes": 3199,
+      "sha256": "067b33e4507c1b9c19392841e03ca898f6eeecdfadf31b34d3de67bcabe01530"
+    },
+    "cdc-verified-source.json": {
+      "bytes": 1991,
+      "sha256": "2e1d2b1f17a0c4485cb01209fd515a712af23d597de9201bdaa174cbd076eeac"
+    }
+  }
+}

@@ -1,0 +1,2390 @@
+diff --git a/README.md b/README.md
+index d9f4044..9b6427b 100644
+--- a/README.md
++++ b/README.md
+@@ -23,17 +23,27 @@ mkdir -m 700 /tmp/xrepl-agent-demo
+ 
+ `make build` builds the agent, retained legacy LFE application and Rust client.
+ The root launcher delegates to the component-local build, starts only the native
+-application and LFE, and accepts a single socket argument. Starting legacy
++application, LFE, crypto and compiler, and accepts a single socket argument. Starting legacy
+ `xrepl` does not automatically start the agent. See the component README for
+ Cayrn host startup and current limits: 64 live capture origins per context,
+-8KiB source/output/value previews, 4096 node-lifetime context identities, no
+-program input or live-state restoration. Native2 uses sparse admission tokens
++8KiB source/output/value previews, no program input or live-state restoration.
++Native3 adds host authority leases and increasing context tickets with bounded
++live state (16 authorities/64 physical live or retiring contexts), removing the
++cumulative context-identity limit. Authority loss retires all its contexts;
++context-only loss preserves its siblings and other host leases remain usable.
++The existing application helper retains the listening endpoint across permanent
++child kills/restarts; native state gets a fresh boot, with no source replay.
++The host must complete its native authority handshake at bind. Native3 retains
++sparse admission tokens
+ and retires drained capture origins; quiet sessions have no total-operation
+ count limit. Background writers preserve their original attribution. A full
+ origin budget refuses evaluation explicitly while preserving the environment.
+ See the component README for its trusted local-descendant capture boundary.
+-The native OTP implementation/tests are written in LFE; remaining node-identity
+-and size hardening follows separately. Native2 requires the matching rebuilt
++The native OTP implementation/tests are written in LFE. Size and ordinary output
++pressure hardening follow separately. Forced supervisor teardown during a blocked
++send can still orphan an evaluator root (NR-02; X03/C06); authority-loss shutdown
++has its own abortive-port cleanup and does not certify general teardown safety.
++Native3 requires the matching rebuilt
+ Cayrn host, while public client RPC remains version 1. The native app remains
+ 0.1.0 within xrepl's 0.2.0 development branch. Nothing new is published.
+ 
+diff --git a/apps/cayrn_lfe/AGENTS.md b/apps/cayrn_lfe/AGENTS.md
+index 8bc78b4..9e61a5a 100644
+--- a/apps/cayrn_lfe/AGENTS.md
++++ b/apps/cayrn_lfe/AGENTS.md
+@@ -9,8 +9,18 @@ Imported from cayrn-lfe 1b04c15ac325731aab68a7491d23e4a9fecaa47a with its licens
+ The first slice preserved pinned source/test bytes. Slice02 converts all five
+ OTP runtime modules and three native test modules to LFE while preserving
+ semantics and metadata/launcher identities. Arc02 adds native2 token fencing
+-and producer-aware capture retirement; node identity and size hardening remain
+-later slices. Do not add legacy xrepl
++and producer-aware capture retirement; Arc02/Slice02 adds native3 node authority
++leases/context tickets and removes cumulative identity history. Size/ordinary
++pressure remain later slices. Native3 registry state uses private typed records,
++exact monitor identities and live physical credits. Its authority-loss-only
++abortive port disposal must remain distinct from normal Close/drain/ACK.
++NR-02 forced supervisor teardown while send is blocked remains serious/open for
++X03/C06; do not claim broad teardown readiness from authority-loss tests.
++The existing app callback helper owns the listen port; listener borrows it across
++child restarts. Preserve exact port DOWN and inode/type-guarded path disposal,
++startup acquisition rollback and stable absolute path despite evaluated cwd.
++Never move endpoint cleanup back into a killable listener/registry child.
++Do not add legacy xrepl
+ services to the startup dependency graph. No automatic replay after runtime loss.
+ Use make build/check here or root make build-agent/check-agent. Keep planning
+ records in the planning worktree and preserve the standalone predecessor.
+@@ -18,9 +28,9 @@ Follow root AGENTS.md, OTP guidance and the Operator-selected LFE style guide
+ when editing language implementation. Self-review is attested, not independent.
+ Assistant-authored commits require the root planning Codex/Billo AI trailers.
+ 
+-All native evaluator, I/O, application and resource cases must be discovered by
+-make check. The I/O companion suite includes evaluator/application/resource
+-tests explicitly because Rebar's default
++All native evaluator, I/O, application, resource and authority cases must run in
++make check. The I/O companion suite lists all native test modules
++explicitly because Rebar's default
+ EUnit discovery does not enumerate all LFE test source files. Preserve strict
+ producer birth/exit/delivery, send/request-count and durable ACK drain witnesses;
+ a root outcome, empty mailbox or timer cannot authorize natural retirement.
+diff --git a/apps/cayrn_lfe/README.md b/apps/cayrn_lfe/README.md
+index 5d1fb09..219e87b 100644
+--- a/apps/cayrn_lfe/README.md
++++ b/apps/cayrn_lfe/README.md
+@@ -38,8 +38,15 @@ It refuses an existing socket path; choose a fresh private directory after an
+ unclean node exit, rather than deleting an endpoint another process may own.
+ 
+ The internal agent wire is bounded, four-byte big-endian length-prefixed JSON,
+-version 2 independently of public client RPC version 1. Hello carries session,
+-generation and authority. Dispatch/cancel/output/outcome use canonical positive
++version 3 independently of public client RPC version 1. Each Rust host first
++opens one persistent AuthorityHello channel and receives a cryptographic node
++boot and monotonic lease. Context Hello carries session, generation, authority,
++boot, lease and an increasing canonical decimal ticket. Ready echoes that scope.
++The host completes this handshake during bind; unavailable/mismatched agents fail
++startup. Authority channels switch to raw framing after Ready: any byte/EOF/error
++retires that lease and all its contexts, even if their clients remain connected.
++A context socket loss alone preserves its sibling contexts. There is no native
++reconnection, lease expiry or code replay. Dispatch/cancel/output/outcome use canonical positive
+ decimal admission tokens (1..i64::MAX); tokens may be sparse. Rust maps them to
+ public operation IDs using its durable journal. A scalar high-water fence rejects
+ stale/replayed native dispatches without retaining all past operation identities.
+@@ -55,9 +62,15 @@ trusted code in the node; it is not a sandbox or rollback system. Definitions
+ made earlier in a failed multi-form request are not committed to the saved
+ environment; external effects and process-dictionary changes are not rolled back.
+ 
+-Limits: 64 live contexts, 64 live capture origins per context, 64 pending I/O
+-writes, 8192-byte source/output/value previews, 256KiB frames, and 4096 context
+-identities per application lifetime. There is no total-operation count limit.
++Limits: 16 live authority owners, 64 globally live/retiring contexts, 64 live
++capture origins per context, 64 pending I/O writes, 8192-byte source/output/value
++previews and 256KiB frames. Listener admission checks temporary children before
++accepting at a watermark of128, with conservative hard bounds of128 accepted
++sockets and256 temporary processes during router handoff. There is no cumulative
++context-identity or operation-count limit. Registry maps retain only live state;
++lease/ticket scalar exhaustion refuses new grants without wrapping. A valid new
++context ticket is consumed before duplicate-SID/capacity refusal; retry needs a
++higher ticket. Physical context credits return only after exact monitor DOWN.
+ A quiet evaluation returns its origin credit only after the collector has
+ physically stopped. Late descendants retain their original collector/token.
+ At 64 live origins a new valid token receives the ordinary Failed preview
+@@ -79,13 +92,31 @@ Assigning an old group leader to unrelated existing processes, remote processes,
+ explicit devices and user tampering with tracing are outside this trusted
+ profile. User process/heap/message fanout is not sandboxed by origin credits.
+ 
+-The 4096 cumulative context-identity guard remains a known node-lifetime limit;
+-large-value assertions/output chunking and capture-pressure behavior also remain
+-for later hardening. These limits are not silently evicted or called resolved.
+-Restarting the application loses contexts and its volatile identity guard; Rust
+-must report state loss, never recreate an environment from transcript history.
+-Native2 requires a matching rebuilt Cayrn host; there is no native1 fallback.
+-The standalone native1 predecessor remains usable with its prior pinned host.
++Native3 requires a matching rebuilt Cayrn host, with no native1/2 fallback.
++Restarting the application creates a fresh cryptographic boot and loses live
++contexts; Rust reports state loss and never recreates an environment from history.
++Authority-loss shutdown closes recorded context ports abortively to wake blocked
++native senders, then requests normal owner cleanup. It abandons uncertain native
++buffered bytes, never reports a Close barrier or success, and retains credits until
++exact context DOWN. Ordinary explicit Close still drains/ACKs; it does not use
++abortive linger. Root/collector/trace cleanup remains context-owned.
++
++The existing OTP application helper owns the listening port for the whole
++application lifetime. Registry or listener child failure, including kill while a
++listener call waits on its supervisor, restarts native state with a fresh boot
++while retaining the same live listening port and startup-resolved absolute path.
++Accepted sockets belong to the listener until role handoff. Normal app stop reaps
++the exact listen port before removing only its recorded socket inode; replacement
++files/symlinks/socket inodes are preserved. Bind/Supstart failures unwind newly
++acquired resources. Whole application/helper/VM kill can still leave a stale path;
++there is no automatic BEAM relaunch or adversarial filesystem guarantee.
++
++Large-value assertions/output chunking and ordinary capture-pressure hardening
++remain later work. A serious known limit (NR-02, X03/C06) is forced supervisor
++teardown during a blocked context send: it can orphan an unlinked evaluator root.
++The native3 authority-loss path has separate suspended/positively pending-send
++controls; they do not establish broad forced-teardown readiness. The standalone
++native1 predecessor remains pinned separately.
+ 
+ Host-agent link loss terminates that context and marks its state uncertain/lost;
+ it never kills the shared BEAM or peer contexts. Host restart retains the Rust
+@@ -126,17 +157,22 @@ From the repository root, `make build-agent check-agent` builds/tests this
+ component independently. `make build` includes the agent, legacy LFE app and
+ Rust client. `./bin/cayrn-lfe /private/path/agent.sock` delegates to this
+ component's launcher; it uses this component's `_build/default/lib/*/ebin`.
+-It starts `cayrn_lfe` and `lfe`, without starting legacy `xrepl`, Ranch,
++It starts `cayrn_lfe`, `lfe`, `crypto` and LFE's `compiler` dependency,
++without starting legacy `xrepl`, Ranch,
+ `xrepl_protocol` or `xrepl_term`. Root and component Rebar caches are separate.
+ The component version stays 0.1.0 while the enclosing xrepl release is 0.2.0.
+ 
+ Cayrn's native/terminal targets default to this integrated component and the
+ sibling xrepl Rust binary; explicit `CAYRN_LFE_DIR` and `XREPL_BIN` overrides are
+ available. Component-only `make check` explicitly discovers evaluator, application
+-and resource tests through the I/O companion generator. Resource cases cover
++resource and authority tests through the I/O companion generator. Resource cases cover
+ 512 quiet sparse dispatches, 64/65 origin pressure, replay non-execution, producer
+ and request/trace order inversions, ACK/close races, physical retirement and
+ independent tracing. The matching Cayrn integration fixture performs 1024 further
+ evaluations while retaining an early late writer's attribution. Callback/module
+ names retain underscores for OTP/wire compatibility; private helpers use LFE
+-conventions. Remaining node-identity/size limits are recorded above.
++conventions. Authority cases exercise4097 reclaimed contexts,33 lease cycles,
++16/17 authority and64/65 context pressure, strict scope/replay/counter/monitor
++controls, router/handshake failures, fresh boot and authority-only loss with raw
++client sockets retained, including suspended and positively pending native sends.
++Size and ordinary-pressure limits are recorded above.
+diff --git a/apps/cayrn_lfe/include/cayrn_lfe_registry.lfe b/apps/cayrn_lfe/include/cayrn_lfe_registry.lfe
+new file mode 100644
+index 0000000..f404d82
+--- /dev/null
++++ b/apps/cayrn_lfe/include/cayrn_lfe_registry.lfe
+@@ -0,0 +1,22 @@
++;;;; Private bounded native ownership records, shared with owned-peer tests.
++(defrecord registry
++  (boot #b() (binary))
++  (last-lease 0 (non_neg_integer))
++  (leases (map) (map))
++  (contexts (map) (map))
++  (sids (map) (map)))
++
++(defrecord lease
++  (owner 'undefined (UNION 'undefined (pid)))
++  (monitor 'undefined (UNION 'undefined (reference)))
++  (authority #b() (binary))
++  (last-ticket 0 (non_neg_integer)))
++
++(defrecord context
++  (pid 'undefined (UNION 'undefined (pid)))
++  (monitor 'undefined (UNION 'undefined (reference)))
++  (lease 0 (non_neg_integer))
++  (sid #b() (binary))
++  (generation #b() (binary))
++  (ticket 0 (non_neg_integer))
++  (socket 'undefined (UNION 'undefined (port))))
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe.app.src b/apps/cayrn_lfe/src/cayrn_lfe.app.src
+index 56f6925..0b90e6d 100644
+--- a/apps/cayrn_lfe/src/cayrn_lfe.app.src
++++ b/apps/cayrn_lfe/src/cayrn_lfe.app.src
+@@ -1,5 +1,5 @@
+ {application, cayrn_lfe,
+  [{description, "Thin LFE runtime agent for the shared Cayrn Rust connector"},
+-  {vsn, "0.1.0"}, {modules, []}, {registered, [cayrn_lfe_sup, cayrn_lfe_listener]},
+-  {applications, [kernel, stdlib, lfe]}, {mod, {cayrn_lfe_app, []}},
++  {vsn, "0.1.0"}, {modules, []}, {registered, [cayrn_lfe_sup, cayrn_lfe_registry, cayrn_lfe_listener]},
++  {applications, [kernel, stdlib, crypto, lfe]}, {mod, {cayrn_lfe_app, []}},
+   {env, []}, {licenses, ["Apache-2.0"]}]}.
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_app.lfe b/apps/cayrn_lfe/src/cayrn_lfe_app.lfe
+index 6b190be..4433dad 100644
+--- a/apps/cayrn_lfe/src/cayrn_lfe_app.lfe
++++ b/apps/cayrn_lfe/src/cayrn_lfe_app.lfe
+@@ -1,18 +1,121 @@
+-;;;; Native Cayrn application boundary.
++;;;; Application-lifetime ownership of the borrowed native listening port.
+ (defmodule cayrn_lfe_app
+   (behaviour application)
+   (export (start 2) (stop 1)))
+ 
++(include-lib "kernel/include/file.hrl")
++
++(defrecord identity
++  (major 0 (non_neg_integer))
++  (minor 0 (non_neg_integer))
++  (inode 0 (non_neg_integer))
++  (type #o140000 (non_neg_integer)))
++
++(defrecord endpoint
++  (socket 'undefined (UNION 'undefined (port)))
++  (path "" (string))
++  (identity 'undefined (UNION 'undefined (record identity))))
++
+ (defspec (start 2)
+   (((call 'application 'start_type) (term))
+-   (UNION (tuple 'ok (pid)) (tuple 'error (term)))))
+-
++   (UNION (tuple 'ok (pid) (record endpoint)) (tuple 'error (term)))))
+ (defun start (_type _args)
+-  "Start the native supervision tree without legacy xrepl services."
+-  (cayrn_lfe_sup:start_link))
++  "Own the listen port in the existing app helper across child restarts."
++  (let* (((tuple 'ok configured) (application:get_env 'cayrn_lfe 'socket))
++         (path (filename:absname configured)))
++    (case (gen_tcp:listen 0
++            (list 'binary '#(active false) '#(packet 4)
++                  '#(packet_size 262144) (tuple 'ifaddr (tuple 'local path))
++                  '#(backlog 64)))
++      ((tuple 'ok socket) (acquire (make-endpoint socket socket path path)))
++      (error error))))
+ 
+-(defspec (stop 1) (((term)) 'ok))
++(defun acquire (provisional)
++  ;; Capture identity BEFORE chmod; failed capture cannot authorize unlink.
++  (case (try (capture-identity (endpoint-path provisional))
++          (catch ((tuple class reason _)
++                  (tuple 'error (tuple class reason)))))
++    ((tuple 'ok identity)
++     (let ((state (set-endpoint provisional identity identity)))
++       (try
++         (let (('ok (file:change_mode (endpoint-path state) #o600)))
++           (case (cayrn_lfe_sup:start_link
++                   (endpoint-socket state) (endpoint-path state))
++             ((tuple 'ok supervisor) (tuple 'ok supervisor state))
++             (error (dispose state) error)))
++         (catch
++           ((tuple class reason _)
++            (dispose state)
++            (tuple 'error (tuple class reason)))))))
++    (error
++     (dispose provisional)
++     (tuple 'error (tuple 'endpoint_identity error)))))
+ 
+-(defun stop (_state)
+-  "Finish application shutdown after the supervision tree stops."
++(defun capture-identity (path)
++  (case (file:read_link_info path)
++    ((tuple 'ok info)
++     (let ((inode (file_info-inode info))
++           (major (file_info-major_device info))
++           (minor (file_info-minor_device info))
++           (type (band (file_info-mode info) #o170000)))
++       (if (andalso (=:= (file_info-type info) 'other)
++                    (=:= type #o140000) (is_integer inode) (> inode 0)
++                    (is_integer major) (>= major 0)
++                    (is_integer minor) (>= minor 0))
++         (tuple 'ok (make-identity major major minor minor
++                                  inode inode type type))
++         '#(error unsupported_socket_identity))))
++    (error error)))
++
++(defspec (stop 1) (((record endpoint)) 'ok))
++(defun stop (state)
++  "Reap the exact listen port after Sup death, then guard pathname unlink."
++  (dispose state))
++
++(defun dispose (state)
++  ;; OTP ignores stop's result: explicit diagnostics survive failed cleanup.
++  (let ((result
++          (try (close-and-unlink state)
++            (catch ((tuple class reason _)
++                    (tuple 'error (tuple class reason)))))))
++    (case result
++      ('ok 'ok)
++      (failure
++       (logger:error "Native listener cleanup failed for ~p: ~p"
++         (list (endpoint-path state) failure)))))
+   'ok)
++
++(defun close-and-unlink (state)
++  (let* ((socket (endpoint-socket state))
++         (ref (monitor 'port socket))
++         (closed (try (gen_tcp:close socket)
++                   (catch ((tuple class reason _)
++                           (tuple 'error (tuple class reason)))))))
++    (case closed
++      ('ok 'ok)
++      (failure (logger:error "Native listening-port close failed: ~p"
++                 (list failure))))
++    (receive
++      ((tuple 'DOWN incoming 'port port _reason)
++       (when (=:= incoming ref) (=:= port socket))
++       (unlink-owned-path state))
++      (after 1000
++        (erlang:demonitor ref '(flush))
++        (tuple 'error (tuple 'listen_port_down_timeout closed))))))
++
++(defun unlink-owned-path
++  (((match-endpoint identity 'undefined))
++   '#(error unconfirmed_path_retained))
++  ((state)
++   (let ((path (endpoint-path state)))
++     (case (capture-identity path)
++       ((tuple 'ok current)
++        (if (=:= current (endpoint-identity state))
++          (case (file:delete path)
++            ('ok 'ok)
++            ('#(error enoent) 'ok)
++            (error error))
++          'ok))
++       ('#(error enoent) 'ok)
++       ('#(error unsupported_socket_identity) 'ok)
++       (error error)))))
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_authority.lfe b/apps/cayrn_lfe/src/cayrn_lfe_authority.lfe
+new file mode 100644
+index 0000000..bdf3a59
+--- /dev/null
++++ b/apps/cayrn_lfe/src/cayrn_lfe_authority.lfe
+@@ -0,0 +1,61 @@
++;;;; One persistent raw control channel per Rust host authority.
++(defmodule cayrn_lfe_authority
++  (behaviour gen_server)
++  (export (handle_call 3) (handle_cast 2) (handle_info 2)
++          (init 1) (start_link 1) (terminate 2)))
++
++(defrecord authority
++  (socket 'undefined (UNION 'undefined (port)))
++  (active 'false (boolean)))
++
++(defspec (start_link 1) (((port)) (term)))
++(defun start_link (socket)
++  "Start paused until the router has transferred the socket."
++  (gen_server:start_link (MODULE) socket '()))
++
++(defspec (init 1) (((port)) (term)))
++(defun init (socket)
++  "Do not grant a lease before socket ownership is transferred."
++  (tuple 'ok (make-authority socket socket) 5000))
++
++(defspec (handle_info 2) (((term) (record authority)) (term)))
++(defun handle_info
++  "Grant once; thereafter any byte, EOF or error retires this owner."
++  (((tuple 'activate
++      (map #b("kind") #b("authority_hello") #b("version") 3
++           #b("authority") authority)) state)
++   (when (=:= (authority-active state) 'false))
++   (try
++     (let* ((socket (authority-socket state))
++            ((tuple 'connected owner) (erlang:port_info socket 'connected))
++            ('true (=:= owner (self)))
++            ((tuple 'ok boot lease) (cayrn_lfe_registry:open authority))
++            ('ok (gen_tcp:send socket
++                   (json:encode
++                     (map 'kind 'authority_ready 'version 3
++                          'boot boot 'lease lease))))
++            ('ok (inet:setopts socket '(#(packet 0) #(active once)))))
++       (tuple 'noreply (set-authority state active 'true)))
++     (catch ((tuple _ reason _) (tuple 'stop reason state)))))
++  (('timeout state) (tuple 'stop 'handshake_timeout state))
++  (((tuple 'tcp _ _) state) (tuple 'stop 'unexpected_authority_data state))
++  (((tuple 'tcp_closed _) state) (tuple 'stop 'normal state))
++  (((tuple 'tcp_error _ reason) state) (tuple 'stop reason state))
++  ((_message state) (tuple 'stop 'invalid_authority_activation state)))
++
++(defspec (handle_call 3)
++  (((term) (call 'gen_server 'from) (record authority)) (term)))
++(defun handle_call (_request _from state)
++  "Reject unsupported calls."
++  (tuple 'reply '#(error unsupported) state))
++
++(defspec (handle_cast 2) (((term) (record authority)) (term)))
++(defun handle_cast (_request state)
++  "Do not accept an authority command protocol after Ready."
++  (tuple 'stop 'unexpected_authority_cast state))
++
++(defspec (terminate 2) (((term) (record authority)) 'ok))
++(defun terminate (_reason state)
++  "Close this owner's socket; the registry observes its exact DOWN."
++  (gen_tcp:close (authority-socket state))
++  'ok)
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_connection.lfe b/apps/cayrn_lfe/src/cayrn_lfe_connection.lfe
+new file mode 100644
+index 0000000..f9496ae
+--- /dev/null
++++ b/apps/cayrn_lfe/src/cayrn_lfe_connection.lfe
+@@ -0,0 +1,68 @@
++;;;; First-frame routing with an explicit socket-ownership handoff.
++(defmodule cayrn_lfe_connection
++  (behaviour gen_server)
++  (export (handle_call 3) (handle_cast 2) (handle_info 2)
++          (init 1) (start_link 1) (terminate 2)))
++
++(defrecord connection (socket 'undefined (UNION 'undefined (port))))
++
++(defspec (start_link 1) (((port)) (term)))
++(defun start_link (socket)
++  "Start paused; the listener transfers ownership before activation."
++  (gen_server:start_link (MODULE) socket '()))
++
++(defspec (init 1) (((port)) (term)))
++(defun init (socket)
++  "Keep only a provisional port and a five-second handshake deadline."
++  (tuple 'ok (make-connection socket socket) 5000))
++
++(defspec (handle_info 2) (((term) (record connection)) (term)))
++(defun handle_info
++  "Read exactly one framed Hello and transfer to one paused endpoint."
++  (('activate state)
++   (case (inet:setopts (connection-socket state) '(#(active once)))
++     ('ok (tuple 'noreply state 5000))
++     ((tuple 'error reason) (tuple 'stop reason state))))
++  (((tuple 'tcp socket bytes) state)
++   (when (=:= socket (connection-socket state)))
++   (try
++     (route (json:decode bytes) socket state)
++     (catch ((tuple _ reason _) (tuple 'stop reason state)))))
++  (('timeout state) (tuple 'stop 'handshake_timeout state))
++  (((tuple 'tcp_closed _) state) (tuple 'stop 'normal state))
++  (((tuple 'tcp_error _ reason) state) (tuple 'stop reason state))
++  ((_message state) (tuple 'noreply state 5000)))
++
++(defun route (hello socket state)
++  (let* ((role (case hello
++                ((map #b("kind") #b("authority_hello") #b("version") 3)
++                 'authority)
++                ((map #b("kind") #b("hello") #b("version") 3) 'context)))
++         ((tuple 'ok child) (call 'cayrn_lfe_sup role socket)))
++    (case (gen_tcp:controlling_process socket child)
++      ('ok
++       ;; Sending to a vanished child is harmless: owner death closes the port.
++       (! child (tuple 'activate hello))
++       (tuple 'stop 'normal (set-connection state socket 'undefined)))
++      ((tuple 'error reason)
++       (exit child 'shutdown)
++       (tuple 'stop reason state)))))
++
++(defspec (handle_call 3)
++  (((term) (call 'gen_server 'from) (record connection)) (term)))
++(defun handle_call (_request _from state)
++  "Reject unsupported calls."
++  (tuple 'reply '#(error unsupported) state))
++
++(defspec (handle_cast 2) (((term) (record connection)) (term)))
++(defun handle_cast (_request state)
++  "Ignore unsupported casts without extending the handshake lifetime."
++  (tuple 'noreply state 5000))
++
++(defspec (terminate 2) (((term) (record connection)) 'ok))
++(defun terminate (_reason state)
++  "Close the socket only while it still belongs to this router."
++  (case (connection-socket state)
++    ('undefined 'ok)
++    (socket (gen_tcp:close socket)))
++  'ok)
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_context.lfe b/apps/cayrn_lfe/src/cayrn_lfe_context.lfe
+index ddf9bdf..c56ac7b 100644
+--- a/apps/cayrn_lfe/src/cayrn_lfe_context.lfe
++++ b/apps/cayrn_lfe/src/cayrn_lfe_context.lfe
+@@ -14,10 +14,11 @@
+ (defspec (init 1) (((port)) (tuple 'ok (map) (timeout))))
+ 
+ (defun init (socket)
+-  "Create an opaque environment, scalar fence and bounded live origins."
++  "Pause without an environment until registry admission succeeds."
+   (process_flag 'trap_exit 'true)
+   (tuple 'ok
+-    (map 'socket socket 'identity 'undefined 'env (cayrn-lfe-eval:new)
++    (map 'socket socket 'identity 'undefined 'env 'undefined
++         'registry 'undefined 'native-scope 'undefined
+          'active 'undefined 'last-token 0 'origins (map) 'pending (map)
+          'seq 0 'closing 'undefined)
+     5000))
+@@ -29,9 +30,18 @@
+ 
+ (defun handle_info
+   "Process native control, evaluator, collector and capture events."
+-  (('activate (= (map 'socket socket) state))
+-   (let (('ok (inet:setopts socket '(#(active once)))))
+-     (tuple 'noreply state 5000)))
++  (((tuple 'activate hello) (= (map 'socket socket) state))
++   (try
++     (let (((tuple 'continue next) (command hello state)))
++       (case (inet:setopts socket '(#(active once)))
++         ('ok (tuple 'noreply next))
++         ((tuple 'error reason) (tuple 'stop reason next))))
++     (catch ((tuple _ reason _) (tuple 'stop reason state)))))
++  (((tuple 'authority_lost registry lease)
++    (= (map 'registry stored-registry
++            'native-scope (tuple _ stored-lease _)) state))
++   (when (=:= registry stored-registry) (=:= lease stored-lease))
++   (tuple 'stop 'normal state))
+   (((tuple 'tcp socket bytes) (= (map 'socket socket) state))
+    (let ((result
+            (try (command (json:decode bytes) state)
+@@ -134,21 +144,23 @@
+   ((_ state) (tuple 'noreply state)))
+ 
+ (defun command
+-  (((map #b("kind") #b("hello") #b("version") 2
++  (((map #b("kind") #b("hello") #b("version") 3
+          #b("session") sid #b("generation") generation
+-         #b("authority") authority)
+-    (= (map 'identity 'undefined) state))
+-   (let* (('true (andalso (valid-id? sid) (valid-id? generation)
+-                         (valid-id? authority)))
+-          ('true (< (ets:info 'cayrn_lfe_contexts 'size) 4096))
+-          ('true (ets:insert_new 'cayrn_lfe_contexts
+-                   (tuple sid generation authority)))
+-          ('ok (send-event state
+-                 (map 'kind 'ready 'version 2 'backend #b("lfe")
++         #b("authority") authority #b("boot") boot
++         #b("lease") lease #b("ticket") ticket)
++    (= (map 'identity 'undefined 'socket socket) state))
++   (let* (((tuple 'ok registry)
++           (cayrn_lfe_registry:admit boot lease ticket sid generation
++                                     authority socket))
++          (next (map-set state 'identity (tuple sid generation authority)
++                  'registry registry 'native-scope (tuple boot lease ticket)
++                  'env (cayrn-lfe-eval:new)))
++          ('ok (send-event next
++                 (map 'kind 'ready 'version 3 'backend #b("lfe")
+                       'interrupt #b("session_destructive")
+-                      'close_barrier 'true))))
+-     (tuple 'continue
+-       (map-set state 'identity (tuple sid generation authority)))))
++                      'close_barrier 'true 'boot boot
++                      'lease lease 'ticket ticket))))
++     (tuple 'continue next)))
+   (((map #b("kind") #b("dispatch") #b("operation") operation
+          #b("source") source #b("generation") generation
+          #b("authority") authority)
+@@ -309,12 +321,6 @@
+   (((tuple 'continue state)) (tuple 'noreply state))
+   (((tuple 'stop state)) (tuple 'stop 'normal state)))
+ 
+-(defun valid-id?
+-  ((id) (when (is_binary id) (> (byte_size id) 0)
+-              (=< (byte_size id) 128))
+-   (=:= (re:run id #b("^[A-Za-z0-9_-]+$") '(#(capture none))) 'match))
+-  ((_) 'false))
+-
+ (defun send-event
+   (((map 'socket socket) data)
+    (gen_tcp:send socket (json:encode data))))
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_listener.lfe b/apps/cayrn_lfe/src/cayrn_lfe_listener.lfe
+index 532268a..1219a24 100644
+--- a/apps/cayrn_lfe/src/cayrn_lfe_listener.lfe
++++ b/apps/cayrn_lfe/src/cayrn_lfe_listener.lfe
+@@ -2,55 +2,55 @@
+ (defmodule cayrn_lfe_listener
+   (behaviour gen_server)
+   (export (handle_call 3) (handle_cast 2) (handle_info 2)
+-          (init 1) (start_link 0) (terminate 2)))
++          (init 1) (start_link 2) (terminate 2)))
+ 
+-(defspec (start_link 0)
+-  (() (UNION (tuple 'ok (pid)) (tuple 'error (term)))))
++(defspec (start_link 2)
++  (((port) (string)) (UNION (tuple 'ok (pid)) (tuple 'error (term)))))
+ 
+-(defun start_link ()
+-  "Start the registered native socket listener."
+-  (gen_server:start_link (tuple 'local (MODULE)) (MODULE) '() '()))
++(defun start_link (socket path)
++  "Accept on the application helper's borrowed listening socket."
++  (gen_server:start_link (tuple 'local (MODULE)) (MODULE)
++    (tuple socket path) '()))
+ 
+ (defspec (init 1)
+-  (((nil)) (UNION (tuple 'ok (map)) (tuple 'stop (term)))))
++  (((tuple (port) (string))) (tuple 'ok (map))))
+ 
+-(defun init (_args)
+-  "Create the native identity guard and private framed Unix listener."
+-  (ets:new 'cayrn_lfe_contexts
+-    '(named_table public set #(write_concurrency true)))
+-  (let (((tuple 'ok path) (application:get_env 'cayrn_lfe 'socket)))
+-    (case (gen_tcp:listen 0
+-            (list 'binary '#(active false) '#(packet 4)
+-                  '#(packet_size 262144) (tuple 'ifaddr (tuple 'local path))
+-                  '#(backlog 64)))
+-      ((tuple 'ok socket)
+-       (let (('ok (file:change_mode path #o600)))
+-         (! (self) 'accept)
+-         (tuple 'ok (map 'socket socket 'path path))))
+-      (error (tuple 'stop error)))))
++(defun init
++  "Validate a live borrowed endpoint without rebinding or changing ownership."
++  (((tuple socket path))
++    (process_flag 'trap_exit 'true)
++    (let* (((tuple 'connected owner) (erlang:port_info socket 'connected))
++           ('true (andalso (is_pid owner) (=/= owner (self))
++                          (=:= path (filename:absname path)))))
++      (! (self) 'accept)
++      (tuple 'ok (map 'socket socket 'path path)))))
+ 
+ (defspec (handle_info 2) (((term) (map)) (tuple 'noreply (map))))
+ 
+ (defun handle_info
+   "Accept bounded contexts and transfer socket ownership before activation."
+   (('accept (= (map 'socket listener) state))
+-   (case (gen_tcp:accept listener 100)
+-     ((tuple 'ok socket)
+-      (let ((counts (supervisor:count_children 'cayrn_lfe_sup)))
+-        (if (=< (proplists:get_value 'active counts) 64)
+-          (case (cayrn_lfe_sup:context socket)
+-            ((tuple 'ok pid)
+-             (let (('ok (gen_tcp:controlling_process socket pid)))
+-               (! pid 'activate)))
+-            (_ (gen_tcp:close socket)))
+-          (gen_tcp:close socket))))
+-     ((tuple 'error 'timeout) 'ok)
+-     ((tuple 'error 'closed) (exit 'listener_closed))
+-     ((tuple 'error reason) (exit reason)))
+-   (! (self) 'accept)
++   (let* ((counts (supervisor:count_children 'cayrn_lfe_sup))
++          (temporary (- (proplists:get_value 'active counts) 2)))
++     (if (< temporary 128)
++       (progn
++         (case (gen_tcp:accept listener 100)
++           ((tuple 'ok socket) (start-router socket))
++           ((tuple 'error 'timeout) 'ok)
++           ((tuple 'error reason) (exit reason)))
++         (! (self) 'accept))
++       (erlang:send_after 10 (self) 'accept)))
+    (tuple 'noreply state))
+   ((_ state) (tuple 'noreply state)))
+ 
++(defun start-router (socket)
++  (case (cayrn_lfe_sup:connection socket)
++    ((tuple 'ok pid)
++     (case (gen_tcp:controlling_process socket pid)
++       ('ok (! pid 'activate))
++       (_ (exit pid 'shutdown) (gen_tcp:close socket))))
++    (_ (gen_tcp:close socket))))
++
+ (defspec (handle_call 3)
+   (((term) (call 'gen_server 'from) (map))
+    (tuple 'reply (term) (map))))
+@@ -67,9 +67,6 @@
+ 
+ (defspec (terminate 2) (((term) (map)) 'ok))
+ 
+-(defun terminate
+-  "Release only the listener's owned endpoint."
+-  ((_reason (map 'socket socket 'path path))
+-   (gen_tcp:close socket)
+-   (file:delete path)
+-   'ok))
++(defun terminate (_reason _state)
++  "Leave the borrowed listen port/path to its application-lifetime owner."
++  'ok)
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_registry.lfe b/apps/cayrn_lfe/src/cayrn_lfe_registry.lfe
+new file mode 100644
+index 0000000..f6c37cc
+--- /dev/null
++++ b/apps/cayrn_lfe/src/cayrn_lfe_registry.lfe
+@@ -0,0 +1,153 @@
++;;;; Live node authority leases and physically reclaimed context credits.
++(defmodule cayrn_lfe_registry
++  (behaviour gen_server)
++  (export (admit 7) (handle_call 3) (handle_cast 2) (handle_info 2)
++          (init 1) (open 1) (start_link 0) (terminate 2)))
++
++(include-file "../include/cayrn_lfe_registry.lfe")
++
++(defspec (admit 7)
++  (((binary) (binary) (binary) (binary) (binary) (binary) (port)) (term)))
++(defun admit (boot lease ticket sid generation authority socket)
++  "Validate wire domains locally and admit this caller's owned context port."
++  (let* (('true (andalso (valid-id? sid) (valid-id? generation)
++                         (valid-id? authority)))
++         (lease-number (number lease)) (ticket-number (number ticket)))
++    (gen_server:call (MODULE)
++      (tuple 'admit boot lease-number ticket-number sid generation
++             authority socket))))
++
++(defspec (open 1) (((binary)) (term)))
++(defun open (authority)
++  "Grant this caller a fresh lease, without retaining retired owners."
++  (let (('true (valid-id? authority)))
++    (gen_server:call (MODULE) (tuple 'open authority))))
++
++(defspec (start_link 0) (() (term)))
++(defun start_link ()
++  "Start the permanent registry before the listener."
++  (gen_server:start_link (tuple 'local (MODULE)) (MODULE) '() '()))
++
++(defspec (init 1) (((nil)) (tuple 'ok (record registry))))
++(defun init (_args)
++  "Create one cryptographic boot identity and empty live indexes."
++  (tuple 'ok (make-registry
++               boot (binary:encode_hex (crypto:strong_rand_bytes 16)))))
++
++(defspec (handle_call 3)
++  (((term) (call 'gen_server 'from) (record registry)) (term)))
++(defun handle_call
++  "Serialize grants and consume valid scoped tickets before budget checks."
++  (((tuple 'open authority) (tuple owner _) state)
++   (let ((leases (registry-leases state)))
++     (if (orelse (=:= (map_size leases) 16)
++                 (=:= (registry-last-lease state) 9223372036854775807)
++                 (lists:any (lambda (lease)
++                              (orelse (=:= authority (lease-authority lease))
++                                      (=:= owner (lease-owner lease))))
++                            (maps:values leases)))
++       (tuple 'reply '#(error authority_refused) state)
++       (let* ((id (+ (registry-last-lease state) 1))
++              (lease (make-lease owner owner monitor (monitor 'process owner)
++                                authority authority)))
++         (tuple 'reply
++           (tuple 'ok (registry-boot state) (integer_to_binary id))
++           (set-registry state last-lease id
++             leases (map-set leases id lease)))))))
++  (((tuple 'admit boot id ticket sid generation authority socket)
++    (tuple caller _) state)
++   (case (maps:find id (registry-leases state))
++     ((tuple 'ok lease)
++      (if (andalso (=:= boot (registry-boot state))
++                   (=:= authority (lease-authority lease))
++                   (> ticket (lease-last-ticket lease))
++                   (=:= (erlang:port_info socket 'connected)
++                        (tuple 'connected caller)))
++        (admit-context id ticket sid generation socket caller lease state)
++        (tuple 'reply '#(error invalid_scope) state)))
++     (_ (tuple 'reply '#(error invalid_scope) state))))
++  ((_request _from state) (tuple 'reply '#(error unsupported) state)))
++
++(defun admit-context (id ticket sid generation socket caller lease state)
++  (let* ((consumed (set-registry state leases
++                    (map-set (registry-leases state) id
++                      (set-lease lease last-ticket ticket))))
++         (contexts (registry-contexts state)) (sids (registry-sids state)))
++    (if (orelse (=:= (map_size contexts) 64) (maps:is_key sid sids)
++                (maps:is_key caller contexts))
++      (tuple 'reply '#(error context_refused) consumed)
++      (let ((context (make-context pid caller monitor (monitor 'process caller)
++                       lease id sid sid generation generation ticket ticket
++                       socket socket)))
++        (tuple 'reply (tuple 'ok (self))
++          (set-registry consumed contexts (map-set contexts caller context)
++            sids (map-set sids sid caller)))))))
++
++(defspec (handle_info 2) (((term) (record registry)) (term)))
++(defun handle_info
++  "Release only exact monitored owners; socket loss is not context reaping."
++  (((tuple 'DOWN ref 'process pid _reason) state)
++   (case (maps:find pid (registry-contexts state))
++     ((tuple 'ok context)
++      (if (=:= ref (context-monitor context))
++        (tuple 'noreply
++          (set-registry state
++            contexts (maps:remove pid (registry-contexts state))
++            sids (maps:remove (context-sid context) (registry-sids state))))
++        (tuple 'noreply state)))
++     (_ (tuple 'noreply (retire-owner pid ref state)))))
++  ((_message state) (tuple 'noreply state)))
++
++(defun retire-owner (pid ref state)
++  (case (lists:filter
++          (match-lambda
++            (((tuple _ lease))
++             (andalso (=:= pid (lease-owner lease))
++                      (=:= ref (lease-monitor lease)))))
++          (maps:to_list (registry-leases state)))
++    ((list (tuple id _lease))
++     ;; Revoke before touching ports; credit remains until exact context DOWN.
++     (let ((next (set-registry state leases
++                   (maps:remove id (registry-leases state)))))
++       (lists:foreach
++         (lambda (context)
++           (if (=:= id (context-lease context))
++             (progn
++               (abort-port (context-socket context))
++               (! (context-pid context)
++                  (tuple 'authority_lost (self) (integer_to_binary id))))
++             'ok))
++         (maps:values (registry-contexts state)))
++       next))
++    (_ state)))
++
++(defun abort-port (socket)
++  ;; OTP prim_inet:close takes direct port_close only with {linger,{true,0}}.
++  ;; Never use its default-linger pending-output wait on authority loss.
++  (case (inet:setopts socket '(#(linger #(true 0))))
++    ('ok (gen_tcp:close socket))
++    (_ (catch (erlang:port_close socket))))
++  'ok)
++
++(defun number
++  ((value) (when (is_binary value) (> (byte_size value) 0)
++                 (=< (byte_size value) 19))
++   (let* ((n (binary_to_integer value))
++          ('true (andalso (> n 0) (=< n 9223372036854775807)
++                          (=:= value (integer_to_binary n))))) n))
++  ((_) (error 'invalid_native_number)))
++
++(defun valid-id?
++  ((id) (when (is_binary id) (> (byte_size id) 0) (=< (byte_size id) 128))
++   (=:= (re:run id #b("^[A-Za-z0-9_-]+\\z") '(#(capture none))) 'match))
++  ((_) 'false))
++
++(defspec (handle_cast 2) (((term) (record registry)) (term)))
++(defun handle_cast (_message state)
++  "Ignore unsupported asynchronous requests."
++  (tuple 'noreply state))
++
++(defspec (terminate 2) (((term) (record registry)) 'ok))
++(defun terminate (_reason _state)
++  "The one_for_all supervisor owns native-domain restart."
++  'ok)
+diff --git a/apps/cayrn_lfe/src/cayrn_lfe_sup.lfe b/apps/cayrn_lfe/src/cayrn_lfe_sup.lfe
+index 1442475..e19adec 100644
+--- a/apps/cayrn_lfe/src/cayrn_lfe_sup.lfe
++++ b/apps/cayrn_lfe/src/cayrn_lfe_sup.lfe
+@@ -1,32 +1,51 @@
+ ;;;; Supervision for the listener and disposable native contexts.
+ (defmodule cayrn_lfe_sup
+   (behaviour supervisor)
+-  (export (context 1) (init 1) (start_link 0)))
++  (export (authority 1) (connection 1) (context 1) (init 1) (start_link 2)))
+ 
+-(defspec (context 1) (((port)) (call 'supervisor 'startchild_ret)))
++(defspec (authority 1) (((port)) (call 'supervisor 'startchild_ret)))
++(defun authority (socket)
++  "Start a paused disposable authority endpoint."
++  (endpoint 'cayrn_lfe_authority socket))
++
++(defspec (connection 1) (((port)) (call 'supervisor 'startchild_ret)))
++(defun connection (socket)
++  "Start a paused first-frame router."
++  (endpoint 'cayrn_lfe_connection socket))
+ 
++(defspec (context 1) (((port)) (call 'supervisor 'startchild_ret)))
+ (defun context (socket)
+-  "Start a temporary context; a failed environment is never restarted."
++  "Start a paused context, with no evaluator environment yet."
++  (endpoint 'cayrn_lfe_context socket))
++
++(defun endpoint (module socket)
+   (supervisor:start_child (MODULE)
+     (map 'id (make_ref)
+-         'start (tuple 'cayrn_lfe_context 'start_link (list socket))
+-         'restart 'temporary 'shutdown 2000)))
++         'start (tuple module 'start_link (list socket))
++         'restart 'temporary 'shutdown 2000 'modules (list module))))
+ 
+ (defspec (init 1)
+-  (((nil)) (tuple 'ok (tuple (call 'supervisor 'sup_flags)
++  (((tuple (port) (string))) (tuple 'ok (tuple (call 'supervisor 'sup_flags)
+                              (list (call 'supervisor 'child_spec))))))
+ 
+-(defun init (_args)
++(defun init
+   "Keep the listener and its contexts in the same failure domain."
+-  (tuple 'ok
+-    (tuple (map 'strategy 'one_for_all 'intensity 3 'period 10)
+-      (list (map 'id 'cayrn_lfe_listener
+-                 'start (tuple 'cayrn_lfe_listener 'start_link '())
+-                 'restart 'permanent 'shutdown 2000)))))
+-
+-(defspec (start_link 0)
+-  (() (UNION (tuple 'ok (pid)) (tuple 'error (term)))))
+-
+-(defun start_link ()
+-  "Start the registered native supervisor."
+-  (supervisor:start_link (tuple 'local (MODULE)) (MODULE) '()))
++  (((tuple socket path))
++    (tuple 'ok
++      (tuple (map 'strategy 'one_for_all 'intensity 3 'period 10)
++        (list (map 'id 'cayrn_lfe_registry
++                   'start (tuple 'cayrn_lfe_registry 'start_link '())
++                   'restart 'permanent 'shutdown 2000
++                   'modules '(cayrn_lfe_registry))
++              (map 'id 'cayrn_lfe_listener
++                   'start (tuple 'cayrn_lfe_listener 'start_link
++                            (list socket path))
++                   'restart 'permanent 'shutdown 2000
++                   'modules '(cayrn_lfe_listener)))))))
++
++(defspec (start_link 2)
++  (((port) (string)) (UNION (tuple 'ok (pid)) (tuple 'error (term)))))
++
++(defun start_link (socket path)
++  "Start the tree with the immutable application-owned listening endpoint."
++  (supervisor:start_link (tuple 'local (MODULE)) (MODULE) (tuple socket path)))
+diff --git a/apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe b/apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe
+index f6f8c4e..98cf381 100644
+--- a/apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe
++++ b/apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe
+@@ -1,10 +1,24 @@
+ ;;;; Startup isolation from the legacy parent EUnit node.
+ (defmodule cayrn_lfe_application_tests
+-  (export (independent_application_start_test_ 0)))
++  (export
++   (application_stop_reaps_endpoint_test_ 0)
++   (await-port-down 1)
++   (callback-guard 2)
++   (child-failure 1)
++   (child_kill_keeps_endpoint_test_ 0)
++   (endpoint-info 0)
++   (identity_guard_preserves_replacements_test_ 0)
++   (independent_application_start_test_ 0)
++   (queued-parent-call 0)
++   (queued_parent_call_survives_registry_kill_test_ 0)
++   (relative_path_survives_evaluated_cwd_test_ 0)
++   (startup-refusal 1)
++   (startup_refusal_cleans_acquisition_test_ 0)))
+ 
+ (include-lib "eunit/include/eunit.hrl")
+ (include-lib "kernel/include/file.hrl")
+ 
++(defspec (independent_application_start_test_ 0) (() (term)))
+ (defun independent_application_start_test_ ()
+   "Check native startup in a fresh, test-owned OTP node."
+   (tuple 'timeout 30 #'independent-application-start/0))
+@@ -36,6 +50,8 @@
+                  ((tuple 'ok info) (file:read_file_info socket)))
+             (assert (lists:member 'cayrn_lfe running))
+             (assert (lists:member 'lfe running))
++            (assert (lists:member 'crypto running))
++            (assert (lists:member 'compiler running))
+             (lists:foreach
+               (lambda (app) (assertNot (lists:member app running)))
+               '(xrepl ranch xrepl_protocol xrepl_term))
+@@ -45,3 +61,507 @@
+       (after
+         (file:delete socket)
+         (file:del_dir dir)))))
++
++;;; Stable application ownership across untrappable child failure.
++
++(defspec (child_kill_keeps_endpoint_test_ 0) (() (term)))
++(defun child_kill_keeps_endpoint_test_ ()
++  "Kill either permanent child; reuse the exact live app-owned endpoint."
++  (tuple 'timeout 30
++    (lambda ()
++      (lists:foreach
++        (lambda (role)
++          (cayrn_lfe_authority_tests:with-peer
++            (lambda (peer path)
++              (let* (((tuple owner grant)
++                      (cayrn_lfe_authority_tests:authority path #b("a")))
++                     ((tuple socket context)
++                      (cayrn_lfe_authority_tests:context peer path grant
++                        #b("1") #b("old") #b("a"))))
++                (try
++                  (progn
++                    (assertEqual #b("1")
++                      (evaluate socket #b("1") #b("(set retained 1)")))
++                    (assertEqual 'ok
++                      (peer:call peer (MODULE) 'child-failure (list role) 8000))
++                    (assertEqual 'ok
++                      (peer:call peer 'cayrn_lfe_authority_tests 'await-down
++                        (list context)))
++                    (assert-fresh peer path grant))
++                  (after (gen_tcp:close socket) (gen_tcp:close owner)))))))
++        '(cayrn_lfe_registry cayrn_lfe_listener)))))
++
++(defspec (child-failure 1) (((atom)) 'ok))
++(defun child-failure (role)
++  "Assert actual child kill preserves app owner, port, path and Unix inode."
++  (let* ((before (endpoint-info))
++         (registry (whereis 'cayrn_lfe_registry))
++         (children (temporary-children))
++         (target (whereis role))
++         (ref (monitor 'process target))
++         (port-ref (monitor 'port (map-get before 'socket))))
++    (exit target 'kill)
++    (receive
++      ((tuple 'DOWN incoming 'process pid 'killed)
++       (when (=:= incoming ref) (=:= pid target)) 'ok)
++      (after 3000 (error 'child_kill_not_observed)))
++    (lists:foreach
++                  #'cayrn_lfe_authority_tests:await-down/1 children)
++    (await-new-registry registry 3000)
++    (assertEqual before (endpoint-info))
++    (assert-no-port-down port-ref (map-get before 'socket))
++    (erlang:demonitor port-ref '(flush))
++    'ok))
++
++(defspec (queued_parent_call_survives_registry_kill_test_ 0) (() (term)))
++(defun queued_parent_call_survives_registry_kill_test_ ()
++  "LR-01 observes an accepted-port start_child behind registry EXIT."
++  (tuple 'timeout 30
++    (lambda ()
++      (cayrn_lfe_authority_tests:with-peer
++        (lambda (peer path)
++          (let* (((tuple owner grant)
++                  (cayrn_lfe_authority_tests:authority path #b("a")))
++                 ((tuple socket context)
++                  (cayrn_lfe_authority_tests:context peer path grant
++                    #b("1") #b("old") #b("a"))))
++            (try
++              (progn
++                (assertEqual 'ok
++                  (peer:call peer (MODULE) 'queued-parent-call '() 10000))
++                (peer:call peer 'cayrn_lfe_authority_tests 'await-down
++                  (list context))
++                (assert-fresh peer path grant))
++              (after (gen_tcp:close socket) (gen_tcp:close owner)))))))))
++
++(defspec (queued-parent-call 0) (() 'ok))
++(defun queued-parent-call ()
++  "Force exact queued parent-call ordering with guaranteed owned-peer resume."
++  (let* ((sup (whereis 'cayrn_lfe_sup))
++         (registry (whereis 'cayrn_lfe_registry))
++         (listener (whereis 'cayrn_lfe_listener))
++         (before (endpoint-info))
++         (listener-ref (monitor 'process listener))
++         (registry-ref (monitor 'process registry))
++         (port-ref (monitor 'port (map-get before 'socket)))
++         (children (temporary-children)))
++    (await-accept listener 1000)
++    (assert (erlang:suspend_process listener))
++    (try
++      (let (('true (accepting? listener))
++            ('ok (sys:suspend sup)))
++        (exit registry 'kill)
++        (receive
++          ((tuple 'DOWN incoming 'process pid 'killed)
++           (when (=:= incoming registry-ref) (=:= pid registry)) 'ok)
++          (after 1000 (error 'registry_down_not_observed)))
++        (await-registry-exit sup registry 1000)
++        (let* (((tuple 'ok raw)
++                (gen_tcp:connect (tuple 'local (map-get before 'path)) 0
++                  '(binary #(active false) #(packet 4)) 1000)))
++          (try
++            (progn
++              (assert (erlang:resume_process listener))
++              (let ((accepted (await-queued-accept sup registry listener 1000)))
++                (assertEqual (tuple 'connected listener)
++                  (erlang:port_info accepted 'connected))
++                (io:format 'user
++                  "LR-01 registry EXIT before start_child; accepted owner=~p~n"
++                  (list listener))
++                (sys:resume sup)
++                (receive
++                  ((tuple 'DOWN incoming 'process pid reason)
++                   (when (=:= incoming listener-ref) (=:= pid listener))
++                   (assertEqual 'killed reason))
++                  (after 5000 (error 'blocked_listener_not_reaped)))
++                (await-port-down accepted)
++                (lists:foreach
++                  #'cayrn_lfe_authority_tests:await-down/1 children)
++                (await-new-registry registry 3000)
++                (assertEqual before (endpoint-info))
++                (assert-no-port-down port-ref (map-get before 'socket))))
++            (after (gen_tcp:close raw)))))
++      (after
++        (catch (erlang:resume_process listener))
++        (catch (sys:resume sup))
++        (erlang:demonitor listener-ref '(flush))
++        (erlang:demonitor registry-ref '(flush))
++        (erlang:demonitor port-ref '(flush)))))
++  'ok)
++
++(defun accepting? (listener)
++  (case (process_info listener 'current_stacktrace)
++    ((tuple 'current_stacktrace stack)
++     (lists:any
++       (match-lambda
++         (((tuple 'prim_inet 'accept0 _ _)) 'true)
++         ((_entry) 'false)) stack))
++    (_ 'false)))
++
++(defun await-accept
++  ((_listener 0) (error 'accept_stack_precondition_missing))
++  ((listener attempts)
++   (if (accepting? listener) 'ok
++     (progn (timer:sleep 1) (await-accept listener (- attempts 1))))))
++
++(defun registry-exit-queued? (sup registry)
++  (let (((tuple 'messages messages) (process_info sup 'messages)))
++    (lists:any
++      (match-lambda
++        (((tuple 'EXIT pid 'killed)) (=:= pid registry))
++        ((_message) 'false)) messages)))
++
++(defun await-registry-exit
++  ((_sup _registry 0) (error 'registry_exit_not_queued))
++  ((sup registry attempts)
++   (if (registry-exit-queued? sup registry) 'ok
++     (progn (timer:sleep 1)
++       (await-registry-exit sup registry (- attempts 1))))))
++
++(defun await-queued-accept
++  ((_sup _registry _listener 0) (error 'pending_accept_call_not_observed))
++  ((sup registry listener attempts)
++   (let* (((tuple 'messages messages) (process_info sup 'messages))
++          (exit-index (message-index
++                        (lambda (message)
++                          (=:= message (tuple 'EXIT registry 'killed)))
++                        messages))
++          (calls (lists:filtermap
++                   (match-lambda
++                     (((tuple '$gen_call (tuple caller _) (tuple 'start_child
++                          (map 'start (tuple 'cayrn_lfe_connection
++                                             'start_link (list socket))))))
++                      (when (=:= caller listener)) (tuple 'true socket))
++                     ((_message) 'false)) messages)))
++     (case calls
++       ((list socket)
++        (let ((call-index (message-index
++                            (match-lambda
++                              (((tuple '$gen_call (tuple caller _) _))
++                               (=:= caller listener))
++                              ((_message) 'false)) messages)))
++          (assert (> exit-index 0))
++          (assert (> call-index exit-index))
++          socket))
++       (_ (timer:sleep 1)
++          (await-queued-accept sup registry listener (- attempts 1)))))))
++
++(defun message-index (predicate messages)
++  (message-index predicate messages 1))
++
++(defun message-index
++  ((_predicate '() _index) 0)
++  ((predicate (cons head tail) index)
++   (if (funcall predicate head) index
++     (message-index predicate tail (+ index 1)))))
++
++(defspec (relative_path_survives_evaluated_cwd_test_ 0) (() (term)))
++(defun relative_path_survives_evaluated_cwd_test_ ()
++  "Resolve relative startup once; evaluated cwd cannot relocate restarts."
++  (tuple 'timeout 30
++    (lambda ()
++      (with-owned-peer
++        (lambda (peer dir path)
++          (let* ((startup (filename:dirname path))
++                 (moved (filename:join dir "moved"))
++                 ('ok (file:make_dir moved))
++                 (name (filename:basename path))
++                 ((tuple 'ok old-cwd) (peer:call peer 'file 'get_cwd '())))
++            (try
++              (progn
++                (peer:call peer 'file 'set_cwd (list startup))
++                (start-native peer name)
++                (let* (((tuple owner grant)
++                        (cayrn_lfe_authority_tests:authority path #b("a")))
++                       ((tuple socket _)
++                        (cayrn_lfe_authority_tests:context peer path grant
++                          #b("1") #b("cwd") #b("a")))
++                       (source (iolist_to_binary
++                                 (io_lib:format "(file:set_cwd ~p)"
++                                   (list moved)))))
++                  (try
++                    (progn
++                      (assertEqual #b("ok") (evaluate socket #b("1") source))
++                      (peer:call peer (MODULE) 'child-failure
++                        '(cayrn_lfe_registry) 8000)
++                      (assert-fresh peer path grant)
++                      (assertEqual (tuple 'ok name)
++                        (peer:call peer 'application 'get_env
++                          '(cayrn_lfe socket)))
++                      (assertEqual '#(error enoent)
++                        (file:read_link_info (filename:join moved name))))
++                    (after (gen_tcp:close socket) (gen_tcp:close owner)))))
++              (after
++                (peer:call peer 'file 'set_cwd (list old-cwd))
++                (file:del_dir moved)))))))))
++
++(defspec (application_stop_reaps_endpoint_test_ 0) (() (term)))
++(defun application_stop_reaps_endpoint_test_ ()
++  "Actual app stop reaps exact listenport/path; restart creates a fresh boot."
++  (tuple 'timeout 30
++    (lambda ()
++      (cayrn_lfe_authority_tests:with-peer
++        (lambda (peer path)
++          (let* (((tuple owner grant)
++                  (cayrn_lfe_authority_tests:authority path #b("a")))
++                 ((tuple socket context)
++                  (cayrn_lfe_authority_tests:context peer path grant
++                    #b("1") #b("old") #b("a")))
++                 (before (peer:call peer (MODULE) 'endpoint-info '())))
++            (assertEqual 'ok
++              (peer:call peer 'application 'stop '(cayrn_lfe)))
++            (peer:call peer (MODULE) 'await-port-down
++              (list (map-get before 'socket)))
++            (peer:call peer 'cayrn_lfe_authority_tests 'await-down
++              (list (map-get before 'owner)))
++            (peer:call peer 'cayrn_lfe_authority_tests 'await-down
++              (list context))
++            (assertEqual '#(error enoent) (file:read_link_info path))
++            (start-native peer path)
++            (assert-fresh peer path grant)
++            (gen_tcp:close socket) (gen_tcp:close owner)))))))
++
++(defspec (identity_guard_preserves_replacements_test_ 0) (() (term)))
++(defun identity_guard_preserves_replacements_test_ ()
++  "Real captured AppState cannot remove replacement file, symlink or socket."
++  (tuple 'timeout 30
++    (lambda ()
++      (lists:foreach
++        (lambda (kind)
++          (with-owned-peer
++            (lambda (peer _dir path)
++              (assertEqual 'ok
++                (peer:call peer (MODULE) 'callback-guard
++                  (list path kind) 8000)))))
++        '(regular symlink socket absent)))))
++
++(defspec (callback-guard 2) (((string) (atom)) 'ok))
++(defun callback-guard (path kind)
++  "Use actual start/2 State and stop/1 on its still-live callback owner."
++  (process_flag 'trap_exit 'true)
++  (application:set_env 'cayrn_lfe 'socket path)
++  (let* (((tuple 'ok sup state) (cayrn_lfe_app:start 'normal '()))
++         (endpoint (endpoint-info))
++         (port (map-get endpoint 'socket))
++         (backup (++ path ".owned-inode"))
++         (target (++ path ".target")))
++    (assertEqual (self) (map-get endpoint 'owner))
++    (try
++      (progn
++        (gen_server:stop sup 'shutdown 3000)
++        (assertEqual (tuple 'connected (self))
++          (erlang:port_info port 'connected))
++        (let ((ref (monitor 'port port)))
++          (gen_tcp:close port)
++          (receive
++            ((tuple 'DOWN incoming 'port socket _)
++             (when (=:= incoming ref) (=:= socket port)) 'ok)
++            (after 1000 (error 'callback_owned_port_leaked))))
++        ;; Pin captured inode so the different-socket oracle cannot hit ABA.
++        (let (('ok (file:make_link path backup))
++              ('ok (file:delete path))) 'ok)
++        (let ((replacement
++                (case kind
++                  ('regular (file:write_file path #b("KEEP")) 'undefined)
++                  ('symlink (file:write_file target #b("KEEP"))
++                            (file:make_symlink target path) 'undefined)
++                  ('socket
++                   (let (((tuple 'ok socket)
++                          (gen_tcp:listen 0
++                            (list 'binary '#(active false)
++                                  (tuple 'ifaddr (tuple 'local path))))))
++                     socket))
++                  ('absent 'undefined))))
++          (try
++            (let ((before (file:read_link_info path)))
++              (if (=:= kind 'socket)
++                (let (((tuple 'ok old-info) (file:read_link_info backup))
++                      ((tuple 'ok new-info) before))
++                  (assertNotEqual (file_info-inode old-info)
++                                  (file_info-inode new-info)))
++                'ok)
++              (assertEqual 'ok (cayrn_lfe_app:stop state))
++              (assertEqual before (file:read_link_info path))
++              (if (=:= kind 'socket)
++                (assertEqual '#(error timeout) (gen_tcp:accept replacement 0))
++                'ok))
++            (after
++              (if (is_port replacement) (gen_tcp:close replacement) 'ok)))))
++      (after
++        (catch (gen_server:stop sup 'shutdown 3000))
++        (cayrn_lfe_app:stop state)
++        (file:delete path) (file:delete backup) (file:delete target))))
++  'ok)
++
++(defspec (startup_refusal_cleans_acquisition_test_ 0) (() (term)))
++(defun startup_refusal_cleans_acquisition_test_ ()
++  "Supstart refusal reaps new acquisition; failed bind preserves the peer."
++  (tuple 'timeout 30
++    (lambda ()
++      (cayrn_lfe_authority_tests:with-peer
++        (lambda (peer path)
++          (let* (((tuple owner grant)
++                  (cayrn_lfe_authority_tests:authority path #b("a")))
++                 ((tuple socket context)
++                  (cayrn_lfe_authority_tests:context peer path grant
++                    #b("1") #b("live") #b("a"))))
++            (try
++              (progn
++                (assertEqual 'ok
++                  (peer:call peer (MODULE) 'startup-refusal (list path) 8000))
++                (assertEqual #b("42") (evaluate socket #b("1") #b("42")))
++                (send-frame socket (map 'kind 'close))
++                (assertEqual #b("closed")
++                  (map-get (read-frame socket) #b("kind")))
++                (peer:call peer 'cayrn_lfe_authority_tests 'await-down
++                  (list context)))
++              (after (gen_tcp:close socket) (gen_tcp:close owner)))))))))
++
++(defspec (startup-refusal 1) (((string)) 'ok))
++(defun startup-refusal (path)
++  "Call real start with existing Sup/live bind; never terminate the old tree."
++  (let* ((sup (whereis 'cayrn_lfe_sup))
++         (endpoint (endpoint-info))
++         (new-path (++ path ".new"))
++         (before (lists:sort (erlang:ports))))
++    (try
++      (progn
++        ;; Binding the existing healthy endpoint must fail BEFORE acquisition.
++        (assertMatch (tuple 'error _) (cayrn_lfe_app:start 'normal '()))
++        (assertEqual endpoint (endpoint-info))
++        ;; Binding a new endpoint succeeds, but named Supstart must refuse.
++        (application:set_env 'cayrn_lfe 'socket new-path)
++        (assertMatch (tuple 'error (tuple 'already_started _))
++          (cayrn_lfe_app:start 'normal '()))
++        (assertEqual '#(error enoent) (file:read_link_info new-path))
++        (assertEqual before (lists:sort (erlang:ports)))
++        (assertEqual sup (whereis 'cayrn_lfe_sup))
++        (assertEqual endpoint (endpoint-info)))
++      (after (application:set_env 'cayrn_lfe 'socket path))))
++  'ok)
++
++(defspec (endpoint-info 0) (() (map)))
++(defun endpoint-info ()
++  "Observe actual borrowed endpoint and connected owner on the test-owned node."
++  (let* ((listener (whereis 'cayrn_lfe_listener))
++         (registry (whereis 'cayrn_lfe_registry))
++         (state (sys:get_state listener))
++         (socket (map-get state 'socket)) (path (map-get state 'path))
++         ((tuple 'connected owner) (erlang:port_info socket 'connected))
++         ((tuple 'ok info) (file:read_link_info path)))
++    (assert (is_process_alive owner))
++    (assertNotEqual listener owner)
++    (assertNotEqual registry owner)
++    (assertEqual (filename:absname path) path)
++    (map 'socket socket 'owner owner 'path path
++         'identity (tuple (file_info-major_device info)
++                          (file_info-minor_device info) (file_info-inode info)
++                          (band (file_info-mode info) #o170000)))))
++
++(defun temporary-children ()
++  (lists:filtermap
++    (match-lambda
++      (((tuple _ pid _ (list module)))
++       (when (=/= module 'cayrn_lfe_listener)
++             (=/= module 'cayrn_lfe_registry)) (tuple 'true pid))
++      ((_child) 'false))
++    (supervisor:which_children 'cayrn_lfe_sup)))
++
++(defspec (await-port-down 1) (((port)) 'ok))
++(defun await-port-down (port)
++  "Observe physical exact port/ref DOWN, not pathname absence alone."
++  (let ((ref (monitor 'port port)))
++    (receive
++      ((tuple 'DOWN incoming 'port socket _)
++       (when (=:= incoming ref) (=:= socket port)) 'ok)
++      (after 1000 (erlang:demonitor ref '(flush))
++                  (error 'owned_port_not_reaped)))))
++
++(defun assert-no-port-down (ref port)
++  (assertNotEqual 'undefined (erlang:port_info port))
++  (receive
++    ((tuple 'DOWN incoming 'port socket _)
++     (when (=:= incoming ref) (=:= socket port))
++     (error 'app_owned_listenport_died))
++    (after 0 'ok)))
++
++(defun await-new-registry
++  ((_old 0) (error 'new_registry_not_ready))
++  ((old attempts)
++   (let ((registry (whereis 'cayrn_lfe_registry))
++         (listener (whereis 'cayrn_lfe_listener)))
++     (if (andalso (is_pid registry) (=/= registry old) (is_pid listener))
++       'ok
++       (progn (timer:sleep 1) (await-new-registry old (- attempts 1)))))))
++
++(defun assert-fresh (peer path old-grant)
++  (let* (((tuple owner grant)
++          (cayrn_lfe_authority_tests:authority path #b("a")))
++         ((tuple socket context)
++          (cayrn_lfe_authority_tests:context peer path grant
++            #b("1") #b("new") #b("a"))))
++    (try
++      (progn
++        (assertNotEqual (map-get old-grant #b("boot"))
++                        (map-get grant #b("boot")))
++        (let (((tuple 'ok stale)
++               (gen_tcp:connect (tuple 'local path) 0
++                 '(binary #(active false) #(packet 4)) 1000)))
++          (try
++            (progn
++              (send-frame stale
++                (map 'kind 'hello 'version 3 'session #b("stale")
++                     'generation #b("g") 'authority #b("a")
++                     'boot (map-get old-grant #b("boot"))
++                     'lease (map-get old-grant #b("lease")) 'ticket #b("2")))
++              (assertEqual '#(error closed) (gen_tcp:recv stale 0 1000)))
++            (after (gen_tcp:close stale))))
++        (assertEqual #b("42") (evaluate socket #b("1") #b("42")))
++        (send-frame socket (map 'kind 'close))
++        (assertEqual #b("closed")
++                  (map-get (read-frame socket) #b("kind")))
++        (peer:call peer 'cayrn_lfe_authority_tests 'await-down
++              (list context)))
++      (after (gen_tcp:close socket) (gen_tcp:close owner)))))
++
++(defun evaluate (socket operation source)
++  (send-frame socket
++    (map 'kind 'dispatch 'operation operation 'source source
++         'generation #b("g") 'authority #b("a")))
++  (let ((result (read-frame socket)))
++    (assertEqual #b("outcome") (map-get result #b("kind")))
++    (assertEqual #b("succeeded") (map-get result #b("phase")))
++    (map-get result #b("value"))))
++
++(defun send-frame (socket frame)
++  (let (('ok (gen_tcp:send socket (json:encode frame)))) 'ok))
++
++(defun read-frame (socket)
++  (let (((tuple 'ok bytes) (gen_tcp:recv socket 0 3000))) (json:decode bytes)))
++
++(defun start-native (peer path)
++  (peer:call peer 'application 'set_env (list 'cayrn_lfe 'socket path))
++  (let (((tuple 'ok _)
++         (peer:call peer 'application 'ensure_all_started '(cayrn_lfe)))) 'ok))
++
++(defun with-owned-peer (function)
++  (let* ((dir (++ "/private/tmp/cayrn-app-lifetime-" (os:getpid) "-"
++                 (integer_to_list
++                   (erlang:unique_integer '(positive monotonic)))))
++         ('ok (file:make_dir dir)) ('ok (file:change_mode dir #o700))
++         (startup (filename:join dir "startup"))
++         ('ok (file:make_dir startup))
++         (path (filename:join startup "agent socket.sock")))
++    (try
++      (let (((tuple 'ok peer _)
++             (peer:start_link (map 'connection 'standard_io
++                                  'args (cons "-pa" (code:get_path))))))
++        (try
++          (let* (('ok (peer:call peer 'application 'load '(cayrn_lfe)))
++                 ((tuple 'ok _) (peer:call peer 'application 'ensure_all_started
++                                  '(lfe)))
++                 ((tuple 'ok _) (peer:call peer 'application 'ensure_all_started
++                                  '(crypto))))
++            (funcall function peer dir path))
++          (after (peer:stop peer))))
++      (after (file:delete path) (file:del_dir startup) (file:del_dir dir)))))
+diff --git a/apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe b/apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe
+new file mode 100644
+index 0000000..7202571
+--- /dev/null
++++ b/apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe
+@@ -0,0 +1,833 @@
++;;;; Native3 lease ownership, bounded live state and abortive-loss controls.
++(defmodule cayrn_lfe_authority_tests
++  (export
++   (authority 2)
++   (authority_capacity_test_ 0)
++   (authority_churn_test_ 0)
++   (authority_eof_test_ 0)
++   (authority_partial_byte_test_ 0)
++   (await-down 1)
++   (context 6)
++   (context_capacity_test_ 0)
++   (context_churn_test_ 0)
++   (context_only_loss_test_ 0)
++   (first_frame_timeout_test_ 0)
++   (listener_restart_test_ 0)
++   (monitor_and_exhaustion_test_ 0)
++   (paused-roles 0)
++   (paused_endpoint_timeout_test_ 0)
++   (pending_output_loss_test_ 0)
++   (preaccept_watermark_test_ 0)
++   (registry_restart_test_ 0)
++   (router-failure 0)
++   (router_transfer_failure_test_ 0)
++   (scope_and_numeric_fences_test_ 0)
++   (set-limit 1)
++   (suspended_context_loss_test_ 0)
++   (with-peer 1)))
++
++(include-lib "eunit/include/eunit.hrl")
++(include-file "../include/cayrn_lfe_registry.lfe")
++
++(defspec (context_churn_test_ 0) (() (term)))
++(defun context_churn_test_ ()
++  "4097 contexts physically reclaim under one lease; replay cannot run source."
++  (tuple 'timeout 240 #'context-churn/0))
++
++(defun context-churn ()
++  (with-peer
++    (lambda (peer path)
++      (let* (((tuple owner grant) (authority path #b("a")))
++             (first (hello grant #b("1") #b("1") #b("a")))
++             (marker (++ path ".replay"))
++             (source (iolist_to_binary
++                       (io_lib:format "(file:write_file ~p #b(\"BAD\"))"
++                         (list marker)))))
++        (lists:foreach
++          (lambda (i)
++            (let* ((ticket (integer_to_binary i))
++                   ((tuple socket pid)
++                    (context peer path grant ticket ticket #b("a"))))
++              (if (=:= i 1)
++                (assertEqual #b("1")
++                  (value socket #b("1") #b("(set initial-binding 1)") #b("a")))
++                'ok)
++              (close-context peer socket pid)
++              (assertEqual 0 (map_size (registry-contexts (state peer))))
++              (assertEqual 0 (map_size (registry-sids (state peer))))))
++          (lists:seq 1 4097))
++        (refused-source path first source)
++        (assertNot (filelib:is_file marker))
++        (let (((tuple socket pid)
++               (context peer path grant #b("5000") #b("final") #b("a"))))
++          (assertEqual #b("42") (value socket #b("1") #b("42") #b("a")))
++          (close-context peer socket pid))
++        (assertEqual 1 (map_size (registry-leases (state peer))))
++        (gen_tcp:close owner)))))
++
++(defspec (authority_churn_test_ 0) (() (term)))
++(defun authority_churn_test_ ()
++  "33 exact owner retirements increase a scalar without historical maps."
++  (tuple 'timeout 60
++    (lambda ()
++      (with-peer
++        (lambda (peer path)
++          (lists:foreach
++            (lambda (i)
++              (let* (((tuple owner grant) (authority path #b("a")))
++                     (before (state peer))
++                     (lease (map-get (registry-leases before) i)))
++                (assertEqual (integer_to_binary i) (map-get grant #b("lease")))
++                (gen_tcp:close owner)
++                (down peer (lease-owner lease))
++                (await-counts peer 0 0)
++                (assertEqual i (registry-last-lease (state peer)))
++                (refused path (hello grant #b("1") #b("old") #b("a")))))
++            (lists:seq 1 33))
++          (let* (((tuple owner grant) (authority path #b("a")))
++                 ((tuple socket pid)
++                  (context peer path grant #b("1") #b("final") #b("a"))))
++            (assertEqual #b("42") (value socket #b("1") #b("42") #b("a")))
++            (close-context peer socket pid)
++            (gen_tcp:close owner)))))))
++
++(defspec (scope_and_numeric_fences_test_ 0) (() (term)))
++(defun scope_and_numeric_fences_test_ ()
++  "Bad scopes, decimal domains and IDs are local; no visible source effect."
++  (tuple 'timeout 60
++    (lambda ()
++      (with-peer
++        (lambda (peer path)
++          (let* (((tuple owner grant) (authority path #b("a")))
++                 ((tuple other other-grant) (authority path #b("b")))
++                 ((tuple socket pid)
++                  (context peer path grant #b("1") #b("live") #b("a")))
++                 (base (hello grant #b("2") #b("new") #b("a")))
++                 (marker (++ path ".forbidden"))
++                 (source (iolist_to_binary
++                           (io_lib:format "(file:write_file ~p #b(\"BAD\"))"
++                             (list marker)))))
++            (lists:foreach
++              (lambda (key)
++                (lists:foreach
++                  (lambda (bad) (refused-source path (map-set base key bad)
++                                               source))
++                  (list #b() 1 #b("0") #b("01") #b("+1") #b("-1")
++                        #b(" 1") #b("1\n") #b("9223372036854775808"))))
++              '(lease ticket))
++            (lists:foreach
++              (lambda (key)
++                (lists:foreach
++                  (lambda (bad) (refused-source path (map-set base key bad)
++                                               source))
++                  (list #b() 1 #b("a\n") #b("bad.dot")
++                        (binary:copy #b("a") 129))))
++              '(session generation authority))
++            (refused-source path (map-set base 'boot #b("WRONG")) source)
++            (refused-source path (map-set base 'authority #b("b")) source)
++            (refused-source path
++              (map-set base 'lease (map-get other-grant #b("lease")))
++              source)
++            ;; No invalid scope consumed either lease's next valid ticket.
++            (let (((tuple fresh fresh-pid)
++                   (context peer path grant #b("2") #b("new") #b("a"))))
++              (assertEqual #b("42") (value fresh #b("1") #b("42") #b("a")))
++              (close-context peer fresh fresh-pid))
++            (let (((tuple live-b pid-b)
++                   (context peer path other-grant #b("1")
++                            #b("b-live") #b("b"))))
++              (assertEqual #b("42") (value live-b #b("1") #b("42") #b("b")))
++              (refused-source path
++                (hello other-grant #b("2") #b("live") #b("b")) source)
++              (refused path
++                (hello other-grant #b("2") #b("b-retry") #b("b")))
++              (let (((tuple next-b next-pid)
++                     (context peer path other-grant #b("3")
++                              #b("b-retry") #b("b"))))
++                (assertEqual #b("42")
++                  (value next-b #b("1") #b("42") #b("b")))
++                (close-context peer next-b next-pid))
++              (close-context peer live-b pid-b))
++            ;; Duplicate SID consumes ticket3; its source cannot run.
++            (refused-source path (hello grant #b("3") #b("live") #b("a"))
++                            source)
++            (refused path (hello grant #b("3") #b("unused") #b("a")))
++            (assertNot (filelib:is_file marker))
++            (assertEqual #b("42") (value socket #b("1") #b("42") #b("a")))
++            (close-context peer socket pid)
++            (gen_tcp:close owner) (gen_tcp:close other)))))))
++
++(defspec (authority_capacity_test_ 0) (() (term)))
++(defun authority_capacity_test_ ()
++  "16 live owners reject the17th and duplicate; exact DOWN restores credit."
++  (tuple 'timeout 60
++    (lambda ()
++      (with-peer
++        (lambda (peer path)
++          (let ((owners
++                  (lists:map
++                    (lambda (i) (authority path (integer_to_binary i)))
++                    (lists:seq 1 16))))
++            (refused path (map 'kind 'authority_hello 'version 3
++                               'authority #b("overflow")))
++            (refused path (map 'kind 'authority_hello 'version 3
++                               'authority #b("1")))
++            (assertEqual 16 (registry-last-lease (state peer)))
++            (let* ((lease (map-get (registry-leases (state peer)) 1))
++                   ((tuple socket _) (car owners)))
++              (gen_tcp:close socket) (down peer (lease-owner lease)))
++            (await-counts peer 15 0)
++            (let (((tuple fresh grant) (authority path #b("fresh"))))
++              (assertEqual #b("17") (map-get grant #b("lease")))
++              (gen_tcp:close fresh))
++            (lists:foreach (lambda (entry) (gen_tcp:close (element 1 entry)))
++                           owners)))))))
++
++(defspec (context_capacity_test_ 0) (() (term)))
++(defun context_capacity_test_ ()
++  "64 physical contexts reject65; a refused ticket remains consumed."
++  (tuple 'timeout 60
++    (lambda ()
++      (with-peer
++        (lambda (peer path)
++          (let* (((tuple owner grant) (authority path #b("a")))
++                 (contexts
++                   (lists:map
++                     (lambda (i)
++                       (let ((id (integer_to_binary i)))
++                         (context peer path grant id id #b("a"))))
++                     (lists:seq 1 64))))
++            (refused path (hello grant #b("65") #b("overflow") #b("a")))
++            (assertEqual 64 (map_size (registry-contexts (state peer))))
++            (close-context peer (element 1 (car contexts))
++                               (element 2 (car contexts)))
++            (await-counts peer 1 63)
++            (refused path (hello grant #b("65") #b("retry") #b("a")))
++            (let (((tuple socket pid)
++                   (context peer path grant #b("66") #b("retry") #b("a"))))
++              (assertEqual #b("42") (value socket #b("1") #b("42") #b("a")))
++              (close-context peer socket pid))
++            (lists:foreach
++              (match-lambda (((tuple socket pid))
++                              (close-context peer socket pid)))
++              (cdr contexts))
++            (await-counts peer 1 0)
++            (gen_tcp:close owner)))))))
++
++(defspec (monitor_and_exhaustion_test_ 0) (() (term)))
++(defun monitor_and_exhaustion_test_ ()
++  "Forged DOWNs cannot free credits; exhausted counters never wrap."
++  (tuple 'timeout 30
++    (lambda ()
++      (with-peer
++        (lambda (peer path)
++          (let* (((tuple owner grant) (authority path #b("a")))
++                 ((tuple socket pid)
++                  (context peer path grant #b("1") #b("live") #b("a")))
++                 (before (state peer))
++                 (registry (peer:call peer 'erlang 'whereis
++                             '(cayrn_lfe_registry))))
++            (lists:foreach
++              (lambda (target)
++                (peer:call peer 'erlang 'send
++                  (list registry (tuple 'DOWN (make_ref) 'process
++                                        target 'normal))))
++              (list pid (lease-owner (map-get (registry-leases before) 1))))
++            (let ((record (map-get (registry-contexts before) pid)))
++              (peer:call peer 'erlang 'send
++                (list registry (tuple 'DOWN (context-monitor record)
++                                      'process (self) 'normal))))
++            (assertEqual before (state peer))
++            (peer:call peer (MODULE) 'set-limit '(ticket))
++            (refused path (hello grant #b("9223372036854775807")
++                                #b("max") #b("a")))
++            (peer:call peer (MODULE) 'set-limit '(lease))
++            (refused path (map 'kind 'authority_hello 'version 3
++                               'authority #b("b")))
++            (assertEqual 9223372036854775807
++              (registry-last-lease (state peer)))
++            (assertEqual #b("42") (value socket #b("1") #b("42") #b("a")))
++            ;; Retain a physically live record while its port is already closed.
++            (peer:call peer 'sys 'suspend (list pid))
++            (try
++              (progn
++                (peer:call peer 'erlang 'port_close
++                  (list (context-socket
++                          (map-get (registry-contexts (state peer)) pid))))
++                (gen_tcp:close owner)
++                (await-counts peer 0 1)
++                (assert (peer:call peer 'erlang 'is_process_alive (list pid))))
++              (after (peer:call peer 'sys 'resume (list pid))))
++            (down peer pid) (await-counts peer 0 0)
++            (gen_tcp:close socket)))))))
++
++(defspec (set-limit 1) (((atom)) (term)))
++(defun set-limit (which)
++  "Owned-peer test-only state mutation; no production debug endpoint."
++  (sys:replace_state 'cayrn_lfe_registry
++    (lambda (state)
++      (case which
++        ('lease (set-registry state last-lease 9223372036854775807))
++        ('ticket
++         (let* ((leases (registry-leases state)) (lease (map-get leases 1)))
++           (set-registry state leases
++             (map-set leases 1
++               (set-lease lease last-ticket 9223372036854775807)))))))))
++
++(defspec (router_transfer_failure_test_ 0) (() (term)))
++(defun router_transfer_failure_test_ ()
++  "Actual not-owner transfer failure cleans provisional roles locally."
++  (tuple 'timeout 30
++    (lambda ()
++      (with-peer
++        (lambda (peer path)
++          (let (((tuple owner grant) (authority path #b("a"))))
++            (assertEqual 'ok (peer:call peer (MODULE) 'router-failure '()))
++            (let (((tuple socket pid)
++                   (context peer path grant #b("1") #b("live") #b("a"))))
++              (assertEqual #b("42") (value socket #b("1") #b("42") #b("a")))
++              (close-context peer socket pid))
++            (gen_tcp:close owner)))))))
++
++(defspec (router-failure 0) (() (term)))
++(defun router-failure ()
++  "Invoke the real callback outside its actual router's controlling PID."
++  (let* (((tuple 'ok listener)
++          (gen_tcp:listen 0 '(binary #(active false) #(packet 4)) ))
++         ((tuple 'ok port) (inet:port listener))
++         ((tuple 'ok client)
++          (gen_tcp:connect "localhost" port '(binary #(active false)) 1000))
++         ((tuple 'ok server) (gen_tcp:accept listener))
++         ((tuple 'ok router) (cayrn_lfe_sup:connection server))
++         ('ok (gen_tcp:controlling_process server router))
++         (before (sys:get_state router)))
++    (try
++      (let* (((tuple 'stop reason next)
++              (cayrn_lfe_connection:handle_info
++                (tuple 'tcp server
++                  (iolist_to_binary
++                    (json:encode (map 'kind 'authority_hello 'version 3
++                                      'authority #b("provisional"))))) before)))
++        (assertEqual 'not_owner reason)
++        (cayrn_lfe_connection:terminate reason next)
++        (gen_server:stop router)
++        (assertEqual '#(error closed) (gen_tcp:recv client 0 1000))
++        'ok)
++      (after
++        (gen_tcp:close server) (gen_tcp:close client)
++        (gen_tcp:close listener)))))
++
++(defspec (first_frame_timeout_test_ 0) (() (term)))
++(defun first_frame_timeout_test_ ()
++  "Partial, malformed and old first frames fail without losing a peer lease."
++  (tuple 'timeout 30
++    (lambda ()
++      (with-peer
++        (lambda (peer path)
++          (let* (((tuple owner grant) (authority path #b("a")))
++                 (unhandshaken (connect path)))
++            (assertEqual '#(error closed) (gen_tcp:recv unhandshaken 0 6500))
++            (gen_tcp:close unhandshaken)
++            (let ((partial (connect path)))
++              (inet:setopts partial '(#(packet 0)))
++              (gen_tcp:send partial #b(0))
++              (assertEqual '#(error closed) (gen_tcp:recv partial 0 6500))
++              (gen_tcp:close partial))
++            (refused path (map 'kind 'hello 'version 2))
++            (let ((bad (connect path)))
++              (gen_tcp:send bad #b("not-json")) (lost bad)
++              (gen_tcp:close bad))
++            (let (((tuple socket pid)
++                   (context peer path grant #b("1") #b("live") #b("a"))))
++              (assertEqual #b("42") (value socket #b("1") #b("42") #b("a")))
++              (close-context peer socket pid))
++            (gen_tcp:close owner)))))))
++
++(defspec (preaccept_watermark_test_ 0) (() (term)))
++(defun preaccept_watermark_test_ ()
++  "128 paused roles prevent accepting another descriptor until physical exit."
++  (tuple 'timeout 30
++    (lambda ()
++      (with-peer
++        (lambda (peer path)
++          (let* (((tuple owner grant) (authority path #b("a")))
++                 (listener (peer:call peer 'erlang 'whereis
++                             '(cayrn_lfe_listener)))
++                 ('ok (peer:call peer 'sys 'suspend (list listener)))
++                 (dummy (lists:map
++                          (lambda (_)
++                            (element 2
++                              (peer:call peer 'cayrn_lfe_sup 'connection
++                                         '(undefined))))
++                          (lists:seq 1 127)))
++                 (waiting (connect path)))
++            (try
++              (progn
++                (peer:call peer 'sys 'resume (list listener))
++                (send-frame waiting (hello grant #b("1") #b("waiting") #b("a")))
++                (assertEqual '#(error timeout) (gen_tcp:recv waiting 0 50))
++                (assertEqual 128 (temporary-count peer))
++                (peer:call peer 'erlang 'exit (list (car dummy) 'shutdown))
++                (down peer (car dummy))
++                (assertEqual #b("ready")
++                  (map-get (read-frame waiting) #b("kind"))))
++              (after
++                (catch (peer:call peer 'sys 'resume (list listener)))
++                (lists:foreach
++                  (lambda (pid) (peer:call peer 'erlang 'exit
++                                  (list pid 'shutdown))) dummy)
++                (gen_tcp:close waiting) (gen_tcp:close owner)))))))))
++
++(defspec (authority_eof_test_ 0) (() (term)))
++(defun authority_eof_test_ ()
++  "Only authority EOF destroys its active contexts; another lease stays usable."
++  (tuple 'timeout 30 (lambda () (authority-loss 'eof 'false))))
++
++(defspec (authority_partial_byte_test_ 0) (() (term)))
++(defun authority_partial_byte_test_ ()
++  "One raw unexpected byte retires an authority without a complete frame."
++  (tuple 'timeout 30 (lambda () (authority-loss 'byte 'false))))
++
++(defspec (suspended_context_loss_test_ 0) (() (term)))
++(defun suspended_context_loss_test_ ()
++  "Port loss precedes suspended callback cooperation, credits wait exact DOWN."
++  (tuple 'timeout 30 (lambda () (authority-loss 'eof 'true))))
++
++(defun authority-loss (mode suspended)
++  (with-peer
++    (lambda (peer path)
++      (let* (((tuple owner grant) (authority path #b("a")))
++             ((tuple other other-grant) (authority path #b("b")))
++             ((tuple socket context)
++              (context peer path grant #b("1") #b("held") #b("a")))
++             ((tuple sibling sibling-pid)
++              (context peer path grant #b("2") #b("sibling") #b("a")))
++             ((tuple survivor survivor-pid)
++              (context peer path other-grant #b("1") #b("survivor") #b("b")))
++             ((tuple root io trace) (start-held peer socket context)))
++        (try
++          (progn
++            (if suspended (peer:call peer 'sys 'suspend (list context)) 'ok)
++            (retire owner mode)
++            (lost socket)
++            (lost sibling)
++            (if suspended
++              (progn
++                (assert (peer:call peer 'erlang 'is_process_alive
++                          (list context)))
++                (await-counts peer 1 2)
++                (assert (maps:is_key #b("held") (registry-sids (state peer)))))
++              'ok)
++            (assertEqual #b("42")
++              (value survivor #b("1") #b("42") #b("b")))
++            (if suspended (peer:call peer 'sys 'resume (list context)) 'ok)
++            (lists:foreach (lambda (pid) (down peer pid))
++                           (list context sibling-pid root io))
++            (assert-no-trace peer trace)
++            (await-counts peer 1 1)
++            (close-context peer survivor survivor-pid))
++          (after
++            (catch (peer:call peer 'sys 'resume (list context)))
++            (gen_tcp:close socket) (gen_tcp:close sibling)
++            (gen_tcp:close survivor) (gen_tcp:close owner)
++            (gen_tcp:close other)))))))
++
++(defspec (pending_output_loss_test_ 0) (() (term)))
++(defun pending_output_loss_test_ ()
++  "Actual send_pend>0 remains positive through authority-only retirement."
++  (tuple 'timeout 30 #'pending-output-loss/0))
++
++(defun pending-output-loss ()
++  (with-peer
++    (lambda (peer path)
++      (let* (((tuple owner grant) (authority path #b("a")))
++             ((tuple other other-grant) (authority path #b("b")))
++             ((tuple socket context)
++              (context peer path grant #b("1") #b("pending") #b("a")))
++             ((tuple survivor survivor-pid)
++              (context peer path other-grant #b("1") #b("survivor") #b("b")))
++             (port (map-get (peer:call peer 'sys 'get_state (list context))
++                            'socket))
++             ((tuple watchdog watchdog-ref)
++              (spawn_monitor
++                (lambda ()
++                  (receive
++                    ('done 'ok)
++                    (after 15000
++                      (catch (peer:stop peer))
++                      (error 'pressure_fixture_watchdog_fired)))))))
++        (try
++          (progn
++            (inet:setopts socket '(#(recbuf 1024)))
++            (peer:call peer 'inet 'setopts (list port '(#(sndbuf 1024))))
++            (io:format 'user "pressure buffers client=~p native=~p~n"
++              (list (inet:getopts socket '(recbuf))
++                    (peer:call peer 'inet 'getopts (list port '(sndbuf)))))
++            (dispatch socket #b("1")
++              #b("(progn (io:format \"START\" ()) "
++                 "(lists:foreach (lambda (i) "
++                 "(! (group_leader) (tuple 'io_request (self) (make_ref) "
++                 "(tuple 'put_chars 'unicode (lists:duplicate 8000 120))))) "
++                 "(lists:seq 1 32)) (receive ('release 42)))") #b("a"))
++            (let* ((start (read-frame socket))
++                   ('true (=:= #b("START") (map-get start #b("text"))))
++                   (active (await-active peer context 500))
++                   ((tuple root _ _ io) (map-get active 'active))
++                   ((tuple _ trace _ _) (map-get (map-get active 'origins) io)))
++              (assert-trace peer trace)
++              (send-frame socket
++                (map 'kind 'ack 'position (map-get start #b("position"))))
++              (await-pending peer port 1000)
++              ;; Do not read client bytes or release evaluated code to help.
++              (let ((pending (send-pending peer port)))
++                (assert (> pending 0))
++                (io:format 'user "retirement decision send_pend=~p~n"
++                  (list pending)))
++              (gen_tcp:close owner)
++              (lists:foreach (lambda (pid) (down peer pid))
++                             (list context root io))
++              (await-counts peer 1 1)
++              (assert-no-trace peer trace)
++              (assertEqual #b("42")
++                (value survivor #b("1") #b("42") #b("b")))
++              (close-context peer survivor survivor-pid)))
++          (after
++            (gen_tcp:close socket) (gen_tcp:close survivor)
++            (gen_tcp:close owner) (gen_tcp:close other)
++            (! watchdog 'done)
++            (receive
++              ((tuple 'DOWN ref 'process pid reason)
++               (when (=:= ref watchdog-ref) (=:= pid watchdog))
++               (assertEqual 'normal reason))
++              (after 1000 (error 'watchdog_cleanup_failed)))))))))
++
++(defspec (context_only_loss_test_ 0) (() (term)))
++(defun context_only_loss_test_ ()
++  "Context-only loss preserves its sibling and both authority owners."
++  (tuple 'timeout 30
++    (lambda ()
++      (with-peer
++        (lambda (peer path)
++          (let* (((tuple owner grant) (authority path #b("a")))
++                 ((tuple first first-pid)
++                  (context peer path grant #b("1") #b("first") #b("a")))
++                 ((tuple second second-pid)
++                  (context peer path grant #b("2") #b("second") #b("a"))))
++            (gen_tcp:close first) (down peer first-pid)
++            (await-counts peer 1 1)
++            (assertEqual #b("42") (value second #b("1") #b("42") #b("a")))
++            (close-context peer second second-pid)
++            (gen_tcp:close owner)))))))
++
++(defspec (registry_restart_test_ 0) (() (term)))
++(defun registry_restart_test_ ()
++  "Nonblocked registry restart creates a fresh boot and rejects old scope."
++  (tuple 'timeout 30 (lambda () (restart-role 'cayrn_lfe_registry))))
++
++(defspec (listener_restart_test_ 0) (() (term)))
++(defun listener_restart_test_ ()
++  "Listener failure restarts the domain, fresh boot and old-scope rejection."
++  (tuple 'timeout 30 (lambda () (restart-role 'cayrn_lfe_listener))))
++
++(defun restart-role (role)
++  (with-peer
++        (lambda (peer path)
++          (let* (((tuple owner grant) (authority path #b("a")))
++                 ((tuple socket pid)
++                  (context peer path grant #b("1") #b("old") #b("a")))
++                 (registry (peer:call peer 'erlang 'whereis
++                             '(cayrn_lfe_registry))))
++            (if (=:= role 'cayrn_lfe_listener)
++              (peer:call peer 'gen_server 'stop
++                (list (peer:call peer 'erlang 'whereis (list role))
++                      'shutdown 1000))
++              (peer:call peer 'erlang 'exit (list registry 'kill)))
++            (down peer registry) (down peer pid)
++            (await-new peer registry 500)
++            (let* (((tuple fresh new-grant) (authority path #b("a")))
++                   ((tuple live live-pid)
++                    (context peer path new-grant #b("1") #b("new") #b("a"))))
++              (assertNotEqual (map-get grant #b("boot"))
++                              (map-get new-grant #b("boot")))
++              (refused path (hello grant #b("2") #b("stale") #b("a")))
++              (assertEqual #b("42") (value live #b("1") #b("42") #b("a")))
++              (close-context peer live live-pid)
++              (gen_tcp:close fresh))
++            (gen_tcp:close socket) (gen_tcp:close owner)))))
++
++(defspec (paused_endpoint_timeout_test_ 0) (() (term)))
++(defun paused_endpoint_timeout_test_ ()
++  "Paused roles own actual ports, time out and allocate no environment."
++  (tuple 'timeout 15
++    (lambda ()
++      (with-peer
++        (lambda (peer _path)
++          (assertEqual 'ok (peer:call peer (MODULE) 'paused-roles '() 8000))
++          (await-counts peer 0 0))))))
++
++(defspec (paused-roles 0) (() 'ok))
++(defun paused-roles ()
++  "Exercise all paused startup roles concurrently on actual transferred ports."
++  (let ((workers
++          (lists:map
++            (lambda (role)
++              (spawn_monitor (lambda () (paused-role role))))
++            '(connection authority context))))
++    (try
++      (lists:foreach
++        (match-lambda
++          (((tuple pid ref))
++           (receive
++             ((tuple 'DOWN incoming 'process target reason)
++              (when (=:= incoming ref) (=:= target pid))
++              (assertEqual 'normal reason))
++             (after 7500 (error 'paused_role_socket_leaked))))) workers)
++      (after
++        (lists:foreach
++          (match-lambda (((tuple pid ref))
++                          (exit pid 'kill)
++                          (erlang:demonitor ref '(flush)))) workers))))
++  'ok)
++
++(defun paused-role (role)
++  (let* (((tuple 'ok listener)
++          (gen_tcp:listen 0 '(binary #(active false) #(packet 4))))
++         ((tuple 'ok port) (inet:port listener))
++         ((tuple 'ok client)
++          (gen_tcp:connect "localhost" port
++            '(binary #(active false) #(packet 4)) 1000))
++         ((tuple 'ok server) (gen_tcp:accept listener))
++         ((tuple 'ok child) (call 'cayrn_lfe_sup role server))
++         (ref (monitor 'process child)))
++    (try
++      (let (('ok (gen_tcp:controlling_process server child)))
++        (if (=:= role 'context)
++          (assertEqual 'undefined (map-get (sys:get_state child) 'env))
++          'ok)
++        ;; No activation: the real provisional owner must time out itself.
++        (assertEqual '#(error closed) (gen_tcp:recv client 0 6500))
++        (receive
++          ((tuple 'DOWN incoming 'process pid _)
++           (when (=:= incoming ref) (=:= pid child)) 'ok)
++          (after 500 (error 'paused_owner_not_reaped))))
++      (after
++        (catch (gen_server:stop child 'normal 1000))
++        (erlang:demonitor ref '(flush))
++        (gen_tcp:close server) (gen_tcp:close client)
++        (gen_tcp:close listener)))))
++
++;;; Owned fixture helpers; no running user node or product instrumentation.
++
++(defspec (with-peer 1) (((function)) (term)))
++(defun with-peer (function)
++  "Run on a fresh standard-I/O peer and always dispose the whole owned node."
++  (let* ((dir (++ "/private/tmp/cayrn-authority-" (os:getpid) "-"
++                 (integer_to_list
++                   (erlang:unique_integer '(positive monotonic)))))
++         ('ok (file:make_dir dir)) ('ok (file:change_mode dir #o700))
++         (path (filename:join dir "agent socket.sock")))
++    (try
++      (let (((tuple 'ok peer _)
++             (peer:start_link (map 'connection 'standard_io
++                                  'args (cons "-pa" (code:get_path))))))
++        (try
++          (let* (('ok (peer:call peer 'application 'load '(cayrn_lfe)))
++                 ('ok (peer:call peer 'application 'set_env
++                        (list 'cayrn_lfe 'socket path)))
++                 ((tuple 'ok _) (peer:call peer 'application 'ensure_all_started
++                                  '(cayrn_lfe))))
++            (funcall function peer path))
++          (after (peer:stop peer))))
++      (after (file:delete path) (file:del_dir dir)))))
++
++(defspec (authority 2) (((string) (binary)) (term)))
++(defun authority (path id)
++  "Open native3 authority and retain its socket through context lifetime."
++  (let ((socket (connect path)))
++    (send-frame socket (map 'kind 'authority_hello 'version 3 'authority id))
++    (let ((grant (read-frame socket)))
++      (assertEqual #b("authority_ready") (map-get grant #b("kind")))
++      (tuple socket grant))))
++
++(defspec (context 6) (((pid) (string) (map) (binary) (binary) (binary)) (term)))
++(defun context (peer path grant ticket sid authority)
++  "Admit a real context and discover its exact registry/module identity."
++  (let ((socket (connect path)))
++    (send-frame socket (hello grant ticket sid authority))
++    (let* ((ready (read-frame socket))
++           ('true (=:= #b("ready") (map-get ready #b("kind"))))
++           (pid (map-get (registry-sids (state peer)) sid))
++           (children (peer:call peer 'supervisor 'which_children
++                       '(cayrn_lfe_sup))))
++      (assertEqual (map-get grant #b("boot")) (map-get ready #b("boot")))
++      (assertEqual (map-get grant #b("lease")) (map-get ready #b("lease")))
++      (assertEqual ticket (map-get ready #b("ticket")))
++      (assert (lists:any
++                (match-lambda
++                  (((tuple _ child _ (list 'cayrn_lfe_context)))
++                   (=:= child pid))
++                  ((_entry) 'false)) children))
++      (tuple socket pid))))
++
++(defun hello (grant ticket sid authority)
++  (map 'kind 'hello 'version 3 'session sid 'generation #b("g")
++       'authority authority 'boot (map-get grant #b("boot"))
++       'lease (map-get grant #b("lease")) 'ticket ticket))
++
++(defun connect (path)
++  (let (((tuple 'ok socket)
++         (gen_tcp:connect (tuple 'local path) 0
++           '(binary #(active false) #(packet 4)) 1000))) socket))
++
++(defun refused (path hello)
++  (refused-source path hello #b("(error 'FORBIDDEN)")))
++
++(defun refused-source (path hello source)
++  (let ((socket (connect path)))
++    (try
++      (progn
++        (send-frame socket hello)
++        ;; The invalid first frame and evaluation are on the same TCP stream.
++        (gen_tcp:send socket
++          (json:encode (map 'kind 'dispatch 'operation #b("1")
++                            'source source 'generation #b("g")
++                            'authority #b("a"))))
++        (lost socket))
++      (after (gen_tcp:close socket)))))
++
++(defun close-context (peer socket pid)
++  (send-frame socket (map 'kind 'close))
++  (assertEqual #b("closed") (map-get (read-frame socket) #b("kind")))
++  (down peer pid)
++  (gen_tcp:close socket)
++  (await-absent peer pid 500))
++
++(defun state (peer)
++  (peer:call peer 'sys 'get_state '(cayrn_lfe_registry) 2000))
++
++(defun temporary-count (peer)
++  (- (proplists:get_value 'active
++       (peer:call peer 'supervisor 'count_children '(cayrn_lfe_sup))) 2))
++
++(defun down (peer pid)
++  (assertEqual 'ok (peer:call peer (MODULE) 'await-down (list pid) 3000)))
++
++(defspec (await-down 1) (((pid)) (term)))
++(defun await-down (pid)
++  "Wait exact known PID/ref DOWN, including already physically dead peers."
++  (let ((ref (monitor 'process pid)))
++    (receive
++      ((tuple 'DOWN incoming 'process target _)
++       (when (=:= incoming ref) (=:= target pid)) 'ok)
++      (after 2500 (erlang:demonitor ref '(flush))
++                  (error 'owned_process_leaked)))))
++
++(defun await-counts (peer leases contexts)
++  (await-counts peer leases contexts 500))
++
++(defun await-counts
++  ((_peer _leases _contexts 0) (error 'registry_reclamation_timeout))
++  ((peer leases contexts attempts)
++   (let ((s (state peer)))
++     (if (andalso (=:= leases (map_size (registry-leases s)))
++                  (=:= contexts (map_size (registry-contexts s))))
++       'ok
++       (progn (timer:sleep 2)
++         (await-counts peer leases contexts (- attempts 1)))))))
++
++(defun await-absent
++  ((_peer _pid 0) (error 'context_credit_not_reaped))
++  ((peer pid attempts)
++   (if (maps:is_key pid (registry-contexts (state peer)))
++     (progn (timer:sleep 2) (await-absent peer pid (- attempts 1)))
++     'ok)))
++
++(defun await-new
++  ((_peer _previous 0) (error 'registry_restart_timeout))
++  ((peer previous attempts)
++   (let ((pid (peer:call peer 'erlang 'whereis '(cayrn_lfe_registry))))
++     (if (andalso (is_pid pid) (=/= previous pid)
++                  (is_pid (peer:call peer 'erlang 'whereis
++                            '(cayrn_lfe_listener))))
++       'ok
++       (progn (timer:sleep 2) (await-new peer previous (- attempts 1)))))))
++
++(defun start-held (peer socket context)
++  (dispatch socket #b("1")
++    #b("(progn (io:format \"START\" ()) (receive ('release 42)))") #b("a"))
++  (let* ((output (read-frame socket))
++         ('true (=:= #b("START") (map-get output #b("text"))))
++         (state (await-active peer context 500))
++         ((tuple root _ _ io) (map-get state 'active))
++         ((tuple _ trace _ _) (map-get (map-get state 'origins) io)))
++    (assert-trace peer trace)
++    (send-frame socket
++      (map 'kind 'ack 'position (map-get output #b("position"))))
++    (tuple root io trace)))
++
++(defun assert-trace (peer trace)
++  (assert (lists:member (element 2 trace)
++            (peer:call peer 'trace 'session_info '(all)))))
++
++(defun assert-no-trace (peer trace)
++  (assertNot (lists:member (element 2 trace)
++               (peer:call peer 'trace 'session_info '(all)))))
++
++(defun await-active
++  ((_peer _context 0) (error 'no_active_evaluator))
++  ((peer context attempts)
++   (let ((state (peer:call peer 'sys 'get_state (list context))))
++     (if (=:= 'undefined (map-get state 'active))
++       (progn (timer:sleep 2) (await-active peer context (- attempts 1)))
++       state))))
++
++(defun send-pending (peer port)
++  (let (((tuple 'ok stats)
++         (peer:call peer 'inet 'getstat (list port '(send_pend)) 2000)))
++    (proplists:get_value 'send_pend stats)))
++
++(defun await-pending
++  ((_peer _port 0) (error 'positive_send_pressure_not_established))
++  ((peer port attempts)
++   (let ((pending (send-pending peer port)))
++     (if (> pending 0)
++       (io:format 'user "positive native send_pend=~p~n" (list pending))
++       (progn (timer:sleep 2) (await-pending peer port (- attempts 1)))))))
++
++(defun retire (socket mode)
++  (case mode
++    ('eof (gen_tcp:close socket))
++    ('byte (inet:setopts socket '(#(packet 0)))
++           (gen_tcp:send socket #b(0)))))
++
++(defun lost (socket)
++  (case (gen_tcp:recv socket 0 2000)
++    ((tuple 'error 'closed) 'ok)
++    ((tuple 'error 'econnreset) 'ok)
++    (other (error (tuple 'expected_transport_loss other)))))
++
++(defun dispatch (socket token source authority)
++  (send-frame socket
++    (map 'kind 'dispatch 'operation token 'source source
++         'generation #b("g") 'authority authority)))
++
++(defun value (socket token source authority)
++  (dispatch socket token source authority)
++  (let ((result (until-outcome socket)))
++    (assertEqual #b("succeeded") (map-get result #b("phase")))
++    (map-get result #b("value"))))
++
++(defun until-outcome (socket)
++  (let ((frame (read-frame socket)))
++    (case (map-get frame #b("kind"))
++      (#b("outcome") frame)
++      (#b("output")
++       (send-frame socket (map 'kind 'ack 'position
++                              (map-get frame #b("position"))))
++       (until-outcome socket)))))
++
++(defun send-frame (socket value)
++  (let (('ok (gen_tcp:send socket (json:encode value)))) 'ok))
++
++(defun read-frame (socket)
++  (let (((tuple 'ok bytes) (gen_tcp:recv socket 0 3000))) (json:decode bytes)))
+diff --git a/apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe b/apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe
+index a64c87a..c3f53c7 100644
+--- a/apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe
++++ b/apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe
+@@ -12,7 +12,8 @@
+   "Discover all native cases without depending on Erlang source files."
+   (list '#(module cayrn_lfe_eval_tests)
+         '#(module cayrn_lfe_application_tests)
+-        '#(module cayrn_lfe_resource_tests)))
++        '#(module cayrn_lfe_resource_tests)
++        '#(module cayrn_lfe_authority_tests)))
+ 
+ (defun capture_requires_owner_ack_test ()
+   "Never acknowledge a native write before its owner commits capture."
+diff --git a/apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe b/apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe
+index e7f570f..c442bfa 100644
+--- a/apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe
++++ b/apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe
+@@ -486,48 +486,15 @@
+     (after 0 'ok)))
+ 
+ (defun with-peer (function)
+-  (let* ((dir (++ "/private/tmp/cayrn-resource-" (os:getpid) "-"
+-                 (integer_to_list
+-                   (erlang:unique_integer '(positive monotonic)))))
+-         ('ok (file:make_dir dir))
+-         ('ok (file:change_mode dir #o700))
+-         (path (filename:join dir "agent socket.sock")))
+-    (try
+-      (let (((tuple 'ok peer _)
+-             (peer:start_link
+-               (map 'connection 'standard_io
+-                    'args (cons "-pa" (code:get_path))))))
+-        (try
+-          (let* (('ok (peer:call peer 'application 'load '(cayrn_lfe)))
+-                 ('ok (peer:call peer 'application 'set_env
+-                        (list 'cayrn_lfe 'socket path)))
+-                 ((tuple 'ok _)
+-                  (peer:call peer 'application 'ensure_all_started
+-                    '(cayrn_lfe)))
+-                 ((tuple 'ok socket)
+-                  (gen_tcp:connect (tuple 'local path) 0
+-                    '(binary #(active false) #(packet 4)) 1000)))
+-            (try
+-              (progn
+-                (send-frame socket
+-                  (map 'kind 'hello 'version 2 'session #b("resource-test")
+-                       'generation #b("g") 'authority #b("a")))
+-                (assertEqual #b("ready")
+-                  (map-get (read-frame socket) #b("kind")))
+-                (let* ((children (peer:call peer 'supervisor 'which_children
+-                                   '(cayrn_lfe_sup)))
+-                       ((list context)
+-                        (lists:filtermap
+-                          (match-lambda
+-                            (((tuple 'cayrn_lfe_listener _ _ _)) 'false)
+-                            (((tuple _ pid _ _)) (tuple 'true pid)))
+-                          children)))
+-                  (funcall function peer socket context)))
+-              (after (gen_tcp:close socket))))
+-          (after (peer:stop peer))))
+-      (after
+-        (file:delete path)
+-        (file:del_dir dir)))))
++  (cayrn_lfe_authority_tests:with-peer
++    (lambda (peer path)
++      (let* (((tuple authority grant)
++              (cayrn_lfe_authority_tests:authority path #b("a")))
++             ((tuple socket context)
++              (cayrn_lfe_authority_tests:context peer path grant #b("1")
++                #b("resource-test") #b("a"))))
++        (try (funcall function peer socket context)
++          (after (gen_tcp:close socket) (gen_tcp:close authority)))))))
+ 
+ (defun origins (peer context)
+   (map-get (peer:call peer 'sys 'get_state (list context)) 'origins))

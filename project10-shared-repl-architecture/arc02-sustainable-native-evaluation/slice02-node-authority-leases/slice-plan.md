@@ -169,3 +169,15 @@ Design/ownership/acquisition/failure/identity test method and exact scope are
 in listener-lifetime-contract.md; independent review history retained. This is
 a private resource-lifetime implementation correction within approved Arc02,
 not a new REPL architecture/Operator policy or wider project authorization.
+
+## Independent accepted return —2026-10-19
+
+Version1.3 current status: CLOSED, all8 original rows done at source38338d6ad38898fd24063b6c89582f0ff486aa30
+and Cayrn3bcbbdb. Current preserved assignment remains cc-prompt-iteration01.md,
+executed correction1/5. Full independent runtime/source/return verification and
+mandatory retrospective are in cdc-verification.md/cdc-retrospective.md. Earlier
+draft/held/current-assignment-none text above is historical, not current status.
+Bounded native3 authority/churn delivered; NR-02 and size/output remain native
+next work/CayrnC06, shared preview C05 precedes matching native update. No full
+arc/project/release acceptance. X-TOOL-01 tracks actual generated-test-BEAM shadow
+freshness separately; source/build scope was not silently changed.

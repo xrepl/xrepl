@@ -1,0 +1,39 @@
+$ make check
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_registry.lfe
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_registry.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling src/cayrn_lfe_connection.lfe
+===> Compiling src/cayrn_lfe_authority.lfe
+=ERROR REPORT==== 19-Oct-2026::00:53:26.081059 ===
+Can't load module 'json' that resides in sticky dir
+
+=ERROR REPORT==== 19-Oct-2026::00:53:26.087001 ===
+Can't load module 'gen_tcp' that resides in sticky dir
+
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_registry.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling src/cayrn_lfe_connection.lfe
+===> Compiling src/cayrn_lfe_authority.lfe
+===> Compiling test/cayrn_lfe_resource_tests.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+===> Compiling test/cayrn_lfe_io_tests.lfe
+===> Compiling test/cayrn_lfe_application_tests.lfe
+===> Compiling test/cayrn_lfe_authority_tests.lfe
+===> Failed to compile /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe
+===> File Errors: [{"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe",
+                    [{486,lfe_parse,{illegal,')'}}]}]
+===> Compiling test/cayrn_lfe_authority_tests.lfe failed
+/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe:486: illegal ')'
+make: *** [check] Error 1
+
+EXIT 2

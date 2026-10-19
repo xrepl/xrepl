@@ -1,0 +1,111 @@
+apps/cayrn_lfe/src/cayrn_lfe_registry.lfe: None
+apps/cayrn_lfe/src/cayrn_lfe_connection.lfe: None
+apps/cayrn_lfe/src/cayrn_lfe_authority.lfe: None
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe: 27a9e54e5f7214d93df2b4dcc21da34b6badea479a1e26e3a8ec530f8a0752ec
+apps/cayrn_lfe/src/cayrn_lfe_listener.lfe: 9980e62f9c2ce02779dbc8b4e3891b9f7dda9285cdcfd40e85ec3b1ddf618bf5
+apps/cayrn_lfe/src/cayrn_lfe_sup.lfe: 603ce74dfb191bbd0d55c88a7f6f24e112a31007e75c949344200e38a4364914
+apps/cayrn_lfe/src/cayrn_lfe.app.src: 98273af701ab79e0e59d4d7c91d57f18c4bf6eb48133e9ffffbef9bb54cb7cb7
+apps/cayrn_lfe/include/cayrn_lfe_registry.lfe: None
+apps/cayrn_lfe/test/cayrn_lfe_authority_tests.lfe: None
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe: 28e9f662afac3e767f16e85008bb5611a543335d9e92ed7983cb90eed99e8aeb
+apps/cayrn_lfe/test/cayrn_lfe_io_tests.lfe: f45a39463ae52188b3ffd739218873a483bd5ea6aa09216466d8ed5ecf923451
+apps/cayrn_lfe/test/cayrn_lfe_application_tests.lfe: 8b246f2e88b1d40247f9390d426dc501ac93134941ed3aa17f77a3f60b47d2af
+apps/cayrn_lfe/README.md: cf6dd26662cd1c854a944117e5a0c9393dd1335405e945700c14f06e44d62c4b
+apps/cayrn_lfe/AGENTS.md: ea74d164a93d9690e866dc36c6541422d4c0499e704a759514a37504c22c5295
+README.md: c058078f7ee65d2ff605d1c6c150e7cfc108dec6b4cbb0471463a11bb83b7614
+$ git status --short
+?? docs/design/
+
+EXIT 0
+$ git branch --show-current
+release/0.2.x
+
+EXIT 0
+$ git rev-parse HEAD
+7228183e2e584e0ab86e03dc6b9454d4b918cc38
+
+EXIT 0
+$ git worktree list
+/Users/oubiwann/lab/lfe/xrepl/xrepl                     7228183 [release/0.2.x]
+/Users/oubiwann/lab/lfe/xrepl/xrepl/.worktrees/planning 63f35f3 [planning]
+
+EXIT 0
+$ git rev-parse HEAD
+3bcbbdb9ec52667b6c75b7f8a5f2260b93d8be44
+
+EXIT 0
+$ git status --short
+
+EXIT 0
+$ make help
+
+[1;36m╔══════════════════════════════════════════════════════════╗[0m
+[1;36m║[0m [1;34mxrepl v0.2.0 — polyglot build system (LFE + Rust)[0m        [1;36m║[0m
+[1;36m╚══════════════════════════════════════════════════════════╝[0m
+
+[1;32mGeneral (both languages):[0m
+  [1;33mmake build[0m            - Compile LFE + native agent + Rust
+  [1;33mmake test[0m             - Test LFE + Rust
+  [1;33mmake lint[0m             - Lint LFE + Rust
+  [1;33mmake format[0m           - Format LFE + Rust
+  [1;33mmake coverage[0m         - Coverage for LFE + Rust
+  [1;33mmake docs[0m             - Docs for LFE + Rust
+  [1;33mmake check[0m            - Full gate: lint + test (both)
+  [1;33mmake ci[0m               - Alias for check
+  [1;33mmake clean[0m            - Clean both build trees
+  [1;33mmake info[0m             - Show build information
+  [1;33mmake check-tools[0m      - Verify required tools
+
+[1;32mLFE / BEAM (rebar3):[0m
+  [1;33mmake build-agent[0m      - Build the independent Cayrn LFE agent
+  [1;33mmake check-agent[0m      - Test the independent Cayrn LFE agent
+  [1;33mmake compile-lfe[0m      - Compile the LFE/OTP app
+  [1;33mmake test-lfe[0m         - Run eunit + Common Test
+  [1;33mmake test-unit-lfe[0m    - Run eunit only
+  [1;33mmake test-ct-lfe[0m      - Run Common Test only
+  [1;33mmake test-proper-lfe[0m  - Run PropEr property tests
+  [1;33mmake lint-lfe[0m         - Run xref
+  [1;33mmake xref-lfe[0m         - Run xref only
+  [1;33mmake dialyzer-lfe[0m     - Run dialyzer (often noisy on LFE)
+  [1;33mmake coverage-lfe[0m     - Coverage (proper + cover)
+  [1;33mmake docs-lfe[0m         - Generate ex_doc documentation
+  [1;33mmake format-lfe[0m       - Format LFE sources
+  [1;33mmake repl-lfe[0m         - Start an LFE REPL in the project
+  [1;33mmake clean-lfe[0m        - Clean BEAM build artifacts
+  [1;33mmake distclean-lfe[0m    - Deep clean (remove _build)
+
+[1;32mRust (cargo workspace):[0m
+  [1;33mmake build-rust[0m       - Build the workspace (debug)
+  [1;33mmake build-release[0m    - Build optimized release
+  [1;33mmake test-rust[0m        - Run all workspace tests
+  [1;33mmake lint-rust[0m        - clippy (-D warnings) + fmt check
+  [1;33mmake format-rust[0m      - Format with rustfmt
+  [1;33mmake coverage-rust[0m    - Coverage (cargo llvm-cov)
+  [1;33mmake coverage-html-rust[0m - HTML coverage report
+  [1;33mmake docs-rust[0m        - Generate Rust API docs
+  [1;33mmake deps[0m             - Upgrade dependencies
+  [1;33mmake check-deps[0m       - Check for outdated deps
+  [1;33mmake clean-rust[0m       - cargo clean
+  [1;33mmake remotes[0m          - Configure git remotes (xrepl org)
+  [1;33mmake push[0m             - Push current branch to all remotes
+  [1;33mmake publish[0m          - Publish crates to crates.io (in order)
+  [1;33mmake publish-dry-run[0m  - Verify crates can be packaged
+  [1;33mmake publish-one CRATE=x[0m - Publish a single crate
+  [1;33mmake tracked-files[0m    - Save list of git-tracked files
+
+
+EXIT 0
+$ rg -n cayrn_lfe_sup:|version.*2|which_children|cayrn_lfe_contexts apps/cayrn_lfe
+apps/cayrn_lfe/src/cayrn_lfe_listener.lfe:19:  (ets:new 'cayrn_lfe_contexts
+apps/cayrn_lfe/src/cayrn_lfe_listener.lfe:41:          (case (cayrn_lfe_sup:context socket)
+apps/cayrn_lfe/src/cayrn_lfe_app.lfe:12:  (cayrn_lfe_sup:start_link))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:137:  (((map #b("kind") #b("hello") #b("version") 2
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:143:          ('true (< (ets:info 'cayrn_lfe_contexts 'size) 4096))
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:144:          ('true (ets:insert_new 'cayrn_lfe_contexts
+apps/cayrn_lfe/src/cayrn_lfe_context.lfe:147:                 (map 'kind 'ready 'version 2 'backend #b("lfe")
+apps/cayrn_lfe/README.md:41:version 2 independently of public client RPC version 1. Hello carries session,
+apps/cayrn_lfe/README.md:131:The component version stays 0.1.0 while the enclosing xrepl release is 0.2.0.
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:513:                  (map 'kind 'hello 'version 2 'session #b("resource-test")
+apps/cayrn_lfe/test/cayrn_lfe_resource_tests.lfe:517:                (let* ((children (peer:call peer 'supervisor 'which_children
+
+EXIT 0

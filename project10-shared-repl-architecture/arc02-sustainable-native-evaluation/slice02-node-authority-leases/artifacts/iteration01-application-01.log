@@ -1,0 +1,18 @@
+$ rebar3 eunit --module=cayrn_lfe_application_tests
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_app.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling test/cayrn_lfe_application_tests.lfe
+===> Compiling test/cayrn_lfe_authority_tests.lfe
+=ERROR REPORT==== 19-Oct-2026::01:22:41.051221 ===
+Can't load module 'sys' that resides in sticky dir
+
+===> Compiling cayrn_lfe
+===> Performing EUnit tests...
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m
+Finished in 7.017 seconds
+[0;32m7 tests, 0 failures
+[0m
+EXIT 0

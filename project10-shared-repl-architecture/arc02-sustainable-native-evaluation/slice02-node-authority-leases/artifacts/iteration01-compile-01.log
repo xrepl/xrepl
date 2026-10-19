@@ -1,0 +1,46 @@
+$ make build
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_app.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Failed to compile /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_sup.lfe
+===> Nested Errors: [{error,[{"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_sup.lfe",
+                              [{31,lfe_lint,bad_head_arity},
+                               {31,lfe_lint,{illegal_pattern,75}},
+                               {31,lfe_lint,bad_head_arity},
+                               {31,lfe_lint,{illegal_pattern,tuple}},
+                               {31,lfe_lint,{unbound_symbol,socket}},
+                               {31,lfe_lint,{unbound_symbol,path}},
+                               {2,lfe_lint,{undefined_function,{init,1}}}]}],
+                            []}]
+===> Failed to compile /Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_listener.lfe
+===> Nested Errors: [{error,[{"/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_listener.lfe",
+                              [{18,lfe_lint,bad_head_arity},
+                               {18,lfe_lint,{illegal_pattern,86}},
+                               {18,lfe_lint,bad_head_arity},
+                               {18,lfe_lint,{illegal_pattern,process_flag}},
+                               {18,lfe_lint,bad_head_arity},
+                               {18,lfe_lint,{illegal_pattern,'let*'}},
+                               {18,lfe_lint,{bad_form,application}},
+                               {18,lfe_lint,{bad_form,application}},
+                               {18,lfe_lint,{unbound_symbol,owner}},
+                               {18,lfe_lint,{unbound_symbol,owner}},
+                               {18,lfe_lint,{unbound_symbol,path}},
+                               {18,lfe_lint,{unbound_symbol,path}},
+                               {18,lfe_lint,{unbound_symbol,socket}},
+                               {18,lfe_lint,{unbound_symbol,path}},
+                               {2,lfe_lint,{undefined_function,{init,1}}}]}],
+                            []}]
+===> Compiling src/cayrn_lfe_sup.lfe failed
+/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_sup.lfe:31: function head arity mismatch
+/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_sup.lfe:31: illegal pattern 75
+/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_sup.lfe:31: function head arity mismatch
+/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_sup.lfe:31: illegal pattern tuple
+/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_sup.lfe:31: symbol socket is unbound
+/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_sup.lfe:31: symbol path is unbound
+/Users/oubiwann/lab/lfe/xrepl/xrepl/apps/cayrn_lfe/src/cayrn_lfe_sup.lfe:2: function init/1 undefined
+make: *** [build] Error 1
+
+EXIT 2

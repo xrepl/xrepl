@@ -1,0 +1,7 @@
+$ rebar3 as test compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling test/cayrn_lfe_authority_tests.lfe
+===> Compiling cayrn_lfe
+
+EXIT 0

@@ -1,0 +1,19 @@
+$ make build
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_registry.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling src/cayrn_lfe_connection.lfe
+===> Compiling src/cayrn_lfe_authority.lfe
+===> Compiling src/cayrn_lfe_context.lfe
+=ERROR REPORT==== 19-Oct-2026::00:48:03.001642 ===
+Can't load module 'json' that resides in sticky dir
+
+=ERROR REPORT==== 19-Oct-2026::00:48:03.006212 ===
+Can't load module 'gen_tcp' that resides in sticky dir
+
+===> Compiling cayrn_lfe
+
+EXIT 0

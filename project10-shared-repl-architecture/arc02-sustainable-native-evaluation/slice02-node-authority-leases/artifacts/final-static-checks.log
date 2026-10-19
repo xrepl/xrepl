@@ -1,0 +1,10 @@
+All16 frozen SHA256s still match; generated beam cleanup changed0 product bytes.
+All allowed LFE files: line lengths <=80.
+Exactly16 changed/new source paths; docs/design remains external preserved untracked population.
+$ git diff --check
+
+EXIT 0
+$ git diff --cached --name-only
+
+EXIT 0
+Changed Bash fences with0..3indent 0; new local links 0; unchanged old fences/links retained. X-DOC-01 and X-PKG-01 excluded limitations remain explicit.

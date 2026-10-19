@@ -1,0 +1,50 @@
+$ make check
+rebar3 compile
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_app.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling cayrn_lfe
+rebar3 eunit
+===> Verifying dependencies...
+===> Analyzing applications...
+===> Compiling src/cayrn_lfe_listener.lfe
+===> Compiling src/cayrn_lfe_app.lfe
+===> Compiling src/cayrn_lfe_sup.lfe
+===> Compiling test/cayrn_lfe_application_tests.lfe
+===> Compiling test/cayrn_lfe_authority_tests.lfe
+=ERROR REPORT==== 19-Oct-2026::01:26:24.372690 ===
+Can't load module 'json' that resides in sticky dir
+
+===> Compiling cayrn_lfe
+===> Performing EUnit tests...
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;31mF[0mpressure buffers client={ok,[{recbuf,1024}]} native={ok,[{sndbuf,1024}]}
+positive native send_pend=15100
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;31mF[0mpressure buffers client={ok,[{recbuf,1024}]} native={ok,[{sndbuf,1024}]}
+positive native send_pend=15100
+[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m[0;32m.[0m
+Failures:
+
+  1) cayrn_lfe_authority_tests:-paused_endpoint_timeout_test_/0-fun-5-/0
+[0;31m     Failure/Error: {error,undef,
+                        [{cayrn_lfe_authority_tests,'await-startup-down',
+                             [<0.90.0>],
+                             []},
+                         {peer,'-do_call/4-fun-0-',5,
+                             [{file,"peer.erl"},{line,1557}]}]}
+[0m
+  2) cayrn_lfe_authority_tests:-paused_endpoint_timeout_test_/0-fun-5-/0
+[0;31m     Failure/Error: {error,undef,
+                        [{cayrn_lfe_authority_tests,'await-startup-down',
+                             [<0.90.0>],
+                             []},
+                         {peer,'-do_call/4-fun-0-',5,
+                             [{file,"peer.erl"},{line,1557}]}]}
+[0m
+
+Finished in 57.165 seconds
+[0;31m61 tests, 2 failures
+[0m===> Error running tests
+make: *** [check] Error 1
+
+EXIT 2

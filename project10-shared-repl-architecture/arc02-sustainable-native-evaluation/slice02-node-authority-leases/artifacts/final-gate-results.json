@@ -1,0 +1,51 @@
+[
+  {
+    "label": "cayrn-full-final-01",
+    "command": [
+      "make",
+      "check",
+      "lint-integration",
+      "test-xrepl"
+    ],
+    "cwd": "/Users/oubiwann/lab/oxur/cayrn",
+    "exit": 0,
+    "all16_source_hashes_agree": true
+  },
+  {
+    "label": "root-final-test-precompile",
+    "command": [
+      "rebar3",
+      "as",
+      "test",
+      "compile"
+    ],
+    "cwd": "/Users/oubiwann/lab/lfe/xrepl/xrepl",
+    "exit": 0,
+    "all16_source_hashes_agree": true
+  },
+  {
+    "label": "root-full-final-01",
+    "command": [
+      "make",
+      "test-lfe",
+      "build-agent",
+      "check-agent",
+      "build",
+      "lint-rust",
+      "test-rust"
+    ],
+    "cwd": "/Users/oubiwann/lab/lfe/xrepl/xrepl",
+    "exit": 0,
+    "all16_source_hashes_agree": true
+  },
+  {
+    "label": "root-launcher-wrapper-final",
+    "command": [
+      "python3",
+      "/private/tmp/x02-root-launcher.py"
+    ],
+    "cwd": "/private/tmp",
+    "exit": 0,
+    "all16_source_hashes_agree": true
+  }
+]
