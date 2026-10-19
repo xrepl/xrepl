@@ -88,6 +88,8 @@
         (let ((refused (evaluate socket #b("1000")
                          #b("(set pressure-mutated 1)"))))
           (assertEqual #b("failed") (map-get refused #b("phase")))
+          (assertEqual (map #b("truncated") 'false)
+            (map-get refused #b("preview")))
           (assertEqual
             #b("native resource limit: 64 live capture origins; "
                "source not evaluated")
@@ -437,7 +439,7 @@
           (spawn_monitor (lambda () (receive ('exit 'ok)))))
          (trace (trace:session_create 'x21_control (self) '()))
          (state (map 'socket server 'active
-                     (tuple 'finishing #b("2") io 'succeeded #b("42"))
+                     (tuple 'finishing #b("2") io 'succeeded #b("42") 'false)
                      'origins (map io (tuple #b("2") trace monitor 'live))
                      'pending (map) 'closing 'undefined)))
     (link io)

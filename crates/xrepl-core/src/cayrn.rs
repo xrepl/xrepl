@@ -215,6 +215,7 @@ async fn drain(
                         operation,
                         phase,
                         value,
+                        ..
                     } => writeln!(
                         output,
                         "[{operation} {phase:?}] {}",

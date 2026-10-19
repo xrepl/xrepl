@@ -39,12 +39,19 @@ and retires drained capture origins; quiet sessions have no total-operation
 count limit. Background writers preserve their original attribution. A full
 origin budget refuses evaluation explicitly while preserving the environment.
 See the component README for its trusted local-descendant capture boundary.
-The native OTP implementation/tests are written in LFE. Size and ordinary output
-pressure hardening follow separately. Forced supervisor teardown during a blocked
-send can still orphan an evaluator root (NR-02; X03/C06); authority-loss shutdown
+The native OTP implementation/tests are written in LFE. Native4 renders bounded
+8192-byte UTF-8 result/error previews with depth32 and explicit boolean truncation
+metadata, preserving full saved bindings. Short strings keep string syntax;
+large collections use structural previews with conservative omission reservations.
+False reports no budget omission under this policy, not lossless serialization;
+old public missing/null metadata is UNKNOWN. Captured Output is separate and is
+never silently clipped by the result policy. Complete output/ordinary pressure
+and responsive ownership remain X04. Forced supervisor teardown during a blocked
+send can still orphan an evaluator root (NR-02; X04/C06); authority-loss shutdown
 has its own abortive-port cleanup and does not certify general teardown safety.
-Native3 requires the matching rebuilt
-Cayrn host, while public client RPC remains version 1. The native app remains
+Native4 requires the matching rebuilt
+Cayrn host (current shared contract34af63e), with old native1/2/3 rejected.
+Public client RPC remains version1. The native app remains
 0.1.0 within xrepl's 0.2.0 development branch. Nothing new is published.
 
 ##### Table of Contents
@@ -665,7 +672,7 @@ late output retain operation attribution. `--cayrn-json` reads one source line p
 turn and writes metadata plus complete event JSON for tools/tests.
 
 Shared SDK dependencies currently use local paths under `../../../oxur/cayrn`.
-The runtime agent lives at `../../cayrn-lfe` relative to this checkout. It is not
+The runtime agent lives in this checkout at `apps/cayrn_lfe`. It is not
 an xrepl dependency cycle or an automatic migration of old stored sessions, shell
 extensions, completion or debugging services. The native application can run in
 a shared BEAM node; individual terminal detach never shuts that node down.

@@ -510,7 +510,7 @@
           (try
             (progn
               (send-frame stale
-                (map 'kind 'hello 'version 3 'session #b("stale")
+                (map 'kind 'hello 'version 4 'session #b("stale")
                      'generation #b("g") 'authority #b("a")
                      'boot (map-get old-grant #b("boot"))
                      'lease (map-get old-grant #b("lease")) 'ticket #b("2")))

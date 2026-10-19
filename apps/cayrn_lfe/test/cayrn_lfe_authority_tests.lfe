@@ -1,4 +1,4 @@
-;;;; Native3 lease ownership, bounded live state and abortive-loss controls.
+;;;; Native4 lease ownership, bounded live state and abortive-loss controls.
 (defmodule cayrn_lfe_authority_tests
   (export
    (authority 2)
@@ -168,9 +168,9 @@
                   (lists:map
                     (lambda (i) (authority path (integer_to_binary i)))
                     (lists:seq 1 16))))
-            (refused path (map 'kind 'authority_hello 'version 3
+            (refused path (map 'kind 'authority_hello 'version 4
                                'authority #b("overflow")))
-            (refused path (map 'kind 'authority_hello 'version 3
+            (refused path (map 'kind 'authority_hello 'version 4
                                'authority #b("1")))
             (assertEqual 16 (registry-last-lease (state peer)))
             (let* ((lease (map-get (registry-leases (state peer)) 1))
@@ -242,7 +242,7 @@
             (refused path (hello grant #b("9223372036854775807")
                                 #b("max") #b("a")))
             (peer:call peer (MODULE) 'set-limit '(lease))
-            (refused path (map 'kind 'authority_hello 'version 3
+            (refused path (map 'kind 'authority_hello 'version 4
                                'authority #b("b")))
             (assertEqual 9223372036854775807
               (registry-last-lease (state peer)))
@@ -306,7 +306,7 @@
               (cayrn_lfe_connection:handle_info
                 (tuple 'tcp server
                   (iolist_to_binary
-                    (json:encode (map 'kind 'authority_hello 'version 3
+                    (json:encode (map 'kind 'authority_hello 'version 4
                                       'authority #b("provisional"))))) before)))
         (assertEqual 'not_owner reason)
         (cayrn_lfe_connection:terminate reason next)
@@ -333,7 +333,12 @@
               (gen_tcp:send partial #b(0))
               (assertEqual '#(error closed) (gen_tcp:recv partial 0 6500))
               (gen_tcp:close partial))
-            (refused path (map 'kind 'hello 'version 2))
+            (lists:foreach
+              (lambda (version)
+                (refused path (map 'kind 'hello 'version version))
+                (refused path (map 'kind 'authority_hello 'version version
+                                   'authority #b("old"))))
+              '(1 2 3))
             (let ((bad (connect path)))
               (gen_tcp:send bad #b("not-json")) (lost bad)
               (gen_tcp:close bad))
@@ -642,11 +647,12 @@
 
 (defspec (authority 2) (((string) (binary)) (term)))
 (defun authority (path id)
-  "Open native3 authority and retain its socket through context lifetime."
+  "Open native4 authority and retain its socket through context lifetime."
   (let ((socket (connect path)))
-    (send-frame socket (map 'kind 'authority_hello 'version 3 'authority id))
+    (send-frame socket (map 'kind 'authority_hello 'version 4 'authority id))
     (let ((grant (read-frame socket)))
       (assertEqual #b("authority_ready") (map-get grant #b("kind")))
+      (assertEqual 4 (map-get grant #b("version")))
       (tuple socket grant))))
 
 (defspec (context 6) (((pid) (string) (map) (binary) (binary) (binary)) (term)))
@@ -659,6 +665,7 @@
            (pid (map-get (registry-sids (state peer)) sid))
            (children (peer:call peer 'supervisor 'which_children
                        '(cayrn_lfe_sup))))
+      (assertEqual 4 (map-get ready #b("version")))
       (assertEqual (map-get grant #b("boot")) (map-get ready #b("boot")))
       (assertEqual (map-get grant #b("lease")) (map-get ready #b("lease")))
       (assertEqual ticket (map-get ready #b("ticket")))
@@ -670,7 +677,7 @@
       (tuple socket pid))))
 
 (defun hello (grant ticket sid authority)
-  (map 'kind 'hello 'version 3 'session sid 'generation #b("g")
+  (map 'kind 'hello 'version 4 'session sid 'generation #b("g")
        'authority authority 'boot (map-get grant #b("boot"))
        'lease (map-get grant #b("lease")) 'ticket ticket))
 

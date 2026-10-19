@@ -35,9 +35,9 @@
 
 (defun route (hello socket state)
   (let* ((role (case hello
-                ((map #b("kind") #b("authority_hello") #b("version") 3)
+                ((map #b("kind") #b("authority_hello") #b("version") 4)
                  'authority)
-                ((map #b("kind") #b("hello") #b("version") 3) 'context)))
+                ((map #b("kind") #b("hello") #b("version") 4) 'context)))
          ((tuple 'ok child) (call 'cayrn_lfe_sup role socket)))
     (case (gen_tcp:controlling_process socket child)
       ('ok

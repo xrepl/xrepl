@@ -22,7 +22,7 @@
 (defun handle_info
   "Grant once; thereafter any byte, EOF or error retires this owner."
   (((tuple 'activate
-      (map #b("kind") #b("authority_hello") #b("version") 3
+      (map #b("kind") #b("authority_hello") #b("version") 4
            #b("authority") authority)) state)
    (when (=:= (authority-active state) 'false))
    (try
@@ -32,7 +32,7 @@
             ((tuple 'ok boot lease) (cayrn_lfe_registry:open authority))
             ('ok (gen_tcp:send socket
                    (json:encode
-                     (map 'kind 'authority_ready 'version 3
+                     (map 'kind 'authority_ready 'version 4
                           'boot boot 'lease lease))))
             ('ok (inet:setopts socket '(#(packet 0) #(active once)))))
        (tuple 'noreply (set-authority state active 'true)))

@@ -38,7 +38,7 @@ It refuses an existing socket path; choose a fresh private directory after an
 unclean node exit, rather than deleting an endpoint another process may own.
 
 The internal agent wire is bounded, four-byte big-endian length-prefixed JSON,
-version 3 independently of public client RPC version 1. Each Rust host first
+version 4 independently of public client RPC version 1. Each Rust host first
 opens one persistent AuthorityHello channel and receives a cryptographic node
 boot and monotonic lease. Context Hello carries session, generation, authority,
 boot, lease and an increasing canonical decimal ticket. Ready echoes that scope.
@@ -92,7 +92,7 @@ Assigning an old group leader to unrelated existing processes, remote processes,
 explicit devices and user tampering with tracing are outside this trusted
 profile. User process/heap/message fanout is not sandboxed by origin credits.
 
-Native3 requires a matching rebuilt Cayrn host, with no native1/2 fallback.
+Native4 requires a matching rebuilt Cayrn host, with no native1/2/3 fallback.
 Restarting the application creates a fresh cryptographic boot and loses live
 contexts; Rust reports state loss and never recreates an environment from history.
 Authority-loss shutdown closes recorded context ports abortively to wake blocked
@@ -111,10 +111,10 @@ files/symlinks/socket inodes are preserved. Bind/Supstart failures unwind newly
 acquired resources. Whole application/helper/VM kill can still leave a stale path;
 there is no automatic BEAM relaunch or adversarial filesystem guarantee.
 
-Large-value assertions/output chunking and ordinary capture-pressure hardening
-remain later work. A serious known limit (NR-02, X03/C06) is forced supervisor
+Complete captured output chunking and ordinary capture-pressure hardening
+remain X04 work. A serious known limit (NR-02, X04/C06) is forced supervisor
 teardown during a blocked context send: it can orphan an unlinked evaluator root.
-The native3 authority-loss path has separate suspended/positively pending-send
+The authority-loss path has separate suspended/positively pending-send
 controls; they do not establish broad forced-teardown readiness. The standalone
 native1 predecessor remains pinned separately.
 
@@ -124,9 +124,38 @@ journal but does not restore native environments or rerun evaluations. Agent
 control/recovery capabilities remain experimental; use the documented Cayrn
 profile, not arbitrary retries of native dispatch messages.
 
-`make check` runs native evaluator tests. Cayrn's `make test-agent` runs the
+`make check` runs all native evaluator, renderer, capture, authority and
+application cases. Cayrn's `make test-agent` runs the
 real host/BEAM socket path, including reconnect, deduplication and failure cases.
 Nothing has been published to Hex or crates.io.
+
+## Bounded result previews
+
+Native4 evaluates and saves the full native value, then renders at most8192 UTF-8
+bytes with structural depth32. Large values and user exceptions stay ordinary
+Succeeded/Failed outcomes; rendering does not discard the committed environment.
+Every native Outcome, including fixed resource/cancellation messages, reports
+`preview: {"truncated": bool}`. True means the renderer omitted representation
+under its byte/depth policy; false means no budget omission under that policy.
+Literal `...` is not an inferred report, and false is not a lossless-value codec.
+Missing/null public metadata in old archives or host diagnostics is UNKNOWN,
+not false. Rust preserves the report through operation records and events.
+
+Up to256 printable list characters or binary bytes keep string syntax. Larger
+lists/binaries use lazy structural syntax; maps use native default iteration
+order, tuples use indexed elements and bitstrings retain explicit tail sizes.
+Structural syntax need not match old pretty-printer sugar. Delimiters, separators
+and omission markers are reserved before descending, so truncation may happen
+conservatively even when another arrangement could use more of the byte budget.
+Integers are fenced before decimal conversion, with no smaller arbitrary cap.
+This bounds rendering work/output policy, not evaluation, user heap or processes.
+
+Captured Output is separate from result previews. It is never silently clipped
+under this value policy. Complete supported streams/chunking/responsive ownership
+and NR-02 teardown are X04, followed by Cayrn C06 mixed-system composition.
+The matching experimental host is Cayrn34af63e or its compatible native4 successor;
+public RPC remains1. Rebuild the xrepl Rust consumer for the additive Outcome field;
+its JSON mode retains metadata while the human display remains unchanged.
 
 ## Native control capabilities
 
@@ -164,8 +193,9 @@ The component version stays 0.1.0 while the enclosing xrepl release is 0.2.0.
 
 Cayrn's native/terminal targets default to this integrated component and the
 sibling xrepl Rust binary; explicit `CAYRN_LFE_DIR` and `XREPL_BIN` overrides are
-available. Component-only `make check` explicitly discovers evaluator, application
-resource and authority tests through the I/O companion generator. Resource cases cover
+available. Component-only `make check` explicitly discovers evaluator, preview,
+application, resource and authority tests through the I/O companion generator.
+Resource cases cover
 512 quiet sparse dispatches, 64/65 origin pressure, replay non-execution, producer
 and request/trace order inversions, ACK/close races, physical retirement and
 independent tracing. The matching Cayrn integration fixture performs 1024 further
@@ -175,4 +205,5 @@ conventions. Authority cases exercise4097 reclaimed contexts,33 lease cycles,
 16/17 authority and64/65 context pressure, strict scope/replay/counter/monitor
 controls, router/handshake failures, fresh boot and authority-only loss with raw
 client sockets retained, including suspended and positively pending native sends.
-Size and ordinary-pressure limits are recorded above.
+Preview byte/depth boundaries and actual native4 retained-binding/error/cancel
+cases are included. Ordinary-pressure limits remain recorded above.

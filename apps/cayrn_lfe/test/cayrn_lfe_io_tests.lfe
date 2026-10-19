@@ -11,6 +11,7 @@
 (defun native_agent_companions_test_ ()
   "Discover all native cases without depending on Erlang source files."
   (list '#(module cayrn_lfe_eval_tests)
+        '#(module cayrn_lfe_preview_tests)
         '#(module cayrn_lfe_application_tests)
         '#(module cayrn_lfe_resource_tests)
         '#(module cayrn_lfe_authority_tests)))

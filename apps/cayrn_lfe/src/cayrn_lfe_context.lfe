@@ -74,12 +74,12 @@
        (progn
          (! from (tuple 'io_reply ref '#(error enobufs)))
          (tuple 'stop 'capture_overflow state)))))
-  (((tuple 'evaluated pid operation status text env)
+  (((tuple 'evaluated pid operation status text omitted env)
     (= (map 'active (tuple pid monitor operation io)) state))
    (erlang:demonitor monitor '(flush))
    (let* (('true (=< (byte_size text) 8192))
           (next (map-set state 'env env
-                  'active (tuple 'finishing operation io status text))))
+                  'active (tuple 'finishing operation io status text omitted))))
      (cayrn_lfe_io:finished io (self))
      (if (=:= (map-get state 'closing) 'undefined)
        (tuple 'noreply next)
@@ -106,6 +106,7 @@
    (when (orelse (=:= mode 'close) (=:= mode 'cancel)))
    (let (('ok (send-event state
                 (map 'kind 'outcome 'operation operation 'phase 'cancelled
+                     'preview (map 'truncated 'false)
                      'value #b("native evaluator terminated; "
                                "environment discarded")))))
      (transition (progress (map-set state 'active 'undefined)))))
@@ -144,7 +145,7 @@
   ((_ state) (tuple 'noreply state)))
 
 (defun command
-  (((map #b("kind") #b("hello") #b("version") 3
+  (((map #b("kind") #b("hello") #b("version") 4
          #b("session") sid #b("generation") generation
          #b("authority") authority #b("boot") boot
          #b("lease") lease #b("ticket") ticket)
@@ -156,7 +157,7 @@
                   'registry registry 'native-scope (tuple boot lease ticket)
                   'env (cayrn-lfe-eval:new)))
           ('ok (send-event next
-                 (map 'kind 'ready 'version 3 'backend #b("lfe")
+                 (map 'kind 'ready 'version 4 'backend #b("lfe")
                       'interrupt #b("session_destructive")
                       'close_barrier 'true 'boot boot
                       'lease lease 'ticket ticket))))
@@ -173,6 +174,7 @@
      (if (=:= 64 (map_size (map-get state 'origins)))
        (let (('ok (send-event next
                     (map 'kind 'outcome 'operation operation 'phase 'failed
+                         'preview (map 'truncated 'false)
                          'value #b("native resource limit: 64 live capture "
                                    "origins; source not evaluated")))))
          (tuple 'continue next))
@@ -216,13 +218,13 @@
             (lambda ()
               (receive
                 ('evaluate
-                 (let* (((tuple status value next)
+                 (let* (((tuple status value omitted next)
                          (cayrn-lfe-eval:run source env))
                         (phase (case status
                                  ('ok 'succeeded)
                                  ('error 'failed))))
                    (! owner (tuple 'evaluated (self) operation
-                                   phase value next)))))))))
+                                   phase value omitted next)))))))))
     (try
       (let (((tuple 'ok io trace) (cayrn_lfe_io:start owner operation pid)))
         (try
@@ -263,15 +265,16 @@
     (maps:values (map-get state 'pending))))
 
 (defun publish-origin
-  ((io (= (map 'active (tuple 'finishing _ io _ _)) state))
+  ((io (= (map 'active (tuple 'finishing _ io _ _ _)) state))
    (publish state))
   ((_io state) state))
 
 (defun publish
-  (((= (map 'active (tuple 'finishing operation _ phase text)) state))
+  (((= (map 'active (tuple 'finishing operation _ phase text omitted)) state))
    (let (('ok (send-event state
                 (map 'kind 'outcome 'operation operation
-                     'phase phase 'value text))))
+                     'phase phase 'value text
+                     'preview (map 'truncated omitted)))))
      (map-set state 'active 'undefined)))
   ((state) state))
 
@@ -279,7 +282,7 @@
   (erlang:send_after 5000 (self) 'close_timeout)
   (let ((next (map-set state 'closing mode)))
     (case (map-get next 'active)
-      ((tuple 'finishing _ _ _ _) (progress (publish next)))
+      ((tuple 'finishing _ _ _ _ _) (progress (publish next)))
       ((tuple pid _ _ _) (exit pid 'kill) (progress next))
       ('undefined (progress next)))))
 
